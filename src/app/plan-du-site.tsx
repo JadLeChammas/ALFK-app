@@ -29,6 +29,7 @@ export default function Sitemap() {
         ['settings', d.nav.settings, '/parametres'],
         ['bell', d.nav.notifications, '/notifications'],
         ...(me?.role === 'admin' ? ([['shield', d.nav.admin, '/admin']] as [IconName, string, string][]) : []),
+        ...(me?.role === 'honneur' ? ([['bar-chart-2', d.nav.stats, '/statistiques']] as [IconName, string, string][]) : []),
       ],
     },
     {

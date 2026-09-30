@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { View } from 'react-native';
 
 import { countryByCode, countryName } from '@/data/countries';
+import { canMessage } from '@/data/permissions';
 import { fullName, useStore } from '@/data/store';
 import type { EventCategory, LfkEvent, Publication, PublicationCategory, Role, User } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -30,7 +31,7 @@ export function useStartConversation() {
   const { actions } = useStore();
   return (userId: string) => {
     const id = actions.conversationWith(userId);
-    router.push(`/messages/${id}`);
+    if (id) router.push(`/messages/${id}`);
   };
 }
 
@@ -46,7 +47,7 @@ export function MemberCard({ user, showPromo }: { user: User; showPromo?: boolea
       <Avatar uri={user.avatar} name={fullName(user)} size={68} />
       <View style={{ alignItems: 'center', gap: 2, width: '100%' }}>
         <Txt variant="h3" numberOfLines={1} align="center">{fullName(user)}</Txt>
-        <Txt variant="small" color="textMuted" numberOfLines={1} align="center">{user.school ?? '—'}</Txt>
+        <Txt variant="small" color="textMuted" numberOfLines={1} align="center">{user.fonction ?? user.school ?? '—'}</Txt>
         {showPromo && user.promo && <Txt variant="small" color="textSubtle">{f(d.common.promo, { year: user.promo })}</Txt>}
       </View>
       {c && (
@@ -58,6 +59,8 @@ export function MemberCard({ user, showPromo }: { user: User; showPromo?: boolea
       <View style={{ flex: 1 }} />
       {isMe ? (
         <Badge label={d.common.you} tone="primary" style={{ alignSelf: 'center' }} />
+      ) : !canMessage(me, user) ? (
+        <View style={{ height: 32 }} />
       ) : (
         <Tap
           onPress={() => start(user.id)}

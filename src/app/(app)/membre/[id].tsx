@@ -1,3 +1,4 @@
+import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
@@ -7,6 +8,7 @@ import { Avatar, Button, Card, EmptyState, ListRow, Row } from '@/components/ui/
 import { BackLink, Columns, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { countryByCode, countryName } from '@/data/countries';
+import { canMessage } from '@/data/permissions';
 import { fullName, useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -49,14 +51,20 @@ export default function MemberProfile() {
                 <Row gap={8} wrap>
                   <RoleBadge role={user.role} />
                   {user.promo && <Txt color="textMuted">{f(d.common.promo, { year: user.promo })}</Txt>}
+                  {user.fonction && <Txt color="textMuted">{user.fonction}</Txt>}
                 </Row>
               </View>
             </Row>
             <Row gap={10} wrap>
               {isMe ? (
                 <Button label={d.profile.edit} icon="edit-2" variant="secondary" onPress={() => router.push('/profil/modifier')} />
-              ) : (
+              ) : canMessage(me, user) ? (
                 <Button label={d.member.sendMessage} icon="message-circle" onPress={() => start(user.id)} />
+              ) : (
+                <Row gap={8} style={{ paddingHorizontal: 14, paddingVertical: 10, borderRadius: 999, backgroundColor: colors.surfaceAlt, flexShrink: 1 }}>
+                  <Feather name="lock" size={13} color={colors.textSubtle} />
+                  <Txt variant="small" color="textMuted" style={{ flexShrink: 1 }}>{d.member.messagingDisabled}</Txt>
+                </Row>
               )}
               {user.promo && <Button label={d.directory.seePromo} variant="secondary" icon="users" onPress={() => router.push(`/annuaire/promo/${user.promo}`)} />}
             </Row>
@@ -68,6 +76,7 @@ export default function MemberProfile() {
         main={
           <Card>
             <Txt variant="h3" style={{ marginBottom: 4 }}>{d.member.info}</Txt>
+            {user.fonction && <ListRow icon="briefcase" title={user.fonction} subtitle={d.member.fonction} />}
             <ListRow icon="book" title={user.school ?? '—'} subtitle={d.member.school} />
             <ListRow icon="map-pin" title={[user.city, countryName(user.country, lang)].filter(Boolean).join(', ')} subtitle={d.member.location} right={country && <Flag code={country.code} size={18} />} />
             {user.promo && <ListRow icon="award" title={String(user.promo)} subtitle={d.profile.promoLabel} />}

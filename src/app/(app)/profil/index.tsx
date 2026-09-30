@@ -8,6 +8,7 @@ import { Avatar, Button, Card, ListRow, Row, type IconName } from '@/components/
 import { Columns, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { countryByCode, countryName } from '@/data/countries';
+import { can } from '@/data/permissions';
 import { fullName, useInbox, useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -30,6 +31,7 @@ export default function MyProfile() {
     ['bell', d.nav.notifications, '/notifications'],
     ['settings', d.nav.settings, '/parametres'],
     ...(me.role === 'admin' ? ([['shield', d.nav.admin, '/admin']] as [IconName, string, string][]) : []),
+    ...(me.role !== 'admin' && can(me, 'viewStats') ? ([['bar-chart-2', d.nav.stats, '/statistiques']] as [IconName, string, string][]) : []),
     ['file-text', d.nav.legal, '/mentions-legales'],
     ['map', d.nav.sitemap, '/plan-du-site'],
     ['mail', d.nav.contact, '/contact'],
@@ -50,7 +52,7 @@ export default function MyProfile() {
                 <Txt variant={isMobile ? 'h1' : 'display'}>{fullName(me)}</Txt>
                 <Row gap={8} wrap>
                   <RoleBadge role={me.role} />
-                  <Txt color="textMuted">{[d.roles[me.role], me.promo && f(d.common.promo, { year: me.promo })].filter(Boolean).join(' · ')}</Txt>
+                  <Txt color="textMuted">{[d.roles[me.role], me.fonction, me.promo && f(d.common.promo, { year: me.promo })].filter(Boolean).join(' · ')}</Txt>
                 </Row>
               </View>
             </View>
@@ -70,7 +72,7 @@ export default function MyProfile() {
             <ListRow icon="book" title={me.school ?? '—'} subtitle={d.member.school} />
             <ListRow icon="map-pin" title={me.city ?? '—'} subtitle={d.auth.city} />
             <ListRow icon="flag" title={country ? countryName(me.country, lang) : '—'} subtitle={d.auth.country} right={country && <Flag code={country.code} size={18} />} />
-            <ListRow icon="award" title={me.promo ? String(me.promo) : '—'} subtitle={d.profile.promoLabel} />
+            {me.fonction ? <ListRow icon="briefcase" title={me.fonction} subtitle={d.member.fonction} /> : <ListRow icon="award" title={me.promo ? String(me.promo) : '—'} subtitle={d.profile.promoLabel} />}
             <ListRow icon="mail" title={me.email} subtitle={d.auth.email} />
             <ListRow icon="phone" title={me.phone ?? '—'} subtitle={d.profile.phone} />
             <ListRow icon="gift" title={me.birthDate ? formatDate(me.birthDate + 'T12:00:00') : '—'} subtitle={d.profile.birthDate} />

@@ -22,6 +22,8 @@ export type User = {
   approved: boolean;
   promo?: number;
   school?: string;
+  /** Position shown for school leadership, e.g. « Proviseur ». Set by an admin. */
+  fonction?: string;
   city?: string;
   country?: string; // ISO code, see countries.ts
   phone?: string;

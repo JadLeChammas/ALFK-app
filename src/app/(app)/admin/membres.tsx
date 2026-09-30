@@ -133,6 +133,21 @@ export default function ManageMembers() {
                     ))}
                   </Row>
                 </View>
+                {db.users.find((u) => u.id === editing.id)?.role === 'honneur' && (
+                  <Button
+                    label={d.admin.editFonction}
+                    icon="briefcase"
+                    variant="secondary"
+                    full
+                    onPress={async () => {
+                      const v = await prompt({ title: d.admin.editFonction, placeholder: d.admin.fonctionField, initial: db.users.find((u) => u.id === editing.id)?.fonction });
+                      if (v !== null) {
+                        actions.setFonction(editing.id, v);
+                        toast(d.common.saved);
+                      }
+                    }}
+                  />
+                )}
                 <Button label={d.admin.resetPassword} icon="key" variant="secondary" full onPress={() => resetPassword(editing)} />
                 {editing.id !== me.id && <Button label={d.admin.deleteUser} icon="trash-2" variant="danger" full onPress={() => remove(editing)} />}
               </>
@@ -151,7 +166,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
   const { colors } = useTheme();
   const { actions } = useStore();
   const { toast } = useDialogs();
-  const blank = { firstName: '', lastName: '', email: '', password: '', phone: '', promo: '', gender: 'F' as Gender, role: 'alumni' as Role, country: 'FR' };
+  const blank = { firstName: '', lastName: '', email: '', password: '', phone: '', promo: '', fonction: '', gender: 'F' as Gender, role: 'alumni' as Role, country: 'FR' };
   const [form, setForm] = useState(blank);
   const [error, setError] = useState<AuthError | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
@@ -160,7 +175,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
   };
   const submit = () => {
     const promo = parseInt(form.promo, 10);
-    const r = actions.createUser({ ...form, promo: Number.isFinite(promo) ? promo : undefined });
+    const r = actions.createUser({ ...form, promo: Number.isFinite(promo) ? promo : undefined, fonction: form.role === 'honneur' && form.fonction.trim() ? form.fonction.trim() : undefined });
     if (!r.ok) return setError(r.error);
     toast(d.admin.userCreated);
     setForm(blank);
@@ -199,6 +214,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
                 {ROLES.map((r) => <Chip key={r} label={d.roles[r]} active={form.role === r} onPress={() => setForm((x) => ({ ...x, role: r }))} />)}
               </Row>
             </View>
+            {form.role === 'honneur' && <Input label={d.admin.fonctionField} icon="briefcase" value={form.fonction} onChangeText={set('fonction')} />}
             {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
             <Button label={d.common.create} icon="user-plus" full size="lg" onPress={submit} disabled={!form.firstName || !form.lastName || !form.email || !form.password} />
           </ScrollView>

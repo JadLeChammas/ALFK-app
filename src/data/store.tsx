@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
+import { canMessage } from './permissions';
 import { createSeed } from './seed';
 import type {
   AdminLog,
@@ -21,7 +22,7 @@ import type {
  * Supabase-backed implementation (see supabase/schema.sql) does not change the UI.
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v2';
+const STORAGE_KEY = 'lfk.demo.db.v3';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError = 'invalid_credentials' | 'email_taken' | 'weak_password' | 'unknown_email' | 'wrong_password';
@@ -36,6 +37,7 @@ export type SignUpInput = {
   role: Role;
   promo?: number;
   school?: string;
+  fonction?: string;
   city?: string;
   country?: string;
 };
@@ -169,8 +171,10 @@ function useStoreValue() {
     },
 
     // ——— Messaging ———
-    conversationWith(otherId: string): string {
+    /** Returns the conversation id, or null when messaging between the two roles is disabled. */
+    conversationWith(otherId: string): string | null {
       const d = dbRef.current!;
+      if (!canMessage(me, d.users.find((u) => u.id === otherId))) return null;
       const existing = d.conversations.find((c) => c.members.includes(meId!) && c.members.includes(otherId));
       if (existing) return existing.id;
       const id = uid('c');
@@ -286,6 +290,9 @@ function useStoreValue() {
       };
       commit((d) => log({ ...d, users: [...d.users, user] }, 'create_user', fullName(user)));
       return { ok: true };
+    },
+    setFonction(id: string, fonction: string) {
+      commit((d) => ({ ...d, users: d.users.map((x) => (x.id === id ? { ...x, fonction: fonction.trim() || undefined } : x)) }));
     },
     setRole(id: string, role: Role) {
       commit((d) => {

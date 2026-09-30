@@ -8,6 +8,7 @@ import { norm } from '@/components/shell/GlobalSearch';
 import { Avatar, Badge, Button, Card, EmptyState, Row, SearchBar, SectionHeader, Segmented, Tap } from '@/components/ui/primitives';
 import { Columns, Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { can } from '@/data/permissions';
 import { fullName, useMe, useStore, useUpcomingBirthdays } from '@/data/store';
 import { useI18n } from '@/i18n';
 
@@ -34,7 +35,7 @@ export default function Events() {
       <PageHeader
         title={d.events.title}
         subtitle={d.events.subtitle}
-        right={me.role === 'admin' && <Button label={d.events.create} icon="plus" onPress={() => setCreating(true)} />}
+        right={can(me, 'createEvent') && <Button label={d.events.create} icon="plus" onPress={() => setCreating(true)} />}
       />
       <Columns
         main={

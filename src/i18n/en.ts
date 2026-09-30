@@ -6,7 +6,7 @@ const en: Dict = {
     home: 'Home', directory: 'Directory', repere: 'Repère', events: 'Events', publications: 'Publications',
     messages: 'Messages', profile: 'My profile', profileShort: 'Profile', settings: 'Settings', notifications: 'Notifications',
     admin: 'Administration', dashboard: 'Dashboard', members: 'Members', approvals: 'Approvals', content: 'Content',
-    contact: 'Contact', logs: 'Audit log', more: 'More', back: 'Back', legal: 'Legal notice', sitemap: 'Sitemap',
+    contact: 'Contact', logs: 'Audit log', stats: 'Statistics', leadership: 'School leadership', more: 'More', back: 'Back', legal: 'Legal notice', sitemap: 'Sitemap',
   },
   roles: { alumni: 'Alumni', eleve: 'Student', honneur: 'Honorary member', admin: 'Admin' },
   gender: { F: 'Female', M: 'Male' },
@@ -41,7 +41,7 @@ const en: Dict = {
     pendingTitle: 'Account awaiting approval',
     pendingSub: "Thanks {name}! We've received your sign-up. An Amicale administrator will review your details — you'll get full access as soon as it's approved.",
     pendingStep1: 'Sign-up sent', pendingStep2: 'Review by an administrator', pendingStep3: 'Access to the community',
-    demoAccounts: 'Demo accounts', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Student', demoPending: 'Pending',
+    demoAccounts: 'Demo accounts', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Student', demoPending: 'Pending', demoDirection: 'Leadership',
   },
   home: {
     hello: 'Hello {name}', heroTitle: 'One community,\nthousands of stories.',
@@ -60,7 +60,7 @@ const en: Dict = {
     title: 'Directory', subtitle: 'Find community members by class, country or search.',
     searchPlaceholder: 'Search by name, class, country or school…', filterPromo: 'Class', filterCountry: 'Country', filterSchool: 'School',
     allPromos: 'All classes', allCountries: 'All countries', seePromo: 'View class', results: '{n} results',
-    honorary: 'Honorary members', noPromo: 'No class', jumpTo: 'Jump to',
+    honorary: 'School leadership', noPromo: 'No class', jumpTo: 'Jump to',
   },
   promo: {
     title: 'Class of {year}', whatsapp: 'Join the WhatsApp group', noWhatsapp: 'No WhatsApp group yet',
@@ -70,7 +70,7 @@ const en: Dict = {
   },
   member: {
     about: 'About', info: 'Details', sendMessage: 'Send a message', since: 'Member since {date}',
-    birthday: 'Birthday', phone: 'Phone', email: 'Email', location: 'Location', school: 'School / University', notFound: 'Member not found',
+    fonction: 'Position', messagingDisabled: 'Private messaging is disabled between school leadership and students.', birthday: 'Birthday', phone: 'Phone', email: 'Email', location: 'Location', school: 'School / University', notFound: 'Member not found',
   },
   repere: {
     title: 'Repère', subtitle: 'Explore the universities and countries where LFK alumni went to study.',
@@ -84,7 +84,7 @@ const en: Dict = {
     addPhotos: 'Add my photos', photos: '{n} photos', info: 'Details', date: 'Date', place: 'Venue', category: 'Category',
     addToCalendar: 'Add to calendar', backToEvents: 'Back to events', galleryEmpty: 'No photos yet. Be the first to share your memories!',
     galleryHint: 'Every approved member can add photos.', uploadedBy: 'Added by {name}',
-    adminZone: 'Admin zone', deleteEvent: 'Delete event', deletePhoto: 'Delete photo',
+    adminZone: 'Admin zone', manageZone: 'Event management', manageHint: 'Visible to administrators and to whoever created the event.', deleteEvent: 'Delete event', deletePhoto: 'Delete photo',
     create: 'Create an event', titleField: 'Title', descriptionField: 'Description', dateField: 'Date (YYYY-MM-DD)', timeField: 'Time (HH:MM)',
     locationField: 'Venue', coverField: 'Cover image URL', notFound: 'Event not found',
     categories: { soiree: 'Party', sport: 'Sport', culture: 'Culture', networking: 'Networking' },
@@ -117,6 +117,10 @@ const en: Dict = {
     passwordChanged: 'Password changed', about: 'About', resetDemo: 'Reset demo data',
     languageMore: 'More languages coming soon.',
   },
+  stats: {
+    title: 'Network statistics', subtitle: 'Where LFK alumni went, class by class and country by country.',
+    readOnly: 'View only', cardSub: '{n} members · {c} countries',
+  },
   notifications: {
     title: 'Notifications', markAll: 'Mark all as read', empty: 'No notifications',
     t: {
@@ -130,7 +134,7 @@ const en: Dict = {
     title: 'Admin dashboard', subtitle: 'Manage the community and follow Amicale activity.',
     toApprove: 'Members to approve', reported: 'Reported messages', upcomingEvents: 'Upcoming events', unreadContact: 'Unread contacts',
     stats: 'Statistics', totalMembers: 'Total members', vsLastYear: 'vs. last year', byRole: 'By role', byCountry: 'By country',
-    byPromo: 'By class', growth: 'Member growth', newPerMonth: 'New sign-ups per month',
+    byPromo: 'By class', bySchool: 'Most chosen universities', fonctionField: 'Position (e.g. Principal)', editFonction: 'Edit position', growth: 'Member growth', newPerMonth: 'New sign-ups per month',
     approvals: 'Approvals', approvalsSub: 'New accounts can access nothing until approved.', approve: 'Approve', refuse: 'Refuse',
     refuseConfirm: "Refusing permanently deletes {name}'s account.", noPending: 'No pending accounts 🎉',
     members: 'Member management', membersSub: 'Roles, passwords and account deletion.', createUser: 'Create a member',

@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { can } from '@/data/permissions';
 import { fullName, useInbox, useMe, useStore, useUnreadNotifications } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -107,6 +108,12 @@ function Sidebar({ compact }: { compact: boolean }) {
         <View style={{ marginTop: 20, gap: 4 }}>
           {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.admin}</Txt>}
           <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} />
+        </View>
+      )}
+      {me.role !== 'admin' && can(me, 'viewStats') && (
+        <View style={{ marginTop: 20, gap: 4 }}>
+          {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.leadership}</Txt>}
+          <SideLink item={{ href: '/statistiques', icon: 'bar-chart-2', label: d.nav.stats }} active={isActive(pathname, { href: '/statistiques', icon: 'bar-chart-2', label: '' })} compact={compact} />
         </View>
       )}
       <View style={{ flex: 1 }} />
@@ -220,7 +227,7 @@ function BottomNav() {
     { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] },
     { href: '/evenements', icon: 'calendar', label: d.nav.events },
     { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread },
-    { href: '/profil', icon: 'user', label: d.nav.profileShort, match: ['/parametres', '/admin', '/repere', '/publications', '/notifications'] },
+    { href: '/profil', icon: 'user', label: d.nav.profileShort, match: ['/parametres', '/admin', '/repere', '/publications', '/notifications', '/statistiques'] },
   ];
   return (
     <View style={{ flexDirection: 'row', backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: Math.max(insets.bottom, 8), paddingTop: 8 }}>

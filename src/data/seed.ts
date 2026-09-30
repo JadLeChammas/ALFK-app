@@ -8,6 +8,7 @@ export const DEMO_ACCOUNTS = {
   member: 'sarah.martin@amicale-lfk.demo',
   eleve: 'nour.haddad@amicale-lfk.demo',
   pending: 'attente@amicale-lfk.demo',
+  direction: 'direction@amicale-lfk.demo',
 };
 
 const img = (id: string, w = 1200) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
@@ -133,9 +134,13 @@ export function createSeed(now = new Date()): Db {
   add({ firstName: 'Julie', lastName: 'Martin', gender: 'F', role: 'alumni', promo: 2019, school: 'Sciences Po', city: 'Paris', country: 'FR', birthDate: '2001-09-01', avatar: portrait('F', 50) });
   const nour = add({ firstName: 'Nour', lastName: 'Haddad', gender: 'F', role: 'eleve', promo: 2027, school: 'Lycée Français du Koweït', city: 'Koweït City', country: 'KW', birthDate: birthdayIn(24, 2009), avatar: portrait('F', 90), email: DEMO_ACCOUNTS.eleve });
   const karim = add({ firstName: 'Karim', lastName: 'Nassar', gender: 'M', role: 'admin', promo: 2016, school: 'American University of Beirut', city: 'Koweït City', country: 'KW', birthDate: '1998-04-18', avatar: portrait('M', 8) });
-  add({ firstName: 'Hélène', lastName: 'Gauthier', gender: 'F', role: 'honneur', school: 'Ancienne proviseure du LFK', city: 'Bordeaux', country: 'FR', birthDate: '1962-10-21', avatar: portrait('F', 79), bio: 'Proviseure du LFK de 2008 à 2019.' });
-  add({ firstName: 'Michel', lastName: 'Laurent', gender: 'M', role: 'honneur', school: 'Ancien professeur de mathématiques', city: 'Koweït City', country: 'KW', birthDate: '1965-02-11', avatar: portrait('M', 67) });
-  add({ firstName: 'Samira', lastName: 'Aoun', gender: 'F', role: 'honneur', school: 'Partenaire — Ambassade de France', city: 'Koweït City', country: 'KW', birthDate: '1970-08-03', avatar: portrait('F', 58) });
+  // School leadership — honorary members (see data/permissions.ts).
+  const proviseur = add({
+    firstName: 'Philippe', lastName: 'Garnier', gender: 'M', role: 'honneur', fonction: 'Proviseur', school: 'Lycée Français du Koweït',
+    city: 'Koweït City', country: 'KW', birthDate: '1968-02-11', avatar: portrait('M', 67), email: DEMO_ACCOUNTS.direction,
+    bio: "Proviseur du Lycée Français du Koweït. Heureux de suivre le parcours de nos anciens élèves à travers le monde.",
+  });
+  add({ firstName: 'Samira', lastName: 'Aoun', gender: 'F', role: 'honneur', fonction: 'Assistante de direction', school: 'Lycée Français du Koweït', city: 'Koweït City', country: 'KW', birthDate: '1976-08-03', avatar: portrait('F', 58) });
 
   // Generated alumni and students.
   for (let i = 0; i < 78; i++) {
@@ -186,6 +191,7 @@ export function createSeed(now = new Date()): Db {
     { id: 'e2', title: 'Tournoi sportif inter-promos', date: at(8, 16), location: 'LFK · Koweït', category: 'sport', cover: IMAGES.sport, createdBy: karim.id, description: 'Football, basket et volley : chaque promo monte son équipe. Venez défendre les couleurs de votre année au gymnase du lycée.' },
     { id: 'e3', title: 'Halloween Party', date: at(31, 20), location: 'Salmiya · Koweït', category: 'soiree', cover: IMAGES.halloween, createdBy: karim.id, description: 'Costumes obligatoires, prix pour le plus beau déguisement.' },
     { id: 'e4', title: 'Afterwork LFK Business Club', date: at(45, 18, 30), location: 'Paris 8e', category: 'networking', cover: IMAGES.meeting, createdBy: jad.id, description: 'Premier afterwork du LFK Business Club : rencontres entre alumni entrepreneurs, consultants et ingénieurs.' },
+    { id: 'e9', title: "Forum d'orientation", date: at(20, 9), location: 'LFK · Koweït', category: 'culture', cover: IMAGES.lecture, createdBy: proviseur.id, description: "Les anciens élèves présentent leurs universités et leurs parcours aux élèves de Première et de Terminale. Alumni, inscrivez-vous auprès de la direction pour tenir un stand !" },
     { id: 'e5', title: 'Dîner de gala', date: at(73, 20), location: 'Koweït City', category: 'culture', cover: IMAGES.gala, createdBy: karim.id, description: "Le grand dîner annuel de l'Amicale, en présence de la direction du lycée et des membres d'honneur." },
     { id: 'e6', title: "Retrouvailles d'été", date: at(-72, 19), location: 'Paris 11e', category: 'soiree', cover: IMAGES.cheers, createdBy: jad.id, description: "Les alumni de passage à Paris se sont retrouvés pour une soirée d'été sur les quais." },
     { id: 'e7', title: 'Remise des diplômes 2026', date: at(-97, 18), location: 'LFK · Koweït', category: 'culture', cover: IMAGES.graduation, createdBy: karim.id, description: 'Bienvenue dans le réseau à la promo 2026 !' },
@@ -207,6 +213,7 @@ export function createSeed(now = new Date()): Db {
   addGallery('e1', 5, 4); // last year's edition photos already shared
 
   const publications: Db['publications'] = [
+    { id: 'pub7', title: "Forum d'orientation : les anciens au rendez-vous", category: 'annonce', date: ago(1), cover: IMAGES.lecture, authorId: proviseur.id, excerpt: 'La direction du lycée invite les alumni à partager leur parcours avec nos élèves.', body: "Chers anciens élèves,\n\nLe forum d'orientation du lycée aura lieu dans quelques semaines. Vos témoignages sont précieux pour nos élèves de Première et de Terminale qui préparent leurs choix d'études.\n\nSi vous souhaitez présenter votre université ou votre métier, contactez-nous via la messagerie de la plateforme.\n\nMerci pour votre fidélité au lycée." },
     { id: 'pub1', title: 'Rentrée 2026 : le mot du président', category: 'actualite', date: ago(2), cover: IMAGES.campus, authorId: jad.id, excerpt: "Une nouvelle année commence pour l'Amicale : nouveaux projets, nouvelle plateforme et beaucoup d'événements.", body: "Chères et chers membres,\n\nCette rentrée marque une étape importante pour l'Amicale du LFK : notre nouvelle plateforme réunit enfin toute la communauté au même endroit, sur téléphone comme sur ordinateur.\n\nCette année, nous voulons renforcer les liens entre les promos, accompagner les élèves dans leurs choix d'orientation grâce à Repère, et multiplier les rencontres, à Koweït comme à l'étranger.\n\nMerci à toutes celles et ceux qui font vivre ce réseau. À très vite lors de la soirée de rentrée !" },
     { id: 'pub2', title: 'Retour sur le voyage au Japon', category: 'article', date: ago(10), cover: IMAGES.japan, authorId: karim.id, excerpt: "24 membres, 10 jours, deux villes : récit d'un voyage qui a marqué l'année.", body: "De Shibuya aux temples de Kyoto, le voyage organisé par l'Amicale a réuni des membres de sept promos différentes.\n\nAu programme : visites, rencontres avec des alumni installés à Tokyo, et beaucoup de souvenirs à retrouver dans la galerie de l'événement." },
     { id: 'pub3', title: 'Nouvelle association : LFK Business Club', category: 'annonce', date: ago(15), cover: IMAGES.work, authorId: jad.id, excerpt: 'Un club pour connecter les alumni entrepreneurs, dirigeants et jeunes diplômés.', body: "Le LFK Business Club réunira chaque trimestre les alumni autour de conférences, d'afterworks et de mentorat.\n\nPremier rendez-vous : l'afterwork parisien, à retrouver dans les événements." },
@@ -260,7 +267,7 @@ export function createSeed(now = new Date()): Db {
     { id: 'l1', actorId: karim.id, action: 'approve', target: 'Emma Moreau', createdAt: ago(3) },
     { id: 'l2', actorId: jad.id, action: 'create_event', target: 'Soirée de rentrée', createdAt: ago(9) },
     { id: 'l3', actorId: jad.id, action: 'reset_password', target: 'Paul Girard', createdAt: ago(5.8) },
-    { id: 'l4', actorId: karim.id, action: 'change_role', target: 'Hélène Gauthier', meta: { role: 'honneur' }, createdAt: ago(12) },
+    { id: 'l4', actorId: karim.id, action: 'change_role', target: 'Samira Aoun', meta: { role: 'honneur' }, createdAt: ago(12) },
     { id: 'l5', actorId: jad.id, action: 'create_publication', target: 'Rentrée 2026 : le mot du président', createdAt: ago(2) },
   ];
 

@@ -48,7 +48,7 @@ export default function Article() {
             <Avatar uri={author.avatar} name={fullName(author)} size={36} />
             <View>
               <Txt variant="smallStrong">{f(d.publications.by, { name: fullName(author) })}</Txt>
-              <Txt variant="small" color="textSubtle">{d.roles[author.role]}</Txt>
+              <Txt variant="small" color="textSubtle">{author.fonction ?? d.roles[author.role]}</Txt>
             </View>
           </Row>
         )}
@@ -61,7 +61,7 @@ export default function Article() {
           <Txt key={i} style={{ fontSize: 17, lineHeight: 29 }}>{para}</Txt>
         ))}
       </View>
-      {me.role === 'admin' && (
+      {(me.role === 'admin' || pub.authorId === me.id) && (
         <Button
           label={d.common.delete}
           icon="trash-2"

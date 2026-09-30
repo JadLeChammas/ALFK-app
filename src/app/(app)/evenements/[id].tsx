@@ -142,13 +142,13 @@ export default function EventPage() {
               <ListRow icon="map-pin" title={event.location} subtitle={d.events.place} />
               <ListRow icon="tag" title={d.events.categories[event.category]} subtitle={d.events.category} last />
             </Card>
-            {isAdmin && (
+            {(isAdmin || event.createdBy === me.id) && (
               <Card style={{ borderColor: colors.warning, borderStyle: 'dashed' }}>
                 <Row gap={8} style={{ marginBottom: 12 }}>
                   <Feather name="shield" size={15} color={colors.warning} />
-                  <Txt variant="h3">{d.events.adminZone}</Txt>
+                  <Txt variant="h3">{d.events.manageZone}</Txt>
                 </Row>
-                <Txt variant="small" color="textMuted" style={{ marginBottom: 14 }}>{d.admin.contentSub}</Txt>
+                <Txt variant="small" color="textMuted" style={{ marginBottom: 14 }}>{d.events.manageHint}</Txt>
                 <Button label={d.events.deleteEvent} icon="trash-2" variant="danger" onPress={removeEvent} />
               </Card>
             )}

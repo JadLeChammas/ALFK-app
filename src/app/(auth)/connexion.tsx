@@ -29,6 +29,7 @@ export default function SignIn() {
     [d.auth.demoAdmin, DEMO_ACCOUNTS.admin],
     [d.auth.demoMember, DEMO_ACCOUNTS.member],
     [d.auth.demoEleve, DEMO_ACCOUNTS.eleve],
+    [d.auth.demoDirection, DEMO_ACCOUNTS.direction],
     [d.auth.demoPending, DEMO_ACCOUNTS.pending],
   ];
 

@@ -37,7 +37,9 @@ export default function Home() {
     { icon: 'users', label: d.nav.directory, href: '/annuaire' },
     { icon: 'book-open', label: d.nav.publications, href: '/publications' },
     { icon: 'message-circle', label: d.nav.messages, href: '/messages', badge: unread },
-    { icon: 'award', label: d.home.myPromo, href: me.promo ? `/annuaire/promo/${me.promo}` : '/profil/modifier' },
+    me.role === 'honneur'
+      ? { icon: 'bar-chart-2', label: d.nav.stats, href: '/statistiques' }
+      : { icon: 'award', label: d.home.myPromo, href: me.promo ? `/annuaire/promo/${me.promo}` : '/profil/modifier' },
     { icon: 'globe', label: d.nav.repere, href: '/repere' },
   ];
 
@@ -48,7 +50,7 @@ export default function Home() {
         <View style={{ gap: 4, flexShrink: 1 }}>
           <Txt variant={isMobile ? 'h1' : 'display'}>{f(d.home.hello, { name: me.firstName })} 👋</Txt>
           <Txt color="textMuted">
-            {formatDate(new Date(), { weekday: true })} · {d.roles[me.role]} · {d.app.name}
+            {formatDate(new Date(), { weekday: true })} · {me.fonction ?? d.roles[me.role]} · {d.app.name}
           </Txt>
         </View>
         {me.role === 'admin' && pending > 0 && (
@@ -150,7 +152,10 @@ export default function Home() {
           <SectionFooter label={d.home.seeAllBirthdays} onPress={() => router.push('/evenements')} />
         </Card>
 
-        {/* My promo */}
+        {/* My promo — or the network overview for school leadership */}
+        {me.role === 'honneur' ? (
+          <LeadershipCard />
+        ) : (
         <Card style={{ height: '100%' }} padded={false}>
           <View style={{ padding: 20, paddingBottom: 0 }}>
             <SectionHeader title={d.home.myPromo} icon="award" />
@@ -179,8 +184,28 @@ export default function Home() {
             <SectionFooter label={d.home.seeMyPromo} onPress={() => router.push(me.promo ? `/annuaire/promo/${me.promo}` : '/profil/modifier')} />
           </View>
         </Card>
+        )}
       </Grid>
     </Screen>
+  );
+}
+
+function LeadershipCard() {
+  const { d, f } = useI18n();
+  const { colors } = useTheme();
+  const members = useApprovedMembers();
+  const countries = new Set(members.map((u) => u.country).filter(Boolean)).size;
+  const alumni = members.filter((u) => u.role === 'alumni' || u.role === 'admin');
+  return (
+    <Card style={{ height: '100%' }}>
+      <SectionHeader title={d.nav.stats} icon="bar-chart-2" />
+      <View style={{ flex: 1, gap: 12 }}>
+        <Txt style={{ fontFamily: fonts.extrabold, fontSize: 40, lineHeight: 44, letterSpacing: -1, color: colors.text }}>{alumni.length}</Txt>
+        <Txt variant="small" color="textMuted">{f(d.stats.cardSub, { n: members.length, c: countries })}</Txt>
+        <Txt variant="small" color="textSubtle">{d.stats.subtitle}</Txt>
+      </View>
+      <SectionFooter label={d.nav.stats} onPress={() => router.push('/statistiques')} />
+    </Card>
   );
 }
 

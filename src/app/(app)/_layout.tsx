@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 
 import { AppShell } from '@/components/shell/AppShell';
+import { can } from '@/data/permissions';
 import { useMe } from '@/data/store';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -14,6 +15,9 @@ export default function MemberLayout() {
         <Stack.Screen name="index" />
         <Stack.Protected guard={me.role === 'admin'}>
           <Stack.Screen name="admin" />
+        </Stack.Protected>
+        <Stack.Protected guard={can(me, 'viewStats')}>
+          <Stack.Screen name="statistiques" />
         </Stack.Protected>
       </Stack>
     </AppShell>

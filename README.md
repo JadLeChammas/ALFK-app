@@ -24,6 +24,7 @@ l'appareil. Sur l'écran de connexion, les boutons « Comptes de démonstration 
 | Admin | `jad@amicale-lfk.demo` | Espace membre + tableau de bord admin |
 | Alumni | `sarah.martin@amicale-lfk.demo` | Espace membre |
 | Élève | `nour.haddad@amicale-lfk.demo` | Espace membre |
+| Direction | `direction@amicale-lfk.demo` | Proviseur (Membre d'honneur) : espace membre + publier, créer des événements, statistiques |
 | En attente | `attente@amicale-lfk.demo` | Écran « compte en attente » |
 
 Mot de passe : `demo1234`. Paramètres → Zone sensible → « Réinitialiser les données de démo »

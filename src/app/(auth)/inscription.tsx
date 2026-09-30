@@ -9,6 +9,7 @@ import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES, UNIVERSITIES } from '@/data/countries';
+import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import { useStore, type AuthError } from '@/data/store';
 import type { Gender, Role } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -90,7 +91,7 @@ export default function SignUp() {
           <View style={{ gap: 8 }}>
             <Txt variant="smallStrong" color="textMuted">{d.auth.status}</Txt>
             <Row gap={8} wrap>
-              {(['alumni', 'eleve', 'honneur'] as Role[]).map((r) => (
+              {SELF_SIGNUP_ROLES.map((r) => (
                 <Chip key={r} label={d.roles[r]} active={form.role === r} onPress={() => setForm((f) => ({ ...f, role: r }))} />
               ))}
             </Row>

@@ -4,7 +4,7 @@ const fr = {
     home: 'Accueil', directory: 'Annuaire', repere: 'Repère', events: 'Événements', publications: 'Publications',
     messages: 'Messages', profile: 'Mon profil', profileShort: 'Profil', settings: 'Paramètres', notifications: 'Notifications',
     admin: 'Administration', dashboard: 'Tableau de bord', members: 'Membres', approvals: 'Approbations', content: 'Contenus',
-    contact: 'Contact', logs: 'Journal', more: 'Plus', back: 'Retour', legal: 'Mentions légales', sitemap: 'Plan du site',
+    contact: 'Contact', logs: 'Journal', stats: 'Statistiques', leadership: 'Direction du lycée', more: 'Plus', back: 'Retour', legal: 'Mentions légales', sitemap: 'Plan du site',
   },
   roles: { alumni: 'Alumni', eleve: 'Élève', honneur: "Membre d'honneur", admin: 'Admin' },
   gender: { F: 'Femme', M: 'Homme' },
@@ -39,7 +39,7 @@ const fr = {
     pendingTitle: 'Compte en attente de validation',
     pendingSub: "Merci {name} ! Votre inscription a bien été reçue. Un administrateur de l'Amicale va vérifier vos informations — vous aurez accès à toute la plateforme dès son approbation.",
     pendingStep1: 'Inscription envoyée', pendingStep2: 'Vérification par un administrateur', pendingStep3: 'Accès à la communauté',
-    demoAccounts: 'Comptes de démonstration', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Élève', demoPending: 'En attente',
+    demoAccounts: 'Comptes de démonstration', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Élève', demoPending: 'En attente', demoDirection: 'Direction',
   },
   home: {
     hello: 'Bonjour {name}', heroTitle: "Une seule communauté,\ndes milliers d'histoires.",
@@ -58,7 +58,7 @@ const fr = {
     title: 'Annuaire', subtitle: 'Retrouvez les membres de la communauté par promo, pays ou recherche.',
     searchPlaceholder: 'Rechercher par nom, promo, pays ou école…', filterPromo: 'Promo', filterCountry: 'Pays', filterSchool: 'École',
     allPromos: 'Toutes les promos', allCountries: 'Tous les pays', seePromo: 'Voir la promo', results: '{n} résultats',
-    honorary: "Membres d'honneur", noPromo: 'Sans promo', jumpTo: 'Aller à',
+    honorary: 'Direction du lycée', noPromo: 'Sans promo', jumpTo: 'Aller à',
   },
   promo: {
     title: 'Promo {year}', whatsapp: 'Rejoindre le groupe WhatsApp', noWhatsapp: 'Pas encore de groupe WhatsApp',
@@ -68,7 +68,7 @@ const fr = {
   },
   member: {
     about: 'À propos', info: 'Informations', sendMessage: 'Envoyer un message', since: 'Membre depuis {date}',
-    birthday: 'Anniversaire', phone: 'Téléphone', email: 'E-mail', location: 'Localisation', school: 'École / Université', notFound: 'Membre introuvable',
+    fonction: 'Fonction', messagingDisabled: 'La messagerie privée est désactivée entre la direction du lycée et les élèves.', birthday: 'Anniversaire', phone: 'Téléphone', email: 'E-mail', location: 'Localisation', school: 'École / Université', notFound: 'Membre introuvable',
   },
   repere: {
     title: 'Repère', subtitle: 'Explorez les universités et pays où sont partis les anciens élèves du LFK.',
@@ -82,7 +82,7 @@ const fr = {
     addPhotos: 'Ajouter mes photos', photos: '{n} photos', info: 'Informations', date: 'Date', place: 'Lieu', category: 'Catégorie',
     addToCalendar: 'Ajouter à mon agenda', backToEvents: 'Retour aux événements', galleryEmpty: 'Aucune photo pour le moment. Soyez le premier à partager vos souvenirs !',
     galleryHint: 'Tous les membres approuvés peuvent ajouter leurs photos.', uploadedBy: 'Ajoutée par {name}',
-    adminZone: 'Zone administrateur', deleteEvent: "Supprimer l'événement", deletePhoto: 'Supprimer la photo',
+    adminZone: 'Zone administrateur', manageZone: "Gestion de l'événement", manageHint: 'Visible par les administrateurs et par la personne qui a créé l’événement.', deleteEvent: "Supprimer l'événement", deletePhoto: 'Supprimer la photo',
     create: 'Créer un événement', titleField: 'Titre', descriptionField: 'Description', dateField: 'Date (AAAA-MM-JJ)', timeField: 'Heure (HH:MM)',
     locationField: 'Lieu', coverField: "URL de l'image de couverture", notFound: 'Événement introuvable',
     categories: { soiree: 'Soirée', sport: 'Sport', culture: 'Culture', networking: 'Networking' },
@@ -115,6 +115,10 @@ const fr = {
     passwordChanged: 'Mot de passe modifié', about: 'À propos', resetDemo: 'Réinitialiser les données de démo',
     languageMore: "D'autres langues arriveront bientôt.",
   },
+  stats: {
+    title: 'Statistiques du réseau', subtitle: 'Où sont partis les anciens élèves du LFK, promo par promo et pays par pays.',
+    readOnly: 'Consultation uniquement', cardSub: '{n} membres · {c} pays',
+  },
   notifications: {
     title: 'Notifications', markAll: 'Tout marquer comme lu', empty: 'Aucune notification',
     t: {
@@ -128,7 +132,7 @@ const fr = {
     title: 'Tableau de bord Admin', subtitle: "Gérez la communauté et suivez l'activité de l'Amicale.",
     toApprove: 'Membres à approuver', reported: 'Messages signalés', upcomingEvents: 'Événements à venir', unreadContact: 'Contacts non lus',
     stats: 'Statistiques', totalMembers: 'Total des membres', vsLastYear: 'vs. l’an dernier', byRole: 'Par rôle', byCountry: 'Par pays',
-    byPromo: 'Par promo', growth: 'Croissance des membres', newPerMonth: 'Nouveaux inscrits par mois',
+    byPromo: 'Par promo', bySchool: 'Universités les plus choisies', fonctionField: 'Fonction (ex. Proviseur)', editFonction: 'Modifier la fonction', growth: 'Croissance des membres', newPerMonth: 'Nouveaux inscrits par mois',
     approvals: 'Approbations', approvalsSub: "Les nouveaux comptes n'ont accès à rien avant validation.", approve: 'Approuver', refuse: 'Refuser',
     refuseConfirm: 'Refuser supprime définitivement le compte de {name}.', noPending: 'Aucun compte en attente 🎉',
     members: 'Gestion des membres', membersSub: 'Rôles, mots de passe et suppression de comptes.', createUser: 'Créer un membre',

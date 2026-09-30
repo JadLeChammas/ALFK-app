@@ -5,6 +5,7 @@ import { PublicationCard } from '@/components/cards';
 import { PublicationFormModal } from '@/components/forms';
 import { Button, Chip, EmptyState } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
+import { can } from '@/data/permissions';
 import { useMe, useStore } from '@/data/store';
 import type { PublicationCategory } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -25,7 +26,7 @@ export default function Publications() {
       <PageHeader
         title={d.publications.title}
         subtitle={d.publications.subtitle}
-        right={me.role === 'admin' && <Button label={d.publications.create} icon="edit-3" onPress={() => setCreating(true)} />}
+        right={can(me, 'publish') && <Button label={d.publications.create} icon="edit-3" onPress={() => setCreating(true)} />}
       />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
         <Chip label={d.common.all} active={cat === 'all'} onPress={() => setCat('all')} count={db.publications.length} />

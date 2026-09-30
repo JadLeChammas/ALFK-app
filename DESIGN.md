@@ -18,6 +18,19 @@ Ce document fixe l'architecture, les pages, les composants et le design system a
 Le gating est **structurel** : `Stack.Protected` dans `src/app/_layout.tsx`. Une URL devinée ne
 contourne pas le garde (et côté serveur, les politiques RLS Supabase appliquent les mêmes règles).
 
+### Rôles et droits (`src/data/permissions.ts`)
+
+| | Alumni / Élève | Membre d'honneur (direction du lycée) | Admin |
+|---|---|---|---|
+| Annuaire, Repère, Événements, galeries, Publications, Messages | ✓ | ✓ | ✓ |
+| Publier un article, créer un événement | — | ✓ (gère ses propres contenus) | ✓ |
+| Statistiques du réseau (lecture seule, `/statistiques`) | — | ✓ | ✓ (dans le tableau de bord) |
+| Approbations, comptes, rôles, modération, contact, journal | — | — | ✓ |
+
+- Le rôle Membre d'honneur est réservé au proviseur et à son assistante : il n'est **pas proposé à
+  l'inscription**, seul un Admin l'attribue (avec un champ « Fonction », ex. « Proviseur »).
+- Messagerie privée **désactivée entre la direction et les élèves** (mineurs), dans les deux sens.
+
 ## 2. Plan des routes
 
 ```
@@ -35,6 +48,7 @@ src/app/
     publications/index · [id]
     messages/index · [id]     Inbox + conversation
     profil/index · modifier   Profil + édition
+    statistiques.tsx          Statistiques (direction + admins)
     parametres.tsx            Apparence, langue, compte, confidentialité, sécurité
     notifications.tsx
     admin/index · membres · approbations · contenus · contact · journal
