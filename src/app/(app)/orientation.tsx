@@ -25,7 +25,7 @@ export default function Orientation() {
   const { d, f, country: countryOf } = useI18n();
   const { colors } = useTheme();
   const me = useMe();
-  const graduates = useApprovedMembers().filter((u) => (u.role === 'alumni' || u.role === 'admin') && u.school && u.id !== me.id);
+  const graduates = useApprovedMembers().filter((u) => (u.role === 'alumni' || u.role === 'admin') && u.school);
   const [field, setField] = useState<FieldKey | 'all'>('all');
   const [country, setCountry] = useState<string>('all');
   const [q, setQ] = useState('');
@@ -142,7 +142,9 @@ function GraduateCard({ user }: { user: User }) {
         )}
       </View>
       <View style={{ flex: 1 }} />
-      {canMessage(me, user) && <Button label={d.orientation.ask} icon="message-circle" size="sm" variant={user.mentor ? 'primary' : 'soft'} onPress={() => start(user.id)} />}
+      {user.id === me.id ? (
+        <Badge label={d.common.you} tone="primary" style={{ alignSelf: 'center' }} />
+      ) : canMessage(me, user) && <Button label={d.orientation.ask} icon="message-circle" size="sm" variant={user.mentor ? 'primary' : 'soft'} onPress={() => start(user.id)} />}
     </Card>
   );
 }
