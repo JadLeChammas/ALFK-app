@@ -51,7 +51,7 @@ export default function Home() {
       {/* Greeting */}
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
         <View style={{ gap: 4, flexShrink: 1 }}>
-          <Txt variant={isMobile ? 'h1' : 'display'}>{f(d.home.hello, { name: me.firstName })} 👋</Txt>
+          <Txt variant={isMobile ? 'h1' : 'display'}>{f(d.home.hello, { name: me.firstName })}</Txt>
           <Txt color="textMuted">
             {formatDate(new Date(), { weekday: true })} · {me.fonction ?? d.roles[me.role]} · {d.app.name}
           </Txt>
