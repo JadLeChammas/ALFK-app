@@ -10,9 +10,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
-import { DialogProvider } from '@/components/ui/Dialogs';
+import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
 import { StoreProvider, useStore } from '@/data/store';
-import { I18nProvider } from '@/i18n';
+import { I18nProvider, useI18n } from '@/i18n';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -24,6 +24,7 @@ export default function RootLayout() {
         <StoreProvider>
           <DialogProvider>
             <RootNavigator />
+            <StoreErrorToast />
           </DialogProvider>
         </StoreProvider>
       </I18nProvider>
@@ -74,4 +75,17 @@ function RootNavigator() {
       </Stack>
     </NavThemeProvider>
   );
+}
+
+/** Surfaces writes the backend refused (the store has already resynced the data). */
+function StoreErrorToast() {
+  const { error, actions } = useStore();
+  const { toast } = useDialogs();
+  const { d, f } = useI18n();
+  useEffect(() => {
+    if (!error) return;
+    toast(f(d.errors.saveFailed, { msg: error }), 'danger');
+    actions.clearError();
+  }, [error]); // eslint-disable-line react-hooks/exhaustive-deps
+  return null;
 }

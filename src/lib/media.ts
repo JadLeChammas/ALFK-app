@@ -1,8 +1,11 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Platform, Share } from 'react-native';
 
-/** Opens the photo library; returns picked image URIs (empty when cancelled). */
-export async function pickImages(multiple = true): Promise<string[]> {
+import type { PickedImage } from '@/data/remote';
+import { isRemote } from './supabase';
+
+/** Opens the photo library; returns the picked images (empty when cancelled). */
+export async function pickImages(multiple = true): Promise<PickedImage[]> {
   if (Platform.OS !== 'web') {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) return [];
@@ -14,9 +17,11 @@ export async function pickImages(multiple = true): Promise<string[]> {
     allowsEditing: !multiple,
     aspect: multiple ? undefined : [1, 1],
     quality: 0.6,
+    // Supabase uploads need the bytes; the local demo only keeps the URI.
+    base64: isRemote,
   });
   if (res.canceled || !res.assets) return [];
-  return res.assets.map((a) => a.uri);
+  return res.assets.map((a) => ({ uri: a.uri, base64: a.base64, mimeType: a.mimeType }));
 }
 
 /** Adds an event to the user's calendar: downloads an .ics on web, opens the share sheet on native. */

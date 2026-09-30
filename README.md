@@ -30,6 +30,43 @@ l'appareil. Sur l'écran de connexion, les boutons « Comptes de démonstration 
 Mot de passe : `demo1234`. Paramètres → Zone sensible → « Réinitialiser les données de démo »
 remet tout à zéro.
 
+## Mise en ligne : Supabase (base de données) + Vercel (site)
+
+Sans configuration, l'app tourne en **démo locale**. Avec les variables Supabase, elle utilise la vraie base.
+
+### 1. Supabase
+1. *SQL Editor* → *New query* → coller [`supabase/schema.sql`](supabase/schema.sql) → **Run**.
+   Facultatif : faire pareil avec [`supabase/seed.sql`](supabase/seed.sql) (promos, événements et publications d'exemple).
+2. *Authentication → URL Configuration* : **Site URL** = l'adresse Vercel (ex. `https://alfk-app.vercel.app`),
+   et ajouter `https://alfk-app.vercel.app/**` dans **Redirect URLs** (liens de réinitialisation du mot de passe).
+3. *Authentication → Sign In / Providers → Email* : « Confirm email » peut être désactivé, puisque chaque
+   compte est de toute façon validé par un admin.
+4. *Project Settings → API Keys* : noter la **Publishable key** et la **Secret key** (la secrète ne se partage jamais).
+
+### 2. Vercel
+1. *Add New → Project* → importer le repo **ALFK-app** (la config est dans [`vercel.json`](vercel.json)).
+2. *Environment Variables* :
+
+| Nom | Valeur |
+|---|---|
+| `EXPO_PUBLIC_SUPABASE_URL` | Project URL Supabase |
+| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Publishable key |
+| `SUPABASE_SECRET_KEY` | Secret key (serveur uniquement : fonctions [`api/`](api/admin.ts)) |
+
+3. **Deploy**.
+
+### 3. Premier administrateur
+S'inscrire sur le site, puis dans Supabase → *SQL Editor* :
+```sql
+update public.profiles set role = 'admin', approved = true where email = 'votre@email.com';
+```
+Ensuite, tout se gère depuis l'espace admin de l'app.
+
+### En local avec Supabase
+Copier `.env.example` en `.env.local` et remplir les deux variables `EXPO_PUBLIC_…`.
+Les actions admin qui passent par `api/` (créer un membre, réinitialiser un mot de passe, supprimer un
+compte) ne fonctionnent qu'une fois déployées sur Vercel.
+
 ## Vérifications
 
 ```bash

@@ -33,19 +33,34 @@ export default function SignUp() {
     setStep(2);
   };
 
-  const submit = () => {
+  const [busy, setBusy] = useState(false);
+  const [confirmEmail, setConfirmEmail] = useState(false);
+
+  const submit = async () => {
     const promo = parseInt(form.promo, 10);
-    const r = actions.signUp({
+    setBusy(true);
+    const r = await actions.signUp({
       ...form,
       promo: Number.isFinite(promo) ? promo : undefined,
       school: form.school || undefined,
       city: form.city || undefined,
     });
+    setBusy(false);
     if (!r.ok) {
       setError(r.error);
-      if (r.error !== 'weak_password') setStep(1);
+      if (r.error !== 'weak_password' && r.error !== 'unknown') setStep(1);
+    } else if (r.confirmEmail) {
+      setConfirmEmail(true);
     }
   };
+
+  if (confirmEmail) {
+    return (
+      <AuthFrame title={d.auth.confirmTitle} subtitle={d.auth.confirmSub}>
+        <Button label={d.auth.backToSignIn} full size="lg" onPress={() => router.replace('/connexion')} />
+      </AuthFrame>
+    );
+  }
 
   const suggestions = UNIVERSITIES[form.country] ?? [];
 
@@ -121,7 +136,7 @@ export default function SignUp() {
           {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
           <Row gap={10}>
             <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(1)} />
-            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} />
+            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} />
           </Row>
         </View>
       )}

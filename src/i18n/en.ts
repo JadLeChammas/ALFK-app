@@ -11,6 +11,7 @@ const en: Dict = {
   roles: { alumni: 'Alumni', eleve: 'Student', honneur: 'Honorary member', admin: 'Admin' },
   gender: { F: 'Female', M: 'Male' },
   continents: { europe: 'Europe', asia: 'Asia & Middle East', africa: 'Africa', north_america: 'North America', south_america: 'South America', oceania: 'Oceania' },
+  errors: { saveFailed: 'Your change could not be saved: {msg}' },
   common: {
     search: 'Search', seeAll: 'See all', see: 'View', save: 'Save', cancel: 'Cancel', delete: 'Delete',
     confirm: 'Confirm', edit: 'Edit', close: 'Close', send: 'Send', add: 'Add', create: 'Create', done: 'Done',
@@ -31,10 +32,11 @@ const en: Dict = {
     errors: {
       invalid_credentials: 'Incorrect email or password.', email_taken: 'An account already exists with this email.',
       weak_password: 'Password must be at least 8 characters.', unknown_email: 'No account with this email.',
-      wrong_password: 'Current password is incorrect.', mismatch: 'Passwords do not match.', missing: 'Please fill in all required fields.',
+      wrong_password: 'Current password is incorrect.', unknown: 'Something went wrong. Please try again in a moment.', mismatch: 'Passwords do not match.', missing: 'Please fill in all required fields.',
     },
     forgotTitle: 'Forgot password', forgotSub: "Enter your email and we'll send you a link to choose a new password.",
-    sendLink: 'Send link', linkSent: 'Email sent', linkSentSub: 'Check your inbox and click the link we sent you.',
+    sendLink: 'Send link', linkSent: 'Email sent', linkSentSub: 'If an account exists for this address, you will receive an email. Click the link inside it.',
+    confirmTitle: 'Confirm your email address', confirmSub: 'We sent you a confirmation link. Click it, then sign in: an administrator will then review your account.',
     openDemoLink: 'Open the emailed link (demo)', backToSignIn: 'Back to sign in',
     recoveryTitle: 'New password', recoverySub: 'Choose a new password to secure your account.',
     newPassword: 'New password', confirmPassword: 'Confirm password', currentPassword: 'Current password',

@@ -28,6 +28,7 @@ export default function EventPage() {
   const users = useUserMap();
   const me = useMe();
   const [open, setOpen] = useState<number | null>(null);
+  const [uploading, setUploading] = useState(false);
   const event = db.events.find((e) => e.id === id);
   const photos = useMemo(() => db.photos.filter((p) => p.eventId === id), [db.photos, id]);
   const isAdmin = me.role === 'admin';
@@ -42,11 +43,12 @@ export default function EventPage() {
   }
 
   const upload = async () => {
-    const uris = await pickImages(true);
-    if (uris.length) {
-      actions.addPhotos(event.id, uris);
-      toast(f(d.events.photos, { n: uris.length }));
-    }
+    const images = await pickImages(true);
+    if (!images.length) return;
+    setUploading(true);
+    const n = await actions.addPhotos(event.id, images);
+    setUploading(false);
+    toast(n ? f(d.events.photos, { n }) : d.auth.errors.unknown, n ? 'success' : 'danger');
   };
 
   const removePhoto = async (photoId: string) => {
@@ -112,7 +114,7 @@ export default function EventPage() {
                   <Feather name="users" size={13} color={colors.textSubtle} />
                   <Txt variant="small" color="textSubtle" style={{ flexShrink: 1 }}>{d.events.galleryHint}</Txt>
                 </Row>
-                <Button label={d.events.addPhotos} icon="upload" size="sm" onPress={upload} />
+                <Button label={d.events.addPhotos} icon="upload" size="sm" onPress={upload} loading={uploading} />
               </Row>
               {photos.length === 0 ? (
                 <EmptyState icon="camera" title={d.events.galleryEmpty} />

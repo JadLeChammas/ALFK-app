@@ -46,12 +46,13 @@ export default function ManageMembers() {
   const resetPassword = async (u: User) => {
     const pw = await prompt({ title: d.admin.resetPassword, message: fullName(u), placeholder: d.auth.passwordHint, secure: true });
     if (!pw) return;
-    const r = actions.adminResetPassword(u.id, pw);
+    const r = await actions.adminResetPassword(u.id, pw);
     toast(r.ok ? d.admin.passwordReset : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
   };
   const remove = async (u: User) => {
     if (await confirm({ title: d.admin.deleteUser, message: f(d.admin.deleteUserConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.common.delete })) {
-      actions.deleteUser(u.id);
+      const r = await actions.deleteUser(u.id);
+      if (!r.ok) toast(d.auth.errors.unknown, 'danger');
       setEditing(null);
     }
   };
@@ -173,9 +174,12 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
     setForm((x) => ({ ...x, [k]: v }));
     setError(null);
   };
-  const submit = () => {
+  const [busy, setBusy] = useState(false);
+  const submit = async () => {
     const promo = parseInt(form.promo, 10);
-    const r = actions.createUser({ ...form, promo: Number.isFinite(promo) ? promo : undefined, fonction: form.role === 'honneur' && form.fonction.trim() ? form.fonction.trim() : undefined });
+    setBusy(true);
+    const r = await actions.createUser({ ...form, promo: Number.isFinite(promo) ? promo : undefined, fonction: form.role === 'honneur' && form.fonction.trim() ? form.fonction.trim() : undefined });
+    setBusy(false);
     if (!r.ok) return setError(r.error);
     toast(d.admin.userCreated);
     setForm(blank);
@@ -216,7 +220,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
             </View>
             {form.role === 'honneur' && <Input label={d.admin.fonctionField} icon="briefcase" value={form.fonction} onChangeText={set('fonction')} />}
             {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
-            <Button label={d.common.create} icon="user-plus" full size="lg" onPress={submit} disabled={!form.firstName || !form.lastName || !form.email || !form.password} />
+            <Button label={d.common.create} icon="user-plus" full size="lg" onPress={submit} loading={busy} disabled={!form.firstName || !form.lastName || !form.email || !form.password} />
           </ScrollView>
         </Pressable>
       </Pressable>

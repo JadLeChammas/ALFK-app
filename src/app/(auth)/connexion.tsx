@@ -14,14 +14,17 @@ import { useTheme } from '@/theme/ThemeProvider';
 export default function SignIn() {
   const { d } = useI18n();
   const { colors } = useTheme();
-  const { actions } = useStore();
+  const { actions, isRemote } = useStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  const submit = (e = email, p = password) => {
-    const r = actions.signIn(e, p);
+  const submit = async (e = email, p = password) => {
+    setBusy(true);
+    const r = await actions.signIn(e, p);
+    setBusy(false);
     if (!r.ok) setError(r.error);
   };
 
@@ -38,6 +41,7 @@ export default function SignIn() {
       title={d.auth.welcome}
       subtitle={d.auth.welcomeSub}
       footer={
+        !isRemote && (
         <View style={{ gap: 12, padding: 16, borderRadius: 18, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.borderStrong }}>
           <Row gap={8}>
             <Feather name="zap" size={14} color={colors.warning} />
@@ -50,6 +54,7 @@ export default function SignIn() {
             ))}
           </Row>
         </View>
+        )
       }>
       <View style={{ gap: 16 }}>
         <Input label={d.auth.email} icon="mail" value={email} onChangeText={(v) => { setEmail(v); setError(null); }} autoCapitalize="none" keyboardType="email-address" autoComplete="email" placeholder={d.auth.emailPlaceholder} />
@@ -76,7 +81,7 @@ export default function SignIn() {
             <Txt variant="smallStrong" color="danger" style={{ flex: 1 }}>{d.auth.errors[error]}</Txt>
           </Row>
         )}
-        <Button label={d.auth.signIn} onPress={() => submit()} full size="lg" disabled={!email || !password} />
+        <Button label={d.auth.signIn} onPress={() => submit()} full size="lg" disabled={!email || !password} loading={busy} />
         <Row gap={12}>
           <Divider style={{ flex: 1 }} />
           <Txt variant="small" color="textSubtle">{d.auth.noAccount}</Txt>

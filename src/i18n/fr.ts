@@ -9,6 +9,7 @@ const fr = {
   roles: { alumni: 'Alumni', eleve: 'Élève', honneur: "Membre d'honneur", admin: 'Admin' },
   gender: { F: 'Femme', M: 'Homme' },
   continents: { europe: 'Europe', asia: 'Asie & Moyen-Orient', africa: 'Afrique', north_america: 'Amérique du Nord', south_america: 'Amérique du Sud', oceania: 'Océanie' },
+  errors: { saveFailed: 'La modification n’a pas pu être enregistrée : {msg}' },
   common: {
     search: 'Rechercher', seeAll: 'Voir tout', see: 'Voir', save: 'Enregistrer', cancel: 'Annuler', delete: 'Supprimer',
     confirm: 'Confirmer', edit: 'Modifier', close: 'Fermer', send: 'Envoyer', add: 'Ajouter', create: 'Créer', done: 'Terminé',
@@ -29,10 +30,11 @@ const fr = {
     errors: {
       invalid_credentials: 'E-mail ou mot de passe incorrect.', email_taken: 'Un compte existe déjà avec cet e-mail.',
       weak_password: 'Le mot de passe doit contenir au moins 8 caractères.', unknown_email: 'Aucun compte avec cet e-mail.',
-      wrong_password: 'Mot de passe actuel incorrect.', mismatch: 'Les mots de passe ne correspondent pas.', missing: 'Merci de remplir tous les champs obligatoires.',
+      wrong_password: 'Mot de passe actuel incorrect.', unknown: 'Une erreur est survenue. Réessayez dans un instant.', mismatch: 'Les mots de passe ne correspondent pas.', missing: 'Merci de remplir tous les champs obligatoires.',
     },
     forgotTitle: 'Mot de passe oublié', forgotSub: 'Indiquez votre e-mail : nous vous enverrons un lien pour choisir un nouveau mot de passe.',
-    sendLink: 'Envoyer le lien', linkSent: 'E-mail envoyé', linkSentSub: 'Consultez votre boîte mail et cliquez sur le lien reçu.',
+    sendLink: 'Envoyer le lien', linkSent: 'E-mail envoyé', linkSentSub: 'Si un compte existe avec cette adresse, vous allez recevoir un e-mail. Cliquez sur le lien qu’il contient.',
+    confirmTitle: 'Confirmez votre adresse e-mail', confirmSub: 'Nous vous avons envoyé un lien de confirmation. Cliquez dessus, puis connectez-vous : votre compte sera ensuite validé par un administrateur.',
     openDemoLink: 'Ouvrir le lien reçu (démo)', backToSignIn: 'Retour à la connexion',
     recoveryTitle: 'Nouveau mot de passe', recoverySub: 'Choisissez un nouveau mot de passe pour sécuriser votre compte.',
     newPassword: 'Nouveau mot de passe', confirmPassword: 'Confirmer le mot de passe', currentPassword: 'Mot de passe actuel',

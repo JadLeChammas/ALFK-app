@@ -55,14 +55,24 @@ export default function EditProfile() {
     router.back();
   };
 
+  const [uploading, setUploading] = useState(false);
   const changePhoto = async () => {
-    const [uri] = await pickImages(false);
-    if (uri) setForm((f) => ({ ...f, avatar: uri }));
+    const [img] = await pickImages(false);
+    if (!img) return;
+    setUploading(true);
+    try {
+      const url = await actions.uploadImage(img, 'avatars');
+      setForm((f) => ({ ...f, avatar: url }));
+    } catch {
+      toast(d.auth.errors.unknown, 'danger');
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const changePassword = () => {
+  const changePassword = async () => {
     if (pw.next !== pw.confirm) return setPwError(d.auth.errors.mismatch);
-    const r = actions.changePassword(pw.current, pw.next);
+    const r = await actions.changePassword(pw.current, pw.next);
     if (!r.ok) return setPwError(d.auth.errors[r.error]);
     setPw({ current: '', next: '', confirm: '' });
     setPwError(null);
@@ -116,7 +126,7 @@ export default function EditProfile() {
                   <Feather name="camera" size={15} color="#fff" />
                 </View>
               </Tap>
-              <Button label={d.profile.changePhoto} variant="secondary" size="sm" icon="image" onPress={changePhoto} />
+              <Button label={d.profile.changePhoto} variant="secondary" size="sm" icon="image" onPress={changePhoto} loading={uploading} />
             </Card>
             <Card style={{ gap: 14 }}>
               <Txt variant="h3">{d.settings.changePassword}</Txt>

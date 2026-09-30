@@ -63,7 +63,10 @@ export default function Approvals() {
                     icon="x"
                     variant="danger"
                     onPress={async () => {
-                      if (await confirm({ title: d.admin.refuse, message: f(d.admin.refuseConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.admin.refuse })) actions.refuseUser(u.id);
+                      if (await confirm({ title: d.admin.refuse, message: f(d.admin.refuseConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.admin.refuse })) {
+                        const r = await actions.refuseUser(u.id);
+                        if (!r.ok) toast(d.auth.errors.unknown, 'danger');
+                      }
                     }}
                   />
                 </Row>

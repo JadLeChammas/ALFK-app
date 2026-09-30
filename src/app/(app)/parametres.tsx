@@ -16,7 +16,7 @@ import { palettes, radius } from '@/theme/tokens';
 export default function Settings() {
   const { d, lang, setLang } = useI18n();
   const { colors, preference, setPreference } = useTheme();
-  const { actions } = useStore();
+  const { actions, isRemote } = useStore();
   const { confirm, toast } = useDialogs();
   const me = useMe();
   const [notif, setNotif] = useState({ messages: true, events: true, birthdays: true });
@@ -101,7 +101,7 @@ export default function Settings() {
 
       <Section title={d.settings.danger} icon="alert-triangle" card danger>
         <ListRow icon="log-out" title={d.common.signOut} onPress={actions.signOut} />
-        <ListRow icon="refresh-ccw" title={d.settings.resetDemo} subtitle={d.common.demo} onPress={async () => (await confirm({ title: d.settings.resetDemo, danger: true })) && actions.resetDemo()} />
+        {!isRemote && <ListRow icon="refresh-ccw" title={d.settings.resetDemo} subtitle={d.common.demo} onPress={async () => (await confirm({ title: d.settings.resetDemo, danger: true })) && actions.resetDemo()} />}
         <ListRow
           icon="trash-2"
           title={d.settings.deleteAccount}
@@ -109,7 +109,10 @@ export default function Settings() {
           danger
           last
           onPress={async () => {
-            if (await confirm({ title: d.settings.deleteAccount, message: d.settings.deleteAccountHint, danger: true, confirmLabel: d.common.delete })) actions.deleteMyAccount();
+            if (await confirm({ title: d.settings.deleteAccount, message: d.settings.deleteAccountHint, danger: true, confirmLabel: d.common.delete })) {
+              const r = await actions.deleteMyAccount();
+              if (!r.ok) toast(d.auth.errors.unknown, 'danger');
+            }
           }}
         />
       </Section>

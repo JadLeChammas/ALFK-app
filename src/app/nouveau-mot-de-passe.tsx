@@ -15,9 +15,12 @@ export default function NewPassword() {
   const [pw2, setPw2] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const submit = () => {
+  const [busy, setBusy] = useState(false);
+  const submit = async () => {
     if (pw !== pw2) return setError(d.auth.errors.mismatch);
-    const r = actions.completeRecovery(pw);
+    setBusy(true);
+    const r = await actions.completeRecovery(pw);
+    setBusy(false);
     if (!r.ok) setError(d.auth.errors[r.error]);
   };
 
@@ -27,7 +30,7 @@ export default function NewPassword() {
         <Txt variant="smallStrong" color="textMuted">{me?.email}</Txt>
         <Input label={d.auth.newPassword} icon="lock" value={pw} onChangeText={(v) => { setPw(v); setError(null); }} secureTextEntry hint={d.auth.passwordHint} autoComplete="new-password" />
         <Input label={d.auth.confirmPassword} icon="lock" value={pw2} onChangeText={(v) => { setPw2(v); setError(null); }} secureTextEntry onSubmitEditing={submit} error={error ?? undefined} />
-        <Button label={d.common.save} full size="lg" onPress={submit} disabled={!pw || !pw2} />
+        <Button label={d.common.save} full size="lg" onPress={submit} disabled={!pw || !pw2} loading={busy} />
         <Button label={d.common.cancel} variant="ghost" full onPress={actions.signOut} />
       </View>
     </AuthFrame>
