@@ -3,7 +3,7 @@ import type { Dict } from './fr';
 const zh: Dict = {
   app: { name: 'Amicale LFK', long: '科威特法国高中校友会', tagline: 'LFK 校友的私人网络' },
   nav: {
-    orientation: '升学指导', calendar: '日历', whatsapp: 'WhatsApp', honorary: '荣誉会员', community: '社区',
+    orientation: '升学指导', calendar: '日历', whatsapp: 'WhatsApp', honorary: '合作伙伴', community: '社区',
     home: '首页', directory: '通讯录', repere: 'Repère', events: '活动', publications: '发布', publicationsShort: '资讯',
     messages: '消息', profile: '我的资料', profileShort: '资料', settings: '设置', notifications: '通知',
     admin: '管理', dashboard: '控制台', members: '成员', approvals: '审核', content: '内容',
@@ -211,8 +211,8 @@ const zh: Dict = {
     noGroup: '此 Promo LFK 还没有 WhatsApp 群组。', askAdmin: '管理员可在 Promo LFK 页面添加链接。', allGroups: '所有 Promo LFK 群组',
   },
   honorary: {
-    title: '荣誉会员', subtitle: '支持校友会的机构和人士。', institutions: '机构',
-    people: '学校领导', website: '网站', add: '添加机构',
+    title: '合作伙伴', subtitle: '支持校友会的机构和人士。', institutions: '机构',
+    people: '学校领导', website: '网站', add: '添加合作伙伴',
     name: '名称', description: '简介', websiteField: '网站（可选）',
     logoField: '标志：图片地址（可选）', invalidUrl: '地址无效：必须以 https:// 开头', permissionNote: '机构须经其书面同意（包括使用其标志）方可在此显示。',
   },

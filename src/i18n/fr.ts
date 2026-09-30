@@ -1,7 +1,7 @@
 const fr = {
   app: { name: 'Amicale LFK', long: 'Amicale du Lycée Français de Koweït', tagline: 'Le réseau privé des anciens du LFK' },
   nav: {
-    orientation: 'Orientation', calendar: 'Calendrier', whatsapp: 'WhatsApp', honorary: 'Membres d\'honneur', community: 'Communauté',
+    orientation: 'Orientation', calendar: 'Calendrier', whatsapp: 'WhatsApp', honorary: 'Partenaires', community: 'Communauté',
     home: 'Accueil', directory: 'Annuaire', repere: 'Repère', events: 'Événements', publications: 'Publications', publicationsShort: 'Actus',
     messages: 'Messages', profile: 'Mon profil', profileShort: 'Profil', settings: 'Paramètres', notifications: 'Notifications',
     admin: 'Administration', dashboard: 'Tableau de bord', members: 'Membres', approvals: 'Approbations', content: 'Contenus',
@@ -209,8 +209,8 @@ const fr = {
     noGroup: 'Pas encore de groupe WhatsApp pour cette Promo LFK.', askAdmin: 'Un administrateur peut ajouter le lien depuis la page de la Promo LFK.', allGroups: 'Tous les groupes de Promo LFK',
   },
   honorary: {
-    title: 'Membres d\'honneur', subtitle: 'Les institutions et les personnalités qui accompagnent l’Amicale.', institutions: 'Institutions',
-    people: 'Direction du lycée', website: 'Site web', add: 'Ajouter une institution',
+    title: 'Partenaires', subtitle: 'Les institutions et les personnalités qui accompagnent l’Amicale.', institutions: 'Institutions',
+    people: 'Direction du lycée', website: 'Site web', add: 'Ajouter un partenaire',
     name: 'Nom', description: 'Description', websiteField: 'Site web (facultatif)',
     logoField: 'Logo : adresse de l’image (facultatif)', invalidUrl: 'Adresse invalide : elle doit commencer par https://', permissionNote: 'Une institution n’apparaît ici qu’avec son accord écrit (et celui d’utiliser son logo).',
   },

@@ -3,7 +3,7 @@ import type { Dict } from './fr';
 const en: Dict = {
   app: { name: 'Amicale LFK', long: 'Alumni of the French Lycée of Kuwait', tagline: 'The private network of LFK alumni' },
   nav: {
-    orientation: 'Guidance', calendar: 'Calendar', whatsapp: 'WhatsApp', honorary: 'Honorary members', community: 'Community',
+    orientation: 'Guidance', calendar: 'Calendar', whatsapp: 'WhatsApp', honorary: 'Partners', community: 'Community',
     home: 'Home', directory: 'Directory', repere: 'Repère', events: 'Events', publications: 'Publications', publicationsShort: 'News',
     messages: 'Messages', profile: 'My profile', profileShort: 'Profile', settings: 'Settings', notifications: 'Notifications',
     admin: 'Administration', dashboard: 'Dashboard', members: 'Members', approvals: 'Approvals', content: 'Content',
@@ -211,8 +211,8 @@ const en: Dict = {
     noGroup: 'No WhatsApp group yet for this Promo LFK.', askAdmin: 'An administrator can add the link from the Promo LFK page.', allGroups: 'All Promo LFK groups',
   },
   honorary: {
-    title: 'Honorary members', subtitle: 'The institutions and people who support the Amicale.', institutions: 'Institutions',
-    people: 'School leadership', website: 'Website', add: 'Add an institution',
+    title: 'Partners', subtitle: 'The institutions and people who support the Amicale.', institutions: 'Institutions',
+    people: 'School leadership', website: 'Website', add: 'Add a partner',
     name: 'Name', description: 'Description', websiteField: 'Website (optional)',
     logoField: 'Logo: image address (optional)', invalidUrl: 'Invalid address: it must start with https://', permissionNote: 'An institution only appears here with its written consent (including for its logo).',
   },

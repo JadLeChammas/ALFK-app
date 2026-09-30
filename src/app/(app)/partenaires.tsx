@@ -19,8 +19,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 const LOGOS: Record<string, number> = { lfk: require('@/assets/images/institution-lfk.png') };
 const logoSource = (logo?: string) => (logo ? (LOGOS[logo] ?? { uri: logo }) : undefined);
 
-/** Honorary members: partner institutions (only with their agreement) and the school's leadership. */
-export default function HonoraryMembers() {
+/** Partners: institutions (only with their agreement) and the school's leadership. */
+export default function Partners() {
   const { d } = useI18n();
   const { colors } = useTheme();
   const { db, actions } = useStore();

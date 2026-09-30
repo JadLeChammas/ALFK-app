@@ -62,9 +62,9 @@ Les numéros ne sont affichés qu'à la personne concernée et aux admins.
   admins en ajoutent), anniversaires des membres, événements pour ceux qui y ont accès.
 - **WhatsApp** (`/whatsapp`) : lien de la communauté (annonces, modifiable par un admin) + groupe de sa
   Promo LFK et tous les groupes (Alumni et admins ; les élèves ne voient que la communauté).
-- **Membres d'honneur** (`/membres-honneur`) : institutions (le LFK au départ) et direction du lycée.
+- **Partenaires** (`/partenaires`) : institutions (le LFK au départ) et direction du lycée.
   Une institution — par exemple le SCAC de l'Ambassade de France — n'est ajoutée par un admin
-  **qu'avec son accord écrit**, y compris pour son logo. Langues : FR, EN, DE, ES, IT, PT, AR (de droite à gauche), JA, ZH.
+  **qu'avec son accord écrit**, y compris pour son logo. Langues : FR, EN, DE, ES, IT, PT, AR (de droite à gauche), JA, ZH, et Pirate (pour le plaisir).
 
 ## 2. Plan des routes
 
@@ -82,7 +82,7 @@ src/app/
     orientation.tsx           Anciens par domaine d'études / établissement
     calendrier.tsx            Dates clés + anniversaires + événements
     whatsapp.tsx              Communauté + groupes de Promo LFK
-    membres-honneur.tsx       Institutions + direction du lycée
+    partenaires.tsx           Partenaires : institutions + direction du lycée
     evenements/index · [id]   Liste + page immersive avec galerie
     publications/index · [id]
     messages/index · [id]     Inbox + conversation
@@ -98,12 +98,12 @@ src/app/
 
 - **Desktop (≥ 1024 px)** : sidebar fixe 248 px — logo, sections (Accueil, Annuaire, Repère,
   Orientation, Calendrier, Événements, Publications, Messages), groupe « Communauté » (WhatsApp,
-  Membres d'honneur), puis Paramètres, Notifications et la carte avatar qui ouvre « Mon profil ».
+  Partenaires), puis Paramètres, Notifications et la carte avatar qui ouvre « Mon profil ».
   Section « Administration » visible seulement pour les admins.
 - **Tablette (768–1023 px)** : sidebar compacte (icônes seules, 76 px).
 - **Mobile (< 768 px)** : la barre de gauche devient la barre du bas — Accueil · Annuaire · Repère ·
-  Actus · Messages · **Plus** (feuille avec Événements, Orientation, Calendrier, WhatsApp, Membres
-  d'honneur ; sans Événements pour les élèves).
+  Actus · Messages · **Plus** (feuille avec Événements, Orientation, Calendrier, WhatsApp,
+  Partenaires ; sans Événements pour les élèves).
   Le profil s'ouvre avec l'avatar en haut à droite ; Paramètres, Admin et Statistiques sont dans le profil. Repère, Publications, Paramètres, Admin sont accessibles depuis l'Accueil
   (actions rapides) et le Profil (menu).
 - **Header** : salutation + date/rôle à gauche ; recherche globale, notifications, avatar à droite.

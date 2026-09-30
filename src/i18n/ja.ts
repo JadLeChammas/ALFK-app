@@ -3,7 +3,7 @@ import type { Dict } from './fr';
 const ja: Dict = {
   app: { name: 'Amicale LFK', long: 'クウェート・フランス人学校 同窓会', tagline: 'LFK卒業生のプライベートネットワーク' },
   nav: {
-    orientation: '進路相談', calendar: 'カレンダー', whatsapp: 'WhatsApp', honorary: '名誉会員', community: 'コミュニティ',
+    orientation: '進路相談', calendar: 'カレンダー', whatsapp: 'WhatsApp', honorary: 'パートナー', community: 'コミュニティ',
     home: 'ホーム', directory: '名簿', repere: 'Repère', events: 'イベント', publications: 'お知らせ', publicationsShort: 'ニュース',
     messages: 'メッセージ', profile: 'マイプロフィール', profileShort: 'プロフィール', settings: '設定', notifications: '通知',
     admin: '管理', dashboard: 'ダッシュボード', members: 'メンバー', approvals: '承認', content: 'コンテンツ',
@@ -211,8 +211,8 @@ const ja: Dict = {
     noGroup: 'この Promo LFK の WhatsApp グループはまだありません。', askAdmin: '管理者が Promo LFK のページからリンクを追加できます。', allGroups: 'すべての Promo LFK グループ',
   },
   honorary: {
-    title: '名誉会員', subtitle: 'Amicale を支える機関と人々。', institutions: '機関',
-    people: '学校長・管理職', website: 'ウェブサイト', add: '機関を追加',
+    title: 'パートナー', subtitle: 'Amicale を支える機関と人々。', institutions: '機関',
+    people: '学校長・管理職', website: 'ウェブサイト', add: 'パートナーを追加',
     name: '名称', description: '説明', websiteField: 'ウェブサイト（任意）',
     logoField: 'ロゴ：画像のアドレス（任意）', invalidUrl: '無効なアドレスです。https:// で始めてください', permissionNote: '機関は書面による同意（ロゴの使用を含む）がある場合にのみ掲載されます。',
   },

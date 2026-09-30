@@ -10,6 +10,7 @@ import es from './es';
 import fr, { type Dict } from './fr';
 import it from './it';
 import ja from './ja';
+import pirate from './pirate';
 import pt from './pt';
 import zh from './zh';
 
@@ -24,10 +25,12 @@ export const LANGUAGES = [
   { code: 'ar', label: 'العربية', country: 'SA', locale: 'ar-u-nu-latn' },
   { code: 'ja', label: '日本語', country: 'JP', locale: 'ja-JP' },
   { code: 'zh', label: '中文', country: 'CN', locale: 'zh-CN' },
+  // For fun: English as spoken aboard. `PIRATE` shows the Jolly Roger instead of a country flag.
+  { code: 'pirate', label: 'Pirate', country: 'PIRATE', locale: 'en-GB' },
 ] as const;
 export type Lang = (typeof LANGUAGES)[number]['code'];
 
-const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, ar, ja, zh };
+const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, ar, ja, zh, pirate };
 const isLang = (v: string | null): v is Lang => !!v && v in dicts;
 export const isRtl = (l: Lang) => l === 'ar';
 
@@ -55,7 +58,7 @@ const I18nContext = createContext<I18nValue | null>(null);
 /** Sets the page language and reading direction (Arabic reads right to left). */
 function applyDocumentLanguage(lang: Lang) {
   if (Platform.OS === 'web' && typeof document !== 'undefined') {
-    document.documentElement.lang = lang;
+    document.documentElement.lang = lang === 'pirate' ? 'en' : lang;
     document.documentElement.dir = isRtl(lang) ? 'rtl' : 'ltr';
   } else if (I18nManager.isRTL !== isRtl(lang)) {
     // Native apps switch direction on the next launch.

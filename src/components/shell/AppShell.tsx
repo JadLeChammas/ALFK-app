@@ -40,7 +40,7 @@ function useNav() {
   const messages: NavItem = { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread };
   const community: NavItem[] = [
     { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
-    { href: '/membres-honneur', icon: 'award', label: d.nav.honorary },
+    { href: '/partenaires', icon: 'award', label: d.nav.honorary },
   ];
   return {
     main: [home, directory, repere, orientation, calendar, ...events, publications, messages],

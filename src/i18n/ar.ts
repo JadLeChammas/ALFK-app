@@ -3,7 +3,7 @@ import type { Dict } from './fr';
 const ar: Dict = {
   app: { name: 'Amicale LFK', long: 'رابطة خريجي الثانوية الفرنسية في الكويت', tagline: 'الشبكة الخاصة لخريجي الثانوية الفرنسية' },
   nav: {
-    orientation: 'التوجيه', calendar: 'التقويم', whatsapp: 'واتساب', honorary: 'الأعضاء الفخريون', community: 'المجتمع',
+    orientation: 'التوجيه', calendar: 'التقويم', whatsapp: 'واتساب', honorary: 'الشركاء', community: 'المجتمع',
     home: 'الرئيسية', directory: 'الدليل', repere: 'Repère', events: 'الفعاليات', publications: 'المنشورات', publicationsShort: 'الأخبار',
     messages: 'الرسائل', profile: 'ملفي الشخصي', profileShort: 'الملف', settings: 'الإعدادات', notifications: 'الإشعارات',
     admin: 'الإدارة', dashboard: 'لوحة التحكم', members: 'الأعضاء', approvals: 'الموافقات', content: 'المحتوى',
@@ -211,8 +211,8 @@ const ar: Dict = {
     noGroup: 'لا توجد مجموعة واتساب لهذه الدفعة بعد.', askAdmin: 'يمكن لأحد المشرفين إضافة الرابط من صفحة الدفعة.', allGroups: 'جميع مجموعات الدفعات',
   },
   honorary: {
-    title: 'الأعضاء الفخريون', subtitle: 'المؤسسات والشخصيات التي تدعم الرابطة.', institutions: 'المؤسسات',
-    people: 'إدارة الثانوية', website: 'الموقع الإلكتروني', add: 'إضافة مؤسسة',
+    title: 'الشركاء', subtitle: 'المؤسسات والشخصيات التي تدعم الرابطة.', institutions: 'المؤسسات',
+    people: 'إدارة الثانوية', website: 'الموقع الإلكتروني', add: 'إضافة شريك',
     name: 'الاسم', description: 'الوصف', websiteField: 'الموقع الإلكتروني (اختياري)',
     logoField: 'الشعار: عنوان الصورة (اختياري)', invalidUrl: 'عنوان غير صالح: يجب أن يبدأ بـ https://', permissionNote: 'لا تظهر أي مؤسسة هنا إلا بموافقتها الكتابية (بما في ذلك استخدام شعارها).',
   },

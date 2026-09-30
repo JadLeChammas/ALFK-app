@@ -3,7 +3,7 @@ import type { Dict } from './fr';
 const de: Dict = {
   app: { name: 'Amicale LFK', long: 'Ehemaligenverein des Französischen Lycée Kuwait', tagline: 'Das private Netzwerk der LFK-Ehemaligen' },
   nav: {
-    orientation: 'Studienberatung', calendar: 'Kalender', whatsapp: 'WhatsApp', honorary: 'Ehrenmitglieder', community: 'Gemeinschaft',
+    orientation: 'Studienberatung', calendar: 'Kalender', whatsapp: 'WhatsApp', honorary: 'Partner', community: 'Gemeinschaft',
     home: 'Startseite', directory: 'Verzeichnis', repere: 'Repère', events: 'Veranstaltungen', publications: 'Beiträge', publicationsShort: 'News',
     messages: 'Nachrichten', profile: 'Mein Profil', profileShort: 'Profil', settings: 'Einstellungen', notifications: 'Mitteilungen',
     admin: 'Verwaltung', dashboard: 'Dashboard', members: 'Mitglieder', approvals: 'Freigaben', content: 'Inhalte',
@@ -211,8 +211,8 @@ const de: Dict = {
     noGroup: 'Noch keine WhatsApp-Gruppe für diese Promo LFK.', askAdmin: 'Ein Administrator kann den Link auf der Seite der Promo LFK hinzufügen.', allGroups: 'Alle Gruppen der Promo LFK',
   },
   honorary: {
-    title: 'Ehrenmitglieder', subtitle: 'Die Institutionen und Persönlichkeiten, die die Amicale unterstützen.', institutions: 'Institutionen',
-    people: 'Schulleitung', website: 'Website', add: 'Institution hinzufügen',
+    title: 'Partner', subtitle: 'Die Institutionen und Persönlichkeiten, die die Amicale unterstützen.', institutions: 'Institutionen',
+    people: 'Schulleitung', website: 'Website', add: 'Partner hinzufügen',
     name: 'Name', description: 'Beschreibung', websiteField: 'Website (optional)',
     logoField: 'Logo: Bildadresse (optional)', invalidUrl: 'Ungültige Adresse: Sie muss mit https:// beginnen', permissionNote: 'Eine Institution erscheint hier nur mit ihrer schriftlichen Zustimmung (auch für ihr Logo).',
   },

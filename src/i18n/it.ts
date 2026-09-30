@@ -3,7 +3,7 @@ import type { Dict } from './fr';
 const it: Dict = {
   app: { name: 'Amicale LFK', long: 'Associazione ex alunni del Liceo Francese del Kuwait', tagline: 'La rete privata degli ex alunni del LFK' },
   nav: {
-    orientation: 'Orientamento', calendar: 'Calendario', whatsapp: 'WhatsApp', honorary: 'Membri onorari', community: 'Comunità',
+    orientation: 'Orientamento', calendar: 'Calendario', whatsapp: 'WhatsApp', honorary: 'Partner', community: 'Comunità',
     home: 'Home', directory: 'Annuario', repere: 'Repère', events: 'Eventi', publications: 'Pubblicazioni', publicationsShort: 'Notizie',
     messages: 'Messaggi', profile: 'Il mio profilo', profileShort: 'Profilo', settings: 'Impostazioni', notifications: 'Notifiche',
     admin: 'Amministrazione', dashboard: 'Dashboard', members: 'Membri', approvals: 'Approvazioni', content: 'Contenuti',
@@ -211,8 +211,8 @@ const it: Dict = {
     noGroup: 'Non c’è ancora un gruppo WhatsApp per questa Promo LFK.', askAdmin: 'Un amministratore può aggiungere il link dalla pagina della Promo LFK.', allGroups: 'Tutti i gruppi Promo LFK',
   },
   honorary: {
-    title: 'Membri onorari', subtitle: 'Le istituzioni e le personalità che accompagnano l’Amicale.', institutions: 'Istituzioni',
-    people: 'Direzione del liceo', website: 'Sito web', add: 'Aggiungi un’istituzione',
+    title: 'Partner', subtitle: 'Le istituzioni e le personalità che accompagnano l’Amicale.', institutions: 'Istituzioni',
+    people: 'Direzione del liceo', website: 'Sito web', add: 'Aggiungi un partner',
     name: 'Nome', description: 'Descrizione', websiteField: 'Sito web (facoltativo)',
     logoField: 'Logo: indirizzo dell’immagine (facoltativo)', invalidUrl: 'Indirizzo non valido: deve iniziare con https://', permissionNote: 'Un’istituzione compare qui solo con il suo consenso scritto (anche per il logo).',
   },
