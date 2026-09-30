@@ -11,6 +11,10 @@ const en: Dict = {
   roles: { alumni: 'Alumni', eleve: 'Student', honneur: 'Honorary member', admin: 'Admin' },
   gender: { F: 'Female', M: 'Male' },
   continents: { europe: 'Europe', asia: 'Asia & Middle East', africa: 'Africa', north_america: 'North America', south_america: 'South America', oceania: 'Oceania' },
+  demo: {
+    tryTitle: 'Explore the app without an account', trySub: 'Try the demo: fictional members, events and messages, with every role (Admin, Alumni, Student, Leadership).',
+    tryButton: 'View the demo', badge: 'Demo mode — fictional data', exit: 'Exit demo',
+  },
   errors: { saveFailed: 'Your change could not be saved: {msg}' },
   common: {
     search: 'Search', seeAll: 'See all', see: 'View', save: 'Save', cancel: 'Cancel', delete: 'Delete',

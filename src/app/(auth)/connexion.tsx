@@ -1,13 +1,14 @@
 import { Feather } from '@expo/vector-icons';
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
 import { Button, Divider, Input, Row, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@/data/seed';
 import { useStore, type AuthError } from '@/data/store';
+import { enterDemo, isDemoForced } from '@/lib/supabase';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -41,11 +42,22 @@ export default function SignIn() {
       title={d.auth.welcome}
       subtitle={d.auth.welcomeSub}
       footer={
-        !isRemote && (
+        isRemote ? (
+          Platform.OS === 'web' && (
+            <View style={{ gap: 10, padding: 16, borderRadius: 18, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.borderStrong }}>
+              <Row gap={8}>
+                <Feather name="play-circle" size={15} color={colors.primary} />
+                <Txt variant="smallStrong">{d.demo.tryTitle}</Txt>
+              </Row>
+              <Txt variant="small" color="textMuted">{d.demo.trySub}</Txt>
+              <Button label={d.demo.tryButton} icon="eye" variant="soft" size="sm" onPress={enterDemo} />
+            </View>
+          )
+        ) : (
         <View style={{ gap: 12, padding: 16, borderRadius: 18, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.borderStrong }}>
           <Row gap={8}>
             <Feather name="zap" size={14} color={colors.warning} />
-            <Txt variant="smallStrong">{d.auth.demoAccounts}</Txt>
+            <Txt variant="smallStrong">{isDemoForced ? d.demo.badge : d.auth.demoAccounts}</Txt>
             <Txt variant="small" color="textSubtle">· {DEMO_PASSWORD}</Txt>
           </Row>
           <Row gap={8} wrap>

@@ -9,6 +9,10 @@ const fr = {
   roles: { alumni: 'Alumni', eleve: 'Élève', honneur: "Membre d'honneur", admin: 'Admin' },
   gender: { F: 'Femme', M: 'Homme' },
   continents: { europe: 'Europe', asia: 'Asie & Moyen-Orient', africa: 'Afrique', north_america: 'Amérique du Nord', south_america: 'Amérique du Sud', oceania: 'Océanie' },
+  demo: {
+    tryTitle: 'Découvrir l’app sans compte', trySub: 'Explorez la démo : membres, événements et messages fictifs, avec tous les rôles (Admin, Alumni, Élève, Direction).',
+    tryButton: 'Voir la démo', badge: 'Mode démo — données fictives', exit: 'Quitter la démo',
+  },
   errors: { saveFailed: 'La modification n’a pas pu être enregistrée : {msg}' },
   common: {
     search: 'Rechercher', seeAll: 'Voir tout', see: 'Voir', save: 'Enregistrer', cancel: 'Annuler', delete: 'Supprimer',

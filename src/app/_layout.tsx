@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
+import { DemoBadge } from '@/components/DemoBadge';
 import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
 import { StoreProvider, useStore } from '@/data/store';
 import { I18nProvider, useI18n } from '@/i18n';
@@ -25,6 +26,7 @@ export default function RootLayout() {
           <DialogProvider>
             <RootNavigator />
             <StoreErrorToast />
+            <DemoBadge />
           </DialogProvider>
         </StoreProvider>
       </I18nProvider>
