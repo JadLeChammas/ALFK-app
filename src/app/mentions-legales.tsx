@@ -1,7 +1,8 @@
+import { router } from 'expo-router';
 import { View } from 'react-native';
 
 import { PublicPage } from '@/components/PublicPage';
-import { Card } from '@/components/ui/primitives';
+import { Button, Card } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { useI18n } from '@/i18n';
 
@@ -34,6 +35,7 @@ export default function Legal() {
           </View>
         ))}
       </Card>
+      <Button label={d.legal.privacy} icon="shield" variant="secondary" onPress={() => router.push('/confidentialite')} />
     </PublicPage>
   );
 }

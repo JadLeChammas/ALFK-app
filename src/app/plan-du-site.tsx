@@ -38,6 +38,7 @@ export default function Sitemap() {
         ['log-in', d.auth.signIn, '/connexion'],
         ['user-plus', d.auth.signUp, '/inscription'],
         ['file-text', d.nav.legal, '/mentions-legales'],
+        ['shield', d.legal.privacy, '/confidentialite'],
         ['mail', d.nav.contact, '/contact'],
       ],
     },

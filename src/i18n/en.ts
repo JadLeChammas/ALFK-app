@@ -160,7 +160,7 @@ const en: Dict = {
     },
   },
   legal: {
-    title: 'Legal notice', sitemap: 'Sitemap', notFound: 'Page not found', notFoundSub: "This page doesn't exist or has moved.",
+    title: 'Legal notice', sitemap: 'Sitemap', privacy: 'Privacy policy', privacyUpdated: 'Last updated: September 30, 2026', notFound: 'Page not found', notFoundSub: "This page doesn't exist or has moved.",
     goHome: 'Back to home', contactTitle: 'Contact us', contactSub: 'A question? The Amicale team will get back to you.',
     subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank you!',
   },

@@ -33,6 +33,7 @@ export default function MyProfile() {
     ...(me.role === 'admin' ? ([['shield', d.nav.admin, '/admin']] as [IconName, string, string][]) : []),
     ...(me.role !== 'admin' && can(me, 'viewStats') ? ([['bar-chart-2', d.nav.stats, '/statistiques']] as [IconName, string, string][]) : []),
     ['file-text', d.nav.legal, '/mentions-legales'],
+    ['shield', d.legal.privacy, '/confidentialite'],
     ['map', d.nav.sitemap, '/plan-du-site'],
     ['mail', d.nav.contact, '/contact'],
   ];

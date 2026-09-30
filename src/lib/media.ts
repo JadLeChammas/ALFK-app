@@ -6,10 +6,7 @@ import { isRemote } from './supabase';
 
 /** Opens the photo library; returns the picked images (empty when cancelled). */
 export async function pickImages(multiple = true): Promise<PickedImage[]> {
-  if (Platform.OS !== 'web') {
-    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!perm.granted) return [];
-  }
+  // No permission prompt: the system photo picker only returns what the user selects.
   const res = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ['images'],
     allowsMultipleSelection: multiple,

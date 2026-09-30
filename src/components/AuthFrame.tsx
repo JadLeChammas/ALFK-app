@@ -39,6 +39,7 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
       {footer}
       <Row gap={16} style={{ justifyContent: 'center', marginTop: 8 }} wrap>
         <Link href="/mentions-legales"><Txt variant="small" color="textSubtle">{d.nav.legal}</Txt></Link>
+        <Link href="/confidentialite"><Txt variant="small" color="textSubtle">{d.legal.privacy}</Txt></Link>
         <Link href="/plan-du-site"><Txt variant="small" color="textSubtle">{d.nav.sitemap}</Txt></Link>
         <Link href="/contact"><Txt variant="small" color="textSubtle">{d.nav.contact}</Txt></Link>
       </Row>

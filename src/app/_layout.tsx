@@ -71,6 +71,7 @@ function RootNavigator() {
           <Stack.Screen name="(app)" />
         </Stack.Protected>
         <Stack.Screen name="mentions-legales" />
+        <Stack.Screen name="confidentialite" />
         <Stack.Screen name="plan-du-site" />
         <Stack.Screen name="contact" />
         <Stack.Screen name="+not-found" />

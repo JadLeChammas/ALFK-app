@@ -158,7 +158,7 @@ const fr = {
     },
   },
   legal: {
-    title: 'Mentions légales', sitemap: 'Plan du site', notFound: 'Page introuvable', notFoundSub: "Cette page n'existe pas ou a été déplacée.",
+    title: 'Mentions légales', sitemap: 'Plan du site', privacy: 'Politique de confidentialité', privacyUpdated: 'Dernière mise à jour : 30 septembre 2026', notFound: 'Page introuvable', notFoundSub: "Cette page n'existe pas ou a été déplacée.",
     goHome: "Retour à l'accueil", contactTitle: 'Nous contacter', contactSub: "Une question ? L'équipe de l'Amicale vous répond.",
     subject: 'Objet', message: 'Message', name: 'Nom', sent: 'Message envoyé, merci !',
   },
