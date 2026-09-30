@@ -1,0 +1,195 @@
+import { Feather } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { ScrollView, View } from 'react-native';
+
+import { DateBadge } from '@/components/cards';
+import { Avatar, Badge, Button, Card, MetaLine, Row, SectionHeader, Tap, type IconName } from '@/components/ui/primitives';
+import { Grid, Screen } from '@/components/ui/Screen';
+import { Txt } from '@/components/ui/Txt';
+import { fullName, useApprovedMembers, useInbox, useMe, useStore, useUpcomingBirthdays } from '@/data/store';
+import { useI18n } from '@/i18n';
+import { useLayout } from '@/theme/layout';
+import { useTheme } from '@/theme/ThemeProvider';
+import { fonts, radius } from '@/theme/tokens';
+
+const campus = require('@/assets/images/lfk-campus.png');
+
+export default function Home() {
+  const { colors } = useTheme();
+  const { d, f, formatDate } = useI18n();
+  const { isMobile } = useLayout();
+  const me = useMe();
+  const { db } = useStore();
+  const { unread } = useInbox();
+  const members = useApprovedMembers();
+  const birthdays = useUpcomingBirthdays(30).filter((b) => b.user.id !== me.id);
+  const now = new Date().toISOString();
+  const nextEvent = [...db.events].filter((e) => e.date >= now).sort((a, b) => (a.date > b.date ? 1 : -1))[0];
+  const news = [...db.publications].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 3);
+  const promoMates = me.promo ? members.filter((u) => u.promo === me.promo) : [];
+  const promoInfo = db.promos.find((p) => p.year === me.promo);
+  const pending = db.users.filter((u) => !u.approved).length;
+
+  const actions: { icon: IconName; label: string; href: string; badge?: number }[] = [
+    { icon: 'calendar', label: d.home.seeEvents, href: '/evenements' },
+    { icon: 'users', label: d.nav.directory, href: '/annuaire' },
+    { icon: 'book-open', label: d.nav.publications, href: '/publications' },
+    { icon: 'message-circle', label: d.nav.messages, href: '/messages', badge: unread },
+    { icon: 'award', label: d.home.myPromo, href: me.promo ? `/annuaire/promo/${me.promo}` : '/profil/modifier' },
+    { icon: 'globe', label: d.nav.repere, href: '/repere' },
+  ];
+
+  return (
+    <Screen>
+      {/* Greeting */}
+      <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <View style={{ gap: 4, flexShrink: 1 }}>
+          <Txt variant={isMobile ? 'h1' : 'display'}>{f(d.home.hello, { name: me.firstName })} 👋</Txt>
+          <Txt color="textMuted">
+            {formatDate(new Date(), { weekday: true })} · {d.roles[me.role]} · {d.app.name}
+          </Txt>
+        </View>
+        {me.role === 'admin' && pending > 0 && (
+          <Button label={f(d.home.adminShortcutSub, { n: pending })} icon="shield" variant="soft" size="sm" onPress={() => router.push('/admin/approbations')} />
+        )}
+      </View>
+
+      {/* Hero */}
+      <View style={{ height: isMobile ? 230 : 260, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: '#000' }}>
+        <Image source={campus} style={{ position: 'absolute', width: '100%', height: '100%' }} contentFit="cover" />
+        <LinearGradient colors={['rgba(8,10,20,0.15)', 'rgba(8,10,20,0.85)']} start={{ x: 0.6, y: 0 }} end={{ x: 0, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <View style={{ flex: 1, justifyContent: 'flex-end', padding: isMobile ? 20 : 32, gap: 8 }}>
+          <Txt style={{ color: '#fff', fontFamily: fonts.extrabold, fontSize: isMobile ? 24 : 32, lineHeight: isMobile ? 30 : 38, letterSpacing: -0.8 }}>{d.home.heroTitle}</Txt>
+          <Txt style={{ color: 'rgba(255,255,255,0.8)', fontFamily: fonts.medium, fontSize: isMobile ? 13 : 15, lineHeight: 21, maxWidth: 520 }}>{d.home.heroSub}</Txt>
+        </View>
+      </View>
+
+      {/* Quick actions */}
+      <View>
+        <Txt variant="caption" style={{ marginBottom: 12 }}>{d.home.quickActions}</Txt>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
+          {actions.map((a) => (
+            <Tap
+              key={a.label}
+              onPress={() => router.push(a.href as never)}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, height: 48, paddingLeft: 8, paddingRight: 18, borderRadius: radius.pill, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
+              hoverStyle={{ borderColor: colors.primary }}>
+              <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' }}>
+                <Feather name={a.icon} size={16} color={colors.primary} />
+              </View>
+              <Txt variant="smallStrong">{a.label}</Txt>
+              {!!a.badge && <Badge label={String(a.badge)} tone="danger" />}
+            </Tap>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Dashboard cards */}
+      <Grid min={260} gap={16}>
+        {/* Next event */}
+        <Card style={{ height: '100%' }}>
+          <SectionHeader title={d.home.nextEvent} icon="calendar" />
+          {nextEvent ? (
+            <Tap onPress={() => router.push(`/evenements/${nextEvent.id}`)} style={{ gap: 12, flex: 1 }}>
+              <View style={{ height: 140, borderRadius: 16, overflow: 'hidden' }}>
+                <Image source={{ uri: nextEvent.cover }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} />
+                <View style={{ position: 'absolute', top: 10, left: 10 }}>
+                  <DateBadge iso={nextEvent.date} size="sm" />
+                </View>
+              </View>
+              <Txt variant="h3">{nextEvent.title}</Txt>
+              <MetaLine icon="clock" text={formatDate(nextEvent.date, { weekday: true, time: true, year: false })} />
+              <MetaLine icon="map-pin" text={nextEvent.location} />
+            </Tap>
+          ) : (
+            <Txt color="textMuted">{d.events.empty}</Txt>
+          )}
+          <SectionFooter label={d.home.seeEvent} onPress={() => router.push(nextEvent ? `/evenements/${nextEvent.id}` : '/evenements')} />
+        </Card>
+
+        {/* News */}
+        <Card style={{ height: '100%' }}>
+          <SectionHeader title={d.home.news} icon="book-open" />
+          <View style={{ gap: 14, flex: 1 }}>
+            {news.map((p) => (
+              <Tap key={p.id} onPress={() => router.push(`/publications/${p.id}`)} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                <Image source={{ uri: p.cover }} style={{ width: 56, height: 56, borderRadius: 12 }} contentFit="cover" />
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Txt variant="smallStrong" numberOfLines={2}>{p.title}</Txt>
+                  <Txt variant="small" color="textSubtle">{formatDate(p.date)}</Txt>
+                </View>
+              </Tap>
+            ))}
+          </View>
+          <SectionFooter label={d.home.seeAllNews} onPress={() => router.push('/publications')} />
+        </Card>
+
+        {/* Birthdays */}
+        <Card style={{ height: '100%' }}>
+          <SectionHeader title={d.home.birthdays} icon="gift" />
+          <View style={{ gap: 12, flex: 1 }}>
+            {birthdays.slice(0, 4).map((b) => (
+              <Tap key={b.user.id} onPress={() => router.push(`/membre/${b.user.id}`)} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                <Avatar uri={b.user.avatar} name={fullName(b.user)} size={40} />
+                <View style={{ flex: 1 }}>
+                  <Txt variant="smallStrong" numberOfLines={1}>{fullName(b.user)}</Txt>
+                  <Txt variant="small" color="textSubtle" numberOfLines={1}>
+                    {formatDate(b.date, { year: false })}
+                    {b.user.promo ? ` · ${f(d.common.promo, { year: b.user.promo })}` : ''}
+                  </Txt>
+                </View>
+                <Badge
+                  label={b.inDays === 0 ? d.common.today : b.inDays === 1 ? d.common.tomorrow : f(d.common.inDays, { n: b.inDays })}
+                  tone={b.inDays <= 2 ? 'warning' : 'neutral'}
+                />
+              </Tap>
+            ))}
+          </View>
+          <SectionFooter label={d.home.seeAllBirthdays} onPress={() => router.push('/evenements')} />
+        </Card>
+
+        {/* My promo */}
+        <Card style={{ height: '100%' }} padded={false}>
+          <View style={{ padding: 20, paddingBottom: 0 }}>
+            <SectionHeader title={d.home.myPromo} icon="award" />
+          </View>
+          {me.promo ? (
+            <Tap onPress={() => router.push(`/annuaire/promo/${me.promo}`)} style={{ flex: 1, paddingHorizontal: 20, gap: 12 }}>
+              <View style={{ height: 120, borderRadius: 16, overflow: 'hidden', backgroundColor: colors.surfaceAlt }}>
+                {promoInfo?.groupPhoto && <Image source={{ uri: promoInfo.groupPhoto }} style={{ width: '100%', height: '100%' }} contentFit="cover" />}
+              </View>
+              <View>
+                <Txt variant="h2">{f(d.common.promo, { year: me.promo })}</Txt>
+                <Txt variant="small" color="textMuted">{f(d.common.members, { n: promoMates.length })}</Txt>
+              </View>
+              <Row gap={0}>
+                {promoMates.filter((u) => u.id !== me.id).slice(0, 5).map((u, i) => (
+                  <View key={u.id} style={{ marginLeft: i ? -10 : 0 }}>
+                    <Avatar uri={u.avatar} name={fullName(u)} size={32} ring />
+                  </View>
+                ))}
+              </Row>
+            </Tap>
+          ) : (
+            <Txt color="textMuted" style={{ paddingHorizontal: 20, flex: 1 }}>{d.home.noPromo}</Txt>
+          )}
+          <View style={{ padding: 20, paddingTop: 0 }}>
+            <SectionFooter label={d.home.seeMyPromo} onPress={() => router.push(me.promo ? `/annuaire/promo/${me.promo}` : '/profil/modifier')} />
+          </View>
+        </Card>
+      </Grid>
+    </Screen>
+  );
+}
+
+function SectionFooter({ label, onPress }: { label: string; onPress: () => void }) {
+  const { colors } = useTheme();
+  return (
+    <Tap onPress={onPress} style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 16, paddingTop: 14, borderTopWidth: 1, borderTopColor: colors.border }}>
+      <Txt variant="smallStrong" color="primary">{label}</Txt>
+      <Feather name="arrow-right" size={14} color={colors.primary} />
+    </Tap>
+  );
+}

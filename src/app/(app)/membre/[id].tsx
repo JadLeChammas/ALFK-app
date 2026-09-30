@@ -1,0 +1,105 @@
+import { router, useLocalSearchParams } from 'expo-router';
+import { View } from 'react-native';
+
+import { RoleBadge, useStartConversation } from '@/components/cards';
+import { Flag } from '@/components/ui/Flag';
+import { Avatar, Button, Card, EmptyState, ListRow, Row } from '@/components/ui/primitives';
+import { BackLink, Columns, Screen } from '@/components/ui/Screen';
+import { Txt } from '@/components/ui/Txt';
+import { countryByCode, countryName } from '@/data/countries';
+import { fullName, useMe, useStore } from '@/data/store';
+import { useI18n } from '@/i18n';
+import { useLayout } from '@/theme/layout';
+import { useTheme } from '@/theme/ThemeProvider';
+
+export default function MemberProfile() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { d, f, lang, formatDate } = useI18n();
+  const { colors } = useTheme();
+  const { isMobile, isDesktop } = useLayout();
+  const { db } = useStore();
+  const me = useMe();
+  const start = useStartConversation();
+  const user = db.users.find((u) => u.id === id && u.approved);
+
+  if (!user) {
+    return (
+      <Screen>
+        <BackLink />
+        <EmptyState icon="user-x" title={d.member.notFound} />
+      </Screen>
+    );
+  }
+
+  const country = countryByCode(user.country);
+  const isMe = user.id === me.id;
+  const photos = db.photos.filter((p) => p.uploadedBy === user.id).length;
+
+  return (
+    <Screen>
+      <BackLink label={d.nav.directory} href="/annuaire" />
+      <Card padded={false}>
+        <View style={{ height: isMobile ? 90 : 130, backgroundColor: colors.primarySoft }} />
+        <View style={{ paddingHorizontal: isMobile ? 20 : 32, paddingBottom: 24, marginTop: isMobile ? -48 : -60, gap: 16 }}>
+          <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+            <Row gap={20} style={{ alignItems: 'flex-end' }}>
+              <Avatar uri={user.avatar} name={fullName(user)} size={isMobile ? 96 : 120} ring />
+              <View style={{ gap: 6, paddingBottom: 6, flexShrink: 1 }}>
+                <Txt variant={isMobile ? 'h1' : 'display'}>{fullName(user)}</Txt>
+                <Row gap={8} wrap>
+                  <RoleBadge role={user.role} />
+                  {user.promo && <Txt color="textMuted">{f(d.common.promo, { year: user.promo })}</Txt>}
+                </Row>
+              </View>
+            </Row>
+            <Row gap={10} wrap>
+              {isMe ? (
+                <Button label={d.profile.edit} icon="edit-2" variant="secondary" onPress={() => router.push('/profil/modifier')} />
+              ) : (
+                <Button label={d.member.sendMessage} icon="message-circle" onPress={() => start(user.id)} />
+              )}
+              {user.promo && <Button label={d.directory.seePromo} variant="secondary" icon="users" onPress={() => router.push(`/annuaire/promo/${user.promo}`)} />}
+            </Row>
+          </View>
+        </View>
+      </Card>
+
+      <Columns
+        main={
+          <Card>
+            <Txt variant="h3" style={{ marginBottom: 4 }}>{d.member.info}</Txt>
+            <ListRow icon="book" title={user.school ?? '—'} subtitle={d.member.school} />
+            <ListRow icon="map-pin" title={[user.city, countryName(user.country, lang)].filter(Boolean).join(', ')} subtitle={d.member.location} right={country && <Flag code={country.code} size={18} />} />
+            {user.promo && <ListRow icon="award" title={String(user.promo)} subtitle={d.profile.promoLabel} />}
+            {user.birthDate && user.privacy.showBirthday && <ListRow icon="gift" title={formatDate(user.birthDate + 'T12:00:00', { year: false })} subtitle={d.member.birthday} />}
+            {user.privacy.showEmail && <ListRow icon="mail" title={user.email} subtitle={d.member.email} />}
+            {user.phone && user.privacy.showPhone && <ListRow icon="phone" title={user.phone} subtitle={d.member.phone} />}
+            <ListRow icon="clock" title={f(d.member.since, { date: formatDate(user.createdAt) })} last />
+          </Card>
+        }
+        aside={
+          <>
+            {user.bio && (
+              <Card>
+                <Txt variant="h3" style={{ marginBottom: 8 }}>{d.member.about}</Txt>
+                <Txt color="textMuted">{user.bio}</Txt>
+              </Card>
+            )}
+            <Card>
+              <Row gap={12}>
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Txt variant="h2">{photos}</Txt>
+                  <Txt variant="small" color="textMuted">{d.profile.photosShared}</Txt>
+                </View>
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Txt variant="h2">{user.promo ?? '—'}</Txt>
+                  <Txt variant="small" color="textMuted">{d.profile.promoLabel}</Txt>
+                </View>
+              </Row>
+            </Card>
+          </>
+        }
+      />
+    </Screen>
+  );
+}
