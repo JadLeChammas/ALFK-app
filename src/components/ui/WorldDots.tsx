@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { useMemo, useRef, useState } from 'react';
+import { Platform, Pressable, View } from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 
 import type { ContinentKey } from '@/data/types';
@@ -38,6 +38,15 @@ const ROWS: [number, number, string][][] = [
 export const MAP_COLS = 60;
 export const MAP_ROWS = ROWS.length;
 
+/** Continent under a map cell, falling back to the nearest land dot within one cell. */
+function continentAt(col: number, row: number): ContinentKey | null {
+  for (const [dc, dr] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]) {
+    const seg = ROWS[row + dr]?.find(([a, b]) => col + dc >= a && col + dc <= b);
+    if (seg) return K[seg[2]];
+  }
+  return null;
+}
+
 export function WorldDots({
   selected,
   onSelect,
@@ -48,6 +57,7 @@ export function WorldDots({
   pins?: { col: number; row: number; count: number; active?: boolean }[];
 }) {
   const { colors } = useTheme();
+  const ref = useRef<View>(null);
   const [w, setW] = useState(0);
   const [hover, setHover] = useState<ContinentKey | null>(null);
   const dots = useMemo(() => {
@@ -61,36 +71,74 @@ export function WorldDots({
   const h = cell * MAP_ROWS;
   const maxPin = Math.max(1, ...pins.map((p) => p.count));
 
+  // Hit-testing happens on the container (not on each SVG dot): react-native-svg does not deliver
+  // per-shape presses reliably on web, and one handler beats 550.
+  const toCell = (x: number, y: number) => (cell > 0 ? continentAt(Math.floor(x / cell), Math.floor(y / cell)) : null);
+  const localPoint = (e: { nativeEvent: { locationX?: number; locationY?: number; clientX?: number; clientY?: number; pageX?: number; pageY?: number } }) => {
+    if (Platform.OS === 'web') {
+      const rect = (ref.current as unknown as HTMLElement).getBoundingClientRect();
+      const ne = e.nativeEvent;
+      const cx = ne.clientX ?? (ne.pageX ?? 0) - window.scrollX;
+      const cy = ne.clientY ?? (ne.pageY ?? 0) - window.scrollY;
+      return [cx - rect.left, cy - rect.top] as const;
+    }
+    return [e.nativeEvent.locationX ?? 0, e.nativeEvent.locationY ?? 0] as const;
+  };
+
+  const svg = w > 0 && (
+    <Svg width={w} height={h} pointerEvents="none">
+      {dots.map(({ c, r, k }) => {
+        const isSel = selected === k;
+        const isHover = hover === k;
+        return (
+          <Circle
+            key={`${c}-${r}`}
+            cx={c * cell + cell / 2}
+            cy={r * cell + cell / 2}
+            r={cell * (isSel ? 0.36 : 0.3)}
+            fill={isSel ? colors.primary : isHover ? colors.silver : colors.borderStrong}
+            opacity={selected && !isSel ? 0.55 : 1}
+          />
+        );
+      })}
+      {pins.map((p, i) => {
+        const rr = cell * (0.55 + (p.count / maxPin) * 0.9);
+        return (
+          <G key={i}>
+            <Circle cx={p.col * cell + cell / 2} cy={p.row * cell + cell / 2} r={rr * 1.9} fill={p.active ? colors.primary : colors.ink} opacity={0.12} />
+            <Circle cx={p.col * cell + cell / 2} cy={p.row * cell + cell / 2} r={rr} fill={p.active ? colors.primary : colors.ink} stroke={colors.surface} strokeWidth={2} />
+          </G>
+        );
+      })}
+    </Svg>
+  );
+
   return (
     <View onLayout={(e) => setW(e.nativeEvent.layout.width)} style={{ width: '100%', height: h || 200 }}>
-      {w > 0 && (
-        <Svg width={w} height={h}>
-          {dots.map(({ c, r, k }) => {
-            const isSel = selected === k;
-            const isHover = hover === k;
-            return (
-              <Circle
-                key={`${c}-${r}`}
-                cx={c * cell + cell / 2}
-                cy={r * cell + cell / 2}
-                r={cell * (isSel ? 0.36 : 0.3)}
-                fill={isSel ? colors.primary : isHover ? colors.silver : colors.borderStrong}
-                opacity={selected && !isSel ? 0.55 : 1}
-                onPress={onSelect ? () => onSelect(k) : undefined}
-                {...({ onMouseEnter: () => setHover(k), onMouseLeave: () => setHover(null), style: onSelect ? { cursor: 'pointer' } : undefined } as object)}
-              />
-            );
-          })}
-          {pins.map((p, i) => {
-            const rr = cell * (0.55 + (p.count / maxPin) * 0.9);
-            return (
-              <G key={i}>
-                <Circle cx={p.col * cell + cell / 2} cy={p.row * cell + cell / 2} r={rr * 1.9} fill={p.active ? colors.primary : colors.ink} opacity={0.12} />
-                <Circle cx={p.col * cell + cell / 2} cy={p.row * cell + cell / 2} r={rr} fill={p.active ? colors.primary : colors.ink} stroke={colors.surface} strokeWidth={2} />
-              </G>
-            );
-          })}
-        </Svg>
+      {onSelect ? (
+        <Pressable
+          ref={ref}
+          accessibilityRole="button"
+          onPress={(e) => {
+            const [x, y] = localPoint(e);
+            const k = toCell(x, y);
+            if (k) onSelect(k);
+          }}
+          style={{ width: '100%', height: '100%', ...(Platform.OS === 'web' ? ({ cursor: hover ? 'pointer' : 'default' } as object) : {}) }}
+          {...(Platform.OS === 'web'
+            ? ({
+                onMouseMove: (e: { nativeEvent: { clientX: number; clientY: number } }) => {
+                  const [x, y] = localPoint(e);
+                  const k = toCell(x, y);
+                  if (k !== hover) setHover(k);
+                },
+                onMouseLeave: () => setHover(null),
+              } as object)
+            : {})}>
+          {svg}
+        </Pressable>
+      ) : (
+        <View ref={ref}>{svg}</View>
       )}
     </View>
   );

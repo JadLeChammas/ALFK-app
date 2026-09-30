@@ -46,7 +46,7 @@ const fr = {
     heroSub: 'Retrouvez vos camarades, découvrez les événements et restez connecté à la communauté du LFK.',
     quickActions: 'Actions rapides', seeEvents: 'Voir les événements', myPromo: 'Ma promo', nextEvent: 'Prochain événement',
     news: 'Actualités', birthdays: 'Anniversaires à venir', seeEvent: "Voir l'événement", seeAllNews: 'Toutes les actualités',
-    seeAllBirthdays: 'Tous les anniversaires', seeMyPromo: 'Voir ma promo', adminShortcut: 'Espace administrateur',
+    seeAllBirthdays: 'Tous les anniversaires', seeMyPromo: 'Voir ma promo', exploreRepere: 'Explorer Repère', adminShortcut: 'Espace administrateur',
     adminShortcutSub: '{n} comptes en attente de validation', customize: 'Personnaliser',
     noPromo: 'Ajoutez votre année de promotion à votre profil pour retrouver votre promo.',
   },

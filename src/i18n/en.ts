@@ -48,7 +48,7 @@ const en: Dict = {
     heroSub: 'Find your classmates, discover events and stay connected to the LFK community.',
     quickActions: 'Quick actions', seeEvents: 'See events', myPromo: 'My class', nextEvent: 'Next event',
     news: 'News', birthdays: 'Upcoming birthdays', seeEvent: 'View event', seeAllNews: 'All news',
-    seeAllBirthdays: 'All birthdays', seeMyPromo: 'View my class', adminShortcut: 'Admin area',
+    seeAllBirthdays: 'All birthdays', seeMyPromo: 'View my class', exploreRepere: 'Explore Repère', adminShortcut: 'Admin area',
     adminShortcutSub: '{n} accounts awaiting approval', customize: 'Customize',
     noPromo: 'Add your graduation year to your profile to find your class.',
   },

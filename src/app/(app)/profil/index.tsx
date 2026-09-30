@@ -97,7 +97,7 @@ export default function MyProfile() {
               <Row gap={12}>
                 {[
                   [threads.length, d.profile.conversations],
-                  [photos, d.profile.photosShared],
+                  ...(can(me, 'viewEvents') ? [[photos, d.profile.photosShared]] : []),
                 ].map(([n, label]) => (
                   <View key={String(label)} style={{ flex: 1, padding: 14, borderRadius: 16, backgroundColor: colors.surfaceAlt, gap: 2 }}>
                     <Txt variant="h1">{n}</Txt>

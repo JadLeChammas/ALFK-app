@@ -7,12 +7,13 @@ import type { Role, User } from './types';
  * - honneur: the school's leadership (proviseur, assistant·e de direction) — publishes and creates
  *   events, sees read-only network statistics, but never manages accounts or moderation.
  */
-export type Permission = 'publish' | 'createEvent' | 'viewStats' | 'manage';
+export type Permission = 'viewEvents' | 'publish' | 'createEvent' | 'viewStats' | 'manage';
 
 const GRANTS: Record<Role, Permission[]> = {
-  admin: ['publish', 'createEvent', 'viewStats', 'manage'],
-  honneur: ['publish', 'createEvent', 'viewStats'],
-  alumni: [],
+  admin: ['viewEvents', 'publish', 'createEvent', 'viewStats', 'manage'],
+  honneur: ['viewEvents', 'publish', 'createEvent', 'viewStats'],
+  alumni: ['viewEvents'],
+  // Current students: alumni events and their galleries are not open to them.
   eleve: [],
 };
 

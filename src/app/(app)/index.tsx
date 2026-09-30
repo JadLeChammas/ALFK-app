@@ -8,7 +8,10 @@ import { DateBadge } from '@/components/cards';
 import { Avatar, Badge, Button, Card, MetaLine, Row, SectionHeader, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { COUNTRIES } from '@/data/countries';
+import { can } from '@/data/permissions';
 import { fullName, useApprovedMembers, useInbox, useMe, useStore, useUpcomingBirthdays } from '@/data/store';
+import { Flag } from '@/components/ui/Flag';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -33,7 +36,7 @@ export default function Home() {
   const pending = db.users.filter((u) => !u.approved).length;
 
   const actions: { icon: IconName; label: string; href: string; badge?: number }[] = [
-    { icon: 'calendar', label: d.home.seeEvents, href: '/evenements' },
+    ...(can(me, 'viewEvents') ? [{ icon: 'calendar' as const, label: d.home.seeEvents, href: '/evenements' }] : []),
     { icon: 'users', label: d.nav.directory, href: '/annuaire' },
     { icon: 'book-open', label: d.nav.publications, href: '/publications' },
     { icon: 'message-circle', label: d.nav.messages, href: '/messages', badge: unread },
@@ -90,7 +93,10 @@ export default function Home() {
 
       {/* Dashboard cards */}
       <Grid min={260} gap={16}>
-        {/* Next event */}
+        {/* Next event — students get the Repère shortcut instead */}
+        {!can(me, 'viewEvents') ? (
+          <RepereCard />
+        ) : (
         <Card style={{ height: '100%' }}>
           <SectionHeader title={d.home.nextEvent} icon="calendar" />
           {nextEvent ? (
@@ -110,6 +116,7 @@ export default function Home() {
           )}
           <SectionFooter label={d.home.seeEvent} onPress={() => router.push(nextEvent ? `/evenements/${nextEvent.id}` : '/evenements')} />
         </Card>
+        )}
 
         {/* News */}
         <Card style={{ height: '100%' }}>
@@ -149,7 +156,7 @@ export default function Home() {
               </Tap>
             ))}
           </View>
-          <SectionFooter label={d.home.seeAllBirthdays} onPress={() => router.push('/evenements')} />
+          {can(me, 'viewEvents') && <SectionFooter label={d.home.seeAllBirthdays} onPress={() => router.push('/evenements')} />}
         </Card>
 
         {/* My promo — or the network overview for school leadership */}
@@ -187,6 +194,32 @@ export default function Home() {
         )}
       </Grid>
     </Screen>
+  );
+}
+
+/** For students: where alumni went to study — the entry point into Repère. */
+function RepereCard() {
+  const { d, f, lang } = useI18n();
+  const members = useApprovedMembers();
+  const alumni = members.filter((u) => (u.role === 'alumni' || u.role === 'admin') && u.country);
+  const top = COUNTRIES.map((c) => ({ c, n: alumni.filter((u) => u.country === c.code).length }))
+    .filter((x) => x.n > 0)
+    .sort((a, b) => b.n - a.n)
+    .slice(0, 4);
+  return (
+    <Card style={{ height: '100%' }}>
+      <SectionHeader title={d.repere.topDestinations} icon="globe" />
+      <View style={{ flex: 1, gap: 12 }}>
+        {top.map(({ c, n }) => (
+          <Tap key={c.code} onPress={() => router.push(`/repere?country=${c.code}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Flag code={c.code} size={18} />
+            <Txt variant="smallStrong" style={{ flex: 1 }}>{c[lang]}</Txt>
+            <Txt variant="small" color="textMuted">{f(d.common.alumniCount, { n })}</Txt>
+          </Tap>
+        ))}
+      </View>
+      <SectionFooter label={d.home.exploreRepere} onPress={() => router.push('/repere')} />
+    </Card>
   );
 }
 

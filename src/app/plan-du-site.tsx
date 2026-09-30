@@ -17,7 +17,7 @@ export default function Sitemap() {
         ['home', d.nav.home, '/'],
         ['users', d.nav.directory, '/annuaire'],
         ['globe', d.nav.repere, '/repere'],
-        ['calendar', d.nav.events, '/evenements'],
+        ...(!me || me.role !== 'eleve' ? ([['calendar', d.nav.events, '/evenements']] as [IconName, string, string][]) : []),
         ['book-open', d.nav.publications, '/publications'],
         ['message-circle', d.nav.messages, '/messages'],
       ],

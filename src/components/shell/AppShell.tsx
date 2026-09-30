@@ -25,14 +25,15 @@ function isActive(pathname: string, item: NavItem) {
 function useNav() {
   const { d } = useI18n();
   const { unread } = useInbox();
+  const me = useMe();
+  // "Mon profil" is reached from the user card at the bottom of the sidebar.
   const main: NavItem[] = [
     { href: '/', icon: 'home', label: d.nav.home },
     { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] },
     { href: '/repere', icon: 'globe', label: d.nav.repere },
-    { href: '/evenements', icon: 'calendar', label: d.nav.events },
+    ...(can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'calendar' as const, label: d.nav.events }] : []),
     { href: '/publications', icon: 'book-open', label: d.nav.publications },
     { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread },
-    { href: '/profil', icon: 'user', label: d.nav.profile },
   ];
   return main;
 }
@@ -124,7 +125,8 @@ function Sidebar({ compact }: { compact: boolean }) {
       </View>
       <Tap
         onPress={() => router.push('/profil')}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: compact ? 6 : 10, borderRadius: 16, borderWidth: 1, borderColor: colors.border, justifyContent: compact ? 'center' : 'flex-start' }}
+        accessibilityLabel={d.nav.profile}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: compact ? 6 : 10, borderRadius: 16, borderWidth: 1, borderColor: pathname.startsWith('/profil') ? colors.primary : colors.border, backgroundColor: pathname.startsWith('/profil') ? colors.primarySoft : 'transparent', justifyContent: compact ? 'center' : 'flex-start' }}
         hoverStyle={{ backgroundColor: colors.surfaceAlt }}>
         <Avatar uri={me.avatar} name={fullName(me)} size={36} />
         {!compact && (
@@ -222,10 +224,11 @@ function BottomNav() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
   const { unread } = useInbox();
+  const me = useMe();
   const items: NavItem[] = [
     { href: '/', icon: 'home', label: d.nav.home },
     { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] },
-    { href: '/evenements', icon: 'calendar', label: d.nav.events },
+    can(me, 'viewEvents') ? { href: '/evenements', icon: 'calendar', label: d.nav.events } : { href: '/repere', icon: 'globe', label: d.nav.repere },
     { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread },
     { href: '/profil', icon: 'user', label: d.nav.profileShort, match: ['/parametres', '/admin', '/repere', '/publications', '/notifications', '/statistiques'] },
   ];

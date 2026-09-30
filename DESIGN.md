@@ -22,7 +22,8 @@ contourne pas le garde (et côté serveur, les politiques RLS Supabase appliquen
 
 | | Alumni / Élève | Membre d'honneur (direction du lycée) | Admin |
 |---|---|---|---|
-| Annuaire, Repère, Événements, galeries, Publications, Messages | ✓ | ✓ | ✓ |
+| Annuaire, Repère, Publications, Messages | ✓ | ✓ | ✓ |
+| Événements et galeries photo | Alumni ✓ · Élève — | ✓ | ✓ |
 | Publier un article, créer un événement | — | ✓ (gère ses propres contenus) | ✓ |
 | Statistiques du réseau (lecture seule, `/statistiques`) | — | ✓ | ✓ (dans le tableau de bord) |
 | Approbations, comptes, rôles, modération, contact, journal | — | — | ✓ |
@@ -57,11 +58,12 @@ src/app/
 
 ## 3. Navigation
 
-- **Desktop (≥ 1024 px)** : sidebar fixe 248 px — logo, 7 sections, puis Paramètres,
-  Notifications, avatar. Section « Administration » visible seulement pour les admins.
+- **Desktop (≥ 1024 px)** : sidebar fixe 248 px — logo, sections (Accueil, Annuaire, Repère,
+  Événements, Publications, Messages), puis Paramètres, Notifications et la carte avatar qui ouvre
+  « Mon profil ». Section « Administration » visible seulement pour les admins.
 - **Tablette (768–1023 px)** : sidebar compacte (icônes seules, 76 px).
 - **Mobile (< 768 px)** : bottom navigation à 5 entrées — Accueil · Annuaire · Événements ·
-  Messages · Profil. Repère, Publications, Paramètres, Admin sont accessibles depuis l'Accueil
+  Messages · Profil (les élèves ont Repère à la place d'Événements). Repère, Publications, Paramètres, Admin sont accessibles depuis l'Accueil
   (actions rapides) et le Profil (menu).
 - **Header** : salutation + date/rôle à gauche ; recherche globale, notifications, avatar à droite.
   La recherche globale couvre membres, promos, pays, événements et publications.

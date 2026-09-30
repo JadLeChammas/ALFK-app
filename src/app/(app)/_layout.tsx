@@ -16,6 +16,10 @@ export default function MemberLayout() {
         <Stack.Protected guard={me.role === 'admin'}>
           <Stack.Screen name="admin" />
         </Stack.Protected>
+        <Stack.Protected guard={can(me, 'viewEvents')}>
+          <Stack.Screen name="evenements/index" />
+          <Stack.Screen name="evenements/[id]" />
+        </Stack.Protected>
         <Stack.Protected guard={can(me, 'viewStats')}>
           <Stack.Screen name="statistiques" />
         </Stack.Protected>
