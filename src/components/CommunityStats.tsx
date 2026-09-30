@@ -7,7 +7,6 @@ import { Flag } from '@/components/ui/Flag';
 import { Badge, Card, Row, SectionHeader } from '@/components/ui/primitives';
 import { Grid } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { countryByCode } from '@/data/countries';
 import { useApprovedMembers } from '@/data/store';
 import type { Role } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -17,7 +16,7 @@ import { fonts } from '@/theme/tokens';
 
 /** Read-only network analytics — shared by the admin dashboard and the school leadership's stats page. */
 export function CommunityStats() {
-  const { d, f, lang } = useI18n();
+  const { d, f, country, formatNumber } = useI18n();
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const members = useApprovedMembers();
@@ -29,7 +28,7 @@ export function CommunityStats() {
   const countryMap = new Map<string, number>();
   members.forEach((u) => u.country && countryMap.set(u.country, (countryMap.get(u.country) ?? 0) + 1));
   const countries = [...countryMap.entries()].sort((a, b) => b[1] - a[1]);
-  const byCountry = countries.slice(0, 6).map(([c, v]) => ({ label: countryByCode(c)?.[lang] ?? c, leading: <Flag code={c} size={12} />, value: v }));
+  const byCountry = countries.slice(0, 6).map(([c, v]) => ({ label: country(c), leading: <Flag code={c} size={12} />, value: v }));
   const others = countries.slice(6).reduce((a, [, v]) => a + v, 0);
   if (others) byCountry.push({ label: d.common.other, leading: <Feather name="globe" size={13} color={colors.textSubtle} />, value: others });
 
@@ -65,7 +64,7 @@ export function CommunityStats() {
         <Card style={{ height: '100%', gap: 8 }}>
           <Txt variant="small" color="textMuted">{d.admin.totalMembers}</Txt>
           <Row gap={10} style={{ alignItems: 'flex-end' }}>
-            <Txt style={{ fontFamily: fonts.extrabold, fontSize: 48, lineHeight: 52, letterSpacing: -1.5, color: colors.text }}>{members.length.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB')}</Txt>
+            <Txt style={{ fontFamily: fonts.extrabold, fontSize: 48, lineHeight: 52, letterSpacing: -1.5, color: colors.text }}>{formatNumber(members.length)}</Txt>
             <Badge label={`+${pct}%`} tone="success" icon="trending-up" style={{ marginBottom: 8 }} />
           </Row>
           <Txt variant="small" color="textSubtle">{d.admin.vsLastYear}</Txt>

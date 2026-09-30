@@ -3,7 +3,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { Platform } from 'react-native';
 
 import { isRemote, supabase } from '@/lib/supabase';
-import { canMessage } from './permissions';
+import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL } from './members';
+import { canMessage, SELF_SIGNUP_ROLES } from './permissions';
 import {
   callAdminApi,
   EMPTY_DB,
@@ -14,6 +15,7 @@ import {
   profilePatchToRow,
   publicationRow,
   toConversation,
+  toUser,
   toMessage,
   toNotification,
   uploadImage,
@@ -44,10 +46,20 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v3';
+const STORAGE_KEY = 'lfk.demo.db.v4';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
-export type AuthError = 'invalid_credentials' | 'email_taken' | 'weak_password' | 'unknown_email' | 'wrong_password' | 'unknown';
+export type AuthError =
+  | 'invalid_credentials'
+  | 'email_taken'
+  | 'weak_password'
+  | 'unknown_email'
+  | 'wrong_password'
+  | 'birth_date'
+  | 'phone'
+  | 'invalid_code'
+  | 'code_taken'
+  | 'unknown';
 export type Result = { ok: true; confirmEmail?: boolean } | { ok: false; error: AuthError };
 
 export type SignUpInput = {
@@ -62,7 +74,12 @@ export type SignUpInput = {
   fonction?: string;
   city?: string;
   country?: string;
+  /** "+965 12345678" — required except for honorary members. */
   phone?: string;
+  /** YYYY-MM-DD — required except for honorary members. */
+  birthDate?: string;
+  /** Admin-created Bureau members only. */
+  bureauCode?: string;
 };
 
 export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio'>>;
@@ -74,6 +91,9 @@ export const fullName = (u?: Pick<User, 'firstName' | 'lastName'>) => (u ? `${u.
 
 function authError(message?: string, code?: string): AuthError {
   const m = `${code ?? ''} ${message ?? ''}`.toLowerCase();
+  if (m.includes('birth_date')) return 'birth_date';
+  if (m.includes('phone')) return 'phone';
+  if (m.includes('code_taken') || m.includes('bureau_code')) return 'code_taken';
   if (m.includes('invalid login') || m.includes('invalid_credentials')) return 'invalid_credentials';
   if (m.includes('already') || m.includes('email_exists') || m.includes('email_taken')) return 'email_taken';
   if (m.includes('weak') || m.includes('password should')) return 'weak_password';
@@ -249,6 +269,10 @@ function useStoreValue() {
     },
     async signUp(input: SignUpInput): Promise<Result> {
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
+      if (!SELF_SIGNUP_ROLES.includes(input.role)) return { ok: false, error: 'unknown' };
+      const contact = contactError(input.role, input.birthDate, input.phone);
+      if (contact) return { ok: false, error: contact };
+      if (input.role === 'eleve') input = { ...input, school: LFK_SCHOOL };
       if (supabase) {
         const { data, error: e } = await supabase.auth.signUp({
           email: input.email.trim(),
@@ -264,6 +288,8 @@ function useStoreValue() {
               school: input.school ?? '',
               city: input.city ?? '',
               country: input.country ?? '',
+              phone: input.phone ?? '',
+              birth_date: input.birthDate ?? '',
             },
           },
         });
@@ -272,8 +298,9 @@ function useStoreValue() {
         return { ok: true, confirmEmail: !data.session };
       }
       if (findByEmail(input.email)) return { ok: false, error: 'email_taken' };
-      const user: User = {
+      const draft: User = {
         ...input,
+        bureauCode: undefined,
         email: input.email.trim(),
         id: demoId('u'),
         approved: false,
@@ -281,14 +308,15 @@ function useStoreValue() {
         lastActiveAt: nowIso(),
         privacy: { showEmail: true, showPhone: false, showBirthday: true },
       };
-      commit((d) => ({
-        ...d,
-        users: [...d.users, user],
+      const [numbered, user] = withRules(dbRef.current!, draft);
+      commit(() => ({
+        ...numbered,
+        users: [...numbered.users, user],
         notifications: [
-          ...d.users
+          ...numbered.users
             .filter((a) => a.role === 'admin')
             .map((a) => ({ id: demoId('n'), userId: a.id, kind: 'approval' as const, template: 'pendingOne' as const, params: { name: fullName(user) }, href: '/admin/approbations', createdAt: nowIso(), read: false })),
-          ...d.notifications,
+          ...numbered.notifications,
         ],
       }));
       saveSession({ userId: user.id });
@@ -340,10 +368,16 @@ function useStoreValue() {
     },
 
     // ——— Profile ———
-    updateProfile(patch: ProfilePatch) {
-      if (!meId) return;
-      commit((d) => ({ ...d, users: d.users.map((u) => (u.id === meId ? { ...u, ...patch } : u)) }));
-      if (supabase) send(supabase.from('profiles').update(profilePatchToRow(patch)).eq('id', meId));
+    /** Saves the signed-in member's profile after checking the membership rules. */
+    updateProfile(patch: ProfilePatch): Result {
+      if (!me) return { ok: false, error: 'unknown' };
+      const merged = { ...me, ...patch };
+      const contact = contactError(me.role, merged.birthDate, merged.phone);
+      if (contact) return { ok: false, error: contact };
+      const safe: ProfilePatch = me.role === 'eleve' ? { ...patch, school: LFK_SCHOOL } : patch;
+      commit((d) => ({ ...d, users: d.users.map((u) => (u.id === me.id ? { ...u, ...safe } : u)) }));
+      if (supabase) send(supabase.from('profiles').update(profilePatchToRow(safe)).eq('id', me.id));
+      return { ok: true };
     },
     updatePrivacy(patch: Partial<Privacy>) {
       if (!meId) return;
@@ -524,6 +558,14 @@ function useStoreValue() {
     },
     async createUser(input: SignUpInput): Promise<Result> {
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
+      const contact = contactError(input.role, input.birthDate, input.phone);
+      if (contact) return { ok: false, error: contact };
+      if (input.role !== 'admin') input = { ...input, bureauCode: undefined };
+      if (input.bureauCode) {
+        if (!isValidBureauCode(input.bureauCode)) return { ok: false, error: 'invalid_code' };
+        if (dbRef.current?.users.some((u) => u.bureauCode === input.bureauCode)) return { ok: false, error: 'code_taken' };
+      }
+      if (input.role === 'eleve') input = { ...input, school: LFK_SCHOOL };
       if (supabase) {
         const r = await callAdminApi('create-user', { ...input, email: input.email.trim() });
         if (!r.ok) return { ok: false, error: authError(r.error, r.error) };
@@ -531,7 +573,7 @@ function useStoreValue() {
         return { ok: true };
       }
       if (findByEmail(input.email)) return { ok: false, error: 'email_taken' };
-      const user: User = {
+      const draft: User = {
         ...input,
         email: input.email.trim(),
         id: demoId('u'),
@@ -540,7 +582,8 @@ function useStoreValue() {
         lastActiveAt: nowIso(),
         privacy: { showEmail: true, showPhone: false, showBirthday: true },
       };
-      commit((d) => log({ ...d, users: [...d.users, user] }, 'create_user', fullName(user)));
+      const [numbered, user] = withRules(dbRef.current!, draft);
+      commit(() => log({ ...numbered, users: [...numbered.users, user] }, 'create_user', fullName(user)));
       return { ok: true };
     },
     setFonction(id: string, fonction: string) {
@@ -551,9 +594,40 @@ function useStoreValue() {
     setRole(id: string, role: Role) {
       commit((d) => {
         const u = d.users.find((x) => x.id === id);
-        return log({ ...d, users: d.users.map((x) => (x.id === id ? { ...x, role } : x)) }, 'change_role', fullName(u), { role });
+        if (!u) return d;
+        // Demo: same rules as the database trigger (number, school, Bureau code).
+        const [numbered, updated] = supabase ? [d, { ...u, role }] : withRules(d, { ...u, role });
+        return log({ ...numbered, users: numbered.users.map((x) => (x.id === id ? updated : x)) }, 'change_role', fullName(u), { role });
       });
-      if (supabase) send(supabase.from('profiles').update({ role }).eq('id', id));
+      if (supabase) {
+        // The database assigns the Alumni number / school / Bureau code; read the row back.
+        Promise.resolve(supabase.from('profiles').update({ role }).eq('id', id)).then(({ error: e }) => {
+          if (e) {
+            setError(e.message);
+            reload();
+          } else actions.refreshUser(id);
+        });
+      }
+    },
+    /** Bureau code: 4 digits, unique, admins (Bureau members) only. */
+    async setBureauCode(id: string, code: string): Promise<Result> {
+      const value = code.trim();
+      const target = dbRef.current?.users.find((u) => u.id === id);
+      if (!target || target.role !== 'admin') return { ok: false, error: 'unknown' };
+      if (value && !isValidBureauCode(value)) return { ok: false, error: 'invalid_code' };
+      if (value && dbRef.current?.users.some((u) => u.id !== id && u.bureauCode === value)) return { ok: false, error: 'code_taken' };
+      if (supabase) {
+        const { error: e } = await supabase.from('profiles').update({ bureau_code: value || null }).eq('id', id);
+        if (e) return { ok: false, error: e.code === '23505' ? 'code_taken' : authError(e.message, e.code) };
+      }
+      commit((d) => ({ ...d, users: d.users.map((u) => (u.id === id ? { ...u, bureauCode: value || undefined } : u)) }));
+      return { ok: true };
+    },
+    /** Supabase: re-reads one profile (after server-side rules changed it). */
+    async refreshUser(id: string) {
+      if (!supabase) return;
+      const { data } = await supabase.from('profiles').select('*').eq('id', id).single();
+      if (data) commit((d) => ({ ...d, users: d.users.map((u) => (u.id === id ? toUser(data) : u)) }));
     },
     async adminResetPassword(id: string, password: string): Promise<Result> {
       if (password.length < 8) return { ok: false, error: 'weak_password' };
@@ -623,6 +697,13 @@ function useStoreValue() {
   };
 
   return { ready: db !== null, db: (db ?? EMPTY_DB) as Db, session, me, actions, error, isRemote };
+}
+
+/** Applies the membership rules to one user and advances the never-reused Alumni number counter. */
+function withRules(d: Db, u: User): [Db, User] {
+  let counter = Math.max(d.nextAlumniNumber ?? FIRST_ALUMNI_NUMBER, ...d.users.map((x) => Number(x.alumniNumber ?? 0) + 1));
+  const next = applyRoleRules(u, () => String(counter++));
+  return [{ ...d, nextAlumniNumber: counter }, next];
 }
 
 function removeUser(d: Db, id: string): Db {

@@ -9,6 +9,7 @@ import { Avatar, Badge, Button, Card, MetaLine, Row, SectionHeader, Tap, type Ic
 import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES } from '@/data/countries';
+import { contactError } from '@/data/members';
 import { can } from '@/data/permissions';
 import { fullName, useApprovedMembers, useInbox, useMe, useStore, useUpcomingBirthdays } from '@/data/store';
 import { Flag } from '@/components/ui/Flag';
@@ -60,6 +61,18 @@ export default function Home() {
           <Button label={f(d.home.adminShortcutSub, { n: pending })} icon="shield" variant="soft" size="sm" onPress={() => router.push('/admin/approbations')} />
         )}
       </View>
+
+      {/* Accounts created before birth date and phone became mandatory */}
+      {contactError(me.role, me.birthDate, me.phone) && (
+        <Row gap={14} wrap style={{ padding: 16, borderRadius: radius.card, backgroundColor: colors.warningSoft, borderWidth: 1, borderColor: colors.warning }}>
+          <Feather name="alert-circle" size={20} color={colors.warning} />
+          <View style={{ flex: 1, minWidth: 200, gap: 2 }}>
+            <Txt variant="bodyStrong">{d.home.completeTitle}</Txt>
+            <Txt variant="small" color="textMuted">{d.home.completeSub}</Txt>
+          </View>
+          <Button label={d.home.completeCta} size="sm" icon="edit-2" onPress={() => router.push('/profil/modifier')} />
+        </Row>
+      )}
 
       {/* Hero */}
       <View style={{ height: isMobile ? 230 : 260, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: '#000' }}>
@@ -199,7 +212,7 @@ export default function Home() {
 
 /** For students: where alumni went to study — the entry point into Repère. */
 function RepereCard() {
-  const { d, f, lang } = useI18n();
+  const { d, f, country } = useI18n();
   const members = useApprovedMembers();
   const alumni = members.filter((u) => (u.role === 'alumni' || u.role === 'admin') && u.country);
   const top = COUNTRIES.map((c) => ({ c, n: alumni.filter((u) => u.country === c.code).length }))
@@ -213,7 +226,7 @@ function RepereCard() {
         {top.map(({ c, n }) => (
           <Tap key={c.code} onPress={() => router.push(`/repere?country=${c.code}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <Flag code={c.code} size={18} />
-            <Txt variant="smallStrong" style={{ flex: 1 }}>{c[lang]}</Txt>
+            <Txt variant="smallStrong" style={{ flex: 1 }}>{country(c.code)}</Txt>
             <Txt variant="small" color="textMuted">{f(d.common.alumniCount, { n })}</Txt>
           </Tap>
         ))}

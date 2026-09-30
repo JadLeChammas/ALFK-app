@@ -1,4 +1,5 @@
 import { CITY_BY_COUNTRY, UNIVERSITIES } from './countries';
+import { DIAL_CODES, FIRST_ALUMNI_NUMBER, hasAlumniNumber, LFK_SCHOOL } from './members';
 import type { Db, EventPhoto, Gender, Message, Role, User } from './types';
 
 /** Demo password for every seeded account. */
@@ -117,7 +118,7 @@ export function createSeed(now = new Date()): Db {
   // Named members used across the demo.
   const jad = add({
     firstName: 'Jad', lastName: 'El Chammas', gender: 'M', role: 'admin', promo: 2020, school: 'INSA Lyon',
-    city: 'Paris', country: 'FR', phone: '+33 6 12 34 56 78', birthDate: '2002-03-12', avatar: portrait('M', 32),
+    city: 'Paris', country: 'FR', phone: '+33 612345678', birthDate: '2002-03-12', avatar: portrait('M', 32),
     email: DEMO_ACCOUNTS.admin, createdAt: ago(720), lastActiveAt: ago(0),
     bio: "Ingénieur en informatique, j'anime la plateforme de l'Amicale.",
   });
@@ -179,6 +180,21 @@ export function createSeed(now = new Date()): Db {
     add({ firstName: fn, lastName: ln, gender: g, role: 'alumni', promo, school, country, city: CITY_BY_COUNTRY[country][0], approved: false, createdAt: ago(r() * 4), avatar: portrait(g, 30 + promo % 20) });
   }
   add({ firstName: 'Maya', lastName: 'Farah', gender: 'F', role: 'alumni', promo: 2022, school: 'EPFL', country: 'CH', city: 'Lausanne', approved: false, email: DEMO_ACCOUNTS.pending, createdAt: ago(1) });
+
+  // Membership rules (data/members.ts): every member has a phone and a birth date (honorary members may
+  // omit them), alumni and admins get an Alumni number in sign-up order, admins a Bureau code.
+  const dialFor = (country?: string) => DIAL_CODES.find((c) => c.code === country)?.dial ?? '+965';
+  let nextNumber = FIRST_ALUMNI_NUMBER;
+  const bureauCodes = ['1001', '1002', '1003'];
+  [...users]
+    .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1))
+    .forEach((u) => {
+      if (!u.phone && u.role !== 'honneur') u.phone = `${dialFor(u.country)} ${String(50000000 + Math.floor(r() * 49999999))}`;
+      if (!u.birthDate && u.role !== 'honneur') u.birthDate = ymd(new Date((u.promo ?? 2010) - 18, Math.floor(r() * 12), 1 + Math.floor(r() * 27)));
+      if (u.role === 'eleve') u.school = LFK_SCHOOL;
+      if (hasAlumniNumber(u.role)) u.alumniNumber = String(nextNumber++);
+      if (u.role === 'admin') u.bureauCode = bureauCodes.shift();
+    });
 
   const promos = Array.from({ length: 18 }, (_, i) => 2012 + i).map((year) => ({
     year,
@@ -279,5 +295,5 @@ export function createSeed(now = new Date()): Db {
     { id: 'n5', userId: jad.id, kind: 'publication', template: 'publication', params: { title: 'Retour sur le voyage au Japon' }, href: '/publications/pub2', createdAt: ago(10), read: true },
   ];
 
-  return { users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications };
+  return { nextAlumniNumber: nextNumber, users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications };
 }

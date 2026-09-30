@@ -5,10 +5,12 @@ import { View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
 import { FieldRow, Button, Chip, Input, Row, Segmented } from '@/components/ui/primitives';
+import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES, UNIVERSITIES } from '@/data/countries';
+import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import { useStore, type AuthError } from '@/data/store';
 import type { Gender, Role } from '@/data/types';
@@ -16,11 +18,11 @@ import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function SignUp() {
-  const { d, lang } = useI18n();
+  const { d, country } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
   const [step, setStep] = useState<1 | 2>(1);
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '' });
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -30,6 +32,8 @@ export default function SignUp() {
   const next = () => {
     if (!form.firstName || !form.lastName || !form.email || !form.password) return setError('missing');
     if (form.password.length < 8) return setError('weak_password');
+    if (!parseFrDate(form.birth)) return setError('birth_date');
+    if (!isValidPhoneNumber(form.phoneNumber)) return setError('phone');
     setStep(2);
   };
 
@@ -39,11 +43,14 @@ export default function SignUp() {
   const submit = async () => {
     const promo = parseInt(form.promo, 10);
     setBusy(true);
+    const { birth, dial, phoneNumber, ...rest } = form;
     const r = await actions.signUp({
-      ...form,
+      ...rest,
       promo: Number.isFinite(promo) ? promo : undefined,
-      school: form.school || undefined,
+      school: form.role === 'eleve' ? LFK_SCHOOL : form.school || undefined,
       city: form.city || undefined,
+      birthDate: parseFrDate(birth) ?? undefined,
+      phone: formatPhone(dial, phoneNumber),
     });
     setBusy(false);
     if (!r.ok) {
@@ -95,6 +102,16 @@ export default function SignUp() {
           </FieldRow>
           <Input label={d.auth.email} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" autoComplete="email" />
           <Input label={d.auth.password} icon="lock" value={form.password} onChangeText={set('password')} secureTextEntry hint={d.auth.passwordHint} autoComplete="new-password" />
+          <DateField label={d.auth.birthDate} value={form.birth} onChange={set('birth')} required error={error === 'birth_date' ? d.auth.errors.birth_date : undefined} />
+          <PhoneField
+            label={d.auth.phone}
+            dial={form.dial}
+            number={form.phoneNumber}
+            onDial={set('dial')}
+            onNumber={set('phoneNumber')}
+            required
+            error={error === 'phone' ? d.auth.errors.phone : undefined}
+          />
           <View style={{ gap: 8 }}>
             <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
             <Segmented value={form.gender} onChange={(g) => setForm((f) => ({ ...f, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }]} />
@@ -111,7 +128,7 @@ export default function SignUp() {
               ))}
             </Row>
           </View>
-          {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
+          {error && error !== 'birth_date' && error !== 'phone' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
           <Button label={d.auth.continue} iconRight="arrow-right" full size="lg" onPress={next} />
         </View>
       ) : (
@@ -122,11 +139,16 @@ export default function SignUp() {
             value={form.country}
             onChange={(c) => setForm((f) => ({ ...f, country: c }))}
             searchable
-            options={COUNTRIES.map((c) => ({ value: c.code, label: c[lang], leading: <Flag code={c.code} /> }))}
+            options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))}
           />
           <Input label={d.auth.city} icon="map-pin" value={form.city} onChangeText={set('city')} />
-          <Input label={d.auth.school} icon="book" value={form.school} onChangeText={set('school')} />
-          {suggestions.length > 0 && (
+          {form.role === 'eleve' ? (
+            // Students are at the LFK: the school is set for them and cannot be changed.
+            <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} />
+          ) : (
+            <Input label={d.auth.school} icon="book" value={form.school} onChangeText={set('school')} />
+          )}
+          {form.role !== 'eleve' && suggestions.length > 0 && (
             <Row gap={6} wrap>
               {suggestions.slice(0, 5).map((s) => (
                 <Chip key={s} label={s} active={form.school === s} onPress={() => setForm((f) => ({ ...f, school: s }))} />

@@ -8,6 +8,7 @@ import { Avatar, Button, Card, ListRow, Row, type IconName } from '@/components/
 import { Columns, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { countryByCode, countryName } from '@/data/countries';
+import { isoToFrDate } from '@/data/members';
 import { can } from '@/data/permissions';
 import { fullName, useInbox, useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -16,7 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 
 export default function MyProfile() {
-  const { d, f, lang, formatDate } = useI18n();
+  const { d, f, lang } = useI18n();
   const { colors } = useTheme();
   const { isMobile, isDesktop } = useLayout();
   const { db, actions } = useStore();
@@ -70,13 +71,19 @@ export default function MyProfile() {
         main={
           <Card>
             <Txt variant="h3" style={{ marginBottom: 4 }}>{d.profile.info}</Txt>
+            {me.role === 'honneur' ? (
+              <ListRow icon="award" title={d.roles.honneur} subtitle={d.member.honorary} tone="warning" />
+            ) : (
+              me.alumniNumber && <ListRow icon="hash" title={me.alumniNumber} subtitle={d.member.alumniNumber} />
+            )}
+            {me.role === 'admin' && me.bureauCode && <ListRow icon="shield" title={me.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             <ListRow icon="book" title={me.school ?? '—'} subtitle={d.member.school} />
             <ListRow icon="map-pin" title={me.city ?? '—'} subtitle={d.auth.city} />
             <ListRow icon="flag" title={country ? countryName(me.country, lang) : '—'} subtitle={d.auth.country} right={country && <Flag code={country.code} size={18} />} />
             {me.fonction ? <ListRow icon="briefcase" title={me.fonction} subtitle={d.member.fonction} /> : <ListRow icon="award" title={me.promo ? String(me.promo) : '—'} subtitle={d.profile.promoLabel} />}
             <ListRow icon="mail" title={me.email} subtitle={d.auth.email} />
             <ListRow icon="phone" title={me.phone ?? '—'} subtitle={d.profile.phone} />
-            <ListRow icon="gift" title={me.birthDate ? formatDate(me.birthDate + 'T12:00:00') : '—'} subtitle={d.profile.birthDate} />
+            <ListRow icon="gift" title={me.birthDate ? isoToFrDate(me.birthDate) : '—'} subtitle={d.profile.birthDate} />
             <ListRow
               icon="user"
               title={d.gender[me.gender]}

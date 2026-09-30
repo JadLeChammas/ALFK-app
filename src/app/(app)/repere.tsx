@@ -17,7 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 export default function Repere() {
   const params = useLocalSearchParams<{ country?: string }>();
-  const { d, f, lang } = useI18n();
+  const { d, f, country: countryOf } = useI18n();
   const { colors } = useTheme();
   const { isDesktop } = useLayout();
   const members = useApprovedMembers();
@@ -59,7 +59,7 @@ export default function Repere() {
   const countryList = countries.length ? (
     <View style={{ gap: 6 }}>
       {countries.map((c) => (
-        <PickRow key={c.code} active={c.code === activeCountry} leading={<Flag code={c.code} />} label={c[lang]} count={perCountry.get(c.code)!.length} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
+        <PickRow key={c.code} active={c.code === activeCountry} leading={<Flag code={c.code} />} label={countryOf(c.code)} count={perCountry.get(c.code)!.length} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
       ))}
     </View>
   ) : (
@@ -133,7 +133,7 @@ export default function Repere() {
             {countryList}
           </Card>
           <Card style={{ flex: 1 }}>
-            <SectionHeader title={ac ? f(d.repere.universitiesIn, { country: ac[lang] }) : d.repere.universities} icon="book" count={f(d.repere.universitiesCount, { n: universities.length })} />
+            <SectionHeader title={ac ? f(d.repere.universitiesIn, { country: countryOf(ac.code) }) : d.repere.universities} icon="book" count={f(d.repere.universitiesCount, { n: universities.length })} />
             {universityList}
           </Card>
         </View>
@@ -151,12 +151,12 @@ export default function Repere() {
             <Txt variant="caption">2 · {d.repere.country}</Txt>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
               {countries.map((c) => (
-                <Chip key={c.code} leading={<Flag code={c.code} size={12} />} label={c[lang]} count={perCountry.get(c.code)!.length} active={c.code === activeCountry} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
+                <Chip key={c.code} leading={<Flag code={c.code} size={12} />} label={countryOf(c.code)} count={perCountry.get(c.code)!.length} active={c.code === activeCountry} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
               ))}
             </ScrollView>
           </View>
           <View style={{ gap: 10 }}>
-            <Txt variant="caption">3 · {ac ? f(d.repere.universitiesIn, { country: ac[lang] }) : d.repere.universities}</Txt>
+            <Txt variant="caption">3 · {ac ? f(d.repere.universitiesIn, { country: countryOf(ac.code) }) : d.repere.universities}</Txt>
             {universityList}
           </View>
         </View>

@@ -10,7 +10,7 @@ import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES, countryName } from '@/data/countries';
+import { COUNTRIES, countrySearchText } from '@/data/countries';
 import { fullName, useApprovedMembers, useMe } from '@/data/store';
 import type { User } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -20,7 +20,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 const PREVIEW = 8;
 
 export default function Directory() {
-  const { d, f, lang } = useI18n();
+  const { d, f, country: countryOf } = useI18n();
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const me = useMe();
@@ -41,7 +41,7 @@ export default function Directory() {
       if (country !== 'all' && u.country !== country) return false;
       if (school !== 'all' && u.school !== school) return false;
       if (!n) return true;
-      const hay = norm(`${fullName(u)} ${u.promo ?? ''} ${countryName(u.country, 'fr')} ${countryName(u.country, 'en')} ${u.school ?? ''} ${u.city ?? ''}`);
+      const hay = norm(`${fullName(u)} ${u.promo ?? ''} ${u.country ? countrySearchText(u.country) : ''} ${u.school ?? ''} ${u.city ?? ''}`);
       return n.split(/\s+/).every((t) => hay.includes(t));
     });
   }, [members, q, promo, country, school]);
@@ -70,7 +70,7 @@ export default function Directory() {
         <Row gap={10} wrap>
           <Feather name="sliders" size={16} color={colors.textMuted} />
           <Select compact value={promo} onChange={setPromo} placeholder={d.directory.filterPromo} searchable options={[{ value: 'all' as const, label: d.directory.allPromos }, ...years.map((y) => ({ value: y, label: f(d.common.promo, { year: y }) }))]} />
-          <Select compact value={country} onChange={setCountry} placeholder={d.directory.filterCountry} searchable options={[{ value: 'all', label: d.directory.allCountries }, ...countries.map((c) => ({ value: c.code, label: c[lang], leading: <Flag code={c.code} /> }))]} />
+          <Select compact value={country} onChange={setCountry} placeholder={d.directory.filterCountry} searchable options={[{ value: 'all', label: d.directory.allCountries }, ...countries.map((c) => ({ value: c.code, label: countryOf(c.code), leading: <Flag code={c.code} /> }))]} />
           <Select compact value={school} onChange={setSchool} placeholder={d.directory.filterSchool} searchable options={[{ value: 'all', label: `${d.common.all} — ${d.directory.filterSchool}` }, ...schools.map((s) => ({ value: s, label: s }))]} />
           {isFiltering && <Button label={d.common.cancel} variant="ghost" size="sm" icon="x" onPress={reset} />}
         </Row>

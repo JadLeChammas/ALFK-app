@@ -36,6 +36,8 @@ Sans configuration, l'app tourne en **démo locale**. Avec les variables Supabas
 
 ### 1. Supabase
 1. *SQL Editor* → *New query* → coller [`supabase/schema.sql`](supabase/schema.sql) → **Run**.
+2. Puis, dans l'ordre, chaque fichier de [`supabase/migrations/`](supabase/migrations) → **Run**
+   (`002_numeros_et_coordonnees.sql` : numéro Alumni, code Bureau, date de naissance et téléphone obligatoires).
    Facultatif : faire pareil avec [`supabase/seed.sql`](supabase/seed.sql) (promos, événements et publications d'exemple).
 2. *Authentication → URL Configuration* : **Site URL** = l'adresse Vercel (ex. `https://alfk-app.vercel.app`),
    et ajouter `https://alfk-app.vercel.app/**` dans **Redirect URLs** (liens de réinitialisation du mot de passe).

@@ -5,7 +5,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { COUNTRIES } from '@/data/countries';
+import { COUNTRIES, countrySearchText } from '@/data/countries';
 import { can } from '@/data/permissions';
 import { fullName, useApprovedMembers, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -20,7 +20,7 @@ export const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').to
 
 export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { colors } = useTheme();
-  const { d, f, lang, formatDate } = useI18n();
+  const { d, f, formatDate, country } = useI18n();
   const { db, me } = useStore();
   const members = useApprovedMembers();
   const { isMobile } = useLayout();
@@ -35,7 +35,7 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
       .slice(0, 6);
     const years = [...new Set(members.map((u) => u.promo).filter(Boolean) as number[])].sort((a, b) => b - a);
     const promos = years.filter((y) => String(y).includes(n) || norm(f(d.common.promo, { year: y })).includes(n)).slice(0, 4);
-    const countries = COUNTRIES.filter((c) => norm(c.fr).includes(n) || norm(c.en).includes(n)).slice(0, 4);
+    const countries = COUNTRIES.filter((c) => norm(countrySearchText(c.code)).includes(n)).slice(0, 4);
     const events = can(me, 'viewEvents') ? db.events.filter((e) => norm(`${e.title} ${e.location}`).includes(n)).slice(0, 4) : [];
     const pubs = db.publications.filter((p) => norm(`${p.title} ${p.excerpt}`).includes(n)).slice(0, 4);
     return { m, promos, countries, events, pubs };
@@ -81,7 +81,7 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
             {results && results.countries.length > 0 && (
               <Group title={d.search.countries}>
                 {results.countries.map((c) => (
-                  <Item key={c.code} onPress={() => go(`/repere?country=${c.code}`)} leading={<View style={{ width: 34, alignItems: 'center' }}><Flag code={c.code} size={18} /></View>} title={c[lang]} subtitle={f(d.common.members, { n: members.filter((u) => u.country === c.code).length })} />
+                  <Item key={c.code} onPress={() => go(`/repere?country=${c.code}`)} leading={<View style={{ width: 34, alignItems: 'center' }}><Flag code={c.code} size={18} /></View>} title={country(c.code)} subtitle={f(d.common.members, { n: members.filter((u) => u.country === c.code).length })} />
                 ))}
               </Group>
             )}

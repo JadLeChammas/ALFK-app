@@ -36,6 +36,8 @@ export const toUser = (r: Row): User => ({
   promo: opt(r.promo),
   school: opt(r.school),
   fonction: opt(r.fonction),
+  alumniNumber: opt(r.alumni_number),
+  bureauCode: opt(r.bureau_code),
   city: opt(r.city),
   country: opt(r.country),
   phone: opt(r.phone),
@@ -61,6 +63,7 @@ const PROFILE_COLUMNS: Record<string, string> = {
   role: 'role',
   approved: 'approved',
   fonction: 'fonction',
+  bureauCode: 'bureau_code',
 };
 
 export function profilePatchToRow(patch: Partial<User>): Row {

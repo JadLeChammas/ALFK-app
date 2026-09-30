@@ -32,6 +32,21 @@ contourne pas le garde (et côté serveur, les politiques RLS Supabase appliquen
   l'inscription**, seul un Admin l'attribue (avec un champ « Fonction », ex. « Proviseur »).
 - Messagerie privée **désactivée entre la direction et les élèves** (mineurs), dans les deux sens.
 
+### Règles d'inscription et numéros (`src/data/members.ts`, migration `002`)
+
+| | Alumni | Élève | Membre d'honneur | Admin (Bureau) |
+|---|---|---|---|---|
+| Date de naissance (JJ/MM/AAAA) et téléphone (+indicatif) | obligatoires | obligatoires | facultatifs | obligatoires |
+| Numéro Alumni (5 chiffres, 11111…, jamais réattribué) | à l'inscription | non — attribué s'il devient Alumni | aucun | oui |
+| Code Bureau (4 chiffres, unique, saisi par un admin) | — | — | — | oui |
+| Établissement | libre | « Lycée Français du Koweït », imposé | libre | libre |
+| Visible dans Repère | oui | non | non | oui |
+
+Ces règles sont vérifiées dans l'app **et** par la base (triggers `apply_member_rules`,
+`guard_profile_update`) : modifier les données envoyées ne permet pas de les contourner.
+Les numéros ne sont affichés qu'à la personne concernée et aux admins.
+« Promo » s'écrit partout « Promo LFK ». Langues : FR, EN, DE, ES, IT, PT, AR (de droite à gauche), JA, ZH.
+
 ## 2. Plan des routes
 
 ```

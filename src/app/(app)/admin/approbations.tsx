@@ -11,7 +11,7 @@ import { fullName, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 
 export default function Approvals() {
-  const { d, f, lang, relative } = useI18n();
+  const { d, f, relative, country } = useI18n();
   const { db, actions } = useStore();
   const { confirm, toast } = useDialogs();
   const pending = db.users.filter((u) => !u.approved).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -44,7 +44,7 @@ export default function Approvals() {
                   <MetaLine icon="mail" text={u.email} />
                   {u.promo && <MetaLine icon="award" text={f(d.common.promo, { year: u.promo })} />}
                   {u.school && <MetaLine icon="book" text={u.school} />}
-                  {c && <MetaLine icon="map-pin" text={[u.city, c[lang]].filter(Boolean).join(', ')} />}
+                  {c && <MetaLine icon="map-pin" text={[u.city, country(c.code)].filter(Boolean).join(', ')} />}
                   <MetaLine icon="user" text={d.gender[u.gender]} />
                 </View>
                 <View style={{ flex: 1 }} />

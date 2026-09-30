@@ -76,7 +76,11 @@ export default function MemberProfile() {
         main={
           <Card>
             <Txt variant="h3" style={{ marginBottom: 4 }}>{d.member.info}</Txt>
+            {user.role === 'honneur' && <ListRow icon="award" title={d.roles.honneur} subtitle={d.member.honorary} tone="warning" />}
             {user.fonction && <ListRow icon="briefcase" title={user.fonction} subtitle={d.member.fonction} />}
+            {/* Membership numbers are shown to the person themself and to admins only. */}
+            {(me.role === 'admin' || isMe) && user.role !== 'honneur' && user.alumniNumber && <ListRow icon="hash" title={user.alumniNumber} subtitle={d.member.alumniNumber} />}
+            {(me.role === 'admin' || isMe) && user.role === 'admin' && user.bureauCode && <ListRow icon="shield" title={user.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             <ListRow icon="book" title={user.school ?? '—'} subtitle={d.member.school} />
             <ListRow icon="map-pin" title={[user.city, countryName(user.country, lang)].filter(Boolean).join(', ')} subtitle={d.member.location} right={country && <Flag code={country.code} size={18} />} />
             {user.promo && <ListRow icon="award" title={String(user.promo)} subtitle={d.profile.promoLabel} />}

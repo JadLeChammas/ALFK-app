@@ -8,10 +8,12 @@ import { norm } from '@/components/shell/GlobalSearch';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { FieldRow, Avatar, Button, Card, Chip, IconButton, Input, Row, SearchBar, Segmented, Tap } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
+import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES } from '@/data/countries';
+import { formatPhone, isValidPhoneNumber, parseFrDate, requiresContact } from '@/data/members';
 import { fullName, useMe, useStore, type AuthError } from '@/data/store';
 import type { Gender, Role, User } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -38,7 +40,7 @@ export default function ManageMembers() {
       db.users
         .filter((u) => u.approved)
         .filter((u) => role === 'all' || u.role === role)
-        .filter((u) => !q || norm(`${fullName(u)} ${u.email} ${u.promo ?? ''}`).includes(norm(q)))
+        .filter((u) => !q || norm(`${fullName(u)} ${u.email} ${u.promo ?? ''} ${u.alumniNumber ?? ''} ${u.bureauCode ?? ''}`).includes(norm(q)))
         .sort((a, b) => a.lastName.localeCompare(b.lastName)),
     [db.users, q, role]
   );
@@ -76,6 +78,7 @@ export default function ManageMembers() {
           <Row style={{ paddingHorizontal: 20, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.surfaceAlt }}>
             <Txt variant="caption" style={{ flex: 2 }}>{d.nav.members}</Txt>
             <Txt variant="caption" style={{ flex: 1 }}>{d.admin.role}</Txt>
+            <Txt variant="caption" style={{ width: 90 }}>{d.member.alumniNumber}</Txt>
             <Txt variant="caption" style={{ width: 90 }}>{d.profile.promoLabel}</Txt>
             <Txt variant="caption" style={{ width: 130, textAlign: 'right' }}> </Txt>
           </Row>
@@ -91,7 +94,11 @@ export default function ManageMembers() {
             </Tap>
             {!isMobile && (
               <>
-                <View style={{ flex: 1 }}><RoleBadge role={u.role} /></View>
+                <View style={{ flex: 1, gap: 4 }}>
+                  <RoleBadge role={u.role} />
+                  {u.role === 'admin' && u.bureauCode && <Txt variant="small" color="textSubtle">{d.member.bureauCode} {u.bureauCode}</Txt>}
+                </View>
+                <Txt variant="small" color="textMuted" style={{ width: 90 }}>{u.role !== 'honneur' && u.alumniNumber ? u.alumniNumber : '—'}</Txt>
                 <Txt variant="small" color="textMuted" style={{ width: 90 }}>{u.promo ?? '—'}</Txt>
               </>
             )}
@@ -149,6 +156,20 @@ export default function ManageMembers() {
                     }}
                   />
                 )}
+                {db.users.find((u) => u.id === editing.id)?.role === 'admin' && (
+                  <Button
+                    label={`${d.admin.editBureauCode}${db.users.find((u) => u.id === editing.id)?.bureauCode ? ` (${db.users.find((u) => u.id === editing.id)?.bureauCode})` : ''}`}
+                    icon="shield"
+                    variant="secondary"
+                    full
+                    onPress={async () => {
+                      const v = await prompt({ title: d.admin.editBureauCode, placeholder: d.admin.bureauCodeField, initial: db.users.find((u) => u.id === editing.id)?.bureauCode });
+                      if (v === null) return;
+                      const r = await actions.setBureauCode(editing.id, v);
+                      toast(r.ok ? d.admin.codeSaved : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
+                    }}
+                  />
+                )}
                 <Button label={d.admin.resetPassword} icon="key" variant="secondary" full onPress={() => resetPassword(editing)} />
                 {editing.id !== me.id && <Button label={d.admin.deleteUser} icon="trash-2" variant="danger" full onPress={() => remove(editing)} />}
               </>
@@ -163,11 +184,11 @@ export default function ManageMembers() {
 }
 
 function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () => void }) {
-  const { d, lang } = useI18n();
+  const { d, country } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
   const { toast } = useDialogs();
-  const blank = { firstName: '', lastName: '', email: '', password: '', phone: '', promo: '', fonction: '', gender: 'F' as Gender, role: 'alumni' as Role, country: 'FR' };
+  const blank = { firstName: '', lastName: '', email: '', password: '', dial: '+965', phoneNumber: '', birth: '', bureauCode: '', promo: '', fonction: '', gender: 'F' as Gender, role: 'alumni' as Role, country: 'FR' };
   const [form, setForm] = useState(blank);
   const [error, setError] = useState<AuthError | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
@@ -177,8 +198,21 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
   const [busy, setBusy] = useState(false);
   const submit = async () => {
     const promo = parseInt(form.promo, 10);
+    const mandatory = requiresContact(form.role);
+    const birthDate = form.birth ? parseFrDate(form.birth) : undefined;
+    if (birthDate === null || (mandatory && !birthDate)) return setError('birth_date');
+    const hasPhone = form.phoneNumber.trim() !== '';
+    if ((mandatory || hasPhone) && !isValidPhoneNumber(form.phoneNumber)) return setError('phone');
+    const { dial, phoneNumber, birth, bureauCode, ...rest } = form;
     setBusy(true);
-    const r = await actions.createUser({ ...form, promo: Number.isFinite(promo) ? promo : undefined, fonction: form.role === 'honneur' && form.fonction.trim() ? form.fonction.trim() : undefined });
+    const r = await actions.createUser({
+      ...rest,
+      promo: Number.isFinite(promo) ? promo : undefined,
+      fonction: form.role === 'honneur' && form.fonction.trim() ? form.fonction.trim() : undefined,
+      birthDate,
+      phone: hasPhone ? formatPhone(dial, phoneNumber) : undefined,
+      bureauCode: form.role === 'admin' && bureauCode.trim() ? bureauCode.trim() : undefined,
+    });
     setBusy(false);
     if (!r.ok) return setError(r.error);
     toast(d.admin.userCreated);
@@ -203,11 +237,12 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
             </FieldRow>
             <Input label={d.auth.email} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" />
             <Input label={d.admin.initialPassword} icon="lock" value={form.password} onChangeText={set('password')} hint={d.auth.passwordHint} />
+            <PhoneField label={d.profile.phone} dial={form.dial} number={form.phoneNumber} onDial={set('dial')} onNumber={set('phoneNumber')} required={requiresContact(form.role)} error={error === 'phone' ? d.auth.errors.phone : undefined} />
             <FieldRow>
-              <Input label={d.profile.phone} icon="phone" value={form.phone} onChangeText={set('phone')} containerStyle={{ flex: 1 }} />
+              <DateField label={d.profile.birthDate} value={form.birth} onChange={set('birth')} required={requiresContact(form.role)} error={error === 'birth_date' ? d.auth.errors.birth_date : undefined} />
               <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
             </FieldRow>
-            <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: c[lang], leading: <Flag code={c.code} /> }))} />
+            <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))} />
             <View style={{ gap: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
               <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }]} />
@@ -219,7 +254,8 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
               </Row>
             </View>
             {form.role === 'honneur' && <Input label={d.admin.fonctionField} icon="briefcase" value={form.fonction} onChangeText={set('fonction')} />}
-            {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
+            {form.role === 'admin' && <Input label={d.admin.bureauCodeField} icon="shield" value={form.bureauCode} onChangeText={(v) => set('bureauCode')(v.replace(/\D/g, '').slice(0, 4))} keyboardType="number-pad" maxLength={4} />}
+            {error && error !== 'phone' && error !== 'birth_date' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
             <Button label={d.common.create} icon="user-plus" full size="lg" onPress={submit} loading={busy} disabled={!form.firstName || !form.lastName || !form.email || !form.password} />
           </ScrollView>
         </Pressable>

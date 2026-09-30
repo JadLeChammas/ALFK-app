@@ -12,7 +12,6 @@ import { Flag } from '@/components/ui/Flag';
 import { Avatar, Badge, Button, Card, Row, SectionHeader, Tap } from '@/components/ui/primitives';
 import { BackLink, Columns, Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { countryByCode } from '@/data/countries';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -22,7 +21,7 @@ import { fonts, radius } from '@/theme/tokens';
 export default function PromoPage() {
   const { annee } = useLocalSearchParams<{ annee: string }>();
   const year = Number(annee);
-  const { d, f, lang, relative } = useI18n();
+  const { d, f, relative, country } = useI18n();
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const { db, actions } = useStore();
@@ -103,7 +102,7 @@ export default function PromoPage() {
             </Card>
             <Card>
               <SectionHeader title={d.promo.countries} icon="globe" />
-              <HBarList data={countries.slice(0, 6).map(([code, value]) => ({ label: countryByCode(code)?.[lang] ?? code, leading: <Flag code={code} size={12} />, value }))} />
+              <HBarList data={countries.slice(0, 6).map(([code, value]) => ({ label: country(code), leading: <Flag code={code} size={12} />, value }))} />
             </Card>
           </>
         }

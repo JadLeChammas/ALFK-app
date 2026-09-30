@@ -28,7 +28,11 @@ type Body = {
   promo?: number;
   phone?: string;
   country?: string;
+  city?: string;
+  school?: string;
   fonction?: string;
+  birthDate?: string;
+  bureauCode?: string;
 };
 
 const ROLES = ['alumni', 'eleve', 'honneur', 'admin'];
@@ -64,30 +68,42 @@ export async function POST(request: Request) {
 
   switch (body.action) {
     case 'create-user': {
-      const { email, password, firstName, lastName, gender, role, promo, phone, country, fonction } = body;
+      const { email, password, firstName, lastName, gender, promo, phone, country, city, school, fonction, birthDate, bureauCode } = body;
+      const role = body.role && ROLES.includes(body.role) ? body.role : 'alumni';
       if (!email || !password || !firstName || !lastName) return json(400, { error: 'missing' });
       if (password.length < 8) return json(400, { error: 'weak_password' });
+      // Same rules as the app; the database checks them again (migration 002).
+      if (role !== 'honneur' || phone) if (!/^\+\d{1,4} \d{6,14}$/.test(phone ?? '')) return json(400, { error: 'phone' });
+      if (role !== 'honneur' || birthDate) if (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate ?? '')) return json(400, { error: 'birth_date' });
+      const code = role === 'admin' ? (bureauCode ?? '').trim() : '';
+      if (code) {
+        if (!/^\d{4}$/.test(code)) return json(400, { error: 'invalid_code' });
+        const { data: clash } = await admin.from('profiles').select('id').eq('bureau_code', code).maybeSingle();
+        if (clash) return json(409, { error: 'code_taken' });
+      }
       const { data, error } = await admin.auth.admin.createUser({
         email,
         password,
         email_confirm: true,
-        user_metadata: { first_name: firstName, last_name: lastName, gender, promo: promo ?? '', country: country ?? '' },
+        user_metadata: {
+          first_name: firstName,
+          last_name: lastName,
+          gender,
+          promo: promo ?? '',
+          country: country ?? '',
+          city: city ?? '',
+          school: school ?? '',
+          phone: phone ?? '',
+          birth_date: birthDate ?? '',
+        },
+        // Trusted fields: only this server can set app metadata. The trigger reads them to create an
+        // approved account with its role, position and Bureau code; the Alumni number is assigned there.
+        app_metadata: { created_by_admin: true, role, fonction: role === 'honneur' ? fonction ?? '' : '', bureau_code: code },
       });
       if (error || !data.user) {
         const taken = /already|exists|registered/i.test(error?.message ?? '');
         return json(taken ? 409 : 500, { error: taken ? 'email_taken' : error?.message ?? 'failed' });
       }
-      // The database trigger created the profile; an admin-created account is approved right away.
-      const { error: upd } = await admin
-        .from('profiles')
-        .update({
-          approved: true,
-          role: role && ROLES.includes(role) ? role : 'alumni',
-          phone: phone || null,
-          fonction: role === 'honneur' ? fonction || null : null,
-        })
-        .eq('id', data.user.id);
-      if (upd) return json(500, { error: upd.message });
       await log('create_user', `${firstName} ${lastName}`);
       return json(200, { ok: true });
     }

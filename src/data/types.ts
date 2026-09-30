@@ -24,10 +24,14 @@ export type User = {
   school?: string;
   /** Position shown for school leadership, e.g. « Proviseur ». Set by an admin. */
   fonction?: string;
+  /** 5 digits, 11111 onwards, assigned once to alumni and admins, never reused (see data/members.ts). */
+  alumniNumber?: string;
+  /** 4 digits, Bureau members (admins) only, typed by an admin, unique. */
+  bureauCode?: string;
   city?: string;
   country?: string; // ISO code, see countries.ts
-  phone?: string;
-  birthDate?: string; // YYYY-MM-DD
+  phone?: string; // "+965 12345678" — required except for honorary members
+  birthDate?: string; // YYYY-MM-DD — required except for honorary members
   avatar?: string;
   bio?: string;
   createdAt: string;
@@ -112,6 +116,8 @@ export type AppNotification = {
 };
 
 export type Db = {
+  /** Demo only: next Alumni number to hand out (numbers are never reused). */
+  nextAlumniNumber?: number;
   users: User[];
   promos: Promo[];
   events: LfkEvent[];
