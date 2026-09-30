@@ -149,6 +149,7 @@ export function PublicationCard({ pub, featured }: { pub: Publication; featured?
       <View style={{ padding: 18, gap: 8, flex: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Badge label={d.publications.categories[pub.category]} tone={PUB_TONE[pub.category]} />
+          {pub.status !== 'published' && <Badge label={pub.status === 'pending' ? d.pubReview.pending : d.pubReview.rejected} tone={pub.status === 'pending' ? 'warning' : 'danger'} />}
           <Txt variant="small" color="textSubtle">{formatDate(pub.date)}</Txt>
         </View>
         <Txt variant={featured ? 'h2' : 'h3'} numberOfLines={2}>{pub.title}</Txt>

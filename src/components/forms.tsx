@@ -1,7 +1,9 @@
+import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 
 import type { EventCategory, PublicationCategory } from '@/data/types';
+import { can } from '@/data/permissions';
 import { useStore } from '@/data/store';
 import { IMAGES } from '@/data/seed';
 import { useI18n } from '@/i18n';
@@ -11,7 +13,7 @@ import { useDialogs } from './ui/Dialogs';
 import { FieldRow, Button, Chip, IconButton, Input, Row } from './ui/primitives';
 import { Txt } from './ui/Txt';
 
-function Sheet({ visible, title, onClose, children }: { visible: boolean; title: string; onClose: () => void; children: React.ReactNode }) {
+export function Sheet({ visible, title, onClose, children }: { visible: boolean; title: string; onClose: () => void; children: React.ReactNode }) {
   const { colors } = useTheme();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
@@ -80,31 +82,42 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
 
 export function PublicationFormModal({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { d } = useI18n();
-  const { actions } = useStore();
+  const { actions, me } = useStore();
+  const { colors } = useTheme();
   const { toast } = useDialogs();
-  const blank = { title: '', excerpt: '', body: '', cover: IMAGES.campus, category: 'actualite' as PublicationCategory };
+  // Members only propose announcements; the admins check them before they appear.
+  const direct = can(me, 'publish');
+  const blank = { title: '', excerpt: '', body: '', cover: IMAGES.campus, category: (direct ? 'actualite' : 'annonce') as PublicationCategory };
   const [form, setForm] = useState(blank);
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   return (
-    <Sheet visible={visible} title={d.publications.create} onClose={onClose}>
+    <Sheet visible={visible} title={direct ? d.publications.create : d.pubReview.propose} onClose={onClose}>
+      {!direct && (
+        <Row gap={8} style={{ alignItems: 'flex-start' }}>
+          <Feather name="shield" size={15} color={colors.warning} style={{ marginTop: 2 }} />
+          <Txt variant="small" color="textMuted" style={{ flex: 1 }}>{d.pubReview.proposeSub}</Txt>
+        </Row>
+      )}
       <Input label={d.events.titleField} value={form.title} onChangeText={set('title')} />
-      <Row gap={8} wrap>
-        {(Object.keys(d.publications.categories) as PublicationCategory[]).map((c) => (
-          <Chip key={c} label={d.publications.categories[c]} active={form.category === c} onPress={() => setForm((f) => ({ ...f, category: c }))} />
-        ))}
-      </Row>
+      {direct && (
+        <Row gap={8} wrap>
+          {(Object.keys(d.publications.categories) as PublicationCategory[]).map((c) => (
+            <Chip key={c} label={d.publications.categories[c]} active={form.category === c} onPress={() => setForm((f) => ({ ...f, category: c }))} />
+          ))}
+        </Row>
+      )}
       <Input label={d.events.coverField} icon="image" value={form.cover} onChangeText={set('cover')} autoCapitalize="none" />
       <Input label={d.publications.excerptField} value={form.excerpt} onChangeText={set('excerpt')} />
       <Input label={d.publications.bodyField} value={form.body} onChangeText={set('body')} multiline />
       <Button
-        label={d.common.create}
+        label={direct ? d.common.create : d.pubReview.submit}
         full
         size="lg"
         disabled={!form.title || !form.body}
         onPress={() => {
-          actions.createPublication({ ...form, excerpt: form.excerpt || form.body.slice(0, 140) });
-          toast(d.common.saved);
+          const r = actions.createPublication({ ...form, excerpt: form.excerpt || form.body.slice(0, 140) });
+          toast(r.pending ? d.pubReview.submitted : d.common.saved);
           setForm(blank);
           onClose();
         }}

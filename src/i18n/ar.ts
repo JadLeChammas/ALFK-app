@@ -3,6 +3,7 @@ import type { Dict } from './fr';
 const ar: Dict = {
   app: { name: 'Amicale LFK', long: 'رابطة خريجي الثانوية الفرنسية في الكويت', tagline: 'الشبكة الخاصة لخريجي الثانوية الفرنسية' },
   nav: {
+    orientation: 'التوجيه', calendar: 'التقويم', whatsapp: 'واتساب', honorary: 'الأعضاء الفخريون', community: 'المجتمع',
     home: 'الرئيسية', directory: 'الدليل', repere: 'Repère', events: 'الفعاليات', publications: 'المنشورات', publicationsShort: 'الأخبار',
     messages: 'الرسائل', profile: 'ملفي الشخصي', profileShort: 'الملف', settings: 'الإعدادات', notifications: 'الإشعارات',
     admin: 'الإدارة', dashboard: 'لوحة التحكم', members: 'الأعضاء', approvals: 'الموافقات', content: 'المحتوى',
@@ -26,6 +27,7 @@ const ar: Dict = {
     alumniCount: '{n} خريج', required: 'حقل إلزامي', copyLink: 'نسخ الرابط', share: 'مشاركة', you: 'أنت', other: 'أخرى',
   },
   auth: {
+    step3: 'إثبات',
     signIn: 'تسجيل الدخول', signUp: 'إنشاء حساب', email: 'البريد الإلكتروني', password: 'كلمة المرور', forgot: 'نسيت كلمة المرور؟', emailPlaceholder: 'name@email.com',
     noAccount: 'لست عضوًا بعد؟', haveAccount: 'لديك حساب بالفعل؟', welcome: 'مرحبًا بعودتك',
     welcomeSub: 'سجّل الدخول لتلتقي مجددًا بمجتمع الرابطة.',
@@ -36,6 +38,7 @@ const ar: Dict = {
     signUpTitle: 'انضم إلى الرابطة', signUpSub: 'بعض المعلومات ليتمكن المجتمع من العثور عليك.',
     step1: 'الهوية', step2: 'المسار', continue: 'متابعة', passwordHint: '8 أحرف على الأقل',
     errors: {
+      proof: 'إثبات الدراسة في الثانوية الفرنسية بالكويت إلزامي للتسجيل.',
       invalid_credentials: 'البريد الإلكتروني أو كلمة المرور غير صحيحة.', email_taken: 'يوجد حساب بهذا البريد الإلكتروني بالفعل.',
       weak_password: 'يجب أن تتكوّن كلمة المرور من 8 أحرف على الأقل.', unknown_email: 'لا يوجد حساب بهذا البريد الإلكتروني.',
       wrong_password: 'كلمة المرور الحالية غير صحيحة.', birth_date: 'تاريخ ميلاد غير صالح: الصيغة يوم/شهر/سنة، وتاريخ في الماضي.', phone: 'رقم هاتف غير صالح: اختر رمز الدولة ثم من 6 إلى 14 رقمًا.', invalid_code: 'يجب أن يتكوّن رمز المكتب من 4 أرقام بالضبط.', code_taken: 'رمز المكتب هذا مخصّص لعضو آخر.', unknown: 'حدث خطأ. حاول مرة أخرى بعد قليل.', mismatch: 'كلمتا المرور غير متطابقتين.', missing: 'يرجى ملء جميع الحقول الإلزامية.',
@@ -111,6 +114,7 @@ const ar: Dict = {
     newConversation: 'رسالة جديدة', you: 'أنت: ', moderation: 'وضع الإشراف — محادثة مُبلّغ عنها',
   },
   profile: {
+    mentor: 'تقديم النصح للطلاب', mentorHint: 'سيتمكن طلاب السنوات الأخيرة من مراسلتك بشأن دراستك.',
     title: 'ملفي الشخصي', edit: 'تعديل ملفي', changePhoto: 'تغيير الصورة', info: 'المعلومات الشخصية',
     phone: 'الهاتف', birthDate: 'تاريخ الميلاد', birthDateHint: 'يوم/شهر/سنة', bio: 'نبذة', genderLocked: 'مقفل',
     promoLabel: 'دفعة LFK', stats: 'نشاطي', conversations: 'المحادثات', photosShared: 'الصور المشاركة', eventsCount: 'الفعاليات',
@@ -133,6 +137,7 @@ const ar: Dict = {
   notifications: {
     title: 'الإشعارات', markAll: 'تحديد الكل كمقروء', empty: 'لا توجد إشعارات',
     t: {
+      publicationApproved: 'تم نشر إعلانك «{title}»', publicationRejected: 'لم يُقبل إعلانك «{title}»', publicationToReview: 'إعلان جديد للمراجعة: {title}',
       message: 'أرسل إليك {name} رسالة', pendingOne: '{name} بانتظار موافقتك',
       pendingMany: '{n} تسجيلات جديدة بانتظار الموافقة', approved: 'تمت الموافقة على حسابك. مرحبًا بك في الرابطة!',
       birthday: 'عيد ميلاد {name} بعد {n} أيام 🎂', photos: '{n} صور جديدة في «{title}»',
@@ -140,6 +145,7 @@ const ar: Dict = {
     },
   },
   admin: {
+    proofRequired: 'إثبات الدراسة مفقود: لا يمكن الموافقة على الحساب.',
     title: 'لوحة تحكم الإدارة', subtitle: 'أدِر المجتمع وتابع نشاط الرابطة.',
     toApprove: 'أعضاء بانتظار الموافقة', reported: 'رسائل مُبلّغ عنها', upcomingEvents: 'الفعاليات القادمة', unreadContact: 'رسائل تواصل غير مقروءة',
     stats: 'الإحصاءات', totalMembers: 'إجمالي الأعضاء', vsLastYear: 'مقارنة بالعام الماضي', byRole: 'حسب الدور', byCountry: 'حسب الدولة',
@@ -156,6 +162,7 @@ const ar: Dict = {
     markRead: 'تحديد كمقروء', markUnread: 'تحديد كغير مقروء', logs: 'سجل الإدارة', logsSub: 'سجل الإجراءات الحساسة.',
     noContact: 'لا توجد رسائل', pendingSince: 'مسجّل {when}',
     actions: {
+      approve_publication: 'نشر الإعلان', reject_publication: 'رفض الإعلان',
       approve: 'وافق على', refuse: 'رفض', create_user: 'أنشأ حساب', change_role: 'غيّر دور',
       reset_password: 'أعاد تعيين كلمة مرور', delete_user: 'حذف حساب', create_event: 'أنشأ الفعالية',
       delete_event: 'حذف الفعالية', delete_photo: 'حذف صورة من', create_publication: 'نشر',
@@ -166,6 +173,62 @@ const ar: Dict = {
     title: 'الإشعارات القانونية', sitemap: 'خريطة الموقع', privacy: 'سياسة الخصوصية', privacyUpdated: 'آخر تحديث: 30 سبتمبر 2026', notFound: 'الصفحة غير موجودة', notFoundSub: 'هذه الصفحة غير موجودة أو تم نقلها.',
     goHome: 'العودة إلى الرئيسية', contactTitle: 'اتصل بنا', contactSub: 'لديك سؤال؟ فريق الرابطة يجيبك.',
     subject: 'الموضوع', message: 'الرسالة', name: 'الاسم', sent: 'تم إرسال الرسالة، شكرًا!',
+  },
+  landing: {
+    title: 'شبكة خريجي الثانوية الفرنسية في الكويت', sub: 'اعثر على زملاء دفعتك، واكتشف أين يدرسون، وابقَ على تواصل مع مجتمع الثانوية الفرنسية في كل أنحاء العالم.', join: 'انضم إلى الرابطة',
+    featuresTitle: 'للأعضاء فقط', featuresSub: 'بعد الموافقة على حسابك، يمكنك الوصول إلى:', fDirectory: 'الدليل',
+    fDirectorySub: 'جميع الأعضاء حسب الدفعة أو البلد أو المؤسسة.', fRepere: 'الخريطة وRepère', fRepereSub: 'إلى أين ذهب الخريجون: القارات والبلدان والجامعات.',
+    fOrientation: 'التوجيه', fOrientationSub: 'لطلاب السنوات الأخيرة: خريجون حسب مجال الدراسة.', fWhatsapp: 'مجموعات واتساب',
+    fWhatsappSub: 'مجموعة دفعتك ومجتمع الإعلانات.', fPublications: 'المنشورات', fPublicationsSub: 'إعلانات الرابطة والأعضاء، بعد مراجعة المشرفين.',
+    fCalendar: 'التقويم', fCalendarSub: 'مواعيد الفرنكوفونية والوكالة AEFE والثانوية وفرنسا، وأعياد الميلاد.', joinTitle: 'كيف تنضم إلى الرابطة؟',
+    joinSub: 'المنصة خاصة: يراجع أحد المشرفين كل طلب تسجيل.', step1: 'املأ النموذج بمعلوماتك الشخصية.', step2: 'أرفق إثباتًا لدراستك في الثانوية: كشف درجات أو شهادة أو إفادة أو مجرد صورة.',
+    step3: 'يراجع أحد المشرفين طلبك ويفعّل حسابك.',
+  },
+  proof: {
+    title: 'إثبات الدراسة في الثانوية الفرنسية', sub: 'إلزامي: كشف درجات أو شهادة مدرسية أو إفادة أو مجرد صورة تثبت دراستك في الثانوية.', pick: 'اختر ملفًا',
+    replace: 'تغيير الملف', formats: 'صورة أو PDF · بحد أقصى 10 ميغابايت', tooBig: 'الملف كبير جدًا: الحد الأقصى 10 ميغابايت.',
+    privacy: 'لا يرى هذا المستند إلا المشرفون، للتحقق من تسجيلك.', sent: 'تم إرسال الإثبات', send: 'إرسال الإثبات',
+    view: 'عرض الإثبات', received: 'تم استلام الإثبات', none: 'الإثبات مفقود',
+    adminCreated: 'أنشأه أحد المشرفين', pendingHint: 'لم نستلم إثبات دراستك: أرسله حتى تتم الموافقة على حسابك.',
+  },
+  fields: {
+    medecine: 'الطب والصحة', droit: 'الحقوق', economie: 'الاقتصاد والإدارة',
+    ingenierie: 'الهندسة', informatique: 'علوم الحاسوب', sciences: 'العلوم',
+    architecture: 'العمارة', arts: 'الفنون والتصميم', lettres: 'الآداب واللغات',
+    sciencesPo: 'العلوم السياسية', communication: 'الاتصال والإعلام', education: 'التعليم',
+    autre: 'أخرى',
+  },
+  pubReview: {
+    propose: 'اقترح إعلانًا', proposeSub: 'سيراجع أحد المشرفين إعلانك قبل نشره.', submit: 'إرسال للمراجعة',
+    submitted: 'تم إرسال الإعلان: سيُنشر بعد المراجعة.', pending: 'بانتظار المراجعة', rejected: 'مرفوض',
+    queue: 'إعلانات للمراجعة', queueEmpty: 'لا توجد إعلانات بانتظار المراجعة', approve: 'نشر',
+    reject: 'رفض', mine: 'اقتراحاتي', published: 'تم نشر الإعلان',
+  },
+  whatsapp: {
+    title: 'مجموعات واتساب', subtitle: 'مجموعة دفعتك ومجتمع واتساب الخاص بالرابطة.', communityTitle: 'مجتمع واتساب للرابطة',
+    communitySub: 'الإعلانات الرسمية للرابطة، لجميع الأعضاء.', join: 'انضم إلى المجتمع', noCommunity: 'الرابط متاح قريبًا',
+    editCommunity: 'رابط المجتمع', invalidLink: 'رابط واتساب غير صالح (https://chat.whatsapp.com/…).', myPromo: 'مجموعة دفعتك',
+    noGroup: 'لا توجد مجموعة واتساب لهذه الدفعة بعد.', askAdmin: 'يمكن لأحد المشرفين إضافة الرابط من صفحة الدفعة.', allGroups: 'جميع مجموعات الدفعات',
+  },
+  honorary: {
+    title: 'الأعضاء الفخريون', subtitle: 'المؤسسات والشخصيات التي تدعم الرابطة.', institutions: 'المؤسسات',
+    people: 'إدارة الثانوية', website: 'الموقع الإلكتروني', add: 'إضافة مؤسسة',
+    name: 'الاسم', description: 'الوصف', websiteField: 'الموقع الإلكتروني (اختياري)',
+    logoField: 'الشعار: عنوان الصورة (اختياري)', invalidUrl: 'عنوان غير صالح: يجب أن يبدأ بـ https://', permissionNote: 'لا تظهر أي مؤسسة هنا إلا بموافقتها الكتابية (بما في ذلك استخدام شعارها).',
+  },
+  orientation: {
+    title: 'التوجيه', subtitle: 'طلاب السنوات الأخيرة: ابحثوا عن خريجين حسب مجال الدراسة أو المؤسسة، واطرحوا عليهم أسئلتكم.', field: 'مجال الدراسة',
+    institutions: 'المؤسسات', mentorsOnly: 'متاحون لتقديم النصح', mentor: 'ينصح الطلاب',
+    searchPlaceholder: 'ابحث عن مؤسسة أو مدينة أو اسم…', results: '{n} من الخريجين', ask: 'اطرح سؤالًا',
+    becomeMentor: 'حدد مجال دراستك وقدّم نصائحك للطلاب من ملفك الشخصي.',
+  },
+  calendar: {
+    title: 'التقويم', subtitle: 'المواعيد المهمة (الفرنكوفونية، AEFE، الثانوية، فرنسا) وأعياد ميلاد الأعضاء.', birthdays: 'أعياد الميلاد',
+    birthdayOf: 'عيد ميلاد {name}', nothing: 'لا شيء مقرر في هذا اليوم.', thisMonth: 'هذا الشهر',
+    add: 'إضافة موعد', titleField: 'العنوان', dateField: 'التاريخ (يوم/شهر)',
+    yearField: 'السنة (اختياري)', yearHint: 'من دون سنة، يتكرر الموعد كل عام.', category: 'الفئة',
+    invalidDate: 'تاريخ غير صالح', prev: 'الشهر السابق', next: 'الشهر التالي',
+    categories: { francophonie: 'الفرنكوفونية', aefe: 'AEFE', lfk: 'الثانوية', france: 'فرنسا', koweit: 'الكويت', amicale: 'الرابطة' },
   },
   months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
   monthsShort: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],

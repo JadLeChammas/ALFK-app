@@ -37,7 +37,7 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
     const promos = years.filter((y) => String(y).includes(n) || norm(f(d.common.promo, { year: y })).includes(n)).slice(0, 4);
     const countries = COUNTRIES.filter((c) => norm(countrySearchText(c.code)).includes(n)).slice(0, 4);
     const events = can(me, 'viewEvents') ? db.events.filter((e) => norm(`${e.title} ${e.location}`).includes(n)).slice(0, 4) : [];
-    const pubs = db.publications.filter((p) => norm(`${p.title} ${p.excerpt}`).includes(n)).slice(0, 4);
+    const pubs = db.publications.filter((p) => p.status === 'published').filter((p) => norm(`${p.title} ${p.excerpt}`).includes(n)).slice(0, 4);
     return { m, promos, countries, events, pubs };
   }, [q, members, db.events, db.publications, d, f, me]);
 

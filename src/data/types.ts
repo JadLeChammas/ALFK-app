@@ -28,6 +28,14 @@ export type User = {
   alumniNumber?: string;
   /** 4 digits, Bureau members (admins) only, typed by an admin, unique. */
   bureauCode?: string;
+  /** Proof of schooling sent at sign-up (private: only admins can open it). Required before approval. */
+  proof?: { path: string; name: string; mimeType?: string; uploadedAt: string };
+  /** Accounts created by an admin need no proof. */
+  createdByAdmin?: boolean;
+  /** Field of study, for the Orientation space (see data/fields.ts). */
+  fieldOfStudy?: string;
+  /** Accepts being contacted by current students about their studies (Orientation). */
+  mentor?: boolean;
   city?: string;
   country?: string; // ISO code, see countries.ts
   phone?: string; // "+965 12345678" — required except for honorary members
@@ -63,7 +71,20 @@ export type Publication = {
   excerpt: string;
   body: string;
   authorId: string;
+  /** Members' submissions wait for an admin before being published. */
+  status: PublicationStatus;
 };
+
+export type PublicationStatus = 'pending' | 'published' | 'rejected';
+
+/** Honorary members that are institutions (LFK, SCAC…), shown on the Membres d'honneur page. */
+export type Institution = { id: string; name: string; description: string; logo?: string; website?: string; order: number };
+
+export type KeyDateCategory = 'francophonie' | 'aefe' | 'lfk' | 'france' | 'koweit' | 'amicale';
+/** A yearly date (month/day) shown in the calendar; `year` set = a one-off date. */
+export type KeyDate = { id: string; title: string; month: number; day: number; year?: number; category: KeyDateCategory };
+
+export type AppSettings = { whatsappCommunity?: string };
 
 export type Conversation = {
   id: string;
@@ -97,11 +118,13 @@ export type AdminLogAction =
   | 'create_publication'
   | 'delete_publication'
   | 'open_reported_conversation'
-  | 'resolve_report';
+  | 'resolve_report'
+  | 'approve_publication'
+  | 'reject_publication';
 
 export type AdminLog = { id: string; actorId: string; action: AdminLogAction; target: string; meta?: { role?: Role }; createdAt: string };
 
-export type NotificationTemplate = 'message' | 'pendingOne' | 'pendingMany' | 'approved' | 'birthday' | 'photos' | 'publication';
+export type NotificationTemplate = 'message' | 'pendingOne' | 'pendingMany' | 'approved' | 'birthday' | 'photos' | 'publication' | 'publicationApproved' | 'publicationRejected' | 'publicationToReview';
 
 export type AppNotification = {
   id: string;
@@ -128,6 +151,9 @@ export type Db = {
   contacts: ContactMessage[];
   logs: AdminLog[];
   notifications: AppNotification[];
+  institutions: Institution[];
+  keyDates: KeyDate[];
+  settings: AppSettings;
 };
 
 export type Session = { userId: string; recovery?: boolean } | null;

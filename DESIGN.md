@@ -9,8 +9,8 @@ Ce document fixe l'architecture, les pages, les composants et le design system a
 
 | État | Ce que voit l'utilisateur |
 |---|---|
-| Non connecté | `/connexion`, `/inscription`, `/mot-de-passe-oublie` + pages légales |
-| Connecté, non approuvé | `/en-attente` uniquement |
+| Non connecté | `/bienvenue` (page d'accueil publique), `/connexion`, `/inscription`, `/mot-de-passe-oublie` + pages légales |
+| Connecté, non approuvé | `/en-attente` uniquement (avec l'envoi du justificatif s'il manque) |
 | Session de récupération | `/nouveau-mot-de-passe` — prioritaire sur tout le reste |
 | Approuvé (Alumni, Élève, Membre d'honneur) | Espace membre complet |
 | Approuvé + Admin | Espace membre + `/admin/*` |
@@ -45,14 +45,33 @@ contourne pas le garde (et côté serveur, les politiques RLS Supabase appliquen
 Ces règles sont vérifiées dans l'app **et** par la base (triggers `apply_member_rules`,
 `guard_profile_update`) : modifier les données envoyées ne permet pas de les contourner.
 Les numéros ne sont affichés qu'à la personne concernée et aux admins.
-« Promo » s'écrit partout « Promo LFK ». Langues : FR, EN, DE, ES, IT, PT, AR (de droite à gauche), JA, ZH.
+« Promo » s'écrit partout « Promo LFK ».
+
+### Justificatif, annonces vérifiées et nouvelles rubriques (migration `003`)
+
+- **Justificatif de scolarité au LFK obligatoire à l'inscription** (étape 3 : bulletin, certificat,
+  attestation ou simple photo, image ou PDF, 10 Mo max). Fichier privé (bucket `proofs`), visible
+  seulement par son auteur et les admins (liens signés de 10 min). Un admin ne peut pas approuver un
+  compte sans justificatif, sauf un compte qu'il a créé lui-même — règle vérifiée aussi par la base.
+- **Publications** : admins et direction publient directement ; les autres membres « proposent une
+  annonce », publiée seulement après vérification par un admin (file « Annonces à vérifier » dans
+  Publications et Admin → Contenus, notifications à l'auteur).
+- **Orientation** (`/orientation`) : les anciens par domaine d'études, établissement ou pays ; un ancien
+  peut se déclarer « disponible pour conseiller les lycéens » depuis son profil.
+- **Calendrier** (`/calendrier`) : dates clés (Francophonie, AEFE, LFK, France, Koweït, Amicale — les
+  admins en ajoutent), anniversaires des membres, événements pour ceux qui y ont accès.
+- **WhatsApp** (`/whatsapp`) : lien de la communauté (annonces, modifiable par un admin) + groupe de sa
+  Promo LFK et tous les groupes (Alumni et admins ; les élèves ne voient que la communauté).
+- **Membres d'honneur** (`/membres-honneur`) : institutions (le LFK au départ) et direction du lycée.
+  Une institution — par exemple le SCAC de l'Ambassade de France — n'est ajoutée par un admin
+  **qu'avec son accord écrit**, y compris pour son logo. Langues : FR, EN, DE, ES, IT, PT, AR (de droite à gauche), JA, ZH.
 
 ## 2. Plan des routes
 
 ```
 src/app/
   _layout.tsx                 Providers + gardes d'accès
-  (auth)/connexion · inscription · mot-de-passe-oublie
+  (auth)/bienvenue · connexion · inscription · mot-de-passe-oublie
   en-attente.tsx              Compte en attente d'approbation
   nouveau-mot-de-passe.tsx    Session de récupération
   (app)/_layout.tsx           Shell : sidebar (desktop) / bottom nav (mobile)
@@ -60,6 +79,10 @@ src/app/
     annuaire/index · promo/[annee]
     membre/[id].tsx           Fiche membre
     repere.tsx                Continent → Pays → Universités
+    orientation.tsx           Anciens par domaine d'études / établissement
+    calendrier.tsx            Dates clés + anniversaires + événements
+    whatsapp.tsx              Communauté + groupes de Promo LFK
+    membres-honneur.tsx       Institutions + direction du lycée
     evenements/index · [id]   Liste + page immersive avec galerie
     publications/index · [id]
     messages/index · [id]     Inbox + conversation
@@ -74,11 +97,13 @@ src/app/
 ## 3. Navigation
 
 - **Desktop (≥ 1024 px)** : sidebar fixe 248 px — logo, sections (Accueil, Annuaire, Repère,
-  Événements, Publications, Messages), puis Paramètres, Notifications et la carte avatar qui ouvre
-  « Mon profil ». Section « Administration » visible seulement pour les admins.
+  Orientation, Calendrier, Événements, Publications, Messages), groupe « Communauté » (WhatsApp,
+  Membres d'honneur), puis Paramètres, Notifications et la carte avatar qui ouvre « Mon profil ».
+  Section « Administration » visible seulement pour les admins.
 - **Tablette (768–1023 px)** : sidebar compacte (icônes seules, 76 px).
-- **Mobile (< 768 px)** : la barre de gauche devient la barre du bas, avec les mêmes rubriques —
-  Accueil · Annuaire · Repère · Événements · Actus · Messages (sans Événements pour les élèves).
+- **Mobile (< 768 px)** : la barre de gauche devient la barre du bas — Accueil · Annuaire · Repère ·
+  Actus · Messages · **Plus** (feuille avec Événements, Orientation, Calendrier, WhatsApp, Membres
+  d'honneur ; sans Événements pour les élèves).
   Le profil s'ouvre avec l'avatar en haut à droite ; Paramètres, Admin et Statistiques sont dans le profil. Repère, Publications, Paramètres, Admin sont accessibles depuis l'Accueil
   (actions rapides) et le Profil (menu).
 - **Header** : salutation + date/rôle à gauche ; recherche globale, notifications, avatar à droite.

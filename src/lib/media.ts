@@ -1,7 +1,8 @@
+import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { Platform, Share } from 'react-native';
 
-import type { PickedImage } from '@/data/remote';
+import type { PickedDoc, PickedImage } from '@/data/remote';
 import { isRemote } from './supabase';
 
 /** Opens the photo library; returns the picked images (empty when cancelled). */
@@ -19,6 +20,23 @@ export async function pickImages(multiple = true): Promise<PickedImage[]> {
   });
   if (res.canceled || !res.assets) return [];
   return res.assets.map((a) => ({ uri: a.uri, base64: a.base64, mimeType: a.mimeType }));
+}
+
+/** Largest proof of schooling accepted (the private bucket enforces the same limit). */
+export const PROOF_MAX_BYTES = 10 * 1024 * 1024;
+
+/** Proof of schooling: a photo or a scan (image or PDF). Returns null when cancelled. */
+export async function pickProof(): Promise<PickedDoc | null> {
+  const res = await DocumentPicker.getDocumentAsync({
+    type: ['image/*', 'application/pdf'],
+    multiple: false,
+    copyToCacheDirectory: true,
+    // Native uploads to Supabase need the bytes; the web gives a File.
+    base64: isRemote && Platform.OS !== 'web',
+  });
+  if (res.canceled || !res.assets?.[0]) return null;
+  const a = res.assets[0];
+  return { uri: a.uri, name: a.name, mimeType: a.mimeType, file: a.file, base64: a.base64, size: a.size ?? a.file?.size };
 }
 
 /** Adds an event to the user's calendar: downloads an .ics on web, opens the share sheet on native. */

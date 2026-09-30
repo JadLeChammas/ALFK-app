@@ -75,6 +75,18 @@ const COUNTRY_WEIGHTS: [string, number][] = [
 const slug = (s: string) =>
   s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z]/g, '');
 
+const FIELD_BY_SCHOOL: [RegExp, string][] = [
+  [/polytechnique|insa|epfl|mohammed vi/i, 'ingenierie'],
+  [/sciences po|sorbonne abu|nyu abu/i, 'sciencesPo'],
+  [/essec|hec|business|ie university|economi/i, 'economie'],
+  [/panth|droit|law|genève/i, 'droit'],
+  [/king's|columbia|new york|boston|mcgill|montréal|sydney|waseda|university college/i, 'sciences'],
+  [/beirut|saint-joseph|kuwait|gust|cité|aix|bruxelles|louvain|paulo|égypte/i, 'medecine'],
+  [/sorbonne|lyon|bordeaux|toulouse|lille|strasbourg/i, 'lettres'],
+  [/architect|beaux-arts|design|arts/i, 'arts'],
+];
+const fieldFor = (school: string) => FIELD_BY_SCHOOL.find(([re]) => re.test(school))?.[1] ?? 'autre';
+
 export function createSeed(now = new Date()): Db {
   const r = rng(20261003);
   const pick = <T,>(arr: T[]) => arr[Math.floor(r() * arr.length)];
@@ -194,6 +206,14 @@ export function createSeed(now = new Date()): Db {
       if (u.role === 'eleve') u.school = LFK_SCHOOL;
       if (hasAlumniNumber(u.role)) u.alumniNumber = String(nextNumber++);
       if (u.role === 'admin') u.bureauCode = bureauCodes.shift();
+      if ((u.role === 'alumni' || u.role === 'admin') && u.school) {
+        u.fieldOfStudy = fieldFor(u.school);
+        u.mentor = r() > 0.25;
+      }
+      // Pending sign-ups carry their proof of schooling (except the "En attente" demo account).
+      if (!u.approved && u.email !== DEMO_ACCOUNTS.pending) {
+        u.proof = { path: IMAGES.lecture, name: 'certificat-de-scolarite.jpg', mimeType: 'image/jpeg', uploadedAt: u.createdAt };
+      }
     });
 
   const promos = Array.from({ length: 18 }, (_, i) => 2012 + i).map((year) => ({
@@ -229,14 +249,21 @@ export function createSeed(now = new Date()): Db {
   addGallery('e1', 5, 4); // last year's edition photos already shared
 
   const publications: Db['publications'] = [
-    { id: 'pub7', title: "Forum d'orientation : les anciens au rendez-vous", category: 'annonce', date: ago(1), cover: IMAGES.lecture, authorId: proviseur.id, excerpt: 'La direction du lycée invite les alumni à partager leur parcours avec nos élèves.', body: "Chers anciens élèves,\n\nLe forum d'orientation du lycée aura lieu dans quelques semaines. Vos témoignages sont précieux pour nos élèves de Première et de Terminale qui préparent leurs choix d'études.\n\nSi vous souhaitez présenter votre université ou votre métier, contactez-nous via la messagerie de la plateforme.\n\nMerci pour votre fidélité au lycée." },
-    { id: 'pub1', title: 'Rentrée 2026 : le mot du président', category: 'actualite', date: ago(2), cover: IMAGES.campus, authorId: jad.id, excerpt: "Une nouvelle année commence pour l'Amicale : nouveaux projets, nouvelle plateforme et beaucoup d'événements.", body: "Chères et chers membres,\n\nCette rentrée marque une étape importante pour l'Amicale du LFK : notre nouvelle plateforme réunit enfin toute la communauté au même endroit, sur téléphone comme sur ordinateur.\n\nCette année, nous voulons renforcer les liens entre les promos, accompagner les élèves dans leurs choix d'orientation grâce à Repère, et multiplier les rencontres, à Koweït comme à l'étranger.\n\nMerci à toutes celles et ceux qui font vivre ce réseau. À très vite lors de la soirée de rentrée !" },
-    { id: 'pub2', title: 'Retour sur le voyage au Japon', category: 'article', date: ago(10), cover: IMAGES.japan, authorId: karim.id, excerpt: "24 membres, 10 jours, deux villes : récit d'un voyage qui a marqué l'année.", body: "De Shibuya aux temples de Kyoto, le voyage organisé par l'Amicale a réuni des membres de sept promos différentes.\n\nAu programme : visites, rencontres avec des alumni installés à Tokyo, et beaucoup de souvenirs à retrouver dans la galerie de l'événement." },
-    { id: 'pub3', title: 'Nouvelle association : LFK Business Club', category: 'annonce', date: ago(15), cover: IMAGES.work, authorId: jad.id, excerpt: 'Un club pour connecter les alumni entrepreneurs, dirigeants et jeunes diplômés.', body: "Le LFK Business Club réunira chaque trimestre les alumni autour de conférences, d'afterworks et de mentorat.\n\nPremier rendez-vous : l'afterwork parisien, à retrouver dans les événements." },
-    { id: 'pub4', title: 'Les 10 ans de la promo 2016', category: 'article', date: ago(20), cover: IMAGES.friends, authorId: karim.id, excerpt: 'Dix ans après le bac, la promo 2016 s’est retrouvée au complet.', body: 'Retrouvailles, souvenirs de classe et photos d’époque : la promo 2016 a fêté ses 10 ans en grand.' },
-    { id: 'pub5', title: "Appel à candidatures — Conseil d'administration", category: 'annonce', date: ago(25), cover: IMAGES.lecture, authorId: jad.id, excerpt: "Vous souhaitez vous investir dans l'Amicale ? Les candidatures sont ouvertes.", body: "Le conseil d'administration de l'Amicale renouvelle trois postes cette année. Envoyez votre candidature via la page contact avant la fin du mois." },
-    { id: 'pub6', title: 'Bourses d’études 2027', category: 'annonce', date: ago(34), cover: IMAGES.students, authorId: karim.id, excerpt: 'L’Amicale soutient les élèves de Terminale dans leurs projets d’études supérieures.', body: 'Trois bourses seront attribuées aux élèves de Terminale. Dossier à déposer auprès du bureau de l’Amicale.' },
+    { id: 'pub7', status: 'published', title: "Forum d'orientation : les anciens au rendez-vous", category: 'annonce', date: ago(1), cover: IMAGES.lecture, authorId: proviseur.id, excerpt: 'La direction du lycée invite les alumni à partager leur parcours avec nos élèves.', body: "Chers anciens élèves,\n\nLe forum d'orientation du lycée aura lieu dans quelques semaines. Vos témoignages sont précieux pour nos élèves de Première et de Terminale qui préparent leurs choix d'études.\n\nSi vous souhaitez présenter votre université ou votre métier, contactez-nous via la messagerie de la plateforme.\n\nMerci pour votre fidélité au lycée." },
+    { id: 'pub1', status: 'published', title: 'Rentrée 2026 : le mot du président', category: 'actualite', date: ago(2), cover: IMAGES.campus, authorId: jad.id, excerpt: "Une nouvelle année commence pour l'Amicale : nouveaux projets, nouvelle plateforme et beaucoup d'événements.", body: "Chères et chers membres,\n\nCette rentrée marque une étape importante pour l'Amicale du LFK : notre nouvelle plateforme réunit enfin toute la communauté au même endroit, sur téléphone comme sur ordinateur.\n\nCette année, nous voulons renforcer les liens entre les promos, accompagner les élèves dans leurs choix d'orientation grâce à Repère, et multiplier les rencontres, à Koweït comme à l'étranger.\n\nMerci à toutes celles et ceux qui font vivre ce réseau. À très vite lors de la soirée de rentrée !" },
+    { id: 'pub2', status: 'published', title: 'Retour sur le voyage au Japon', category: 'article', date: ago(10), cover: IMAGES.japan, authorId: karim.id, excerpt: "24 membres, 10 jours, deux villes : récit d'un voyage qui a marqué l'année.", body: "De Shibuya aux temples de Kyoto, le voyage organisé par l'Amicale a réuni des membres de sept promos différentes.\n\nAu programme : visites, rencontres avec des alumni installés à Tokyo, et beaucoup de souvenirs à retrouver dans la galerie de l'événement." },
+    { id: 'pub3', status: 'published', title: 'Nouvelle association : LFK Business Club', category: 'annonce', date: ago(15), cover: IMAGES.work, authorId: jad.id, excerpt: 'Un club pour connecter les alumni entrepreneurs, dirigeants et jeunes diplômés.', body: "Le LFK Business Club réunira chaque trimestre les alumni autour de conférences, d'afterworks et de mentorat.\n\nPremier rendez-vous : l'afterwork parisien, à retrouver dans les événements." },
+    { id: 'pub4', status: 'published', title: 'Les 10 ans de la promo 2016', category: 'article', date: ago(20), cover: IMAGES.friends, authorId: karim.id, excerpt: 'Dix ans après le bac, la promo 2016 s’est retrouvée au complet.', body: 'Retrouvailles, souvenirs de classe et photos d’époque : la promo 2016 a fêté ses 10 ans en grand.' },
+    { id: 'pub5', status: 'published', title: "Appel à candidatures — Conseil d'administration", category: 'annonce', date: ago(25), cover: IMAGES.lecture, authorId: jad.id, excerpt: "Vous souhaitez vous investir dans l'Amicale ? Les candidatures sont ouvertes.", body: "Le conseil d'administration de l'Amicale renouvelle trois postes cette année. Envoyez votre candidature via la page contact avant la fin du mois." },
+    { id: 'pub6', status: 'published', title: 'Bourses d’études 2027', category: 'annonce', date: ago(34), cover: IMAGES.students, authorId: karim.id, excerpt: 'L’Amicale soutient les élèves de Terminale dans leurs projets d’études supérieures.', body: 'Trois bourses seront attribuées aux élèves de Terminale. Dossier à déposer auprès du bureau de l’Amicale.' },
   ];
+
+  // A member's announcement waiting for an admin (publications are moderated).
+  publications.push({
+    id: 'pub8', status: 'pending', title: 'Colocation à Paris pour la rentrée', category: 'annonce', date: ago(0.3), cover: IMAGES.paris, authorId: sarah.id,
+    excerpt: 'Je cherche un ou une colocataire parmi les alumni pour un appartement dans le 11e.',
+    body: 'Bonjour à tous,\n\nJe cherche un ou une colocataire pour un deux-pièces dans le 11e arrondissement, à partir de novembre.\n\nÉcrivez-moi via la messagerie de la plateforme !',
+  });
 
   const conversations: Db['conversations'] = [];
   const messages: Message[] = [];
@@ -295,5 +322,24 @@ export function createSeed(now = new Date()): Db {
     { id: 'n5', userId: jad.id, kind: 'publication', template: 'publication', params: { title: 'Retour sur le voyage au Japon' }, href: '/publications/pub2', createdAt: ago(10), read: true },
   ];
 
-  return { nextAlumniNumber: nextNumber, users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications };
+  // Honorary institutions. The SCAC (French Embassy) is added by an admin once it has agreed.
+  const institutions: Db['institutions'] = [
+    { id: 'inst-lfk', order: 1, name: 'Lycée Français du Koweït', logo: 'lfk', website: 'https://www.lfkoweit.edu.kw',
+      description: "L'établissement où tout a commencé : l'Amicale réunit ses anciens élèves et reste liée à sa direction, à ses équipes et à ses élèves." },
+  ];
+
+  // Key dates shown in the calendar every year (AEFE and LFK dates are added by admins).
+  const keyDates: Db['keyDates'] = [
+    { id: 'kd1', title: 'Fête nationale du Koweït', month: 2, day: 25, category: 'koweit' },
+    { id: 'kd2', title: 'Jour de la Libération du Koweït', month: 2, day: 26, category: 'koweit' },
+    { id: 'kd3', title: 'Journée internationale de la Francophonie', month: 3, day: 20, category: 'francophonie' },
+    { id: 'kd4', title: 'Victoire du 8 mai 1945', month: 5, day: 8, category: 'france' },
+    { id: 'kd5', title: 'Fête nationale française', month: 7, day: 14, category: 'france' },
+    { id: 'kd6', title: 'Armistice du 11 novembre 1918', month: 11, day: 11, category: 'france' },
+  ];
+
+  return {
+    nextAlumniNumber: nextNumber, users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications,
+    institutions, keyDates, settings: { whatsappCommunity: 'https://chat.whatsapp.com/lfk-communaute' },
+  };
 }

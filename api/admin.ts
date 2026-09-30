@@ -55,7 +55,14 @@ export async function POST(request: Request) {
     return json(400, { error: 'bad_request' });
   }
 
+  /** Removes a member's proof of schooling (private "proofs" bucket, one folder per member). */
+  const removeProofs = async (userId: string) => {
+    const { data } = await admin.storage.from('proofs').list(userId);
+    if (data?.length) await admin.storage.from('proofs').remove(data.map((f) => `${userId}/${f.name}`));
+  };
+
   if (body.action === 'delete-self') {
+    await removeProofs(callerId);
     const { error } = await admin.auth.admin.deleteUser(callerId);
     return error ? json(500, { error: error.message }) : json(200, { ok: true });
   }
@@ -120,6 +127,7 @@ export async function POST(request: Request) {
     case 'delete-user': {
       if (!body.userId) return json(400, { error: 'missing' });
       if (body.userId === callerId) return json(400, { error: 'use_delete_self' });
+      await removeProofs(body.userId);
       const { error } = await admin.auth.admin.deleteUser(body.userId);
       if (error) return json(500, { error: error.message });
       await log(body.logAction === 'refuse' ? 'refuse' : 'delete_user', body.name ?? body.userId);

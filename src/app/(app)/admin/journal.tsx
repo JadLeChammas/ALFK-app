@@ -24,6 +24,8 @@ const ICON: Record<AdminLogAction, [IconName, Tone]> = {
   delete_publication: ['book-open', 'danger'],
   open_reported_conversation: ['eye', 'warning'],
   resolve_report: ['check-circle', 'success'],
+  approve_publication: ['file-text', 'success'],
+  reject_publication: ['file-text', 'danger'],
 };
 
 export default function AuditLog() {

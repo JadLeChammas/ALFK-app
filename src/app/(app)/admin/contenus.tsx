@@ -5,6 +5,7 @@ import { View } from 'react-native';
 
 import { AdminNav } from '@/components/AdminNav';
 import { EventFormModal, PublicationFormModal } from '@/components/forms';
+import { PublicationReviewList } from '@/components/PublicationReview';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, Card, EmptyState, IconButton, Row, SectionHeader, Tap } from '@/components/ui/primitives';
 import { Columns, Grid, PageHeader, Screen } from '@/components/ui/Screen';
@@ -23,7 +24,7 @@ export default function Content() {
   const [newPub, setNewPub] = useState(false);
   const reports = db.conversations.filter((c) => c.report && !c.report.resolved);
   const events = [...db.events].sort((a, b) => (a.date < b.date ? 1 : -1));
-  const pubs = [...db.publications].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const pubs = db.publications.filter((p) => p.status === 'published').sort((a, b) => (a.date < b.date ? 1 : -1));
   const photos = [...db.photos].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)).slice(0, 12);
 
   const del = async (title: string, run: () => void) => {
@@ -34,6 +35,8 @@ export default function Content() {
     <Screen>
       <PageHeader title={d.admin.content} subtitle={d.admin.contentSub} />
       <AdminNav />
+
+      <PublicationReviewList showEmpty />
 
       <Card style={reports.length ? { borderColor: colors.danger } : undefined}>
         <SectionHeader title={d.admin.reports} icon="flag" count={String(reports.length)} />

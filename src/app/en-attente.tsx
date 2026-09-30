@@ -1,9 +1,13 @@
 import { Feather } from '@expo/vector-icons';
+import { useState } from 'react';
 import { View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
-import { Button } from '@/components/ui/primitives';
+import { ProofPicker } from '@/components/ProofPicker';
+import { useDialogs } from '@/components/ui/Dialogs';
+import { Badge, Button, Row } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
+import type { PickedDoc } from '@/data/remote';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -12,6 +16,19 @@ export default function Pending() {
   const { d, f } = useI18n();
   const { colors } = useTheme();
   const { me, actions } = useStore();
+  const { toast } = useDialogs();
+  const [doc, setDoc] = useState<PickedDoc | null>(null);
+  const [busy, setBusy] = useState(false);
+  const hasProof = !!me?.proof || !!me?.createdByAdmin;
+  const send = async () => {
+    if (!doc) return;
+    setBusy(true);
+    const r = await actions.submitProof(doc);
+    setBusy(false);
+    if (!r.ok) return toast(d.auth.errors.unknown, 'danger');
+    setDoc(null);
+    toast(d.proof.sent);
+  };
   const steps = [
     { label: d.auth.pendingStep1, state: 'done' },
     { label: d.auth.pendingStep2, state: 'current' },
@@ -36,6 +53,22 @@ export default function Pending() {
           );
         })}
       </View>
+      {hasProof ? (
+        <Row gap={10} style={{ padding: 14, borderRadius: 16, backgroundColor: colors.successSoft }}>
+          <Feather name="file-text" size={18} color={colors.success} />
+          <Txt variant="smallStrong" style={{ flex: 1 }} numberOfLines={1}>{me?.proof?.name ?? d.proof.adminCreated}</Txt>
+          <Badge label={d.proof.received} tone="success" />
+        </Row>
+      ) : (
+        <View style={{ gap: 12 }}>
+          <Row gap={8} style={{ padding: 12, borderRadius: 12, backgroundColor: colors.warningSoft }}>
+            <Feather name="alert-triangle" size={16} color={colors.warning} />
+            <Txt variant="smallStrong" style={{ flex: 1 }}>{d.proof.pendingHint}</Txt>
+          </Row>
+          <ProofPicker value={doc} onChange={setDoc} />
+          <Button label={d.proof.send} icon="send" full size="lg" onPress={send} disabled={!doc} loading={busy} />
+        </View>
+      )}
       <Button label={d.common.signOut} variant="secondary" icon="log-out" full size="lg" onPress={actions.signOut} />
     </AuthFrame>
   );

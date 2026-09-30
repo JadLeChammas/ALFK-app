@@ -4,14 +4,17 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { ProofPicker } from '@/components/ProofPicker';
 import { FieldRow, Button, Chip, Input, Row, Segmented } from '@/components/ui/primitives';
 import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES, UNIVERSITIES } from '@/data/countries';
+import { FIELDS } from '@/data/fields';
 import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
+import type { PickedDoc } from '@/data/remote';
 import { useStore, type AuthError } from '@/data/store';
 import type { Gender, Role } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -21,8 +24,9 @@ export default function SignUp() {
   const { d, country } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
-  const [step, setStep] = useState<1 | 2>(1);
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '' });
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [proof, setProof] = useState<PickedDoc | null>(null);
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '' });
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -41,21 +45,24 @@ export default function SignUp() {
   const [confirmEmail, setConfirmEmail] = useState(false);
 
   const submit = async () => {
+    // The proof of schooling is mandatory: no account without it.
+    if (!proof) return setError('proof');
     const promo = parseInt(form.promo, 10);
     setBusy(true);
-    const { birth, dial, phoneNumber, ...rest } = form;
+    const { birth, dial, phoneNumber, fieldOfStudy, ...rest } = form;
     const r = await actions.signUp({
       ...rest,
+      fieldOfStudy: form.role === 'alumni' && fieldOfStudy ? fieldOfStudy : undefined,
       promo: Number.isFinite(promo) ? promo : undefined,
       school: form.role === 'eleve' ? LFK_SCHOOL : form.school || undefined,
       city: form.city || undefined,
       birthDate: parseFrDate(birth) ?? undefined,
       phone: formatPhone(dial, phoneNumber),
-    });
+    }, proof);
     setBusy(false);
     if (!r.ok) {
       setError(r.error);
-      if (r.error !== 'weak_password' && r.error !== 'unknown') setStep(1);
+      if (r.error !== 'weak_password' && r.error !== 'unknown' && r.error !== 'proof') setStep(1);
     } else if (r.confirmEmail) {
       setConfirmEmail(true);
     }
@@ -82,7 +89,7 @@ export default function SignUp() {
         </Row>
       }>
       <Row gap={8}>
-        {[d.auth.step1, d.auth.step2].map((label, i) => {
+        {[d.auth.step1, d.auth.step2, d.auth.step3].map((label, i) => {
           const active = step === i + 1;
           const done = step > i + 1;
           return (
@@ -131,7 +138,7 @@ export default function SignUp() {
           {error && error !== 'birth_date' && error !== 'phone' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
           <Button label={d.auth.continue} iconRight="arrow-right" full size="lg" onPress={next} />
         </View>
-      ) : (
+      ) : step === 2 ? (
         <View style={{ gap: 16 }}>
           <Input label={d.auth.promo} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} placeholder="2020" />
           <Select
@@ -155,10 +162,30 @@ export default function SignUp() {
               ))}
             </Row>
           )}
-          {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
+          {form.role === 'alumni' && (
+            <Select
+              label={`${d.orientation.field} (${d.common.optional})`}
+              value={form.fieldOfStudy}
+              onChange={set('fieldOfStudy')}
+              options={[{ value: '', label: '—' }, ...FIELDS.map((k) => ({ value: k, label: d.fields[k] }))]}
+            />
+          )}
           <Row gap={10}>
             <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(1)} />
-            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} />
+            <Button label={d.auth.continue} iconRight="arrow-right" size="lg" onPress={() => setStep(3)} style={{ flex: 1 }} />
+          </Row>
+        </View>
+      ) : (
+        <View style={{ gap: 16 }}>
+          <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} />
+          <Row gap={8} style={{ alignItems: 'flex-start' }}>
+            <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />
+            <Txt variant="small" color="textSubtle" style={{ flex: 1 }}>{d.proof.privacy}</Txt>
+          </Row>
+          {error && error !== 'proof' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
+          <Row gap={10}>
+            <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(2)} />
+            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} disabled={!proof} />
           </Row>
         </View>
       )}

@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { router, usePathname } from 'expo-router';
 import { useEffect, useState, type ReactNode } from 'react';
-import { Platform, View } from 'react-native';
+import { Modal, Platform, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { can } from '@/data/permissions';
@@ -25,18 +25,29 @@ function isActive(pathname: string, item: NavItem) {
 function useNav() {
   const { d } = useI18n();
   const { unread } = useInbox();
+  const { db } = useStore();
   const me = useMe();
-  // Same sections in the desktop sidebar and the phone bottom bar. "Mon profil" is the user card
-  // at the bottom of the sidebar, and the avatar in the phone top bar.
-  const main: NavItem[] = [
-    { href: '/', icon: 'home', label: d.nav.home },
-    { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] },
-    { href: '/repere', icon: 'globe', label: d.nav.repere },
-    ...(can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'calendar' as const, label: d.nav.events }] : []),
-    { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort },
-    { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread },
+  const toReview = me.role === 'admin' ? db.publications.filter((p) => p.status === 'pending').length : 0;
+  // Same sections in the desktop sidebar and the phone bottom bar (+ "Plus" sheet). "Mon profil" is the
+  // user card at the bottom of the sidebar, and the avatar in the phone top bar.
+  const home: NavItem = { href: '/', icon: 'home', label: d.nav.home };
+  const directory: NavItem = { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] };
+  const repere: NavItem = { href: '/repere', icon: 'globe', label: d.nav.repere };
+  const orientation: NavItem = { href: '/orientation', icon: 'compass', label: d.nav.orientation };
+  const calendar: NavItem = { href: '/calendrier', icon: 'calendar', label: d.nav.calendar };
+  const events: NavItem[] = can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'star', label: d.nav.events }] : [];
+  const publications: NavItem = { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort, badge: toReview };
+  const messages: NavItem = { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread };
+  const community: NavItem[] = [
+    { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
+    { href: '/membres-honneur', icon: 'award', label: d.nav.honorary },
   ];
-  return main;
+  return {
+    main: [home, directory, repere, orientation, calendar, ...events, publications, messages],
+    community,
+    bar: [home, directory, repere, publications, messages],
+    more: [...events, orientation, calendar, ...community],
+  };
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -79,7 +90,7 @@ function Sidebar({ compact }: { compact: boolean }) {
   const me = useMe();
   const { db } = useStore();
   const pathname = usePathname();
-  const nav = useNav();
+  const { main, community } = useNav();
   const notif = useUnreadNotifications();
   const pending = db.users.filter((u) => !u.approved).length;
   const bottom: NavItem[] = [
@@ -101,25 +112,32 @@ function Sidebar({ compact }: { compact: boolean }) {
       <Tap onPress={() => router.push('/')} style={{ paddingHorizontal: compact ? 5 : 8, marginBottom: 28 }}>
         {compact ? <LogoMark size={40} /> : <LogoLockup />}
       </Tap>
-      <View style={{ gap: 4 }}>
-        {nav.map((item) => (
+      <ScrollView style={{ flex: 1, marginHorizontal: -4 }} contentContainerStyle={{ paddingHorizontal: 4 }} showsVerticalScrollIndicator={false}>
+      <View style={{ gap: 2 }}>
+        {main.map((item) => (
+          <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
+        ))}
+      </View>
+      <View style={{ marginTop: 18, gap: 2 }}>
+        {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.community}</Txt>}
+        {community.map((item) => (
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
         ))}
       </View>
       {me.role === 'admin' && (
-        <View style={{ marginTop: 20, gap: 4 }}>
+        <View style={{ marginTop: 18, gap: 4 }}>
           {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.admin}</Txt>}
           <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} />
         </View>
       )}
       {me.role !== 'admin' && can(me, 'viewStats') && (
-        <View style={{ marginTop: 20, gap: 4 }}>
+        <View style={{ marginTop: 18, gap: 4 }}>
           {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.leadership}</Txt>}
           <SideLink item={{ href: '/statistiques', icon: 'bar-chart-2', label: d.nav.stats }} active={isActive(pathname, { href: '/statistiques', icon: 'bar-chart-2', label: '' })} compact={compact} />
         </View>
       )}
-      <View style={{ flex: 1 }} />
-      <View style={{ gap: 4, marginBottom: 14 }}>
+      </ScrollView>
+      <View style={{ gap: 4, marginBottom: 14, marginTop: 12 }}>
         {bottom.map((item) => (
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
         ))}
@@ -154,7 +172,7 @@ function SideLink({ item, active, compact }: { item: NavItem; active: boolean; c
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        height: 44,
+        height: 42,
         paddingHorizontal: compact ? 0 : 12,
         justifyContent: compact ? 'center' : 'flex-start',
         borderRadius: 14,
@@ -226,23 +244,49 @@ function MobileTopBar({ onSearch }: { onSearch: () => void }) {
 
 function BottomNav() {
   const { colors } = useTheme();
+  const { d } = useI18n();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const items = useNav();
+  const { bar, more } = useNav();
+  const [open, setOpen] = useState(false);
+  const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href) };
+  const tab = (item: NavItem, active: boolean, onPress: () => void) => (
+    <Tap key={item.href} onPress={onPress} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
+      <View style={{ width: 46, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? colors.primarySoft : 'transparent' }}>
+        <Feather name={item.icon} size={20} color={active ? colors.primary : colors.textMuted} />
+        {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -4, right: 4 }} />}
+      </View>
+      <Txt numberOfLines={1} style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 10, letterSpacing: -0.1, color: active ? colors.primary : colors.textMuted }}>{item.short ?? item.label}</Txt>
+    </Tap>
+  );
   return (
     <View style={{ flexDirection: 'row', backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: Math.max(insets.bottom, 8), paddingTop: 8 }}>
-      {items.map((item) => {
-        const active = isActive(pathname, item);
-        return (
-          <Tap key={item.href} onPress={() => router.navigate(item.href as never)} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
-            <View style={{ width: 46, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? colors.primarySoft : 'transparent' }}>
-              <Feather name={item.icon} size={20} color={active ? colors.primary : colors.textMuted} />
-              {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -4, right: 4 }} />}
+      {bar.map((item) => tab(item, isActive(pathname, item), () => router.navigate(item.href as never)))}
+      {tab(moreItem, open || more.some((m) => isActive(pathname, m)), () => setOpen(true))}
+      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+        <Pressable onPress={() => setOpen(false)} style={{ flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' }}>
+          <Pressable onPress={() => {}} style={{ backgroundColor: colors.surface, borderTopLeftRadius: 28, borderTopRightRadius: 28, paddingTop: 10, paddingHorizontal: 16, paddingBottom: Math.max(insets.bottom, 16) + 8, gap: 6 }}>
+            <View style={{ alignSelf: 'center', width: 40, height: 4, borderRadius: 2, backgroundColor: colors.border, marginBottom: 10 }} />
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+              {more.map((item) => {
+                const active = isActive(pathname, item);
+                return (
+                  <Tap
+                    key={item.href}
+                    onPress={() => {
+                      setOpen(false);
+                      router.navigate(item.href as never);
+                    }}
+                    style={{ flexBasis: '30%', flexGrow: 1, alignItems: 'center', gap: 8, paddingVertical: 16, borderRadius: 18, backgroundColor: active ? colors.primarySoft : colors.surfaceAlt }}>
+                    <Feather name={item.icon} size={22} color={active ? colors.primary : colors.text} />
+                    <Txt variant="smallStrong" numberOfLines={1} style={{ color: active ? colors.primary : colors.text }}>{item.label}</Txt>
+                  </Tap>
+                );
+              })}
             </View>
-            <Txt numberOfLines={1} style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 10, letterSpacing: -0.1, color: active ? colors.primary : colors.textMuted }}>{item.short ?? item.label}</Txt>
-          </Tap>
-        );
-      })}
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }

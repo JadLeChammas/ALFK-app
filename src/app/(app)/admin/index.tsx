@@ -22,6 +22,7 @@ export default function AdminDashboard() {
   const now = new Date();
   const kpis: { label: string; value: number; icon: IconName; tone: Tone; href: string }[] = [
     { label: d.admin.toApprove, value: db.users.filter((u) => !u.approved).length, icon: 'user-plus', tone: 'warning', href: '/admin/approbations' },
+    { label: d.pubReview.queue, value: db.publications.filter((p) => p.status === 'pending').length, icon: 'file-text', tone: 'primary', href: '/admin/contenus' },
     { label: d.admin.reported, value: db.conversations.filter((c) => c.report && !c.report.resolved).length, icon: 'flag', tone: 'danger', href: '/admin/contenus' },
     { label: d.admin.upcomingEvents, value: db.events.filter((e) => new Date(e.date) >= now).length, icon: 'calendar', tone: 'violet', href: '/evenements' },
     { label: d.admin.unreadContact, value: db.contacts.filter((c) => !c.read).length, icon: 'inbox', tone: 'info', href: '/admin/contact' },

@@ -3,6 +3,7 @@ import type { Dict } from './fr';
 const ja: Dict = {
   app: { name: 'Amicale LFK', long: 'クウェート・フランス人学校 同窓会', tagline: 'LFK卒業生のプライベートネットワーク' },
   nav: {
+    orientation: '進路相談', calendar: 'カレンダー', whatsapp: 'WhatsApp', honorary: '名誉会員', community: 'コミュニティ',
     home: 'ホーム', directory: '名簿', repere: 'Repère', events: 'イベント', publications: 'お知らせ', publicationsShort: 'ニュース',
     messages: 'メッセージ', profile: 'マイプロフィール', profileShort: 'プロフィール', settings: '設定', notifications: '通知',
     admin: '管理', dashboard: 'ダッシュボード', members: 'メンバー', approvals: '承認', content: 'コンテンツ',
@@ -26,6 +27,7 @@ const ja: Dict = {
     alumniCount: '卒業生{n}人', required: '必須項目', copyLink: 'リンクをコピー', share: '共有', you: 'あなた', other: 'その他',
   },
   auth: {
+    step3: '証明書類',
     signIn: 'ログイン', signUp: 'アカウントを作成', email: 'メールアドレス', password: 'パスワード', forgot: 'パスワードをお忘れですか？', emailPlaceholder: 'name@email.com',
     noAccount: 'まだ会員ではありませんか？', haveAccount: 'すでに会員ですか？', welcome: 'おかえりなさい',
     welcomeSub: 'ログインして同窓会のコミュニティに戻りましょう。',
@@ -36,6 +38,7 @@ const ja: Dict = {
     signUpTitle: '同窓会に参加する', signUpSub: 'コミュニティがあなたを見つけられるよう、いくつかの情報を入力してください。',
     step1: '本人情報', step2: '経歴', continue: '次へ', passwordHint: '8文字以上',
     errors: {
+      proof: '登録には LFK の在籍証明書類が必要です。',
       invalid_credentials: 'メールアドレスまたはパスワードが正しくありません。', email_taken: 'このメールアドレスのアカウントはすでに存在します。',
       weak_password: 'パスワードは8文字以上にしてください。', unknown_email: 'このメールアドレスのアカウントはありません。',
       wrong_password: '現在のパスワードが正しくありません。', birth_date: '生年月日が無効です：DD/MM/YYYY形式の過去の日付を入力してください。', phone: '電話番号が無効です：国番号を選び、6〜14桁の番号を入力してください。', invalid_code: 'ビューロー番号はちょうど4桁にしてください。', code_taken: 'このビューロー番号はすでに別のメンバーに割り当てられています。', unknown: 'エラーが発生しました。少ししてからもう一度お試しください。', mismatch: 'パスワードが一致しません。', missing: '必須項目をすべて入力してください。',
@@ -111,6 +114,7 @@ const ja: Dict = {
     newConversation: '新しいメッセージ', you: 'あなた：', moderation: 'モデレーションモード — 報告された会話',
   },
   profile: {
+    mentor: '在校生にアドバイスする', mentorHint: '高校生があなたの学業について質問できるようになります。',
     title: 'マイプロフィール', edit: 'プロフィールを編集', changePhoto: '写真を変更', info: '個人情報',
     phone: '電話番号', birthDate: '生年月日', birthDateHint: 'DD/MM/YYYY', bio: '自己紹介', genderLocked: 'ロック中',
     promoLabel: 'LFK学年', stats: '私のアクティビティ', conversations: '会話', photosShared: '共有した写真', eventsCount: 'イベント',
@@ -133,6 +137,7 @@ const ja: Dict = {
   notifications: {
     title: '通知', markAll: 'すべて既読にする', empty: '通知はありません',
     t: {
+      publicationApproved: 'お知らせ「{title}」が公開されました', publicationRejected: 'お知らせ「{title}」は承認されませんでした', publicationToReview: '確認待ちのお知らせ：{title}',
       message: '{name}さんからメッセージが届きました', pendingOne: '{name}さんが承認を待っています',
       pendingMany: '承認待ちの新規登録が{n}件あります', approved: 'アカウントが承認されました。同窓会へようこそ！',
       birthday: '{name}さんの誕生日まであと{n}日です 🎂', photos: '「{title}」に新しい写真が{n}枚追加されました',
@@ -140,6 +145,7 @@ const ja: Dict = {
     },
   },
   admin: {
+    proofRequired: '在籍証明書類がないため承認できません。',
     title: '管理ダッシュボード', subtitle: 'コミュニティを管理し、同窓会の活動を確認できます。',
     toApprove: '承認待ちのメンバー', reported: '報告されたメッセージ', upcomingEvents: '今後のイベント', unreadContact: '未読のお問い合わせ',
     stats: '統計', totalMembers: 'メンバー総数', vsLastYear: '前年比', byRole: '役割別', byCountry: '国別',
@@ -156,6 +162,7 @@ const ja: Dict = {
     markRead: '既読にする', markUnread: '未読にする', logs: '管理ログ', logsSub: '重要な操作の履歴。',
     noContact: 'メッセージはありません', pendingSince: '{when}に登録',
     actions: {
+      approve_publication: 'お知らせを公開しました', reject_publication: 'お知らせを却下しました',
       approve: 'が承認しました：', refuse: 'が却下しました：', create_user: 'がアカウントを作成しました：', change_role: 'が役割を変更しました：',
       reset_password: 'がパスワードをリセットしました：', delete_user: 'がアカウントを削除しました：', create_event: 'がイベントを作成しました：',
       delete_event: 'がイベントを削除しました：', delete_photo: 'が写真を削除しました：', create_publication: 'が投稿しました：',
@@ -166,6 +173,62 @@ const ja: Dict = {
     title: '法的表示', sitemap: 'サイトマップ', privacy: 'プライバシーポリシー', privacyUpdated: '最終更新日：2026年9月30日', notFound: 'ページが見つかりません', notFoundSub: 'このページは存在しないか、移動しました。',
     goHome: 'ホームに戻る', contactTitle: 'お問い合わせ', contactSub: 'ご質問がありますか？同窓会のチームがお答えします。',
     subject: '件名', message: 'メッセージ', name: 'お名前', sent: 'メッセージを送信しました。ありがとうございます！',
+  },
+  landing: {
+    title: 'クウェート・フランス人学校（LFK）卒業生ネットワーク', sub: 'Promo LFK の同級生と再会し、みんながどこで学んでいるかを知り、世界中の LFK コミュニティとつながり続けましょう。', join: 'Amicale に参加する',
+    featuresTitle: '会員限定', featuresSub: 'アカウントが承認されると、次の機能を利用できます：', fDirectory: '名簿',
+    fDirectorySub: 'Promo LFK、国、学校ごとの全会員。', fRepere: 'マップと Repère', fRepereSub: '卒業生の進学先：大陸・国・大学。',
+    fOrientation: '進路相談', fOrientationSub: '高校生向け：専攻分野ごとの卒業生。', fWhatsapp: 'WhatsApp グループ',
+    fWhatsappSub: 'あなたの Promo LFK のグループと、お知らせ用コミュニティ。', fPublications: '記事', fPublicationsSub: 'Amicale と会員からのお知らせ（管理者が確認済み）。',
+    fCalendar: 'カレンダー', fCalendarSub: 'フランコフォニー、AEFE、LFK、フランスの記念日と誕生日。', joinTitle: 'Amicale への参加方法',
+    joinSub: 'このプラットフォームは非公開です。すべての登録は管理者が確認します。', step1: '個人情報をフォームに入力します。', step2: 'LFK の在籍証明書類を添付します：成績表、在学証明書、証明書、または写真。',
+    step3: '管理者が申請を確認し、アカウントを有効にします。',
+  },
+  proof: {
+    title: 'LFK の在籍証明書類', sub: '必須：成績表、在学証明書、証明書、または LFK に在籍していたことがわかる写真。', pick: 'ファイルを選択',
+    replace: 'ファイルを変更', formats: '画像または PDF・最大 10 MB', tooBig: 'ファイルが大きすぎます（最大 10 MB）。',
+    privacy: 'この書類は登録確認のため管理者のみが閲覧します。', sent: '証明書類を送信しました', send: '証明書類を送信',
+    view: '証明書類を見る', received: '証明書類を受領', none: '証明書類なし',
+    adminCreated: '管理者が作成', pendingHint: '在籍証明書類が届いていません。アカウントを承認できるよう送信してください。',
+  },
+  fields: {
+    medecine: '医学・保健', droit: '法学', economie: '経済・経営',
+    ingenierie: '工学', informatique: '情報科学', sciences: '理学',
+    architecture: '建築', arts: '芸術・デザイン', lettres: '人文・語学',
+    sciencesPo: '政治学', communication: 'コミュニケーション・メディア', education: '教育',
+    autre: 'その他',
+  },
+  pubReview: {
+    propose: 'お知らせを提案する', proposeSub: 'お知らせは公開前に管理者が確認します。', submit: '確認に送る',
+    submitted: 'お知らせを送信しました。確認後に公開されます。', pending: '確認待ち', rejected: '却下',
+    queue: '確認待ちのお知らせ', queueEmpty: '確認待ちのお知らせはありません', approve: '公開する',
+    reject: '却下する', mine: '自分の提案', published: 'お知らせを公開しました',
+  },
+  whatsapp: {
+    title: 'WhatsApp グループ', subtitle: 'あなたの Promo LFK のグループと Amicale の WhatsApp コミュニティ。', communityTitle: 'Amicale の WhatsApp コミュニティ',
+    communitySub: '全会員向けの Amicale 公式のお知らせ。', join: 'コミュニティに参加', noCommunity: 'リンクは近日公開',
+    editCommunity: 'コミュニティのリンク', invalidLink: '無効な WhatsApp リンクです（https://chat.whatsapp.com/…）。', myPromo: 'あなたの Promo LFK のグループ',
+    noGroup: 'この Promo LFK の WhatsApp グループはまだありません。', askAdmin: '管理者が Promo LFK のページからリンクを追加できます。', allGroups: 'すべての Promo LFK グループ',
+  },
+  honorary: {
+    title: '名誉会員', subtitle: 'Amicale を支える機関と人々。', institutions: '機関',
+    people: '学校長・管理職', website: 'ウェブサイト', add: '機関を追加',
+    name: '名称', description: '説明', websiteField: 'ウェブサイト（任意）',
+    logoField: 'ロゴ：画像のアドレス（任意）', invalidUrl: '無効なアドレスです。https:// で始めてください', permissionNote: '機関は書面による同意（ロゴの使用を含む）がある場合にのみ掲載されます。',
+  },
+  orientation: {
+    title: '進路相談', subtitle: '高校生のみなさん：専攻分野や学校から卒業生を探して、質問してみましょう。', field: '専攻分野',
+    institutions: '学校', mentorsOnly: '相談に応じられる人', mentor: '在校生の相談に応じます',
+    searchPlaceholder: '学校名・都市・名前で検索…', results: '卒業生 {n} 人', ask: '質問する',
+    becomeMentor: 'プロフィールで専攻分野を入力し、高校生へのアドバイスを申し出ましょう。',
+  },
+  calendar: {
+    title: 'カレンダー', subtitle: '重要な日付（フランコフォニー、AEFE、LFK、フランス）と会員の誕生日。', birthdays: '誕生日',
+    birthdayOf: '{name} さんの誕生日', nothing: 'この日の予定はありません。', thisMonth: '今月',
+    add: '日付を追加', titleField: 'タイトル', dateField: '日付（日/月）',
+    yearField: '年（任意）', yearHint: '年を指定しない場合、毎年繰り返されます。', category: 'カテゴリー',
+    invalidDate: '無効な日付', prev: '前の月', next: '次の月',
+    categories: { francophonie: 'フランコフォニー', aefe: 'AEFE', lfk: 'LFK', france: 'フランス', koweit: 'クウェート', amicale: 'Amicale' },
   },
   months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
   monthsShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],

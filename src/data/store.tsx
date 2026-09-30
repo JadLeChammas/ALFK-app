@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 import { isRemote, supabase } from '@/lib/supabase';
 import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL } from './members';
-import { canMessage, SELF_SIGNUP_ROLES } from './permissions';
+import { can, canMessage, SELF_SIGNUP_ROLES } from './permissions';
 import {
   callAdminApi,
   EMPTY_DB,
@@ -18,7 +18,12 @@ import {
   toUser,
   toMessage,
   toNotification,
+  institutionRow,
+  keyDateRow,
+  proofUrl,
   uploadImage,
+  uploadProof,
+  type PickedDoc,
   type PickedImage,
 } from './remote';
 import { createSeed } from './seed';
@@ -28,6 +33,8 @@ import type {
   Conversation,
   Db,
   Gender,
+  Institution,
+  KeyDate,
   LfkEvent,
   Privacy,
   Publication,
@@ -46,7 +53,7 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v4';
+const STORAGE_KEY = 'lfk.demo.db.v5';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -59,6 +66,7 @@ export type AuthError =
   | 'phone'
   | 'invalid_code'
   | 'code_taken'
+  | 'proof'
   | 'unknown';
 export type Result = { ok: true; confirmEmail?: boolean } | { ok: false; error: AuthError };
 
@@ -80,9 +88,11 @@ export type SignUpInput = {
   birthDate?: string;
   /** Admin-created Bureau members only. */
   bureauCode?: string;
+  /** Alumni: field of study, used by the orientation space. */
+  fieldOfStudy?: string;
 };
 
-export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio'>>;
+export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor'>>;
 
 const demoId = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 const makeId = (p: string) => (isRemote ? newId() : demoId(p));
@@ -251,6 +261,15 @@ function useStoreValue() {
     [meId, send]
   );
 
+  /** Supabase: uploads the proof to the private bucket and records it on the profile. */
+  const saveProof = async (userId: string, doc: PickedDoc) => {
+    const path = await uploadProof(userId, doc);
+    const row = { proof_path: path, proof_name: doc.name, proof_mime: doc.mimeType ?? null, proof_uploaded_at: nowIso() };
+    const { error: e } = await supabase!.from('profiles').update(row).eq('id', userId);
+    if (e) throw e;
+    return path;
+  };
+
   const findByEmail = (email: string) => dbRef.current?.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
   const redirectUrl = Platform.OS === 'web' && typeof window !== 'undefined' ? window.location.origin : undefined;
 
@@ -267,8 +286,9 @@ function useStoreValue() {
       saveSession({ userId: u.id });
       return { ok: true };
     },
-    async signUp(input: SignUpInput): Promise<Result> {
+    async signUp(input: SignUpInput, proof: PickedDoc | null): Promise<Result> {
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
+      if (!proof) return { ok: false, error: 'proof' };
       if (!SELF_SIGNUP_ROLES.includes(input.role)) return { ok: false, error: 'unknown' };
       const contact = contactError(input.role, input.birthDate, input.phone);
       if (contact) return { ok: false, error: contact };
@@ -290,17 +310,26 @@ function useStoreValue() {
               country: input.country ?? '',
               phone: input.phone ?? '',
               birth_date: input.birthDate ?? '',
+              field_of_study: input.fieldOfStudy ?? '',
             },
           },
         });
         if (e) return { ok: false, error: authError(e.message, e.code) };
-        // Supabase answers without a session when e-mail confirmation is enabled (or the address is already used).
-        return { ok: true, confirmEmail: !data.session };
+        // Supabase answers without a session when e-mail confirmation is enabled (or the address is already used);
+        // the proof is then sent from the "pending" screen after the first sign-in.
+        if (!data.session || !data.user) return { ok: true, confirmEmail: true };
+        try {
+          await saveProof(data.user.id, proof);
+        } catch {
+          // The account exists; the pending screen offers to send the proof again.
+        }
+        return { ok: true };
       }
       if (findByEmail(input.email)) return { ok: false, error: 'email_taken' };
       const draft: User = {
         ...input,
         bureauCode: undefined,
+        proof: { path: proof.uri, name: proof.name, mimeType: proof.mimeType ?? undefined, uploadedAt: nowIso() },
         email: input.email.trim(),
         id: demoId('u'),
         approved: false,
@@ -497,11 +526,41 @@ function useStoreValue() {
     },
 
     // ——— Publications ———
-    createPublication(p: Omit<Publication, 'id' | 'authorId' | 'date'>) {
-      const pub: Publication = { ...p, id: makeId('pub'), authorId: meId!, date: nowIso() };
+    /**
+     * Admins and school leadership publish directly; every other member's announcement waits for an admin.
+     * Returns the new id and whether it is pending.
+     */
+    createPublication(p: Omit<Publication, 'id' | 'authorId' | 'date' | 'status'>) {
+      const direct = can(me, 'publish');
+      const pub: Publication = { ...p, id: makeId('pub'), authorId: meId!, date: nowIso(), status: direct ? 'published' : 'pending' };
       if (supabase) send(supabase.from('publications').insert(publicationRow(pub)));
-      commit((d) => log({ ...d, publications: [pub, ...d.publications] }, 'create_publication', p.title));
-      return pub.id;
+      commit((d) => {
+        const next = { ...d, publications: [pub, ...d.publications] };
+        if (direct) return log(next, 'create_publication', p.title);
+        // Demo: tell the admins (Supabase does it with a database trigger).
+        if (supabase) return next;
+        const alerts = d.users
+          .filter((a) => a.role === 'admin' && a.approved)
+          .map((a) => ({ id: demoId('n'), userId: a.id, kind: 'publication' as const, template: 'publicationToReview' as const, params: { title: pub.title }, href: '/admin/contenus', createdAt: nowIso(), read: false }));
+        return { ...next, notifications: [...alerts, ...next.notifications] };
+      });
+      return { id: pub.id, pending: !direct };
+    },
+    /** Admins: publish or reject a member's announcement. */
+    reviewPublication(id: string, decision: 'published' | 'rejected') {
+      commit((d) => {
+        const p = d.publications.find((x) => x.id === id);
+        if (!p) return d;
+        const next = {
+          ...d,
+          publications: d.publications.map((x) => (x.id === id ? { ...x, status: decision, date: decision === 'published' ? nowIso() : x.date } : x)),
+          notifications: supabase
+            ? d.notifications
+            : [{ id: demoId('n'), userId: p.authorId, kind: 'publication' as const, template: decision === 'published' ? ('publicationApproved' as const) : ('publicationRejected' as const), params: { title: p.title }, href: `/publications/${id}`, createdAt: nowIso(), read: false }, ...d.notifications],
+        };
+        return log(next, decision === 'published' ? 'approve_publication' : 'reject_publication', p.title);
+      });
+      if (supabase) send(supabase.from('publications').update({ status: decision, ...(decision === 'published' ? { date: nowIso() } : {}) }).eq('id', id));
     },
     deletePublication(id: string) {
       commit((d) => {
@@ -522,7 +581,36 @@ function useStoreValue() {
     },
 
     // ——— Admin ———
-    approveUser(id: string) {
+    /** Pending members: send (or replace) the proof of schooling. */
+    async submitProof(doc: PickedDoc): Promise<Result> {
+      if (!meId) return { ok: false, error: 'unknown' };
+      let path = doc.uri;
+      if (supabase) {
+        try {
+          path = await saveProof(meId, doc);
+        } catch {
+          return { ok: false, error: 'unknown' };
+        }
+      }
+      const proof = { path, name: doc.name, mimeType: doc.mimeType ?? undefined, uploadedAt: nowIso() };
+      commit((d) => ({ ...d, users: d.users.map((u) => (u.id === meId ? { ...u, proof } : u)) }));
+      return { ok: true };
+    },
+    /** Admins: a link to open a member's proof (temporary signed link with Supabase). */
+    async openProof(userId: string): Promise<string | null> {
+      const u = dbRef.current?.users.find((x) => x.id === userId);
+      if (!u?.proof) return null;
+      return supabase ? proofUrl(u.proof.path) : u.proof.path;
+    },
+    /** Approval requires the proof of schooling (accounts created by an admin are exempt). */
+    approveUser(id: string): Result {
+      const target = dbRef.current?.users.find((x) => x.id === id);
+      if (!target) return { ok: false, error: 'unknown' };
+      if (!target.proof && !target.createdByAdmin) return { ok: false, error: 'proof' };
+      actions.approveUserNow(id);
+      return { ok: true };
+    },
+    approveUserNow(id: string) {
       commit((d) => {
         const u = d.users.find((x) => x.id === id);
         return log(
@@ -682,6 +770,31 @@ function useStoreValue() {
       if (supabase) send(supabase.from('notifications').update({ read: true }).eq('user_id', meId).eq('read', false));
     },
 
+    // ——— WhatsApp community, honorary institutions, calendar (admins) ———
+    setWhatsappCommunity(url: string) {
+      const value = url.trim() || undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, whatsappCommunity: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'whatsappCommunity', value: value ?? null }));
+    },
+    addInstitution(inst: Omit<Institution, 'id' | 'order'>) {
+      const row: Institution = { ...inst, id: makeId('inst'), order: (dbRef.current?.institutions.length ?? 0) + 1 };
+      commit((d) => ({ ...d, institutions: [...d.institutions, row] }));
+      if (supabase) send(supabase.from('institutions').insert(institutionRow(row)));
+    },
+    deleteInstitution(id: string) {
+      commit((d) => ({ ...d, institutions: d.institutions.filter((i) => i.id !== id) }));
+      if (supabase) send(supabase.from('institutions').delete().eq('id', id));
+    },
+    addKeyDate(k: Omit<KeyDate, 'id'>) {
+      const row: KeyDate = { ...k, id: makeId('kd') };
+      commit((d) => ({ ...d, keyDates: [...d.keyDates, row] }));
+      if (supabase) send(supabase.from('key_dates').insert(keyDateRow(row)));
+    },
+    deleteKeyDate(id: string) {
+      commit((d) => ({ ...d, keyDates: d.keyDates.filter((k) => k.id !== id) }));
+      if (supabase) send(supabase.from('key_dates').delete().eq('id', id));
+    },
+
     // ——— Demo ———
     resetDemo() {
       if (supabase) return;
@@ -748,6 +861,12 @@ export function useUserMap() {
 export function useApprovedMembers() {
   const { db } = useStore();
   return useMemo(() => db.users.filter((u) => u.approved), [db.users]);
+}
+
+/** Announcements everyone can read (pending or rejected submissions stay with their author and the admins). */
+export function usePublished() {
+  const { db } = useStore();
+  return useMemo(() => db.publications.filter((p) => p.status === 'published').sort((a, b) => (a.date < b.date ? 1 : -1)), [db.publications]);
 }
 
 export function useInbox() {

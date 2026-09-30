@@ -3,6 +3,7 @@ import type { Dict } from './fr';
 const zh: Dict = {
   app: { name: 'Amicale LFK', long: '科威特法国高中校友会', tagline: 'LFK 校友的私人网络' },
   nav: {
+    orientation: '升学指导', calendar: '日历', whatsapp: 'WhatsApp', honorary: '荣誉会员', community: '社区',
     home: '首页', directory: '通讯录', repere: 'Repère', events: '活动', publications: '发布', publicationsShort: '资讯',
     messages: '消息', profile: '我的资料', profileShort: '资料', settings: '设置', notifications: '通知',
     admin: '管理', dashboard: '控制台', members: '成员', approvals: '审核', content: '内容',
@@ -26,6 +27,7 @@ const zh: Dict = {
     alumniCount: '{n} 名校友', required: '必填项', copyLink: '复制链接', share: '分享', you: '你', other: '其他',
   },
   auth: {
+    step3: '证明',
     signIn: '登录', signUp: '创建账号', email: '电子邮箱', password: '密码', forgot: '忘记密码？', emailPlaceholder: 'name@email.com',
     noAccount: '还不是会员？', haveAccount: '已经是会员？', welcome: '欢迎回来',
     welcomeSub: '登录以重新联系校友会社区。',
@@ -36,6 +38,7 @@ const zh: Dict = {
     signUpTitle: '加入校友会', signUpSub: '填写一些信息，方便社区找到你。',
     step1: '身份', step2: '经历', continue: '继续', passwordHint: '至少 8 个字符',
     errors: {
+      proof: '注册必须提供在 LFK 就读的证明。',
       invalid_credentials: '邮箱或密码不正确。', email_taken: '该邮箱已注册账号。',
       weak_password: '密码至少需要 8 个字符。', unknown_email: '没有使用该邮箱的账号。',
       wrong_password: '当前密码不正确。', birth_date: '出生日期无效：请使用 DD/MM/YYYY 格式，且为过去的日期。', phone: '电话号码无效：请选择国家代码，再输入 6 至 14 位数字。', invalid_code: '理事会编号必须正好是 4 位数字。', code_taken: '该理事会编号已分配给其他成员。', unknown: '出现错误，请稍后再试。', mismatch: '两次输入的密码不一致。', missing: '请填写所有必填项。',
@@ -111,6 +114,7 @@ const zh: Dict = {
     newConversation: '新消息', you: '你：', moderation: '审核模式 — 被举报的对话',
   },
   profile: {
+    mentor: '为在校生提供建议', mentorHint: '高中生可以就您的学业向您提问。',
     title: '我的资料', edit: '编辑资料', changePhoto: '更换照片', info: '个人信息',
     phone: '电话', birthDate: '出生日期', birthDateHint: 'DD/MM/YYYY', bio: '简介', genderLocked: '已锁定',
     promoLabel: 'LFK 年级', stats: '我的动态', conversations: '对话', photosShared: '已分享的照片', eventsCount: '活动',
@@ -133,6 +137,7 @@ const zh: Dict = {
   notifications: {
     title: '通知', markAll: '全部标为已读', empty: '暂无通知',
     t: {
+      publicationApproved: '您的公告“{title}”已发布', publicationRejected: '您的公告“{title}”未获通过', publicationToReview: '待审核的新公告：{title}',
       message: '{name} 给你发送了一条消息', pendingOne: '{name} 正在等待你的审核',
       pendingMany: '{n} 个新注册等待审核', approved: '你的账号已通过审核。欢迎加入校友会！',
       birthday: '{name} 的生日还有 {n} 天 🎂', photos: '「{title}」新增了 {n} 张照片',
@@ -140,6 +145,7 @@ const zh: Dict = {
     },
   },
   admin: {
+    proofRequired: '缺少就读证明：无法批准。',
     title: '管理控制台', subtitle: '管理社区并查看校友会的动态。',
     toApprove: '待审核成员', reported: '被举报的消息', upcomingEvents: '即将举行的活动', unreadContact: '未读联系消息',
     stats: '统计', totalMembers: '成员总数', vsLastYear: '较去年', byRole: '按角色', byCountry: '按国家',
@@ -156,6 +162,7 @@ const zh: Dict = {
     markRead: '标为已读', markUnread: '标为未读', logs: '管理日志', logsSub: '敏感操作记录。',
     noContact: '暂无消息', pendingSince: '{when}注册',
     actions: {
+      approve_publication: '发布了公告', reject_publication: '拒绝了公告',
       approve: '审核通过了', refuse: '拒绝了', create_user: '创建了账号：', change_role: '更改了角色：',
       reset_password: '重置了密码：', delete_user: '删除了账号：', create_event: '创建了活动',
       delete_event: '删除了活动', delete_photo: '删除了照片：', create_publication: '发布了',
@@ -166,6 +173,62 @@ const zh: Dict = {
     title: '法律声明', sitemap: '网站地图', privacy: '隐私政策', privacyUpdated: '最后更新：2026 年 9 月 30 日', notFound: '页面未找到', notFoundSub: '该页面不存在或已被移动。',
     goHome: '返回首页', contactTitle: '联系我们', contactSub: '有问题吗？校友会团队会为你解答。',
     subject: '主题', message: '消息', name: '姓名', sent: '消息已发送，谢谢！',
+  },
+  landing: {
+    title: '科威特法国高中（LFK）校友网络', sub: '找回您的 Promo LFK 同学，了解他们在哪里求学，并与世界各地的 LFK 社区保持联系。', join: '加入校友会',
+    featuresTitle: '仅限会员', featuresSub: '账户通过审核后，您可以使用：', fDirectory: '通讯录',
+    fDirectorySub: '按 Promo LFK、国家或院校查看所有会员。', fRepere: '地图与 Repère', fRepereSub: '校友的去向：大洲、国家和大学。',
+    fOrientation: '升学指导', fOrientationSub: '面向高中生：按专业查找校友。', fWhatsapp: 'WhatsApp 群组',
+    fWhatsappSub: '您的 Promo LFK 群组和公告社区。', fPublications: '文章', fPublicationsSub: '校友会和会员的公告，经管理员审核。',
+    fCalendar: '日历', fCalendarSub: '法语国家、AEFE、LFK 和法国的重要日期，以及会员生日。', joinTitle: '如何加入校友会？',
+    joinSub: '平台为私密平台：每次注册均由管理员审核。', step1: '填写包含个人信息的表格。', step2: '附上在 LFK 就读的证明：成绩单、在读证明、证明信或一张简单的照片。',
+    step3: '管理员审核您的申请并激活账户。',
+  },
+  proof: {
+    title: 'LFK 就读证明', sub: '必填：成绩单、在读证明、证明信，或能证明您曾在 LFK 就读的照片。', pick: '选择文件',
+    replace: '更换文件', formats: '图片或 PDF · 最大 10 MB', tooBig: '文件过大：最大 10 MB。',
+    privacy: '只有管理员能看到此文件，用于审核您的注册。', sent: '证明已发送', send: '发送证明',
+    view: '查看证明', received: '已收到证明', none: '缺少证明',
+    adminCreated: '由管理员创建', pendingHint: '我们尚未收到您的就读证明：请发送，以便审核您的账户。',
+  },
+  fields: {
+    medecine: '医学与健康', droit: '法律', economie: '经济与管理',
+    ingenierie: '工程', informatique: '计算机科学', sciences: '理科',
+    architecture: '建筑', arts: '艺术与设计', lettres: '文学与语言',
+    sciencesPo: '政治学', communication: '传播与媒体', education: '教育',
+    autre: '其他',
+  },
+  pubReview: {
+    propose: '提交公告', proposeSub: '公告发布前将由管理员审核。', submit: '提交审核',
+    submitted: '公告已提交：审核后发布。', pending: '等待审核', rejected: '已拒绝',
+    queue: '待审核公告', queueEmpty: '没有待审核的公告', approve: '发布',
+    reject: '拒绝', mine: '我的提交', published: '公告已发布',
+  },
+  whatsapp: {
+    title: 'WhatsApp 群组', subtitle: '您的 Promo LFK 群组和校友会的 WhatsApp 社区。', communityTitle: '校友会 WhatsApp 社区',
+    communitySub: '面向全体会员的校友会官方公告。', join: '加入社区', noCommunity: '链接即将发布',
+    editCommunity: '社区链接', invalidLink: '无效的 WhatsApp 链接（https://chat.whatsapp.com/…）。', myPromo: '您的 Promo LFK 群组',
+    noGroup: '此 Promo LFK 还没有 WhatsApp 群组。', askAdmin: '管理员可在 Promo LFK 页面添加链接。', allGroups: '所有 Promo LFK 群组',
+  },
+  honorary: {
+    title: '荣誉会员', subtitle: '支持校友会的机构和人士。', institutions: '机构',
+    people: '学校领导', website: '网站', add: '添加机构',
+    name: '名称', description: '简介', websiteField: '网站（可选）',
+    logoField: '标志：图片地址（可选）', invalidUrl: '地址无效：必须以 https:// 开头', permissionNote: '机构须经其书面同意（包括使用其标志）方可在此显示。',
+  },
+  orientation: {
+    title: '升学指导', subtitle: '高中生：按专业或院校查找校友，并向他们提问。', field: '专业领域',
+    institutions: '院校', mentorsOnly: '可提供建议', mentor: '为在校生提供建议',
+    searchPlaceholder: '搜索院校、城市或姓名…', results: '{n} 位校友', ask: '提问',
+    becomeMentor: '在个人资料中填写您的专业，并为高中生提供建议。',
+  },
+  calendar: {
+    title: '日历', subtitle: '重要日期（法语国家、AEFE、LFK、法国）和会员生日。', birthdays: '生日',
+    birthdayOf: '{name} 的生日', nothing: '这一天没有安排。', thisMonth: '本月',
+    add: '添加日期', titleField: '标题', dateField: '日期（日/月）',
+    yearField: '年份（可选）', yearHint: '不填年份则每年重复。', category: '类别',
+    invalidDate: '日期无效', prev: '上个月', next: '下个月',
+    categories: { francophonie: '法语国家', aefe: 'AEFE', lfk: 'LFK', france: '法国', koweit: '科威特', amicale: '校友会' },
   },
   months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
   monthsShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],

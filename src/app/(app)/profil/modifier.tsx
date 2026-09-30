@@ -4,13 +4,14 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { useDialogs } from '@/components/ui/Dialogs';
-import { FieldRow, Avatar, Button, Card, Input, Row, Tap } from '@/components/ui/primitives';
+import { FieldRow, Avatar, Button, Card, Input, Row, Switch, Tap } from '@/components/ui/primitives';
 import { BackLink, Columns, PageHeader, Screen } from '@/components/ui/Screen';
 import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES } from '@/data/countries';
+import { FIELDS } from '@/data/fields';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
 import { fullName, useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -35,7 +36,11 @@ export default function EditProfile() {
     country: me.country ?? 'FR',
     bio: me.bio ?? '',
     avatar: me.avatar,
+    fieldOfStudy: me.fieldOfStudy ?? '',
   });
+  const [mentor, setMentor] = useState(!!me.mentor);
+  // Former students share their studies with the lycée students (Orientation space).
+  const graduate = me.role === 'alumni' || me.role === 'admin';
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' });
   const [pwError, setPwError] = useState<string | null>(null);
@@ -61,6 +66,8 @@ export default function EditProfile() {
       school: form.school || undefined,
       city: form.city || undefined,
       bio: form.bio || undefined,
+      fieldOfStudy: graduate ? form.fieldOfStudy || undefined : undefined,
+      mentor: graduate ? mentor : undefined,
     });
     if (!r.ok) {
       if (r.error === 'birth_date' || r.error === 'phone') setFieldError(r.error);
@@ -140,6 +147,24 @@ export default function EditProfile() {
                 <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))} />
               </View>
             </FieldRow>
+            {graduate && (
+              <>
+                <Select
+                  label={d.orientation.field}
+                  value={form.fieldOfStudy}
+                  onChange={set('fieldOfStudy')}
+                  options={[{ value: '', label: '—' }, ...FIELDS.map((k) => ({ value: k, label: d.fields[k] }))]}
+                />
+                <Row gap={12} style={{ padding: 14, borderRadius: 14, backgroundColor: colors.surfaceAlt }}>
+                  <Feather name="compass" size={18} color={colors.primary} />
+                  <View style={{ flex: 1 }}>
+                    <Txt variant="bodyStrong">{d.profile.mentor}</Txt>
+                    <Txt variant="small" color="textMuted">{d.profile.mentorHint}</Txt>
+                  </View>
+                  <Switch value={mentor} onValueChange={setMentor} />
+                </Row>
+              </>
+            )}
             <Input label={d.profile.bio} value={form.bio} onChangeText={set('bio')} multiline />
             <View style={{ gap: 6 }}>
               <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>

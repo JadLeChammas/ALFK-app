@@ -11,7 +11,7 @@ import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES } from '@/data/countries';
 import { contactError } from '@/data/members';
 import { can } from '@/data/permissions';
-import { fullName, useApprovedMembers, useInbox, useMe, useStore, useUpcomingBirthdays } from '@/data/store';
+import { fullName, useApprovedMembers, useInbox, useMe, usePublished, useStore, useUpcomingBirthdays } from '@/data/store';
 import { Flag } from '@/components/ui/Flag';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -26,12 +26,13 @@ export default function Home() {
   const { isMobile } = useLayout();
   const me = useMe();
   const { db } = useStore();
+  const published = usePublished();
   const { unread } = useInbox();
   const members = useApprovedMembers();
   const birthdays = useUpcomingBirthdays(30).filter((b) => b.user.id !== me.id);
   const now = new Date().toISOString();
   const nextEvent = [...db.events].filter((e) => e.date >= now).sort((a, b) => (a.date > b.date ? 1 : -1))[0];
-  const news = [...db.publications].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 3);
+  const news = published.slice(0, 3);
   const promoMates = me.promo ? members.filter((u) => u.promo === me.promo) : [];
   const promoInfo = db.promos.find((p) => p.year === me.promo);
   const pending = db.users.filter((u) => !u.approved).length;
@@ -45,6 +46,9 @@ export default function Home() {
       ? { icon: 'bar-chart-2', label: d.nav.stats, href: '/statistiques' }
       : { icon: 'award', label: d.home.myPromo, href: me.promo ? `/annuaire/promo/${me.promo}` : '/profil/modifier' },
     { icon: 'globe', label: d.nav.repere, href: '/repere' },
+    // Students first look for guidance; alumni for their Promo LFK WhatsApp group.
+    me.role === 'eleve' ? { icon: 'compass', label: d.nav.orientation, href: '/orientation' } : { icon: 'message-square', label: d.nav.whatsapp, href: '/whatsapp' },
+    { icon: 'calendar', label: d.nav.calendar, href: '/calendrier' },
   ];
 
   return (

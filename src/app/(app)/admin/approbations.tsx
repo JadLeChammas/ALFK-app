@@ -1,9 +1,9 @@
-import { View } from 'react-native';
+import { Linking, Platform, View } from 'react-native';
 
 import { AdminNav } from '@/components/AdminNav';
 import { RoleBadge } from '@/components/cards';
 import { useDialogs } from '@/components/ui/Dialogs';
-import { Avatar, Button, Card, EmptyState, MetaLine, Row } from '@/components/ui/primitives';
+import { Avatar, Badge, Button, Card, EmptyState, MetaLine, Row } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { countryByCode } from '@/data/countries';
@@ -47,15 +47,39 @@ export default function Approvals() {
                   {c && <MetaLine icon="map-pin" text={[u.city, country(c.code)].filter(Boolean).join(', ')} />}
                   <MetaLine icon="user" text={d.gender[u.gender]} />
                 </View>
+                <Row gap={8} wrap>
+                  {u.proof ? (
+                    <>
+                      <Badge label={d.proof.received} tone="success" icon="file-text" />
+                      <Button
+                        label={d.proof.view}
+                        icon="external-link"
+                        size="sm"
+                        variant="secondary"
+                        onPress={async () => {
+                          const url = await actions.openProof(u.id);
+                          if (!url) return toast(d.auth.errors.unknown, 'danger');
+                          if (Platform.OS === 'web') window.open(url, '_blank', 'noopener');
+                          else Linking.openURL(url);
+                        }}
+                      />
+                    </>
+                  ) : u.createdByAdmin ? (
+                    <Badge label={d.proof.adminCreated} tone="info" icon="shield" />
+                  ) : (
+                    <Badge label={d.proof.none} tone="danger" icon="alert-triangle" />
+                  )}
+                </Row>
                 <View style={{ flex: 1 }} />
                 <Row gap={10}>
                   <Button
                     label={d.admin.approve}
                     icon="check"
                     style={{ flex: 1 }}
+                    disabled={!u.proof && !u.createdByAdmin}
                     onPress={() => {
-                      actions.approveUser(u.id);
-                      toast(`${fullName(u)} ✓`);
+                      const r = actions.approveUser(u.id);
+                      toast(r.ok ? `${fullName(u)} ✓` : d.admin.proofRequired, r.ok ? 'success' : 'danger');
                     }}
                   />
                   <Button

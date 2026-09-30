@@ -20,7 +20,9 @@ export default function Article() {
   const { confirm } = useDialogs();
   const users = useUserMap();
   const me = useMe();
-  const pub = db.publications.find((p) => p.id === id);
+  const found = db.publications.find((p) => p.id === id);
+  // Pending or rejected announcements are only visible to their author and the admins.
+  const pub = found && (found.status === 'published' || found.authorId === me.id || me.role === 'admin') ? found : undefined;
 
   if (!pub) {
     return (
@@ -31,7 +33,7 @@ export default function Article() {
     );
   }
   const author = users.get(pub.authorId);
-  const more = db.publications.filter((p) => p.id !== pub.id).slice(0, 3);
+  const more = db.publications.filter((p) => p.id !== pub.id && p.status === 'published').slice(0, 3);
 
   return (
     <Screen maxWidth={900}>
@@ -39,6 +41,7 @@ export default function Article() {
       <View style={{ gap: 16 }}>
         <Row gap={10}>
           <Badge label={d.publications.categories[pub.category]} tone={PUB_TONE[pub.category]} />
+          {pub.status !== 'published' && <Badge label={pub.status === 'pending' ? d.pubReview.pending : d.pubReview.rejected} tone={pub.status === 'pending' ? 'warning' : 'danger'} />}
           <Txt variant="small" color="textSubtle">{formatDate(pub.date, { weekday: true })}</Txt>
         </Row>
         <Txt variant={isMobile ? 'h1' : 'display'} style={!isMobile && { fontSize: 40, lineHeight: 48 }}>{pub.title}</Txt>
@@ -61,6 +64,12 @@ export default function Article() {
           <Txt key={i} style={{ fontSize: 17, lineHeight: 29 }}>{para}</Txt>
         ))}
       </View>
+      {me.role === 'admin' && pub.status === 'pending' && (
+        <Row gap={10} wrap>
+          <Button label={d.pubReview.approve} icon="check" onPress={() => actions.reviewPublication(pub.id, 'published')} />
+          <Button label={d.pubReview.reject} icon="x" variant="secondary" onPress={() => actions.reviewPublication(pub.id, 'rejected')} />
+        </Row>
+      )}
       {(me.role === 'admin' || pub.authorId === me.id) && (
         <Button
           label={d.common.delete}

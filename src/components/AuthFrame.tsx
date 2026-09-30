@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -20,11 +21,20 @@ const campus = require('@/assets/images/lfk-campus.png');
 export function AuthFrame({ title, subtitle, children, footer }: { title: string; subtitle?: string; children: ReactNode; footer?: ReactNode }) {
   const { colors } = useTheme();
   const { d } = useI18n();
+  const { me } = useStore();
   const { isDesktop } = useLayout();
   const insets = useSafeAreaInsets();
 
   const form = (
     <View style={{ width: '100%', maxWidth: 440, gap: 24 }}>
+      {!me && (
+        <Link href="/bienvenue" style={{ alignSelf: 'flex-start' }}>
+          <Row gap={6}>
+            <Feather name="arrow-left" size={14} color={colors.textMuted} />
+            <Txt variant="smallStrong" color="textMuted">{d.nav.home}</Txt>
+          </Row>
+        </Link>
+      )}
       {!isDesktop && (
         <View style={{ alignItems: 'center', gap: 12, marginBottom: 8 }}>
           <LogoMark size={72} />

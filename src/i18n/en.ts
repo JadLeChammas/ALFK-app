@@ -3,6 +3,7 @@ import type { Dict } from './fr';
 const en: Dict = {
   app: { name: 'Amicale LFK', long: 'Alumni of the French Lycée of Kuwait', tagline: 'The private network of LFK alumni' },
   nav: {
+    orientation: 'Guidance', calendar: 'Calendar', whatsapp: 'WhatsApp', honorary: 'Honorary members', community: 'Community',
     home: 'Home', directory: 'Directory', repere: 'Repère', events: 'Events', publications: 'Publications', publicationsShort: 'News',
     messages: 'Messages', profile: 'My profile', profileShort: 'Profile', settings: 'Settings', notifications: 'Notifications',
     admin: 'Administration', dashboard: 'Dashboard', members: 'Members', approvals: 'Approvals', content: 'Content',
@@ -26,6 +27,7 @@ const en: Dict = {
     alumniCount: '{n} alumni', required: 'Required', copyLink: 'Copy link', share: 'Share', you: 'You', other: 'Other',
   },
   auth: {
+    step3: 'Proof',
     signIn: 'Sign in', signUp: 'Create an account', email: 'Email', password: 'Password', forgot: 'Forgot password?', emailPlaceholder: 'first.last@email.com',
     noAccount: 'Not a member yet?', haveAccount: 'Already a member?', welcome: 'Welcome back',
     welcomeSub: 'Sign in to reconnect with the Amicale community.',
@@ -36,6 +38,7 @@ const en: Dict = {
     signUpTitle: 'Join the Amicale', signUpSub: 'A few details so the community can find you.',
     step1: 'Identity', step2: 'Background', continue: 'Continue', passwordHint: 'At least 8 characters',
     errors: {
+      proof: 'Proof of schooling at the LFK is required to sign up.',
       invalid_credentials: 'Incorrect email or password.', email_taken: 'An account already exists with this email.',
       weak_password: 'Password must be at least 8 characters.', unknown_email: 'No account with this email.',
       wrong_password: 'Current password is incorrect.', birth_date: 'Invalid date of birth: use DD/MM/YYYY, a past date.', phone: 'Invalid phone number: pick the country code, then 6 to 14 digits.', invalid_code: 'The Bureau code must be exactly 4 digits.', code_taken: 'This Bureau code is already assigned to another member.', unknown: 'Something went wrong. Please try again in a moment.', mismatch: 'Passwords do not match.', missing: 'Please fill in all required fields.',
@@ -111,6 +114,7 @@ const en: Dict = {
     newConversation: 'New message', you: 'You: ', moderation: 'Moderation mode — reported conversation',
   },
   profile: {
+    mentor: 'Advise high-school students', mentorHint: 'Students in their last three years can write to you about your studies.',
     title: 'My profile', edit: 'Edit my profile', changePhoto: 'Change photo', info: 'Personal information',
     phone: 'Phone', birthDate: 'Date of birth', birthDateHint: 'DD/MM/YYYY', bio: 'Bio', genderLocked: 'Locked',
     promoLabel: 'LFK Class', stats: 'My activity', conversations: 'Conversations', photosShared: 'Photos shared', eventsCount: 'Events',
@@ -133,6 +137,7 @@ const en: Dict = {
   notifications: {
     title: 'Notifications', markAll: 'Mark all as read', empty: 'No notifications',
     t: {
+      publicationApproved: 'Your announcement “{title}” has been published', publicationRejected: 'Your announcement “{title}” was not accepted', publicationToReview: 'New announcement to review: {title}',
       message: '{name} sent you a message', pendingOne: '{name} is waiting for your approval',
       pendingMany: '{n} new sign-ups to approve', approved: 'Your account has been approved. Welcome to the Amicale!',
       birthday: "It's {name}'s birthday in {n} days 🎂", photos: '{n} new photos in “{title}”',
@@ -140,6 +145,7 @@ const en: Dict = {
     },
   },
   admin: {
+    proofRequired: 'Proof of schooling missing: the account cannot be approved.',
     title: 'Admin dashboard', subtitle: 'Manage the community and follow Amicale activity.',
     toApprove: 'Members to approve', reported: 'Reported messages', upcomingEvents: 'Upcoming events', unreadContact: 'Unread contacts',
     stats: 'Statistics', totalMembers: 'Total members', vsLastYear: 'vs. last year', byRole: 'By role', byCountry: 'By country',
@@ -156,6 +162,7 @@ const en: Dict = {
     markRead: 'Mark read', markUnread: 'Mark unread', logs: 'Admin audit log', logsSub: 'History of sensitive actions.',
     noContact: 'No messages', pendingSince: 'Signed up {when}',
     actions: {
+      approve_publication: 'published the announcement', reject_publication: 'rejected the announcement',
       approve: 'approved', refuse: 'refused', create_user: 'created the account of', change_role: 'changed the role of',
       reset_password: 'reset the password of', delete_user: 'deleted the account of', create_event: 'created the event',
       delete_event: 'deleted the event', delete_photo: 'deleted a photo from', create_publication: 'published',
@@ -166,6 +173,62 @@ const en: Dict = {
     title: 'Legal notice', sitemap: 'Sitemap', privacy: 'Privacy policy', privacyUpdated: 'Last updated: September 30, 2026', notFound: 'Page not found', notFoundSub: "This page doesn't exist or has moved.",
     goHome: 'Back to home', contactTitle: 'Contact us', contactSub: 'A question? The Amicale team will get back to you.',
     subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank you!',
+  },
+  landing: {
+    title: 'The alumni network of the Lycée Français de Koweït', sub: 'Find your Promo LFK classmates, see where they study and stay connected to the LFK community all over the world.', join: 'Join the Amicale',
+    featuresTitle: 'Members only', featuresSub: 'Once your account is approved, you get access to:', fDirectory: 'Directory',
+    fDirectorySub: 'Every member, by Promo LFK, country or institution.', fRepere: 'Map and Repère', fRepereSub: 'Where alumni went: continents, countries and universities.',
+    fOrientation: 'Guidance', fOrientationSub: 'For students in their last three years: alumni by field of study.', fWhatsapp: 'WhatsApp groups',
+    fWhatsappSub: 'Your Promo LFK group and the community for announcements.', fPublications: 'Publications', fPublicationsSub: 'Announcements from the Amicale and from members, checked by the admins.',
+    fCalendar: 'Calendar', fCalendarSub: 'Francophonie, AEFE, LFK and French dates, and members’ birthdays.', joinTitle: 'How to join the Amicale?',
+    joinSub: 'The platform is private: every sign-up is checked by an administrator.', step1: 'Fill in the form with your personal details.', step2: 'Attach proof of schooling at the LFK: report card, certificate, attestation or a simple photo.',
+    step3: 'An administrator checks your request and activates your account.',
+  },
+  proof: {
+    title: 'Proof of schooling at the LFK', sub: 'Required: report card, school certificate, attestation or a simple photo showing you studied at the LFK.', pick: 'Choose a file',
+    replace: 'Change file', formats: 'Image or PDF · 10 MB max', tooBig: 'File too large: 10 MB max.',
+    privacy: 'Only administrators can see this document, to approve your sign-up.', sent: 'Proof sent', send: 'Send the proof',
+    view: 'View proof', received: 'Proof received', none: 'Proof missing',
+    adminCreated: 'Created by an admin', pendingHint: 'We have not received your proof of schooling: send it so your account can be approved.',
+  },
+  fields: {
+    medecine: 'Medicine & health', droit: 'Law', economie: 'Economics & management',
+    ingenierie: 'Engineering', informatique: 'Computer science', sciences: 'Sciences',
+    architecture: 'Architecture', arts: 'Arts & design', lettres: 'Humanities & languages',
+    sciencesPo: 'Political science', communication: 'Communication & media', education: 'Teaching',
+    autre: 'Other',
+  },
+  pubReview: {
+    propose: 'Suggest an announcement', proposeSub: 'An administrator will check your announcement before it is published.', submit: 'Send for review',
+    submitted: 'Announcement sent: it will be published once reviewed.', pending: 'Awaiting review', rejected: 'Rejected',
+    queue: 'Announcements to review', queueEmpty: 'No announcement waiting', approve: 'Publish',
+    reject: 'Reject', mine: 'My suggestions', published: 'Announcement published',
+  },
+  whatsapp: {
+    title: 'WhatsApp groups', subtitle: 'Your Promo LFK group and the Amicale’s WhatsApp community.', communityTitle: 'Amicale WhatsApp community',
+    communitySub: 'Official announcements from the Amicale, for every member.', join: 'Join the community', noCommunity: 'Link coming soon',
+    editCommunity: 'Community link', invalidLink: 'Invalid WhatsApp link (https://chat.whatsapp.com/…).', myPromo: 'Your Promo LFK group',
+    noGroup: 'No WhatsApp group yet for this Promo LFK.', askAdmin: 'An administrator can add the link from the Promo LFK page.', allGroups: 'All Promo LFK groups',
+  },
+  honorary: {
+    title: 'Honorary members', subtitle: 'The institutions and people who support the Amicale.', institutions: 'Institutions',
+    people: 'School leadership', website: 'Website', add: 'Add an institution',
+    name: 'Name', description: 'Description', websiteField: 'Website (optional)',
+    logoField: 'Logo: image address (optional)', invalidUrl: 'Invalid address: it must start with https://', permissionNote: 'An institution only appears here with its written consent (including for its logo).',
+  },
+  orientation: {
+    title: 'Guidance', subtitle: 'High-school students: find alumni by field of study or institution, and ask them your questions.', field: 'Field of study',
+    institutions: 'Institutions', mentorsOnly: 'Available to advise', mentor: 'Advises students',
+    searchPlaceholder: 'Search an institution, a city, a name…', results: '{n} alumni', ask: 'Ask a question',
+    becomeMentor: 'Add your field of study and offer advice to high-school students from your profile.',
+  },
+  calendar: {
+    title: 'Calendar', subtitle: 'Important dates (Francophonie, AEFE, LFK, France) and members’ birthdays.', birthdays: 'Birthdays',
+    birthdayOf: '{name}’s birthday', nothing: 'Nothing planned that day.', thisMonth: 'This month',
+    add: 'Add a date', titleField: 'Title', dateField: 'Date (DD/MM)',
+    yearField: 'Year (optional)', yearHint: 'Without a year, the date comes back every year.', category: 'Category',
+    invalidDate: 'Invalid date', prev: 'Previous month', next: 'Next month',
+    categories: { francophonie: 'Francophonie', aefe: 'AEFE', lfk: 'LFK', france: 'France', koweit: 'Kuwait', amicale: 'Amicale' },
   },
   months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   monthsShort: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
