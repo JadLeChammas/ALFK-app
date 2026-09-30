@@ -3,7 +3,7 @@ import type { Dict } from './fr';
 const en: Dict = {
   app: { name: 'Amicale LFK', long: 'Alumni of the French Lycée of Kuwait', tagline: 'The private network of LFK alumni' },
   nav: {
-    home: 'Home', directory: 'Directory', repere: 'Repère', events: 'Events', publications: 'Publications',
+    home: 'Home', directory: 'Directory', repere: 'Repère', events: 'Events', publications: 'Publications', publicationsShort: 'News',
     messages: 'Messages', profile: 'My profile', profileShort: 'Profile', settings: 'Settings', notifications: 'Notifications',
     admin: 'Administration', dashboard: 'Dashboard', members: 'Members', approvals: 'Approvals', content: 'Content',
     contact: 'Contact', logs: 'Audit log', stats: 'Statistics', leadership: 'School leadership', more: 'More', back: 'Back', legal: 'Legal notice', sitemap: 'Sitemap',

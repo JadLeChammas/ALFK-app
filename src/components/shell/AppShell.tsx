@@ -15,7 +15,7 @@ import { Avatar, CountBadge, IconButton, Tap, type IconName } from '../ui/primit
 import { Txt } from '../ui/Txt';
 import { GlobalSearch } from './GlobalSearch';
 
-type NavItem = { href: string; icon: IconName; label: string; badge?: number; match?: string[] };
+type NavItem = { href: string; icon: IconName; label: string; short?: string; badge?: number; match?: string[] };
 
 function isActive(pathname: string, item: NavItem) {
   if (item.href === '/') return pathname === '/';
@@ -26,13 +26,14 @@ function useNav() {
   const { d } = useI18n();
   const { unread } = useInbox();
   const me = useMe();
-  // "Mon profil" is reached from the user card at the bottom of the sidebar.
+  // Same sections in the desktop sidebar and the phone bottom bar. "Mon profil" is the user card
+  // at the bottom of the sidebar, and the avatar in the phone top bar.
   const main: NavItem[] = [
     { href: '/', icon: 'home', label: d.nav.home },
     { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] },
     { href: '/repere', icon: 'globe', label: d.nav.repere },
     ...(can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'calendar' as const, label: d.nav.events }] : []),
-    { href: '/publications', icon: 'book-open', label: d.nav.publications },
+    { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort },
     { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread },
   ];
   return main;
@@ -206,6 +207,9 @@ function MobileTopBar({ onSearch }: { onSearch: () => void }) {
   const { d } = useI18n();
   const insets = useSafeAreaInsets();
   const notif = useUnreadNotifications();
+  const me = useMe();
+  const pathname = usePathname();
+  const onProfile = pathname.startsWith('/profil');
   return (
     <View style={{ paddingTop: insets.top + 8, paddingBottom: 8, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: colors.bg, borderBottomWidth: 1, borderBottomColor: colors.border }}>
       <Tap onPress={() => router.push('/')} style={{ flex: 1 }}>
@@ -213,36 +217,29 @@ function MobileTopBar({ onSearch }: { onSearch: () => void }) {
       </Tap>
       <IconButton icon="search" onPress={onSearch} size={38} label={d.common.search} />
       <IconButton icon="bell" badge={notif} onPress={() => router.push('/notifications')} size={38} label={d.nav.notifications} />
-      <IconButton icon="settings" onPress={() => router.push('/parametres')} size={38} label={d.nav.settings} />
+      <Tap onPress={() => router.push('/profil')} accessibilityLabel={d.nav.profile} style={{ borderRadius: 21, borderWidth: 2, borderColor: onProfile ? colors.primary : 'transparent' }}>
+        <Avatar uri={me.avatar} name={fullName(me)} size={36} />
+      </Tap>
     </View>
   );
 }
 
 function BottomNav() {
   const { colors } = useTheme();
-  const { d } = useI18n();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const { unread } = useInbox();
-  const me = useMe();
-  const items: NavItem[] = [
-    { href: '/', icon: 'home', label: d.nav.home },
-    { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] },
-    can(me, 'viewEvents') ? { href: '/evenements', icon: 'calendar', label: d.nav.events } : { href: '/repere', icon: 'globe', label: d.nav.repere },
-    { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread },
-    { href: '/profil', icon: 'user', label: d.nav.profileShort, match: ['/parametres', '/admin', '/repere', '/publications', '/notifications', '/statistiques'] },
-  ];
+  const items = useNav();
   return (
     <View style={{ flexDirection: 'row', backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: Math.max(insets.bottom, 8), paddingTop: 8 }}>
       {items.map((item) => {
         const active = isActive(pathname, item);
         return (
-          <Tap key={item.href} onPress={() => router.navigate(item.href as never)} style={{ flex: 1, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
-            <View style={{ width: 52, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? colors.primarySoft : 'transparent' }}>
+          <Tap key={item.href} onPress={() => router.navigate(item.href as never)} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
+            <View style={{ width: 46, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? colors.primarySoft : 'transparent' }}>
               <Feather name={item.icon} size={20} color={active ? colors.primary : colors.textMuted} />
               {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -4, right: 4 }} />}
             </View>
-            <Txt style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 11, color: active ? colors.primary : colors.textMuted }}>{item.label}</Txt>
+            <Txt numberOfLines={1} style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 10, letterSpacing: -0.1, color: active ? colors.primary : colors.textMuted }}>{item.short ?? item.label}</Txt>
           </Tap>
         );
       })}

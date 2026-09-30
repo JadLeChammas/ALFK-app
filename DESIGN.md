@@ -62,8 +62,9 @@ src/app/
   Événements, Publications, Messages), puis Paramètres, Notifications et la carte avatar qui ouvre
   « Mon profil ». Section « Administration » visible seulement pour les admins.
 - **Tablette (768–1023 px)** : sidebar compacte (icônes seules, 76 px).
-- **Mobile (< 768 px)** : bottom navigation à 5 entrées — Accueil · Annuaire · Événements ·
-  Messages · Profil (les élèves ont Repère à la place d'Événements). Repère, Publications, Paramètres, Admin sont accessibles depuis l'Accueil
+- **Mobile (< 768 px)** : la barre de gauche devient la barre du bas, avec les mêmes rubriques —
+  Accueil · Annuaire · Repère · Événements · Actus · Messages (sans Événements pour les élèves).
+  Le profil s'ouvre avec l'avatar en haut à droite ; Paramètres, Admin et Statistiques sont dans le profil. Repère, Publications, Paramètres, Admin sont accessibles depuis l'Accueil
   (actions rapides) et le Profil (menu).
 - **Header** : salutation + date/rôle à gauche ; recherche globale, notifications, avatar à droite.
   La recherche globale couvre membres, promos, pays, événements et publications.

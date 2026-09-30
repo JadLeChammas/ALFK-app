@@ -1,7 +1,7 @@
 const fr = {
   app: { name: 'Amicale LFK', long: 'Amicale du Lycée Français de Koweït', tagline: 'Le réseau privé des anciens du LFK' },
   nav: {
-    home: 'Accueil', directory: 'Annuaire', repere: 'Repère', events: 'Événements', publications: 'Publications',
+    home: 'Accueil', directory: 'Annuaire', repere: 'Repère', events: 'Événements', publications: 'Publications', publicationsShort: 'Actus',
     messages: 'Messages', profile: 'Mon profil', profileShort: 'Profil', settings: 'Paramètres', notifications: 'Notifications',
     admin: 'Administration', dashboard: 'Tableau de bord', members: 'Membres', approvals: 'Approbations', content: 'Contenus',
     contact: 'Contact', logs: 'Journal', stats: 'Statistiques', leadership: 'Direction du lycée', more: 'Plus', back: 'Retour', legal: 'Mentions légales', sitemap: 'Plan du site',
