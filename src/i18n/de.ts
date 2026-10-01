@@ -289,6 +289,10 @@ const de: Dict = {
     work: 'Beruf', companies: 'Unternehmen', companiesIn: 'Unternehmen — {country}', companiesCount: '{n} Unternehmen',
     whereHint: 'Stadt und Land: wo Sie heute studieren oder arbeiten.',
   },
+  retro: {
+    banner: 'Willkommen auf der Homepage der Amicale LFK!!! ★ Optimiert für 800×600 und Internet Explorer 6 ★ Trag dich ins Gästebuch ein ★ Diese Seite ist im Aufbau ★', visitor: 'Du bist Besucher Nr.', construction: 'IM AUFBAU',
+    exit: 'Retro-Modus verlassen', on: 'Retro-Modus an. Willkommen in 2003!', off: 'Zurück ins 21. Jahrhundert.',
+  },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Anderswo — {country}', none: 'Keine Einrichtung gefunden', notListed: 'Meine Hochschule ist nicht in der Liste',

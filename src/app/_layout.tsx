@@ -1,5 +1,6 @@
 import { InstrumentSerif_400Regular, InstrumentSerif_400Regular_Italic } from '@expo-google-fonts/instrument-serif';
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
+import { ComicNeue_400Regular, ComicNeue_700Bold } from '@expo-google-fonts/comic-neue';
 import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold, useFonts } from '@expo-google-fonts/inter';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -7,6 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { DemoBadge } from '@/components/DemoBadge';
+import { RetroLayer } from '@/components/RetroLayer';
 import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
 import { StoreProvider, useStore } from '@/data/store';
 import { I18nProvider, useI18n } from '@/i18n';
@@ -23,6 +25,7 @@ export default function RootLayout() {
             <RootNavigator />
             <StoreErrorToast />
             <DemoBadge />
+            <RetroLayer />
           </DialogProvider>
         </StoreProvider>
       </I18nProvider>
@@ -33,7 +36,7 @@ export default function RootLayout() {
 function RootNavigator() {
   const { scheme, colors } = useTheme();
   const { ready, session, me } = useStore();
-  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold, InstrumentSerif_400Regular, InstrumentSerif_400Regular_Italic, BebasNeue_400Regular });
+  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold, InstrumentSerif_400Regular, InstrumentSerif_400Regular_Italic, BebasNeue_400Regular, ComicNeue_400Regular, ComicNeue_700Bold });
   const loaded = ready && fontsLoaded;
 
   useEffect(() => {

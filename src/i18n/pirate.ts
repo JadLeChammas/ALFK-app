@@ -290,6 +290,10 @@ const pirate: Dict = {
     work: 'Work', companies: 'Ships', companiesIn: 'Ships — {country}', companiesCount: '{n} ships',
     whereHint: 'Port an’ land: where ye study or work today.',
   },
+  retro: {
+    banner: 'Ahoy, welcome aboard th\' Amicale LFK homepage!!! ★ Best spied at 800×600 in Internet Explorer 6 ★ Sign our ship\'s log ★ This vessel be under construction ★', visitor: 'Ye be visitor number', construction: 'UNDER CONSTRUCTION',
+    exit: 'Abandon retro mode', on: 'Retro mode hoisted. Welcome to 2003, matey!', off: 'Back to th\' 21st century.',
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

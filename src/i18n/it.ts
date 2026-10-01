@@ -289,6 +289,10 @@ const it: Dict = {
     work: 'Lavoro', companies: 'Aziende', companiesIn: 'Aziende — {country}', companiesCount: '{n} aziende',
     whereHint: 'Città e paese: dove studia o lavora oggi.',
   },
+  retro: {
+    banner: 'Benvenuti sulla homepage dell\'Amicale LFK!!! ★ Visualizzazione ottimale a 800×600 con Internet Explorer 6 ★ Firma il nostro guestbook ★ Sito in costruzione ★', visitor: 'Sei il visitatore n.', construction: 'IN COSTRUZIONE',
+    exit: 'Esci dalla modalità retrò', on: 'Modalità retrò attiva. Benvenuto nel 2003!', off: 'Ritorno al XXI secolo.',
+  },
   uni: {
     pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',
     elsewhere: 'Altrove — {country}', none: 'Nessun istituto trovato', notListed: 'Il mio istituto non è nell’elenco',

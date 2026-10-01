@@ -289,6 +289,10 @@ const pt: Dict = {
     work: 'Trabalho', companies: 'Empresas', companiesIn: 'Empresas — {country}', companiesCount: '{n} empresas',
     whereHint: 'Cidade e país: onde estuda ou trabalha hoje.',
   },
+  retro: {
+    banner: 'Bem-vindo à página da Amicale LFK!!! ★ Melhor visualizado em 800×600 no Internet Explorer 6 ★ Assine nosso livro de visitas ★ Site em construção ★', visitor: 'Você é o visitante n.º', construction: 'EM CONSTRUÇÃO',
+    exit: 'Sair do modo retrô', on: 'Modo retrô ativado. Bem-vindo a 2003!', off: 'De volta ao século XXI.',
+  },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',
     elsewhere: 'Noutro lugar — {country}', none: 'Nenhuma instituição encontrada', notListed: 'A minha instituição não está na lista',

@@ -9,6 +9,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
+import { useRetroTaps } from '@/lib/retro';
 import { Globe } from './fx/Globe';
 import { useDestinationMarkers } from './site/blocks';
 import { PublicSettingsButton } from './site/PublicSettings';
@@ -26,6 +27,7 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
   const markers = useDestinationMarkers();
   // The public home page only exists for visitors (not for a pending or recovering account).
   const home = me ? undefined : () => router.push('/bienvenue');
+  const logoTap = useRetroTaps(home);
 
   const form = (
     <View style={{ width: '100%', maxWidth: 440, gap: 24 }}>
@@ -43,7 +45,7 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
         <PublicSettingsButton />
       </Row>
       {!isDesktop && (
-        <Tap onPress={home} disabled={!home} style={{ alignItems: 'center', gap: 12, marginBottom: 8 }}>
+        <Tap onPress={logoTap} style={{ alignItems: 'center', gap: 12, marginBottom: 8 }}>
           <LogoFull size={130} />
         </Tap>
       )}
@@ -67,7 +69,7 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
       {isDesktop && (
         <View style={{ flex: 1.05, margin: 16, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: brand.navy }}>
           <View style={{ flex: 1, padding: 48, justifyContent: 'space-between', gap: 24 }}>
-            <Tap onPress={home} disabled={!home} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, alignSelf: 'flex-start' }}>
+            <Tap onPress={logoTap} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, alignSelf: 'flex-start' }}>
               <LogoMark size={48} />
               <View>
                 <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 24, lineHeight: 26 }}>{d.app.name}</Txt>

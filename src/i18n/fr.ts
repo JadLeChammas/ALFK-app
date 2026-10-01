@@ -287,6 +287,10 @@ const fr = {
     work: 'Travail', companies: 'Entreprises', companiesIn: 'Entreprises — {country}', companiesCount: '{n} entreprises',
     whereHint: 'Ville et pays : là où vous étudiez ou travaillez aujourd’hui.',
   },
+  retro: {
+    banner: 'Bienvenue sur la page de l\'Amicale LFK !!! ★ Meilleur affichage en 800×600 avec Internet Explorer 6 ★ Signez notre livre d\'or ★ Ce site est en construction ★', visitor: 'Vous êtes le visiteur n°', construction: 'EN CONSTRUCTION',
+    exit: 'Quitter le mode rétro', on: 'Mode rétro activé. Bienvenue en 2003 !', off: 'Retour au XXIᵉ siècle.',
+  },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',
     elsewhere: 'Ailleurs — {country}', none: 'Aucun établissement trouvé', notListed: 'Mon établissement n’est pas dans la liste',

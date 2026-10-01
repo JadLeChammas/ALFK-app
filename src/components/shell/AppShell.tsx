@@ -10,6 +10,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
+import { useRetroTaps } from '@/lib/retro';
 import { LogoMark } from '../ui/Logo';
 import { Avatar, CountBadge, IconButton, Tap, type IconName } from '../ui/primitives';
 import { Txt } from '../ui/Txt';
@@ -92,6 +93,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 const RAIL = { text: brand.sky, active: '#FFFFFF', activeBg: 'rgba(102,128,174,0.28)', hover: 'rgba(200,211,229,0.08)', rule: 'rgba(200,211,229,0.14)' };
 
 function Sidebar({ compact }: { compact: boolean }) {
+  const logoTap = useRetroTaps(() => router.push('/'));
   const { colors, scheme } = useTheme();
   const { d } = useI18n();
   const me = useMe();
@@ -117,7 +119,7 @@ function Sidebar({ compact }: { compact: boolean }) {
         paddingHorizontal: compact ? 12 : 14,
         ...(Platform.OS === 'web' ? ({ height: '100vh', position: 'sticky', top: 0 } as object) : {}),
       }}>
-      <Tap onPress={() => router.push('/')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: compact ? 5 : 8, marginBottom: 16 }}>
+      <Tap onPress={logoTap} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: compact ? 5 : 8, marginBottom: 16 }}>
         <LogoMark size={compact ? 40 : 34} />
         {!compact && (
           <View>
@@ -237,6 +239,7 @@ function TopBar({ onSearch }: { onSearch: () => void }) {
 }
 
 function MobileTopBar({ onSearch }: { onSearch: () => void }) {
+  const logoTap = useRetroTaps(() => router.push('/'));
   const { colors } = useTheme();
   const { d } = useI18n();
   const insets = useSafeAreaInsets();
@@ -246,7 +249,7 @@ function MobileTopBar({ onSearch }: { onSearch: () => void }) {
   const onProfile = pathname.startsWith('/profil');
   return (
     <View style={{ paddingTop: insets.top + 8, paddingBottom: 8, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.rail }}>
-      <Tap onPress={() => router.push('/')} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      <Tap onPress={logoTap} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
         <LogoMark size={30} />
         <Txt style={{ fontFamily: fonts.serif, fontSize: 21, lineHeight: 24, color: '#fff' }}>{d.app.name}</Txt>
       </Tap>

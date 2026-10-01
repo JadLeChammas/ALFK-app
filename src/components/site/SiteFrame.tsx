@@ -16,6 +16,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
+import { useRetroTaps } from '@/lib/retro';
 import { PublicSettingsButton } from './PublicSettings';
 import { Reveal } from './Reveal';
 
@@ -213,10 +214,11 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
   }));
   const line = useAnimatedStyle(() => ({ width: `${progress.value * 100}%` }));
 
+  const logoTap = useRetroTaps(() => go(me ? '/' : '/bienvenue'));
   return (
     <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, paddingTop: insets.top, zIndex: 10 }, bar]}>
       <Container style={{ height: HEADER_H, flexDirection: 'row', alignItems: 'center', gap: isDesktop ? 24 : 10 }}>
-        <Tap onPress={() => go(me ? '/' : '/bienvenue')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: isDesktop ? undefined : 1 }}>
+        <Tap onPress={logoTap} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: isDesktop ? undefined : 1 }}>
           <LogoMark size={30} />
           <Txt numberOfLines={1} style={{ fontFamily: fonts.serif, fontSize: isDesktop ? 22 : 20, lineHeight: 26, color: '#fff', flexShrink: 1 }}>{d.app.name}</Txt>
         </Tap>

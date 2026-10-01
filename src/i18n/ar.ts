@@ -289,6 +289,10 @@ const ar: Dict = {
     work: 'العمل', companies: 'الشركات', companiesIn: 'الشركات — {country}', companiesCount: '{n} شركة',
     whereHint: 'المدينة والبلد: حيث تدرس أو تعمل اليوم.',
   },
+  retro: {
+    banner: '!!! مرحبًا بكم في صفحة Amicale LFK ★ أفضل عرض بدقة 800×600 على Internet Explorer 6 ★ وقّعوا في سجل الزوار ★ الموقع قيد الإنشاء ★', visitor: 'أنت الزائر رقم', construction: 'قيد الإنشاء',
+    exit: 'الخروج من الوضع القديم', on: 'تم تفعيل الوضع القديم. مرحبًا بك في 2003!', off: 'عودة إلى القرن الحادي والعشرين.',
+  },
   uni: {
     pick: 'اختر من القائمة', searchPlaceholder: 'اكتب الاسم أو الاختصار (مثل I أو ISEP أو Sorbonne)…', inCity: 'في {city}',
     elsewhere: 'في مكان آخر — {country}', none: 'لم يتم العثور على أي مؤسسة', notListed: 'مؤسستي غير موجودة في القائمة',

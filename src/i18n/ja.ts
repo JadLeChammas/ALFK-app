@@ -289,6 +289,10 @@ const ja: Dict = {
     work: '仕事', companies: '会社', companiesIn: '会社 — {country}', companiesCount: '{n} 社',
     whereHint: '都市と国：現在の就学先または勤務地。',
   },
+  retro: {
+    banner: 'Amicale LFK のホームページへようこそ！！！★ 800×600・Internet Explorer 6 推奨 ★ ゲストブックに記帳してね ★ 工事中 ★', visitor: 'あなたは何人目の訪問者：', construction: '工事中',
+    exit: 'レトロモードを終了', on: 'レトロモード ON。2003年へようこそ！', off: '21世紀に戻りました。',
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

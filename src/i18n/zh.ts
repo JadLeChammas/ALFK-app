@@ -289,6 +289,10 @@ const zh: Dict = {
     work: '工作', companies: '公司', companiesIn: '公司 — {country}', companiesCount: '{n} 家公司',
     whereHint: '城市和国家：您目前学习或工作的地方。',
   },
+  retro: {
+    banner: '欢迎来到 Amicale LFK 主页！！！★ 最佳浏览：800×600，Internet Explorer 6 ★ 请在留言簿签名 ★ 本站正在建设中 ★', visitor: '您是第几位访客：', construction: '建设中',
+    exit: '退出复古模式', on: '复古模式已开启。欢迎来到 2003 年！', off: '回到 21 世纪。',
+  },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',
     elsewhere: '其他地方 — {country}', none: '未找到院校', notListed: '我的学校不在列表中',

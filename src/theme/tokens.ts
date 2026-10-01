@@ -108,7 +108,47 @@ const dark: typeof light = {
   chart: ['#8FA5CF', '#E5393B', '#C8D3E5', '#4F6696'],
 };
 
+/** Hidden 2000s mode (5 taps on the logo): Windows 98 desktop, flashy links, yellow on navy. */
+const retro: typeof light = {
+  ...light,
+  bg: '#008080',
+  surface: '#C0C0C0',
+  surfaceAlt: '#FFFFFF',
+  surfaceHover: '#D4D0C8',
+  border: '#808080',
+  borderStrong: '#404040',
+  text: '#000000',
+  textMuted: '#202020',
+  textSubtle: '#404040',
+  primary: '#0000EE',
+  primaryPressed: '#0000AA',
+  primarySoft: '#FFFFCC',
+  accent: '#FF00CC',
+  accentPressed: '#CC0099',
+  accentSoft: '#FFFFCC',
+  secondary: '#008000',
+  secondaryStrong: '#006400',
+  secondarySoft: '#FFFFCC',
+  navy: '#000080',
+  sky: '#FFFF00',
+  rail: '#000080',
+  nav: '#000080',
+  navText: '#FFFF00',
+  navActive: 'rgba(255, 255, 0, 0.22)',
+  ink: '#000080',
+  onInk: '#FFFF00',
+  danger: '#FF0000',
+  success: '#00AA00',
+  warning: '#FF8800',
+  bubbleMine: '#0000EE',
+  bubbleTheirs: '#FFFFCC',
+  chart: ['#FF00CC', '#0000EE', '#00AA00', '#FF8800'],
+};
+
 export const palettes = { light, dark };
+export const retroPalette = retro;
+/** Comic Neue (Comic Sans look-alike that ships on every platform), used by the retro mode. */
+export const retroFonts = { regular: 'ComicNeue_400Regular', bold: 'ComicNeue_700Bold' } as const;
 export type Colors = typeof light;
 export type ColorToken = Exclude<keyof Colors, 'chart'>;
 
