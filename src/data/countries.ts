@@ -8,24 +8,29 @@ export type Country = {
   continent: ContinentKey;
   /** Position on the 60×22 dot map (see WorldDots). */
   pin: [number, number];
+  /** Latitude / longitude of the main alumni city — used by the globe and the world map. */
+  ll: [number, number];
 };
 
+/** The Lycée Français de Koweït — origin of every arc on the globe and the map. */
+export const LFK_LL: [number, number] = [29.33, 48.0];
+
 export const COUNTRIES: Country[] = [
-  { code: 'FR', fr: 'France', en: 'France', flag: '🇫🇷', continent: 'europe', pin: [30, 5] },
-  { code: 'GB', fr: 'Royaume-Uni', en: 'United Kingdom', flag: '🇬🇧', continent: 'europe', pin: [29, 4] },
-  { code: 'BE', fr: 'Belgique', en: 'Belgium', flag: '🇧🇪', continent: 'europe', pin: [31, 4] },
-  { code: 'CH', fr: 'Suisse', en: 'Switzerland', flag: '🇨🇭', continent: 'europe', pin: [31, 5] },
-  { code: 'ES', fr: 'Espagne', en: 'Spain', flag: '🇪🇸', continent: 'europe', pin: [29, 6] },
-  { code: 'KW', fr: 'Koweït', en: 'Kuwait', flag: '🇰🇼', continent: 'asia', pin: [38, 8] },
-  { code: 'LB', fr: 'Liban', en: 'Lebanon', flag: '🇱🇧', continent: 'asia', pin: [35, 7] },
-  { code: 'AE', fr: 'Émirats arabes unis', en: 'United Arab Emirates', flag: '🇦🇪', continent: 'asia', pin: [39, 9] },
-  { code: 'JP', fr: 'Japon', en: 'Japan', flag: '🇯🇵', continent: 'asia', pin: [53, 6] },
-  { code: 'CA', fr: 'Canada', en: 'Canada', flag: '🇨🇦', continent: 'north_america', pin: [17, 5] },
-  { code: 'US', fr: 'États-Unis', en: 'United States', flag: '🇺🇸', continent: 'north_america', pin: [16, 6] },
-  { code: 'BR', fr: 'Brésil', en: 'Brazil', flag: '🇧🇷', continent: 'south_america', pin: [22, 16] },
-  { code: 'EG', fr: 'Égypte', en: 'Egypt', flag: '🇪🇬', continent: 'africa', pin: [35, 8] },
-  { code: 'MA', fr: 'Maroc', en: 'Morocco', flag: '🇲🇦', continent: 'africa', pin: [28, 7] },
-  { code: 'AU', fr: 'Australie', en: 'Australia', flag: '🇦🇺', continent: 'oceania', pin: [55, 18] },
+  { code: 'FR', fr: 'France', en: 'France', flag: '🇫🇷', continent: 'europe', pin: [30, 5], ll: [48.86, 2.35] },
+  { code: 'GB', fr: 'Royaume-Uni', en: 'United Kingdom', flag: '🇬🇧', continent: 'europe', pin: [29, 4], ll: [51.51, -0.13] },
+  { code: 'BE', fr: 'Belgique', en: 'Belgium', flag: '🇧🇪', continent: 'europe', pin: [31, 4], ll: [50.85, 4.35] },
+  { code: 'CH', fr: 'Suisse', en: 'Switzerland', flag: '🇨🇭', continent: 'europe', pin: [31, 5], ll: [46.52, 6.63] },
+  { code: 'ES', fr: 'Espagne', en: 'Spain', flag: '🇪🇸', continent: 'europe', pin: [29, 6], ll: [40.42, -3.7] },
+  { code: 'KW', fr: 'Koweït', en: 'Kuwait', flag: '🇰🇼', continent: 'asia', pin: [38, 8], ll: [29.37, 47.98] },
+  { code: 'LB', fr: 'Liban', en: 'Lebanon', flag: '🇱🇧', continent: 'asia', pin: [35, 7], ll: [33.89, 35.5] },
+  { code: 'AE', fr: 'Émirats arabes unis', en: 'United Arab Emirates', flag: '🇦🇪', continent: 'asia', pin: [39, 9], ll: [24.45, 54.38] },
+  { code: 'JP', fr: 'Japon', en: 'Japan', flag: '🇯🇵', continent: 'asia', pin: [53, 6], ll: [35.68, 139.69] },
+  { code: 'CA', fr: 'Canada', en: 'Canada', flag: '🇨🇦', continent: 'north_america', pin: [17, 5], ll: [45.5, -73.57] },
+  { code: 'US', fr: 'États-Unis', en: 'United States', flag: '🇺🇸', continent: 'north_america', pin: [16, 6], ll: [40.71, -74.01] },
+  { code: 'BR', fr: 'Brésil', en: 'Brazil', flag: '🇧🇷', continent: 'south_america', pin: [22, 16], ll: [-23.55, -46.63] },
+  { code: 'EG', fr: 'Égypte', en: 'Egypt', flag: '🇪🇬', continent: 'africa', pin: [35, 8], ll: [30.04, 31.24] },
+  { code: 'MA', fr: 'Maroc', en: 'Morocco', flag: '🇲🇦', continent: 'africa', pin: [28, 7], ll: [33.57, -7.59] },
+  { code: 'AU', fr: 'Australie', en: 'Australia', flag: '🇦🇺', continent: 'oceania', pin: [55, 18], ll: [-33.87, 151.21] },
 ];
 
 export const CONTINENTS: ContinentKey[] = ['europe', 'asia', 'north_america', 'africa', 'south_america', 'oceania'];

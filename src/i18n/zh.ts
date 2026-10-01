@@ -85,6 +85,7 @@ const zh: Dict = {
     fonction: '职务', messagingDisabled: '学校领导与在校生之间的私信已关闭。', alumniNumber: '校友编号', bureauCode: '理事会编号', honorary: '身份：荣誉会员', birthday: '生日', phone: '电话', email: '邮箱', location: '所在地', school: '学校 / 大学', notFound: '未找到该成员',
   },
   repere: {
+    viewGlobe: '地球', viewMap: '地图',
     title: 'Repère', subtitle: '探索 LFK 校友前往就读的大学和国家。',
     continent: '大洲', country: '国家', universities: '大学', pickContinent: '在地图或列表中选择一个大洲。',
     pickCountry: '选择一个国家', universitiesIn: '大学 — {country}', countriesCount: '{n} 个国家',
@@ -145,6 +146,7 @@ const zh: Dict = {
     },
   },
   admin: {
+    kpiTodo: '待处理', kpiClear: '暂无待办', kpiNext: '下一场：{date}',
     proofRequired: '缺少就读证明：无法批准。',
     title: '管理控制台', subtitle: '管理社区并查看校友会的动态。',
     toApprove: '待审核成员', reported: '被举报的消息', upcomingEvents: '即将举行的活动', unreadContact: '未读联系消息',
@@ -227,6 +229,7 @@ const zh: Dict = {
       mySpace: '我的空间', menu: '菜单',
     },
     home: {
+      bigPre: '一个网络，汇聚', bigUnit: '位校友', bigPost: '遍布 {c} 个国家 · {u} 所大学',
       s1Title: '一个网络，一份记忆，', s1Italic: '一个国际社区。', s1Sub: 'LFK 的校友、在校生和学校领导：重新相聚，分享各自的经历，无论生活把你带到哪里都保持联系。',
       s2Title: '找回你的同学', s2Italic: '无论 Promo LFK 的伙伴身在何处。', s2Sub: '按 Promo LFK、国家或大学查看整个社区的通讯录，以及私信功能。',
       s3Title: '看看校友们', s3Italic: '去了哪里。', s3Sub: '校友的大学和国家，以及帮助准备升学的升学指导空间。',
@@ -252,6 +255,7 @@ const zh: Dict = {
       a4Sub: '校友、应届毕业生和职场人士之间的聚会、讲座与互助。', presenceTitle: '我们的社区', presenceItalic: '遍布 {n} 个国家。',
     },
     bureau: {
+      president: '会长',
       title: '理事会', sub: '让校友会运转的志愿者，以及支持校友会的荣誉会员。', board: '理事会与管理员',
       honorary: '荣誉会员', member: '理事', volunteerTitle: '想要',
       volunteerItalic: '参与进来吗？', volunteerSub: '理事会定期欢迎新的志愿者。请给我们写信报名。', empty: '理事会成员即将公布。',

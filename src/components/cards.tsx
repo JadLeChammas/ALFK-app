@@ -14,9 +14,9 @@ import { Avatar, Badge, Button, Card, MetaLine, Tap, type Tone } from './ui/prim
 import { Flag } from './ui/Flag';
 import { Txt } from './ui/Txt';
 
-export const ROLE_TONE: Record<Role, Tone> = { alumni: 'primary', eleve: 'success', honneur: 'warning', admin: 'ink' };
-export const CATEGORY_TONE: Record<EventCategory, Tone> = { soiree: 'violet', sport: 'success', culture: 'warning', networking: 'info' };
-export const PUB_TONE: Record<PublicationCategory, Tone> = { actualite: 'primary', article: 'violet', annonce: 'warning' };
+export const ROLE_TONE: Record<Role, Tone> = { alumni: 'secondary', eleve: 'violet', honneur: 'ink', admin: 'primary' };
+export const CATEGORY_TONE: Record<EventCategory, Tone> = { soiree: 'primary', sport: 'secondary', culture: 'ink', networking: 'violet' };
+export const PUB_TONE: Record<PublicationCategory, Tone> = { actualite: 'primary', article: 'ink', annonce: 'secondary' };
 
 export function RoleBadge({ role }: { role: Role }) {
   const { d } = useI18n();
@@ -64,7 +64,7 @@ export function MemberCard({ user, showPromo }: { user: User; showPromo?: boolea
       ) : (
         <Tap
           onPress={() => start(user.id)}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, height: 32, borderRadius: radius.pill, backgroundColor: colors.primarySoft }}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, height: 32, borderRadius: radius.input, backgroundColor: colors.primarySoft }}
           hoverStyle={{ opacity: 0.85 }}>
           <Feather name="message-circle" size={13} color={colors.primary} />
           <Txt variant="smallStrong" color="primary">{d.common.message}</Txt>
@@ -81,7 +81,7 @@ export function DateBadge({ iso, size = 'md' }: { iso: string; size?: 'sm' | 'md
   const s = size === 'sm';
   return (
     <View style={{ width: s ? 48 : 58, paddingVertical: s ? 6 : 8, borderRadius: 14, backgroundColor: colors.surface, alignItems: 'center', borderWidth: 1, borderColor: colors.border }}>
-      <Txt style={{ fontFamily: fonts.extrabold, fontSize: s ? 18 : 22, lineHeight: s ? 20 : 26, color: colors.text }}>{String(date.getDate()).padStart(2, '0')}</Txt>
+      <Txt style={{ fontFamily: fonts.display, fontSize: s ? 22 : 28, lineHeight: s ? 22 : 28, color: colors.text }}>{String(date.getDate()).padStart(2, '0')}</Txt>
       <Txt style={{ fontFamily: fonts.bold, fontSize: 10, letterSpacing: 1, color: colors.primary }}>{d.monthsShort[date.getMonth()]}</Txt>
     </View>
   );

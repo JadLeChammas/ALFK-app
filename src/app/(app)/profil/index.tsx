@@ -33,6 +33,9 @@ export default function MyProfile() {
     ['settings', d.nav.settings, '/parametres'],
     ...(me.role === 'admin' ? ([['shield', d.nav.admin, '/admin']] as [IconName, string, string][]) : []),
     ...(me.role !== 'admin' && can(me, 'viewStats') ? ([['bar-chart-2', d.nav.stats, '/statistiques']] as [IconName, string, string][]) : []),
+    ['heart', d.site.nav.association, '/association'],
+    ['users', d.site.nav.bureau, '/bureau'],
+    ['briefcase', d.site.nav.partners, '/partenaires'],
     ['file-text', d.nav.legal, '/mentions-legales'],
     ['shield', d.legal.privacy, '/confidentialite'],
     ['map', d.nav.sitemap, '/plan-du-site'],
@@ -42,15 +45,17 @@ export default function MyProfile() {
   return (
     <Screen>
       <Card padded={false}>
-        <View style={{ height: isMobile ? 110 : 160, backgroundColor: colors.ink, overflow: 'hidden' }}>
+        <View style={{ height: isMobile ? 110 : 160, backgroundColor: colors.navy, overflow: 'hidden' }}>
           <View style={{ position: 'absolute', right: -40, top: -60, width: 260, height: 260, borderRadius: 130, backgroundColor: colors.primary, opacity: 0.55 }} />
-          <View style={{ position: 'absolute', right: 140, top: 40, width: 140, height: 140, borderRadius: 70, backgroundColor: colors.silver, opacity: 0.25 }} />
+          <View style={{ position: 'absolute', right: 140, top: 40, width: 140, height: 140, borderRadius: 70, backgroundColor: colors.secondary, opacity: 0.35 }} />
         </View>
-        <View style={{ paddingHorizontal: isMobile ? 20 : 32, paddingBottom: 28, marginTop: isMobile ? -56 : -72, gap: 16 }}>
-          <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 16 }}>
-            <View style={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: 16 }}>
-              <Avatar uri={me.avatar} name={fullName(me)} size={isMobile ? 112 : 144} ring />
-              <View style={{ gap: 6, paddingBottom: 8 }}>
+        <View style={{ paddingHorizontal: isMobile ? 20 : 32, paddingBottom: 28, gap: 16 }}>
+          <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-start' : 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+            <View style={{ flexDirection: isMobile ? 'column' : 'row', alignItems: 'flex-start', gap: isMobile ? 12 : 24 }}>
+              <View style={{ marginTop: isMobile ? -56 : -72 }}>
+                <Avatar uri={me.avatar} name={fullName(me)} size={isMobile ? 112 : 144} ring />
+              </View>
+              <View style={{ gap: 6, paddingTop: isMobile ? 0 : 20 }}>
                 <Txt variant={isMobile ? 'h1' : 'display'}>{fullName(me)}</Txt>
                 <Row gap={8} wrap>
                   <RoleBadge role={me.role} />
@@ -58,7 +63,7 @@ export default function MyProfile() {
                 </Row>
               </View>
             </View>
-            <Row gap={10} wrap>
+            <Row gap={10} wrap style={{ paddingTop: isDesktop ? 24 : 0 }}>
               <Button label={d.profile.edit} icon="edit-2" onPress={() => router.push('/profil/modifier')} />
               <Button label={d.nav.settings} icon="settings" variant="secondary" onPress={() => router.push('/parametres')} />
             </Row>
@@ -116,7 +121,7 @@ export default function MyProfile() {
             </Card>
             <Card>
               {menu.map(([icon, label, href], i) => (
-                <ListRow key={href} icon={icon} title={label} onPress={() => router.push(href as never)} tone={href === '/admin' ? 'ink' : 'primary'} last={i === menu.length - 1} />
+                <ListRow key={href} icon={icon} title={label} onPress={() => router.push(href as never)} tone={href === '/admin' ? 'ink' : 'secondary'} last={i === menu.length - 1} />
               ))}
             </Card>
             <Button label={d.common.signOut} icon="log-out" variant="danger" full onPress={actions.signOut} />

@@ -11,11 +11,11 @@ import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const ICON: Record<AdminLogAction, [IconName, Tone]> = {
-  approve: ['user-check', 'success'],
+  approve: ['user-check', 'secondary'],
   refuse: ['user-x', 'danger'],
   create_user: ['user-plus', 'primary'],
-  change_role: ['sliders', 'violet'],
-  reset_password: ['key', 'warning'],
+  change_role: ['sliders', 'ink'],
+  reset_password: ['key', 'secondary'],
   delete_user: ['trash-2', 'danger'],
   create_event: ['calendar', 'primary'],
   delete_event: ['calendar', 'danger'],

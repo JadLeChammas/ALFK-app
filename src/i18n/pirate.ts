@@ -86,6 +86,7 @@ const pirate: Dict = {
     fonction: 'Post', messagingDisabled: 'Private bottles be forbidden between the Lycée admiralty an’ the cabin boys.', alumniNumber: 'Old Hand no.', bureauCode: 'Bureau code', honorary: 'Rank: Honorary Buccaneer', birthday: 'Birthday', phone: 'Horn', email: 'Email', location: 'Port', school: 'School / University', notFound: 'This sailor be lost at sea',
   },
   repere: {
+    viewGlobe: 'Globe', viewMap: 'Chart',
     title: 'Repère', subtitle: 'Explore the universities an’ lands where LFK old hands dropped anchor.',
     continent: 'Continent', country: 'Land', universities: 'Universities', pickContinent: 'Pick a continent on the map or in the list.',
     pickCountry: 'Pick a land', universitiesIn: 'Universities — {country}', countriesCount: '{n} lands',
@@ -146,6 +147,7 @@ const pirate: Dict = {
     },
   },
   admin: {
+    kpiTodo: 'All hands needed', kpiClear: 'Calm seas', kpiNext: 'Next: {date}',
     proofRequired: 'No proof o’ schoolin’: this recruit can’t be approved.',
     title: 'Captain’s Quarterdeck', subtitle: 'Command the crew an’ keep an eye on the Amicale.',
     toApprove: 'Recruits to approve', reported: 'Reported bottles', upcomingEvents: 'Shore leaves ahead', unreadContact: 'Unread hails',
@@ -228,6 +230,7 @@ const pirate: Dict = {
       mySpace: 'Me quarters', menu: 'Menu',
     },
     home: {
+      bigPre: 'A fleet o’', bigUnit: 'old hands', bigPost: 'in {c} lands · {u} universities',
       s1Title: 'One fleet, one logbook,', s1Italic: 'one crew across the seven seas.', s1Sub: 'LFK old hands, cabin boys an’ the Lycée admiralty: find each other, share yer voyages an’ stay tied, wherever the winds take ye.',
       s2Title: 'Find yer shipmates', s2Italic: 'from yer LFK crew, wherever they sail.', s2Sub: 'A roster o’ the whole crew, by Promo LFK, land or university, plus private bottles.',
       s3Title: 'Discover where', s3Italic: 'the old hands dropped anchor.', s3Sub: 'The universities an’ lands o’ the old hands, an’ a Charts & Heading space to plot yer studies.',
@@ -253,6 +256,7 @@ const pirate: Dict = {
       a4Sub: 'Meetups, talks an’ a helpin’ hand between old hands, young graduates an’ professionals.', presenceTitle: 'A crew sailin’', presenceItalic: 'in {n} lands.',
     },
     bureau: {
+      president: 'Captain',
       title: 'The Officers', sub: 'The volunteers who keep the Amicale afloat, an’ the honorary buccaneers who sail alongside.', board: 'Officers & captains',
       honorary: 'Honorary buccaneers', member: 'Officer', volunteerTitle: 'Fancy',
       volunteerItalic: 'joinin’ the officers?', volunteerSub: 'The officers often welcome new volunteers. Send us a bottle to apply.', empty: 'The officers will be announced soon.',

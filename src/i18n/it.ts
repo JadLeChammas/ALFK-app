@@ -85,6 +85,7 @@ const it: Dict = {
     fonction: 'Ruolo', messagingDisabled: 'La messaggistica privata è disattivata tra la direzione del liceo e gli studenti.', alumniNumber: 'N. Alumni', bureauCode: 'Codice Bureau', honorary: "Stato: Membro d'onore", birthday: 'Compleanno', phone: 'Telefono', email: 'E-mail', location: 'Luogo', school: 'Scuola / Università', notFound: 'Membro non trovato',
   },
   repere: {
+    viewGlobe: 'Globo', viewMap: 'Mappa',
     title: 'Repère', subtitle: 'Esplora le università e i paesi dove sono andati gli ex alunni del LFK.',
     continent: 'Continente', country: 'Paese', universities: 'Università', pickContinent: 'Scegli un continente sulla mappa o nella lista.',
     pickCountry: 'Scegli un paese', universitiesIn: 'Università — {country}', countriesCount: '{n} paesi',
@@ -145,6 +146,7 @@ const it: Dict = {
     },
   },
   admin: {
+    kpiTodo: 'Da gestire', kpiClear: 'Nulla in sospeso', kpiNext: 'Prossimo: {date}',
     proofRequired: 'Documento scolastico mancante: approvazione impossibile.',
     title: 'Dashboard amministrazione', subtitle: "Gestisci la comunità e segui l'attività dell'Amicale.",
     toApprove: 'Membri da approvare', reported: 'Messaggi segnalati', upcomingEvents: 'Prossimi eventi', unreadContact: 'Contatti non letti',
@@ -227,6 +229,7 @@ const it: Dict = {
       mySpace: 'Il mio spazio', menu: 'Menu',
     },
     home: {
+      bigPre: 'Una rete di', bigUnit: 'ex allievi', bigPost: 'in {c} paesi · {u} università',
       s1Title: 'Una rete, una memoria,', s1Italic: 'una comunità internazionale.', s1Sub: 'Ex allievi, studenti e direzione del LFK: ritrovatevi, condividete i vostri percorsi e restate in contatto, ovunque vi porti la vita.',
       s2Title: 'Ritrova i tuoi compagni', s2Italic: 'di Promo LFK, ovunque siano.', s2Sub: 'Un annuario di tutta la comunità, per Promo LFK, paese o università, e una messaggistica privata.',
       s3Title: 'Scopri dove', s3Italic: 'sono andati gli ex allievi.', s3Sub: 'Le università e i paesi degli ex allievi, e uno spazio Orientamento per preparare gli studi.',
@@ -252,6 +255,7 @@ const it: Dict = {
       a4Sub: 'Incontri, conferenze e aiuto reciproco tra ex allievi, giovani laureati e professionisti.', presenceTitle: 'Una comunità presente', presenceItalic: 'in {n} paesi.',
     },
     bureau: {
+      president: 'Presidente',
       title: 'Il direttivo', sub: 'I volontari che fanno vivere l’Amicale e i membri onorari che la accompagnano.', board: 'Direttivo e amministratori',
       honorary: 'Membri onorari', member: 'Membro del direttivo', volunteerTitle: 'Vuoi',
       volunteerItalic: 'impegnarti?', volunteerSub: 'Il direttivo accoglie regolarmente nuovi volontari. Scrivici per candidarti.', empty: 'La composizione del direttivo sarà pubblicata presto.',

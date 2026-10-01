@@ -85,6 +85,7 @@ const pt: Dict = {
     fonction: 'Cargo', messagingDisabled: 'As mensagens privadas estão desativadas entre a direção do liceu e os alunos.', alumniNumber: 'N.º Alumni', bureauCode: 'Código de Bureau', honorary: 'Estatuto: Membro honorário', birthday: 'Aniversário', phone: 'Telefone', email: 'E-mail', location: 'Localização', school: 'Escola / Universidade', notFound: 'Membro não encontrado',
   },
   repere: {
+    viewGlobe: 'Globo', viewMap: 'Mapa',
     title: 'Repère', subtitle: 'Explore as universidades e os países para onde foram os antigos alunos do LFK.',
     continent: 'Continente', country: 'País', universities: 'Universidades', pickContinent: 'Escolha um continente no mapa ou na lista.',
     pickCountry: 'Escolha um país', universitiesIn: 'Universidades — {country}', countriesCount: '{n} países',
@@ -145,6 +146,7 @@ const pt: Dict = {
     },
   },
   admin: {
+    kpiTodo: 'Por tratar', kpiClear: 'Nada pendente', kpiNext: 'Próximo: {date}',
     proofRequired: 'Falta o comprovativo de escolaridade: aprovação impossível.',
     title: 'Painel de administração', subtitle: 'Gira a comunidade e acompanhe a atividade da Amicale.',
     toApprove: 'Membros por aprovar', reported: 'Mensagens denunciadas', upcomingEvents: 'Próximos eventos', unreadContact: 'Contactos não lidos',
@@ -227,6 +229,7 @@ const pt: Dict = {
       mySpace: 'O meu espaço', menu: 'Menu',
     },
     home: {
+      bigPre: 'Uma rede de', bigUnit: 'antigos alunos', bigPost: 'em {c} países · {u} universidades',
       s1Title: 'Uma rede, uma memória,', s1Italic: 'uma comunidade internacional.', s1Sub: 'Antigos alunos, alunos e direção do LFK: reencontrem-se, partilhem os vossos percursos e mantenham a ligação, para onde quer que a vida vos leve.',
       s2Title: 'Reencontre os seus colegas', s2Italic: 'da Promo LFK, onde quer que estejam.', s2Sub: 'Um diretório de toda a comunidade, por Promo LFK, país ou universidade, e mensagens privadas.',
       s3Title: 'Descubra para onde', s3Italic: 'foram os antigos alunos.', s3Sub: 'As universidades e os países dos antigos alunos, e um espaço de Orientação para preparar os estudos.',
@@ -252,6 +255,7 @@ const pt: Dict = {
       a4Sub: 'Encontros, conferências e entreajuda entre antigos alunos, jovens diplomados e profissionais.', presenceTitle: 'Uma comunidade presente', presenceItalic: 'em {n} países.',
     },
     bureau: {
+      president: 'Presidente',
       title: 'A direção', sub: 'Os voluntários que dão vida à Amicale e os membros honorários que a acompanham.', board: 'Direção e administradores',
       honorary: 'Membros honorários', member: 'Membro da direção', volunteerTitle: 'Quer',
       volunteerItalic: 'participar?', volunteerSub: 'A direção acolhe regularmente novos voluntários. Escreva-nos para se candidatar.', empty: 'A composição da direção será publicada em breve.',

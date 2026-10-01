@@ -14,7 +14,7 @@ export default function NotFound() {
     <PublicPage title="">
       <View style={{ alignItems: 'center', gap: 16, paddingVertical: 48 }}>
         <LogoMark size={96} />
-        <Txt style={{ fontFamily: fonts.extrabold, fontSize: 72, lineHeight: 80, letterSpacing: -2 }} color="primary">404</Txt>
+        <Txt style={{ fontFamily: fonts.display, fontSize: 120, lineHeight: 120 }} color="primary">404</Txt>
         <Txt variant="h1" align="center">{d.legal.notFound}</Txt>
         <Txt color="textMuted" align="center">{d.legal.notFoundSub}</Txt>
         <Button label={d.legal.goHome} icon="home" onPress={() => router.replace('/')} />

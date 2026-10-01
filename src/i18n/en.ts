@@ -85,6 +85,7 @@ const en: Dict = {
     fonction: 'Position', messagingDisabled: 'Private messaging is disabled between school leadership and students.', alumniNumber: 'Alumni no.', bureauCode: 'Bureau code', honorary: 'Status: Honorary member', birthday: 'Birthday', phone: 'Phone', email: 'Email', location: 'Location', school: 'School / University', notFound: 'Member not found',
   },
   repere: {
+    viewGlobe: 'Globe', viewMap: 'Map',
     title: 'Repère', subtitle: 'Explore the universities and countries where LFK alumni went to study.',
     continent: 'Continent', country: 'Country', universities: 'Universities', pickContinent: 'Pick a continent on the map or in the list.',
     pickCountry: 'Pick a country', universitiesIn: 'Universities — {country}', countriesCount: '{n} countries',
@@ -145,6 +146,7 @@ const en: Dict = {
     },
   },
   admin: {
+    kpiTodo: 'Needs action', kpiClear: 'All clear', kpiNext: 'Next: {date}',
     proofRequired: 'Proof of schooling missing: the account cannot be approved.',
     title: 'Admin dashboard', subtitle: 'Manage the community and follow Amicale activity.',
     toApprove: 'Members to approve', reported: 'Reported messages', upcomingEvents: 'Upcoming events', unreadContact: 'Unread contacts',
@@ -227,6 +229,7 @@ const en: Dict = {
       mySpace: 'My space', menu: 'Menu',
     },
     home: {
+      bigPre: 'A network of', bigUnit: 'alumni', bigPost: 'in {c} countries · {u} universities',
       s1Title: 'One network, one memory,', s1Italic: 'one international community.', s1Sub: 'LFK alumni, students and school leadership: find each other, share your journeys and stay connected, wherever life takes you.',
       s2Title: 'Find your classmates', s2Italic: 'from Promo LFK, wherever they are.', s2Sub: 'A directory of the whole community, by Promo LFK, country or university, plus private messaging.',
       s3Title: 'Discover where', s3Italic: 'alumni went.', s3Sub: 'The universities and countries of alumni, and a Guidance space to prepare your studies.',
@@ -252,6 +255,7 @@ const en: Dict = {
       a4Sub: 'Meetups, talks and mutual help between alumni, young graduates and professionals.', presenceTitle: 'A community present', presenceItalic: 'in {n} countries.',
     },
     bureau: {
+      president: 'President',
       title: 'The Board', sub: 'The volunteers who run the Amicale, and the honorary members who support it.', board: 'Board & administrators',
       honorary: 'Honorary members', member: 'Board member', volunteerTitle: 'Want to',
       volunteerItalic: 'get involved?', volunteerSub: 'The Board regularly welcomes new volunteers. Write to us to apply.', empty: 'The Board members will be announced soon.',

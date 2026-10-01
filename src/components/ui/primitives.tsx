@@ -17,7 +17,7 @@ import {
 
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fonts, radius, space, type ColorToken, type Colors } from '@/theme/tokens';
+import { brand, fonts, radius, space, type ColorToken, type Colors } from '@/theme/tokens';
 import { Txt } from './Txt';
 
 export type IconName = ComponentProps<typeof Feather>['name'];
@@ -75,7 +75,7 @@ export function Card({
   ];
   if (onPress) {
     return (
-      <Tap onPress={onPress} style={base} hoverStyle={{ borderColor: colors.borderStrong, transform: [{ translateY: -2 }] }}>
+      <Tap onPress={onPress} style={base} hoverStyle={{ borderColor: colors.borderStrong }}>
         {children}
       </Tap>
     );
@@ -83,7 +83,7 @@ export function Card({
   return <View style={base}>{children}</View>;
 }
 
-type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger' | 'ink' | 'soft';
+type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger' | 'ink' | 'soft' | 'onDark' | 'white';
 
 export function Button({
   label,
@@ -115,12 +115,19 @@ export function Button({
     ink: { bg: colors.ink, fg: colors.onInk, border: colors.ink, hover: colors.ink },
     secondary: { bg: colors.surface, fg: colors.text, border: colors.border, hover: colors.surfaceHover },
     ghost: { bg: 'transparent', fg: colors.text, border: 'transparent', hover: colors.surfaceAlt },
-    soft: { bg: colors.primarySoft, fg: colors.primary, border: colors.primarySoft, hover: colors.primarySoft },
+    soft: { bg: colors.secondarySoft, fg: colors.ink, border: colors.secondarySoft, hover: colors.sky },
     danger: { bg: colors.dangerSoft, fg: colors.danger, border: colors.dangerSoft, hover: colors.dangerSoft },
+    /** Outlined white — for navy or red brand panels. */
+    onDark: { bg: 'transparent', fg: '#FFFFFF', border: 'rgba(255,255,255,0.4)', hover: 'rgba(255,255,255,0.12)' },
+    /** Solid white with brand-red text — the main action on red or navy panels. */
+    white: { bg: '#FFFFFF', fg: brand.red, border: '#FFFFFF', hover: '#F3F6FB' },
   };
   const p = palette[variant];
-  const h = size === 'sm' ? 34 : size === 'lg' ? 52 : 44;
+  const h = size === 'sm' ? 34 : size === 'lg' ? 46 : 40;
+  // The row wrapper stops the button from stretching inside a column, without pinning it to the
+  // top of a row (a bare alignSelf: 'flex-start' did that, misaligning it next to taller items).
   return (
+    <View style={{ flexDirection: 'row', alignSelf: full ? 'stretch' : undefined }}>
     <Tap
       onPress={onPress}
       disabled={disabled || loading}
@@ -128,8 +135,8 @@ export function Button({
       style={[
         {
           height: h,
-          paddingHorizontal: size === 'sm' ? 14 : 20,
-          borderRadius: radius.pill,
+          paddingHorizontal: size === 'sm' ? 12 : size === 'lg' ? 22 : 16,
+          borderRadius: radius.input,
           backgroundColor: p.bg,
           borderWidth: 1,
           borderColor: p.border,
@@ -137,7 +144,7 @@ export function Button({
           alignItems: 'center',
           justifyContent: 'center',
           gap: 8,
-          alignSelf: full ? 'stretch' : 'flex-start',
+          flexGrow: full ? 1 : 0,
           opacity: disabled ? 0.5 : 1,
         },
         style,
@@ -148,13 +155,14 @@ export function Button({
       ) : (
         <>
           {icon && <Feather name={icon} size={size === 'sm' ? 14 : 16} color={p.fg} />}
-          <Txt variant={size === 'sm' ? 'smallStrong' : 'bodyStrong'} style={{ color: p.fg }} numberOfLines={1}>
+          <Txt variant={size === 'sm' ? 'smallStrong' : 'bodyStrong'} style={{ color: p.fg, fontSize: size === 'sm' ? 13 : 14 }} numberOfLines={1}>
             {label}
           </Txt>
           {iconRight && <Feather name={iconRight} size={size === 'sm' ? 14 : 16} color={p.fg} />}
         </>
       )}
     </Tap>
+    </View>
   );
 }
 
@@ -176,7 +184,7 @@ export function IconButton({
   label?: string;
 }) {
   const { colors } = useTheme();
-  const bg = { surface: colors.surface, ghost: 'transparent', primary: colors.primary, overlay: 'rgba(0,0,0,0.45)' }[variant];
+  const bg = { surface: colors.surface, ghost: 'transparent', primary: colors.primary, overlay: 'rgba(0,16,53,0.5)' }[variant];
   const fg = color ?? (variant === 'primary' || variant === 'overlay' ? '#fff' : colors.text);
   return (
     <Tap
@@ -266,7 +274,7 @@ export function SearchBar({ value, onChangeText, placeholder, style, autoFocus, 
   return (
     <View
       style={[
-        { flexDirection: 'row', alignItems: 'center', height: 46, borderRadius: radius.pill, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, gap: 10 },
+        { flexDirection: 'row', alignItems: 'center', height: 42, borderRadius: radius.input, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, gap: 10 },
         style,
       ]}>
       <Feather name="search" size={17} color={colors.textSubtle} />
@@ -305,7 +313,7 @@ export function Avatar({ uri, name, size = 44, ring, online }: { uri?: string; n
           height: size,
           borderRadius: size / 2,
           overflow: 'hidden',
-          backgroundColor: colors.primarySoft,
+          backgroundColor: colors.secondarySoft,
           alignItems: 'center',
           justifyContent: 'center',
           borderWidth: ring ? 3 : 0,
@@ -314,7 +322,7 @@ export function Avatar({ uri, name, size = 44, ring, online }: { uri?: string; n
         {uri ? (
           <Image source={{ uri }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} />
         ) : (
-          <Txt style={{ color: colors.primary, fontFamily: fonts.bold, fontSize: size * 0.36 }}>{initials}</Txt>
+          <Txt style={{ color: colors.secondaryStrong, fontFamily: fonts.bold, fontSize: size * 0.36 }}>{initials}</Txt>
         )}
       </View>
       {online && (
@@ -324,16 +332,17 @@ export function Avatar({ uri, name, size = 44, ring, online }: { uri?: string; n
   );
 }
 
-export type Tone = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'violet' | 'neutral' | 'ink';
+export type Tone = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'violet' | 'neutral' | 'ink';
 
 export function toneColors(colors: Colors, tone: Tone) {
   switch (tone) {
     case 'primary': return { bg: colors.primarySoft, fg: colors.primary };
+    case 'secondary':
+    case 'info': return { bg: colors.secondarySoft, fg: colors.secondaryStrong };
+    case 'violet': return { bg: colors.sky, fg: colors.navy };
     case 'success': return { bg: colors.successSoft, fg: colors.success };
     case 'warning': return { bg: colors.warningSoft, fg: colors.warning };
     case 'danger': return { bg: colors.dangerSoft, fg: colors.danger };
-    case 'info': return { bg: colors.infoSoft, fg: colors.info };
-    case 'violet': return { bg: colors.violetSoft, fg: colors.violet };
     case 'ink': return { bg: colors.ink, fg: colors.onInk };
     default: return { bg: colors.surfaceAlt, fg: colors.textMuted };
   }
@@ -343,9 +352,11 @@ export function Badge({ label, tone = 'neutral', icon, style }: { label: string;
   const { colors } = useTheme();
   const t = toneColors(colors, tone);
   return (
-    <View style={[{ flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start', backgroundColor: t.bg, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 4 }, style]}>
+    <View style={[{ flexDirection: 'row' }, style]}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: t.bg, borderRadius: radius.sm - 1, paddingHorizontal: 8, paddingVertical: 3 }}>
       {icon && <Feather name={icon} size={11} color={t.fg} />}
-      <Txt style={{ color: t.fg, fontFamily: fonts.bold, fontSize: 11, lineHeight: 14 }}>{label}</Txt>
+      <Txt style={{ color: t.fg, fontFamily: fonts.semibold, fontSize: 11, lineHeight: 14 }}>{label}</Txt>
+    </View>
     </View>
   );
 }
@@ -359,9 +370,9 @@ export function Chip({ label, active, onPress, icon, count, leading }: { label: 
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-        height: 36,
-        paddingHorizontal: 16,
-        borderRadius: radius.pill,
+        height: 34,
+        paddingHorizontal: 12,
+        borderRadius: radius.input,
         backgroundColor: active ? colors.ink : colors.surface,
         borderWidth: 1,
         borderColor: active ? colors.ink : colors.border,
@@ -378,7 +389,8 @@ export function Chip({ label, active, onPress, icon, count, leading }: { label: 
 export function Segmented<T extends string>({ value, options, onChange, style }: { value: T; options: { value: T; label: string; icon?: IconName }[]; onChange: (v: T) => void; style?: StyleProp<ViewStyle> }) {
   const { colors, scheme } = useTheme();
   return (
-    <View style={[{ flexDirection: 'row', backgroundColor: colors.surfaceAlt, borderRadius: radius.pill, padding: 4, alignSelf: 'flex-start', borderWidth: 1, borderColor: colors.border }, style]}>
+    <View style={[{ flexDirection: 'row' }, style]}>
+    <View style={{ flexDirection: 'row', backgroundColor: colors.surfaceAlt, borderRadius: radius.input + 2, padding: 3, borderWidth: 1, borderColor: colors.border, flexGrow: 1 }}>
       {options.map((o) => {
         const active = o.value === value;
         return (
@@ -386,7 +398,7 @@ export function Segmented<T extends string>({ value, options, onChange, style }:
             key={o.value}
             onPress={() => onChange(o.value)}
             style={[
-              { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, height: 34, borderRadius: radius.pill, justifyContent: 'center', flexGrow: 1 },
+              { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, height: 32, borderRadius: radius.input - 1, justifyContent: 'center', flexGrow: 1 },
               active && { backgroundColor: colors.surface },
               active && scheme === 'light' && styles.shadow,
             ]}>
@@ -396,6 +408,7 @@ export function Segmented<T extends string>({ value, options, onChange, style }:
         );
       })}
     </View>
+    </View>
   );
 }
 
@@ -404,11 +417,7 @@ export function SectionHeader({ title, icon, action, onAction, count, style }: {
   return (
     <View style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: space.lg }, style]}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1 }}>
-        {icon && (
-          <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' }}>
-            <Feather name={icon} size={16} color={colors.primary} />
-          </View>
-        )}
+        {icon && <Feather name={icon} size={16} color={colors.secondary} />}
         <Txt variant="h3" numberOfLines={1} style={{ flexShrink: 1 }}>{title}</Txt>
         {count && <Txt variant="small" color="textSubtle">{count}</Txt>}
       </View>
@@ -422,13 +431,13 @@ export function SectionHeader({ title, icon, action, onAction, count, style }: {
   );
 }
 
-export function ListRow({ icon, title, subtitle, right, onPress, danger, tone = 'primary', last }: { icon?: IconName; title: string; subtitle?: string; right?: ReactNode; onPress?: () => void; danger?: boolean; tone?: Tone; last?: boolean }) {
+export function ListRow({ icon, title, subtitle, right, onPress, danger, tone = 'secondary', last }: { icon?: IconName; title: string; subtitle?: string; right?: ReactNode; onPress?: () => void; danger?: boolean; tone?: Tone; last?: boolean }) {
   const { colors } = useTheme();
   const t = toneColors(colors, danger ? 'danger' : tone);
   const content = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14, paddingVertical: 14, borderBottomWidth: last ? 0 : 1, borderBottomColor: colors.border }}>
       {icon && (
-        <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: t.bg, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ width: 34, height: 34, borderRadius: radius.input, backgroundColor: t.bg, alignItems: 'center', justifyContent: 'center' }}>
           <Feather name={icon} size={17} color={t.fg} />
         </View>
       )}
@@ -459,8 +468,8 @@ export function EmptyState({ icon, title, subtitle, action }: { icon: IconName; 
   const { colors } = useTheme();
   return (
     <View style={{ alignItems: 'center', paddingVertical: space.huge, paddingHorizontal: space.xl, gap: 10 }}>
-      <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center', marginBottom: 6 }}>
-        <Feather name={icon} size={26} color={colors.primary} />
+      <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: colors.secondarySoft, alignItems: 'center', justifyContent: 'center', marginBottom: 6 }}>
+        <Feather name={icon} size={26} color={colors.secondaryStrong} />
       </View>
       <Txt variant="h3" align="center">{title}</Txt>
       {subtitle && <Txt color="textMuted" align="center" style={{ maxWidth: 360 }}>{subtitle}</Txt>}
@@ -496,10 +505,10 @@ export function MetaLine({ icon, text, color = 'textMuted' }: { icon: IconName; 
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#111726',
+    shadowColor: '#00206A',
     shadowOpacity: 0.05,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 3,
+    shadowOffset: { width: 0, height: 1 },
     elevation: 1,
   },
 });

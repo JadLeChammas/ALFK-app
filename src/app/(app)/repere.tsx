@@ -3,11 +3,12 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { Avatar, Badge, Card, Chip, EmptyState, Row, SectionHeader, Tap } from '@/components/ui/primitives';
+import { Globe } from '@/components/fx/Globe';
+import { Avatar, Badge, Card, Chip, EmptyState, Row, SectionHeader, Segmented, Tap } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { WorldDots } from '@/components/ui/WorldDots';
+import { WorldMap } from '@/components/fx/WorldMap';
 import { CONTINENTS, COUNTRIES, countryByCode } from '@/data/countries';
 import { fullName, useApprovedMembers } from '@/data/store';
 import type { ContinentKey, User } from '@/data/types';
@@ -28,6 +29,7 @@ export default function Repere() {
   const [continent, setContinent] = useState<ContinentKey>(initialCountry?.continent ?? 'europe');
   const [country, setCountry] = useState<string | null>(initialCountry?.code ?? null);
   const [openSchool, setOpenSchool] = useState<string | null>(null);
+  const [view, setView] = useState<'globe' | 'map'>('globe');
 
   const perCountry = new Map<string, User[]>();
   for (const u of alumni) perCountry.set(u.country!, [...(perCountry.get(u.country!) ?? []), u]);
@@ -41,13 +43,13 @@ export default function Repere() {
   for (const u of perCountry.get(activeCountry ?? '') ?? []) schoolMap.set(u.school!, [...(schoolMap.get(u.school!) ?? []), u]);
   const universities = [...schoolMap.entries()].sort((a, b) => b[1].length - a[1].length);
 
-  const pins = COUNTRIES.filter((c) => perCountry.has(c.code)).map((c) => ({ col: c.pin[0], row: c.pin[1], count: perCountry.get(c.code)!.length, active: c.code === activeCountry }));
   const pickContinent = (c: ContinentKey) => {
     setContinent(c);
     setCountry(null);
     setOpenSchool(null);
   };
   const ac = countryByCode(activeCountry ?? undefined);
+  const markers = COUNTRIES.filter((c) => perCountry.has(c.code) && c.code !== 'KW').map((c) => ({ key: c.code, ll: c.ll, weight: perCountry.get(c.code)!.length, active: c.code === activeCountry, label: countryOf(c.code) }));
 
   const continentList = (
     <View style={{ gap: 6 }}>
@@ -72,8 +74,8 @@ export default function Repere() {
         return (
           <View key={school} style={{ borderRadius: 16, borderWidth: 1, borderColor: open ? colors.primary : colors.border, backgroundColor: colors.surface, overflow: 'hidden' }}>
             <Tap onPress={() => setOpenSchool(open ? null : school)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14 }} hoverStyle={{ backgroundColor: colors.surfaceAlt }}>
-              <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: i === 0 ? colors.primary : colors.primarySoft, alignItems: 'center', justifyContent: 'center' }}>
-                <Txt variant="smallStrong" style={{ color: i === 0 ? colors.onPrimary : colors.primary }}>{i + 1}</Txt>
+              <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: i === 0 ? colors.primary : colors.secondarySoft, alignItems: 'center', justifyContent: 'center' }}>
+                <Txt variant="smallStrong" style={{ color: i === 0 ? colors.onPrimary : colors.secondaryStrong }}>{i + 1}</Txt>
               </View>
               <View style={{ flex: 1 }}>
                 <Txt variant="bodyStrong" numberOfLines={1}>{school}</Txt>
@@ -112,14 +114,25 @@ export default function Repere() {
 
       <Card>
         <Row gap={10} style={{ justifyContent: 'space-between', marginBottom: 16 }} wrap>
-          <Row gap={8}>
-            <Feather name="map" size={16} color={colors.primary} />
-            <Txt variant="h3">{d.continents[continent]}</Txt>
-            <Txt color="textSubtle">· {f(d.common.alumniCount, { n: continentCounts[continent] })}</Txt>
+          <Row gap={8} style={{ flexShrink: 1 }}>
+            {ac ? <Flag code={ac.code} /> : <Feather name="map" size={16} color={colors.secondaryStrong} />}
+            <Txt variant="h3" numberOfLines={1} style={{ flexShrink: 1 }}>{view === 'globe' && ac ? countryOf(ac.code) : d.continents[continent]}</Txt>
+            <Txt color="textSubtle">· {f(d.common.alumniCount, { n: view === 'globe' && ac ? perCountry.get(ac.code)?.length ?? 0 : continentCounts[continent] })}</Txt>
           </Row>
-          <Txt variant="small" color="textSubtle">{d.repere.pickContinent}</Txt>
+          <Segmented
+            value={view}
+            onChange={setView}
+            options={[
+              { value: 'globe', label: d.repere.viewGlobe, icon: 'globe' },
+              { value: 'map', label: d.repere.viewMap, icon: 'map' },
+            ]}
+          />
         </Row>
-        <WorldDots selected={continent} onSelect={(c) => continentCounts[c] && pickContinent(c)} pins={pins} />
+        {view === 'globe' ? (
+          <Globe markers={markers} focus={ac?.ll ?? null} autoRotate={!ac} maxSize={isDesktop ? 520 : 380} />
+        ) : (
+          <WorldMap arcs={COUNTRIES.filter((c) => perCountry.has(c.code) && c.code !== 'KW').map((c) => ({ key: c.code, to: c.ll, active: c.code === activeCountry, label: countryOf(c.code) }))} />
+        )}
       </Card>
 
       {isDesktop ? (
@@ -171,11 +184,11 @@ function PickRow({ label, count, active, onPress, leading, disabled }: { label: 
     <Tap
       onPress={onPress}
       disabled={disabled}
-      style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, height: 44, borderRadius: 12, backgroundColor: active ? colors.primarySoft : 'transparent', opacity: disabled ? 0.4 : 1 }}
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, height: 44, borderRadius: 12, backgroundColor: active ? colors.secondarySoft : 'transparent', opacity: disabled ? 0.4 : 1, borderLeftWidth: 3, borderLeftColor: active ? colors.primary : 'transparent' }}
       hoverStyle={!active && { backgroundColor: colors.surfaceAlt }}>
       {leading}
-      <Txt variant="bodyStrong" numberOfLines={1} style={{ flex: 1, fontSize: 14, color: active ? colors.primary : colors.text }}>{label}</Txt>
-      <Txt variant="smallStrong" style={{ color: active ? colors.primary : colors.textSubtle }}>{count}</Txt>
+      <Txt variant="bodyStrong" numberOfLines={1} style={{ flex: 1, fontSize: 14, color: active ? colors.navy : colors.text }}>{label}</Txt>
+      <Txt variant="smallStrong" style={{ color: active ? colors.navy : colors.textSubtle }}>{count}</Txt>
       {active && <Feather name="chevron-right" size={15} color={colors.primary} />}
     </Tap>
   );

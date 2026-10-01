@@ -9,8 +9,8 @@ import { fullName, useInbox, useMe, useStore, useUnreadNotifications } from '@/d
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fonts, radius } from '@/theme/tokens';
-import { LogoLockup, LogoMark } from '../ui/Logo';
+import { brand, fonts, radius } from '@/theme/tokens';
+import { LogoMark } from '../ui/Logo';
 import { Avatar, CountBadge, IconButton, Tap, type IconName } from '../ui/primitives';
 import { Txt } from '../ui/Txt';
 import { GlobalSearch } from './GlobalSearch';
@@ -88,8 +88,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 }
 
+/** Navy brand rail: sky labels, white + red indicator for the active section. */
+const RAIL = { text: brand.sky, active: '#FFFFFF', activeBg: 'rgba(102,128,174,0.28)', hover: 'rgba(200,211,229,0.08)', rule: 'rgba(200,211,229,0.14)' };
+
 function Sidebar({ compact }: { compact: boolean }) {
-  const { colors } = useTheme();
+  const { colors, scheme } = useTheme();
   const { d } = useI18n();
   const me = useMe();
   const { db } = useStore();
@@ -101,18 +104,27 @@ function Sidebar({ compact }: { compact: boolean }) {
     { href: '/parametres', icon: 'settings', label: d.nav.settings },
     { href: '/notifications', icon: 'bell', label: d.nav.notifications, badge: notif },
   ];
+  const section = (label: string) => !compact && <Txt style={{ fontFamily: fonts.medium, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: 'rgba(200,211,229,0.55)', paddingHorizontal: 12, marginBottom: 6 }}>{label}</Txt>;
 
   return (
     <View
       style={{
         width: compact ? 76 : 248,
-        backgroundColor: colors.nav,
+        backgroundColor: colors.rail,
+        borderRightWidth: 1,
+        borderRightColor: scheme === 'dark' ? colors.border : 'transparent',
         paddingVertical: 20,
-        paddingHorizontal: compact ? 12 : 16,
+        paddingHorizontal: compact ? 12 : 14,
         ...(Platform.OS === 'web' ? ({ height: '100vh', position: 'sticky', top: 0 } as object) : {}),
       }}>
-      <Tap onPress={() => router.push('/')} style={{ paddingHorizontal: compact ? 5 : 8, marginBottom: 20 }}>
-        {compact ? <LogoMark size={40} /> : <LogoLockup light />}
+      <Tap onPress={() => router.push('/')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: compact ? 5 : 8, marginBottom: 16 }}>
+        <LogoMark size={compact ? 40 : 34} />
+        {!compact && (
+          <View>
+            <Txt style={{ fontFamily: fonts.serif, fontSize: 22, lineHeight: 24, color: '#fff' }}>{d.app.name}</Txt>
+            <Txt style={{ fontFamily: fonts.medium, fontSize: 9, letterSpacing: 1.6, color: RAIL.text }}>ALFK · KOWEÏT</Txt>
+          </View>
+        )}
       </Tap>
       <ScrollView style={{ flex: 1, marginHorizontal: -4 }} contentContainerStyle={{ paddingHorizontal: 4 }} showsVerticalScrollIndicator={false}>
       <View style={{ gap: 2 }}>
@@ -121,21 +133,21 @@ function Sidebar({ compact }: { compact: boolean }) {
         ))}
       </View>
       <View style={{ marginTop: 12, gap: 2 }}>
-        {!compact && <NavCaption label={d.nav.community} />}
+        {section(d.nav.community)}
         {[...community, ...amicale].map((item) => (
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
         ))}
       </View>
 
       {me.role === 'admin' && (
-        <View style={{ marginTop: 12, gap: 4 }}>
-          {!compact && <NavCaption label={d.nav.admin} />}
+        <View style={{ marginTop: 12, gap: 2 }}>
+          {section(d.nav.admin)}
           <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} />
         </View>
       )}
       {me.role !== 'admin' && can(me, 'viewStats') && (
-        <View style={{ marginTop: 12, gap: 4 }}>
-          {!compact && <NavCaption label={d.nav.leadership} />}
+        <View style={{ marginTop: 12, gap: 2 }}>
+          {section(d.nav.leadership)}
           <SideLink item={{ href: '/statistiques', icon: 'bar-chart-2', label: d.nav.stats }} active={isActive(pathname, { href: '/statistiques', icon: 'bar-chart-2', label: '' })} compact={compact} />
         </View>
       )}
@@ -148,16 +160,16 @@ function Sidebar({ compact }: { compact: boolean }) {
       <Tap
         onPress={() => router.push('/profil')}
         accessibilityLabel={d.nav.profile}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: compact ? 6 : 10, borderRadius: 16, borderWidth: 1, borderColor: pathname.startsWith('/profil') ? '#FFFFFF' : 'rgba(255, 255, 255, 0.16)', backgroundColor: pathname.startsWith('/profil') ? colors.navActive : 'transparent', justifyContent: compact ? 'center' : 'flex-start' }}
-        hoverStyle={{ backgroundColor: colors.navActive }}>
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: compact ? 6 : 10, borderRadius: radius.card, borderWidth: 1, borderColor: pathname.startsWith('/profil') ? brand.red : RAIL.rule, backgroundColor: pathname.startsWith('/profil') ? RAIL.activeBg : 'transparent', justifyContent: compact ? 'center' : 'flex-start' }}
+        hoverStyle={{ backgroundColor: RAIL.hover }}>
         <Avatar uri={me.avatar} name={fullName(me)} size={36} />
         {!compact && (
           <>
             <View style={{ flex: 1 }}>
-              <Txt variant="smallStrong" numberOfLines={1} style={{ color: '#FFFFFF' }}>{fullName(me)}</Txt>
-              <Txt variant="small" numberOfLines={1} style={{ color: colors.navText }}>{d.roles[me.role]}</Txt>
+              <Txt variant="smallStrong" numberOfLines={1} style={{ color: '#fff' }}>{fullName(me)}</Txt>
+              <Txt variant="small" numberOfLines={1} style={{ color: RAIL.text }}>{me.fonction ?? d.roles[me.role]}</Txt>
             </View>
-            <Feather name="chevron-right" size={16} color={colors.navText} />
+            <Feather name="chevron-right" size={16} color={RAIL.text} />
           </>
         )}
       </Tap>
@@ -165,14 +177,8 @@ function Sidebar({ compact }: { compact: boolean }) {
   );
 }
 
-function NavCaption({ label }: { label: string }) {
-  const { colors } = useTheme();
-  return <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6, color: colors.navText, opacity: 0.7 }}>{label}</Txt>;
-}
-
 function SideLink({ item, active, compact }: { item: NavItem; active: boolean; compact: boolean }) {
   const { colors } = useTheme();
-  const fg = active ? '#FFFFFF' : colors.navText;
   return (
     <Tap
       onPress={() => router.push(item.href as never)}
@@ -181,22 +187,21 @@ function SideLink({ item, active, compact }: { item: NavItem; active: boolean; c
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        height: 36,
+        height: 35,
         paddingHorizontal: compact ? 0 : 12,
         justifyContent: compact ? 'center' : 'flex-start',
-        borderRadius: 12,
-        backgroundColor: active ? colors.navActive : 'transparent',
+        borderRadius: radius.input,
+        backgroundColor: active ? RAIL.activeBg : 'transparent',
       }}
-      hoverStyle={!active && { backgroundColor: 'rgba(255, 255, 255, 0.06)' }}>
-      {/* Red marker on the open section */}
-      {active && <View style={{ position: 'absolute', left: compact ? 2 : -2, top: 9, width: 3, height: 18, borderRadius: 2, backgroundColor: colors.accent }} />}
+      hoverStyle={!active && { backgroundColor: RAIL.hover }}>
+      {active && <View style={{ position: 'absolute', left: compact ? 4 : 0, top: 9, bottom: 9, width: 3, borderRadius: 2, backgroundColor: brand.red }} />}
       <View>
-        <Feather name={item.icon} size={18} color={fg} />
-        {compact && !!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -8, right: -10, borderColor: colors.nav }} />}
+        <Feather name={item.icon} size={18} color={active ? '#fff' : RAIL.text} />
+        {compact && !!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -8, right: -10, borderColor: colors.rail }} />}
       </View>
       {!compact && (
         <>
-          <Txt variant="bodyStrong" style={{ flex: 1, color: fg, fontSize: 14 }}>{item.label}</Txt>
+          <Txt style={{ flex: 1, fontFamily: active ? fonts.semibold : fonts.medium, fontSize: 14, color: active ? RAIL.active : RAIL.text }}>{item.label}</Txt>
           {!!item.badge && <CountBadge n={item.badge} style={{ borderColor: 'transparent' }} />}
         </>
       )}
@@ -210,10 +215,10 @@ function TopBar({ onSearch }: { onSearch: () => void }) {
   const me = useMe();
   const notif = useUnreadNotifications();
   return (
-    <View style={{ height: 72, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingHorizontal: 36, gap: 12, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.bg }}>
+    <View style={{ height: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingHorizontal: 36, gap: 12, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.bg }}>
       <Tap
         onPress={onSearch}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, height: 42, width: 380, maxWidth: '60%', paddingHorizontal: 16, borderRadius: radius.pill, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, height: 40, width: 380, maxWidth: '60%', paddingHorizontal: 14, borderRadius: radius.input, backgroundColor: colors.surfaceAlt, borderWidth: 1, borderColor: colors.border }}
         hoverStyle={{ borderColor: colors.borderStrong }}>
         <Feather name="search" size={16} color={colors.textSubtle} />
         <Txt variant="small" color="textSubtle" numberOfLines={1} style={{ flex: 1 }}>{d.search.placeholder}</Txt>
@@ -240,21 +245,22 @@ function MobileTopBar({ onSearch }: { onSearch: () => void }) {
   const pathname = usePathname();
   const onProfile = pathname.startsWith('/profil');
   return (
-    <View style={{ paddingTop: insets.top + 8, paddingBottom: 8, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: colors.bg, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-      <Tap onPress={() => router.push('/')} style={{ flex: 1 }}>
-        <LogoLockup compact />
+    <View style={{ paddingTop: insets.top + 8, paddingBottom: 8, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.rail }}>
+      <Tap onPress={() => router.push('/')} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <LogoMark size={30} />
+        <Txt style={{ fontFamily: fonts.serif, fontSize: 21, lineHeight: 24, color: '#fff' }}>{d.app.name}</Txt>
       </Tap>
-      <IconButton icon="search" onPress={onSearch} size={38} label={d.common.search} />
-      <IconButton icon="bell" badge={notif} onPress={() => router.push('/notifications')} size={38} label={d.nav.notifications} />
-      <Tap onPress={() => router.push('/profil')} accessibilityLabel={d.nav.profile} style={{ borderRadius: 21, borderWidth: 2, borderColor: onProfile ? colors.primary : 'transparent' }}>
-        <Avatar uri={me.avatar} name={fullName(me)} size={36} />
+      <IconButton icon="search" onPress={onSearch} size={38} variant="ghost" color="#fff" label={d.common.search} />
+      <IconButton icon="bell" badge={notif} onPress={() => router.push('/notifications')} size={38} variant="ghost" color="#fff" label={d.nav.notifications} />
+      <Tap onPress={() => router.push('/profil')} accessibilityLabel={d.nav.profile} style={{ borderRadius: 21, borderWidth: 2, borderColor: onProfile ? brand.red : 'transparent' }}>
+        <Avatar uri={me.avatar} name={fullName(me)} size={34} />
       </Tap>
     </View>
   );
 }
 
 function BottomNav() {
-  const { colors } = useTheme();
+  const { colors, scheme } = useTheme();
   const { d } = useI18n();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
@@ -263,15 +269,15 @@ function BottomNav() {
   const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href) };
   const tab = (item: NavItem, active: boolean, onPress: () => void) => (
     <Tap key={item.href} onPress={onPress} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
-      <View style={{ width: 46, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? colors.navActive : 'transparent' }}>
-        <Feather name={item.icon} size={20} color={active ? '#FFFFFF' : colors.navText} />
-        {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -4, right: 4, borderColor: colors.nav }} />}
+      <View style={{ width: 44, height: 28, borderRadius: radius.input, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? brand.red : 'transparent' }}>
+        <Feather name={item.icon} size={19} color={active ? '#FFFFFF' : brand.sky} />
+        {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -4, right: 4, borderColor: colors.rail }} />}
       </View>
-      <Txt numberOfLines={1} style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 10, letterSpacing: -0.1, color: active ? '#FFFFFF' : colors.navText }}>{item.short ?? item.label}</Txt>
+      <Txt numberOfLines={1} style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 10, letterSpacing: -0.1, color: active ? '#FFFFFF' : brand.sky }}>{item.short ?? item.label}</Txt>
     </Tap>
   );
   return (
-    <View style={{ flexDirection: 'row', backgroundColor: colors.nav, paddingBottom: Math.max(insets.bottom, 8), paddingTop: 8 }}>
+    <View style={{ flexDirection: 'row', backgroundColor: colors.rail, paddingBottom: Math.max(insets.bottom, 8), paddingTop: 8, borderTopWidth: 1, borderTopColor: scheme === 'dark' ? colors.border : 'transparent' }}>
       {bar.map((item) => tab(item, isActive(pathname, item), () => router.navigate(item.href as never)))}
       {tab(moreItem, open || more.some((m) => isActive(pathname, m)), () => setOpen(true))}
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>

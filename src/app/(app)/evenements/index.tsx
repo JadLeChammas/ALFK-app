@@ -64,7 +64,7 @@ export default function Events() {
                     <Txt variant="smallStrong" numberOfLines={1}>{fullName(b.user)}{b.user.id === me.id ? ' 🎉' : ''}</Txt>
                     <Txt variant="small" color="textSubtle">{formatDate(b.date, { year: false })}</Txt>
                   </View>
-                  <Badge label={b.inDays === 0 ? d.common.today : b.inDays === 1 ? d.common.tomorrow : f(d.common.inDays, { n: b.inDays })} tone={b.inDays <= 2 ? 'warning' : 'neutral'} />
+                  <Badge label={b.inDays === 0 ? d.common.today : b.inDays === 1 ? d.common.tomorrow : f(d.common.inDays, { n: b.inDays })} tone={b.inDays <= 2 ? 'primary' : 'neutral'} />
                 </Tap>
               ))}
               {birthdays.length === 0 && <Txt color="textMuted">—</Txt>}

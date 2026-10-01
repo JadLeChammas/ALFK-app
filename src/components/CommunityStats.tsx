@@ -64,7 +64,7 @@ export function CommunityStats() {
         <Card style={{ height: '100%', gap: 8 }}>
           <Txt variant="small" color="textMuted">{d.admin.totalMembers}</Txt>
           <Row gap={10} style={{ alignItems: 'flex-end' }}>
-            <Txt style={{ fontFamily: fonts.extrabold, fontSize: 48, lineHeight: 52, letterSpacing: -1.5, color: colors.text }}>{formatNumber(members.length)}</Txt>
+            <Txt style={{ fontFamily: fonts.display, fontSize: 64, lineHeight: 64, color: colors.text }}>{formatNumber(members.length)}</Txt>
             <Badge label={`+${pct}%`} tone="success" icon="trending-up" style={{ marginBottom: 8 }} />
           </Row>
           <Txt variant="small" color="textSubtle">{d.admin.vsLastYear}</Txt>
@@ -75,7 +75,7 @@ export function CommunityStats() {
         </Card>
         <Card style={{ height: '100%' }}>
           <SectionHeader title={d.admin.byRole} icon="pie-chart" />
-          <Donut data={byRole} centerValue={String(members.length)} centerLabel={d.nav.members} size={150} />
+          <Donut data={byRole} centerValue={String(members.length)} centerLabel={d.nav.members} size={128} />
         </Card>
         <Card style={{ height: '100%' }}>
           <SectionHeader title={d.admin.byCountry} icon="globe" action={d.nav.repere} onAction={() => router.push('/repere')} />

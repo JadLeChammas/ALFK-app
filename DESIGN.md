@@ -112,6 +112,22 @@ src/app/
 
 ## 4. Design system
 
+### Design v2 (repris de la version d'anwarbitar, branche `version2.1` du dépôt AmicaleLFK)
+
+- Palette : rouge `#AE0000` (actions), bleu `#6680AE` (navigation, icônes), marine `#00206A`
+  (titres, panneaux), ciel `#C8D3E5` ; fond `#E4EAF4`. Polices : Instrument Serif (titres),
+  Inter (texte), Bebas Neue (grands chiffres).
+- Effets (`src/components/fx`) : globe 3D interactif (`Globe`, rotation automatique, glisser pour
+  tourner, arcs depuis le LFK), carte du monde animée (`WorldMap`), révélation des titres mot par mot
+  (`MaskedText`), chiffres qui défilent (`TextRoll`, `NumberTicker`), bandeau défilant (`Marquee`),
+  photos qui se dévoilent (`ImageReveal`), bouton rond tournant (`SpinningButton`). Tout se fige si
+  le système demande moins d'animations.
+- Blocs du site public (`src/components/site`) : `SiteFrame` (en-tête transparent puis marine,
+  barre de progression, pied de page), `PillarSlider` (accueil), `blocks.tsx` (hero éditorial,
+  grande statistique, carte globe, bureau, témoignage, colonnes, FAQ…). Les membres voient ces pages
+  dans leur espace, avec la barre de gauche.
+- Les chiffres publics viennent de `usePublicOverview()` (migration `004`), jamais des profils.
+
 ### Identité : bleu marine + rouge, Instrument Serif + Inter
 
 Les pages publiques (`src/components/site/PublicSite.tsx`) suivent la charte tricolore : bandeau et

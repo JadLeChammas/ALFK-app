@@ -12,6 +12,16 @@ export default function Sitemap() {
   const { me } = useStore();
   const groups: { title: string; items: [IconName, string, string][] }[] = [
     {
+      title: d.site.nav.association,
+      items: [
+        ...(!me ? ([['compass', d.nav.home, '/bienvenue']] as [IconName, string, string][]) : []),
+        ['heart', d.site.nav.association, '/association'],
+        ['users', d.site.nav.bureau, '/bureau'],
+        ['briefcase', d.site.nav.partners, '/partenaires'],
+        ['user-plus', d.site.nav.join, '/adherer'],
+      ],
+    },
+    {
       title: d.app.name,
       items: [
         ['home', d.nav.home, '/'],

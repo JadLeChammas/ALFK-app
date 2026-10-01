@@ -5,21 +5,23 @@ import { Linking, View } from 'react-native';
 
 import { PartnersManager } from '@/components/PartnersManager';
 import { AppShell } from '@/components/shell/AppShell';
-import { Band, CtaSection, Eyebrow, PageHero, PublicSite, SerifTitle } from '@/components/site/PublicSite';
+import { EditorialImageHero } from '@/components/site/blocks';
+import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { usePublicOverview } from '@/data/public';
 import { useStore } from '@/data/store';
+import type { Institution } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
-import { useTheme } from '@/theme/ThemeProvider';
-import { radius } from '@/theme/tokens';
+import { fonts, radius } from '@/theme/tokens';
 
+const campus = require('@/assets/images/lfk-campus.png');
 const LOGOS: Record<string, number> = { lfk: require('@/assets/images/institution-lfk.png') };
 
 /**
  * Partners. Approved members get it inside their space (admins manage the list there);
- * visitors get the public version.
+ * visitors get the public version. Only institutions that agreed to appear are listed.
  */
 export default function Partners() {
   const { me, session } = useStore();
@@ -35,46 +37,57 @@ export default function Partners() {
 
 function PublicPartners() {
   const { d } = useI18n();
-  const { colors } = useTheme();
-  const { isMobile } = useLayout();
-  const o = usePublicOverview();
+  const { isDesktop } = useLayout();
+  const { institutions } = usePublicOverview();
   const p = d.site.partners;
 
   return (
-    <PublicSite>
-      <PageHero eyebrow={p.eyebrow} title={p.title} sub={p.sub} />
-      <Band>
-        {o.institutions.length === 0 ? (
-          <Txt color="textMuted">{p.empty}</Txt>
-        ) : (
-          <View style={{ gap: 0 }}>
-            {o.institutions.map((inst, i) => {
-              const logo = inst.logo ? (LOGOS[inst.logo] ?? { uri: inst.logo }) : undefined;
-              return (
-                <View key={inst.id} style={{ flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 12 : 32, paddingVertical: 28, borderTopWidth: 1, borderTopColor: colors.border, alignItems: isMobile ? 'flex-start' : 'center' }}>
-                  <Eyebrow label={`0${i + 1}`} />
-                  <View style={{ width: 72, height: 72, borderRadius: 18, backgroundColor: '#fff', borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    {logo ? <Image source={logo} style={{ width: 60, height: 60 }} contentFit="contain" /> : <Feather name="home" size={26} color={colors.primary} />}
-                  </View>
-                  <View style={{ flex: isMobile ? undefined : 1, gap: 6 }}>
-                    <SerifTitle text={inst.name} size={isMobile ? 28 : 34} />
-                    <Txt color="textMuted">{inst.description}</Txt>
-                  </View>
-                  {inst.website && <Button label={d.honorary.website} icon="external-link" variant="secondary" size="sm" onPress={() => Linking.openURL(inst.website!)} />}
-                </View>
-              );
-            })}
-          </View>
-        )}
-      </Band>
-      <Band style={{ paddingTop: 0 }}>
-        <View style={{ gap: 16, padding: isMobile ? 24 : 40, borderRadius: radius.hero, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}>
-          <SerifTitle text={p.becomeTitle} italic={p.becomeItalic} size={isMobile ? 34 : 48} />
-          <Txt color="textMuted" style={{ maxWidth: 620 }}>{p.becomeSub}</Txt>
-          <Button label={p.becomeCta} iconRight="arrow-right" variant="accent" onPress={() => router.push('/contact')} />
+    <SiteFrame overlay>
+      <EditorialImageHero tagline={p.eyebrow} title={p.title} description={p.sub} image={campus} />
+
+      <Section style={{ paddingTop: 0 }}>
+        <PartnerList partners={institutions} empty={p.empty} />
+      </Section>
+
+      <Section tone="blue">
+        <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 24 }}>
+          <Reveal style={{ flex: 1 }}>
+            <SerifHeading title={p.becomeTitle} accent={p.becomeItalic} lead={p.becomeSub} />
+          </Reveal>
+          <Reveal index={1}>
+            <Button label={p.becomeCta} variant="white" onPress={() => router.push('/contact')} />
+          </Reveal>
         </View>
-      </Band>
-      <CtaSection />
-    </PublicSite>
+      </Section>
+    </SiteFrame>
+  );
+}
+
+function PartnerList({ partners, empty }: { partners: Institution[]; empty: string }) {
+  const t = useTone();
+  const { d } = useI18n();
+  const { isMobile, isDesktop } = useLayout();
+  if (!partners.length) return <Txt style={{ fontFamily: fonts.regular, fontSize: 15, color: t.muted }}>{empty}</Txt>;
+  return (
+    <View style={{ borderTopWidth: 1, borderTopColor: t.rule }}>
+      {partners.map((x, i) => {
+        const logo = x.logo ? (LOGOS[x.logo] ?? { uri: x.logo }) : undefined;
+        return (
+          <Reveal key={x.id} index={i}>
+            <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'center' : 'flex-start', gap: isDesktop ? 40 : 16, paddingVertical: isMobile ? 28 : 44, borderBottomWidth: 1, borderBottomColor: t.rule }}>
+              <Txt style={{ fontFamily: fonts.display, fontSize: 40, color: t.accent, width: 56 }}>{String(i + 1).padStart(2, '0')}</Txt>
+              <View style={{ width: 96, height: 96, borderRadius: radius.hero, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', overflow: 'hidden' }}>
+                {logo ? <Image source={logo} style={{ width: 80, height: 80 }} contentFit="contain" /> : <Feather name="home" size={32} color={t.accent} />}
+              </View>
+              <View style={{ flex: 1, gap: 8 }}>
+                <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 30 : 40, lineHeight: isMobile ? 34 : 44, color: t.fg }}>{x.name}</Txt>
+                <Txt style={{ fontFamily: fonts.regular, fontSize: 15, lineHeight: 24, color: t.muted, maxWidth: 560 }}>{x.description}</Txt>
+                {x.website && <LinkCta label={d.honorary.website} onPress={() => Linking.openURL(x.website!)} />}
+              </View>
+            </View>
+          </Reveal>
+        );
+      })}
+    </View>
   );
 }

@@ -47,7 +47,7 @@ export function BarChart({ data, height = 160, highlightLast = true }: { data: D
                     width: '70%',
                     maxWidth: 22,
                     height: Math.max(2, (d.value / max) * height),
-                    backgroundColor: strong ? colors.chart[0] : colors.primarySoft,
+                    backgroundColor: strong ? colors.primary : colors.sky,
                     borderTopLeftRadius: 4,
                     borderTopRightRadius: 4,
                   }}
@@ -78,7 +78,7 @@ export function HBarList({ data, max: maxProp, color }: { data: (Datum & { leadi
         <View key={d.label} style={{ gap: 6 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             {d.leading}
-            <Txt variant="small" numberOfLines={1} style={{ flex: 1 }}>{d.label}</Txt>
+            <Txt variant="small" style={{ flex: 1 }}>{d.label}</Txt>
             <Txt variant="smallStrong">{d.value}</Txt>
           </View>
           <View style={{ height: 6, borderRadius: 3, backgroundColor: colors.surfaceAlt, overflow: 'hidden' }}>
@@ -100,7 +100,7 @@ export function Donut({ data, size = 140, centerLabel, centerValue }: { data: Da
   const gap = 2;
   const offsets = data.map((_, i) => data.slice(0, i).reduce((a, x) => a + (x.value / total) * c, 0));
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
       <View style={{ width: size, height: size }}>
         <Svg width={size} height={size}>
           <Circle cx={size / 2} cy={size / 2} r={r} stroke={colors.surfaceAlt} strokeWidth={stroke} fill="none" />
@@ -129,7 +129,7 @@ export function Donut({ data, size = 140, centerLabel, centerValue }: { data: Da
           </View>
         )}
       </View>
-      <View style={{ gap: 10, flex: 1, minWidth: 140 }}>
+      <View style={{ gap: 10, flex: 1, minWidth: 190 }}>
         {data.map((d, i) => (
           <View key={d.label} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: colors.chart[i % colors.chart.length] }} />

@@ -1,69 +1,52 @@
 import { router } from 'expo-router';
 import { View } from 'react-native';
 
-import { Band, CtaSection, Eyebrow, PageHero, PublicSite, SerifTitle } from '@/components/site/PublicSite';
-import { Avatar, Button } from '@/components/ui/primitives';
+import { EditorialImageHero, TeamShowcase, type TeamMember } from '@/components/site/blocks';
+import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
+import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
-import { usePublicOverview, type PublicPerson } from '@/data/public';
+import { usePublicOverview } from '@/data/public';
+import { IMAGES } from '@/data/seed';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
-import { useTheme } from '@/theme/ThemeProvider';
-import { radius } from '@/theme/tokens';
+import { fonts } from '@/theme/tokens';
 
-/** Le bureau: the volunteers who run the Amicale, and its honorary members. Public page. */
-export default function Bureau() {
+/** « Le bureau » — the association's administrators and honorary members (Team Showcase). Public page. */
+export default function Board() {
   const { d } = useI18n();
-  const { isMobile } = useLayout();
-  const o = usePublicOverview();
+  const { isDesktop } = useLayout();
+  const { bureau } = usePublicOverview();
   const b = d.site.bureau;
-  const board = o.bureau.filter((p) => p.role === 'admin');
-  const honorary = o.bureau.filter((p) => p.role === 'honneur');
+  // Names, role titles and photos only (see public_overview); the president comes first.
+  const team: TeamMember[] = bureau.map((p) => ({ id: p.name, name: p.name, role: p.fonction || (p.role === 'admin' ? b.member : d.roles.honneur), image: p.avatar }));
 
   return (
-    <PublicSite>
-      <PageHero eyebrow={d.app.long} title={b.title} sub={b.sub} />
+    <SiteFrame overlay>
+      <EditorialImageHero tagline={d.app.long} title={b.title} description={b.sub} image={IMAGES.meeting} />
 
-      <Band>
-        <View style={{ gap: 40 }}>
-          <Group title={b.board} people={board} fallback={b.member} empty={b.empty} />
-          {honorary.length > 0 && <Group title={b.honorary} people={honorary} fallback={d.roles.honneur} />}
-        </View>
-      </Band>
+      <Section style={{ paddingTop: 0 }}>
+        <Reveal style={{ marginBottom: 40 }}>
+          <SerifHeading title={`${b.board} · ${b.honorary}`} />
+        </Reveal>
+        {team.length ? <TeamShowcase members={team} /> : <Empty text={b.empty} />}
+      </Section>
 
-      <Band style={{ paddingTop: 0 }}>
-        <View style={{ gap: 14, alignItems: 'center' }}>
-          <SerifTitle text={b.volunteerTitle} italic={b.volunteerItalic} size={isMobile ? 36 : 52} align="center" />
-          <Txt color="textMuted" align="center" style={{ maxWidth: 560 }}>{b.volunteerSub}</Txt>
-          <View style={{ flexDirection: 'row', gap: 10, marginTop: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Button label={d.site.footer.contact} variant="accent" onPress={() => router.push('/contact')} />
-            <Button label={d.site.nav.join} variant="secondary" onPress={() => router.push('/adherer')} />
-          </View>
+      <Section tone="navy">
+        <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 24 }}>
+          <Reveal style={{ flex: 1 }}>
+            <SerifHeading title={b.volunteerTitle} accent={b.volunteerItalic} lead={b.volunteerSub} />
+          </Reveal>
+          <Reveal index={1} style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            <Button label={d.site.footer.contact} onPress={() => router.push('/contact')} />
+            <LinkCta label={d.site.nav.join} onPress={() => router.push('/adherer')} />
+          </Reveal>
         </View>
-      </Band>
-      <CtaSection />
-    </PublicSite>
+      </Section>
+    </SiteFrame>
   );
 }
 
-function Group({ title, people, fallback, empty }: { title: string; people: PublicPerson[]; fallback: string; empty?: string }) {
-  const { colors } = useTheme();
-  const { isMobile } = useLayout();
-  return (
-    <View style={{ gap: 20 }}>
-      <SerifTitle text={title} size={isMobile ? 32 : 44} />
-      {people.length === 0 ? (
-        <Txt color="textMuted">{empty}</Txt>
-      ) : (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
-          {people.map((p) => (
-            <View key={p.name} style={{ flexBasis: isMobile ? '100%' : 260, flexGrow: isMobile ? 1 : 0, alignItems: 'center', gap: 12, padding: 24, borderRadius: radius.card, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}>
-              <Avatar uri={p.avatar} name={p.name} size={88} />
-              <Txt variant="h2" align="center">{p.name}</Txt>
-              <Eyebrow label={p.fonction || fallback} align="center" />
-            </View>
-          ))}
-        </View>
-      )}
-    </View>
-  );
+function Empty({ text }: { text: string }) {
+  const t = useTone();
+  return <Txt style={{ fontFamily: fonts.regular, fontSize: 15, color: t.muted }}>{text}</Txt>;
 }

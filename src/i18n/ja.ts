@@ -85,6 +85,7 @@ const ja: Dict = {
     fonction: '役職', messagingDisabled: '学校管理職と在校生の間のプライベートメッセージは無効です。', alumniNumber: '卒業生番号', bureauCode: 'ビューロー番号', honorary: '区分：名誉会員', birthday: '誕生日', phone: '電話番号', email: 'メール', location: '所在地', school: '学校・大学', notFound: 'メンバーが見つかりません',
   },
   repere: {
+    viewGlobe: '地球儀', viewMap: '地図',
     title: 'Repère', subtitle: 'LFK卒業生が進学した大学と国を探索しましょう。',
     continent: '大陸', country: '国', universities: '大学', pickContinent: '地図またはリストから大陸を選んでください。',
     pickCountry: '国を選んでください', universitiesIn: '大学 — {country}', countriesCount: '{n}か国',
@@ -145,6 +146,7 @@ const ja: Dict = {
     },
   },
   admin: {
+    kpiTodo: '要対応', kpiClear: '対応待ちなし', kpiNext: '次回：{date}',
     proofRequired: '在籍証明書類がないため承認できません。',
     title: '管理ダッシュボード', subtitle: 'コミュニティを管理し、同窓会の活動を確認できます。',
     toApprove: '承認待ちのメンバー', reported: '報告されたメッセージ', upcomingEvents: '今後のイベント', unreadContact: '未読のお問い合わせ',
@@ -227,6 +229,7 @@ const ja: Dict = {
       mySpace: 'マイページ', menu: 'メニュー',
     },
     home: {
+      bigPre: 'ネットワークの', bigUnit: '卒業生', bigPost: '{c} か国 · {u} 大学',
       s1Title: 'ひとつのネットワーク、ひとつの記憶、', s1Italic: 'ひとつの国際コミュニティ。', s1Sub: 'LFK の卒業生、在校生、学校の管理職のみなさん。再会し、歩みを共有し、どこにいてもつながり続けましょう。',
       s2Title: '同級生を見つけよう', s2Italic: 'Promo LFK の仲間がどこにいても。', s2Sub: 'Promo LFK、国、大学ごとのコミュニティ名簿と、プライベートメッセージ。',
       s3Title: '卒業生の', s3Italic: '進学先を知ろう。', s3Sub: '卒業生の大学と国、そして進学準備のための進路相談スペース。',
@@ -252,6 +255,7 @@ const ja: Dict = {
       a4Sub: '卒業生、若手、社会人の交流会、講演会、助け合い。', presenceTitle: 'コミュニティは', presenceItalic: '{n} か国に。',
     },
     bureau: {
+      president: '会長',
       title: '役員会', sub: 'Amicale を支えるボランティアと、寄り添う名誉会員。', board: '役員・管理者',
       honorary: '名誉会員', member: '役員', volunteerTitle: '一緒に',
       volunteerItalic: '活動しませんか？', volunteerSub: '役員会は新しいボランティアを随時募集しています。ご応募はメッセージでどうぞ。', empty: '役員は近日発表します。',

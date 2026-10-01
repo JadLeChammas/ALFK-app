@@ -4,27 +4,23 @@ import { router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
 import { DateBadge } from '@/components/cards';
-import { Avatar, Badge, Button, Card, MetaLine, Row, SectionHeader, Tap, type IconName } from '@/components/ui/primitives';
+import { GlobeCard, StatsRow, useDestinationMarkers } from '@/components/site/blocks';
+import { Avatar, Badge, Button, Card, CountBadge, MetaLine, Row, SectionHeader, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { WorldArcs } from '@/components/ui/WorldDots';
-import { COUNTRIES, countryByCode } from '@/data/countries';
+import { COUNTRIES } from '@/data/countries';
 import { contactError } from '@/data/members';
-import { usePublicOverview } from '@/data/public';
 import { can } from '@/data/permissions';
 import { fullName, useApprovedMembers, useInbox, useMe, usePublished, useStore, useUpcomingBirthdays } from '@/data/store';
 import { Flag } from '@/components/ui/Flag';
 import { useI18n } from '@/i18n';
-import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
 
 export default function Home() {
   const { colors } = useTheme();
   const { d, f, formatDate } = useI18n();
-  const { isMobile, isDesktop } = useLayout();
   const me = useMe();
-  const overview = usePublicOverview();
   const { db } = useStore();
   const published = usePublished();
   const { unread } = useInbox();
@@ -36,6 +32,7 @@ export default function Home() {
   const promoMates = me.promo ? members.filter((u) => u.promo === me.promo) : [];
   const promoInfo = db.promos.find((p) => p.year === me.promo);
   const pending = db.users.filter((u) => !u.approved).length;
+  const markers = useDestinationMarkers();
 
   const actions: { icon: IconName; label: string; href: string; badge?: number }[] = [
     ...(can(me, 'viewEvents') ? [{ icon: 'calendar' as const, label: d.home.seeEvents, href: '/evenements' }] : []),
@@ -53,32 +50,17 @@ export default function Home() {
 
   return (
     <Screen>
-      {/* Greeting, key figures and the map of where alumni went (navy banner) */}
-      <View style={{ borderRadius: radius.hero, backgroundColor: colors.nav, padding: isMobile ? 22 : 36, flexDirection: isDesktop ? 'row' : 'column', gap: 24, overflow: 'hidden' }}>
-        <View style={{ flex: 1, gap: 6 }}>
-          <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 36 : 48, lineHeight: isMobile ? 40 : 52, color: '#fff' }}>{f(d.home.hello, { name: me.firstName })}</Txt>
-          <Txt style={{ color: colors.navText }}>{formatDate(new Date(), { weekday: true })} · {me.fonction ?? d.roles[me.role]}</Txt>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 18, rowGap: 16 }}>
-            {([
-              [overview.alumni, d.site.home.statAlumni],
-              [overview.countries, d.site.home.statCountries],
-              [overview.promos, d.site.home.statPromos],
-              [overview.universities, d.site.home.statUniversities],
-            ] as const).map(([n, label], i) => (
-              <View key={label} style={{ flexBasis: isMobile ? '50%' : '25%', minWidth: 110, paddingLeft: i % (isMobile ? 2 : 4) ? 14 : 0, borderLeftWidth: i % (isMobile ? 2 : 4) ? 1 : 0, borderLeftColor: 'rgba(255,255,255,0.18)' }}>
-                <Txt style={{ fontFamily: fonts.extrabold, fontSize: isMobile ? 26 : 32, lineHeight: isMobile ? 30 : 36, color: '#fff' }}>{n}</Txt>
-                <Txt style={{ fontFamily: fonts.semibold, fontSize: 10, letterSpacing: 1.1, textTransform: 'uppercase', color: colors.navText }}>{label}</Txt>
-              </View>
-            ))}
-          </View>
-          {me.role === 'admin' && pending > 0 && (
-            <Button label={f(d.home.adminShortcutSub, { n: pending })} icon="shield" size="sm" onPress={() => router.push('/admin/approbations')} style={{ marginTop: 18 }} />
-          )}
-        </View>
-        <View style={{ width: isDesktop ? 380 : '100%', justifyContent: 'center' }}>
-          <WorldArcs origin={countryByCode('KW')!.pin} targets={overview.destinations.flatMap((t) => { const c = countryByCode(t.code); return c ? [{ col: c.pin[0], row: c.pin[1], n: t.n }] : []; })} />
-        </View>
-      </View>
+      {/* Hero — Interactive Globe card: greeting, network figures, alumni globe */}
+      <GlobeCard
+        compact
+        title={f(d.home.hello, { name: me.firstName })}
+        lead={`${formatDate(new Date(), { weekday: true })} · ${me.fonction ?? d.roles[me.role]}`}
+        markers={markers}
+        stats={<StatsRow light dense />}>
+        {me.role === 'admin' && pending > 0 ? (
+          <Button label={f(d.home.adminShortcutSub, { n: pending })} icon="shield" size="sm" variant="onDark" onPress={() => router.push('/admin/approbations')} />
+        ) : null}
+      </GlobeCard>
 
       {/* Accounts created before birth date and phone became mandatory */}
       {contactError(me.role, me.birthDate, me.phone) && (
@@ -101,13 +83,11 @@ export default function Home() {
             <Tap
               key={a.label}
               onPress={() => router.push(a.href as never)}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, height: 48, paddingLeft: 8, paddingRight: 18, borderRadius: radius.pill, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
-              hoverStyle={{ borderColor: colors.primary }}>
-              <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' }}>
-                <Feather name={a.icon} size={16} color={colors.primary} />
-              </View>
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, height: 42, paddingHorizontal: 14, borderRadius: radius.input, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
+              hoverStyle={{ borderColor: colors.borderStrong, backgroundColor: colors.surfaceAlt }}>
+              <Feather name={a.icon} size={16} color={colors.secondary} />
               <Txt variant="smallStrong">{a.label}</Txt>
-              {!!a.badge && <Badge label={String(a.badge)} tone="danger" />}
+              {!!a.badge && <CountBadge n={a.badge} style={{ borderColor: 'transparent' }} />}
             </Tap>
           ))}
         </ScrollView>
@@ -173,7 +153,7 @@ export default function Home() {
                 </View>
                 <Badge
                   label={b.inDays === 0 ? d.common.today : b.inDays === 1 ? d.common.tomorrow : f(d.common.inDays, { n: b.inDays })}
-                  tone={b.inDays <= 2 ? 'warning' : 'neutral'}
+                  tone={b.inDays <= 2 ? 'primary' : 'neutral'}
                 />
               </Tap>
             ))}
@@ -255,7 +235,7 @@ function LeadershipCard() {
     <Card style={{ height: '100%' }}>
       <SectionHeader title={d.nav.stats} icon="bar-chart-2" />
       <View style={{ flex: 1, gap: 12 }}>
-        <Txt style={{ fontFamily: fonts.extrabold, fontSize: 40, lineHeight: 44, letterSpacing: -1, color: colors.text }}>{alumni.length}</Txt>
+        <Txt style={{ fontFamily: fonts.serif, fontSize: 48, lineHeight: 50, color: colors.text }}>{alumni.length}</Txt>
         <Txt variant="small" color="textMuted">{f(d.stats.cardSub, { n: members.length, c: countries })}</Txt>
         <Txt variant="small" color="textSubtle">{d.stats.subtitle}</Txt>
       </View>

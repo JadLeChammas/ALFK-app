@@ -83,6 +83,7 @@ const fr = {
     fonction: 'Fonction', messagingDisabled: 'La messagerie privée est désactivée entre la direction du lycée et les élèves.', alumniNumber: 'N° Alumni', bureauCode: 'Code Bureau', honorary: 'Statut : Membre d’honneur', birthday: 'Anniversaire', phone: 'Téléphone', email: 'E-mail', location: 'Localisation', school: 'École / Université', notFound: 'Membre introuvable',
   },
   repere: {
+    viewGlobe: 'Globe', viewMap: 'Carte',
     title: 'Repère', subtitle: 'Explorez les universités et pays où sont partis les anciens élèves du LFK.',
     continent: 'Continent', country: 'Pays', universities: 'Universités', pickContinent: 'Choisissez un continent sur la carte ou dans la liste.',
     pickCountry: 'Choisissez un pays', universitiesIn: 'Universités — {country}', countriesCount: '{n} pays',
@@ -143,6 +144,7 @@ const fr = {
     },
   },
   admin: {
+    kpiTodo: 'À traiter', kpiClear: 'Rien en attente', kpiNext: 'Prochain : {date}',
     proofRequired: 'Justificatif de scolarité manquant : approbation impossible.',
     title: 'Tableau de bord Admin', subtitle: "Gérez la communauté et suivez l'activité de l'Amicale.",
     toApprove: 'Membres à approuver', reported: 'Messages signalés', upcomingEvents: 'Événements à venir', unreadContact: 'Contacts non lus',
@@ -225,6 +227,7 @@ const fr = {
       mySpace: 'Mon espace', menu: 'Menu',
     },
     home: {
+      bigPre: 'Un réseau de', bigUnit: 'anciens élèves', bigPost: 'dans {c} pays · {u} universités',
       s1Title: 'Un réseau, une mémoire,', s1Italic: 'une communauté internationale.', s1Sub: 'Anciens élèves, élèves et direction du LFK : retrouvez-vous, partagez vos parcours et gardez le lien, où que la vie vous mène.',
       s2Title: 'Retrouvez vos camarades', s2Italic: 'de Promo LFK, où qu’ils soient.', s2Sub: 'Un annuaire de toute la communauté, par Promo LFK, pays ou université, et une messagerie privée.',
       s3Title: 'Découvrez où', s3Italic: 'sont partis les anciens.', s3Sub: 'Les universités et les pays des anciens, et un espace Orientation pour préparer ses études.',
@@ -250,6 +253,7 @@ const fr = {
       a4Sub: 'Rencontres, conférences et entraide entre anciens élèves, jeunes diplômés et professionnels.', presenceTitle: 'Une communauté présente', presenceItalic: 'dans {n} pays.',
     },
     bureau: {
+      president: 'Président',
       title: 'Le bureau', sub: 'Les bénévoles qui font vivre l’Amicale, et les membres d’honneur qui l’accompagnent.', board: 'Bureau & administrateurs',
       honorary: 'Membres d\'honneur', member: 'Membre du bureau', volunteerTitle: 'Envie de',
       volunteerItalic: 'vous investir ?', volunteerSub: 'Le bureau s’ouvre régulièrement à de nouveaux bénévoles. Écrivez-nous pour proposer votre candidature.', empty: 'La composition du bureau sera bientôt publiée.',

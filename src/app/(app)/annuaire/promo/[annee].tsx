@@ -51,10 +51,10 @@ export default function PromoPage() {
       {/* Header banner */}
       <View style={{ minHeight: isMobile ? 220 : 260, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: colors.ink }}>
         {info?.groupPhoto && <Image source={{ uri: info.groupPhoto }} style={{ position: 'absolute', width: '100%', height: '100%' }} contentFit="cover" />}
-        <LinearGradient colors={['rgba(8,10,20,0.1)', 'rgba(8,10,20,0.88)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <LinearGradient colors={['rgba(0,32,106,0.05)', 'rgba(0,18,60,0.9)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <View style={{ flex: 1, justifyContent: 'flex-end', padding: isMobile ? 20 : 32, gap: 14 }}>
           {me.promo === year && <Badge label={d.promo.yourPromo} tone="primary" icon="star" />}
-          <Txt style={{ color: '#fff', fontFamily: fonts.extrabold, fontSize: isMobile ? 34 : 44, lineHeight: isMobile ? 40 : 50, letterSpacing: -1 }}>{f(d.promo.title, { year })}</Txt>
+          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: isMobile ? 40 : 60, lineHeight: isMobile ? 44 : 64, letterSpacing: -0.5 }}>{f(d.promo.title, { year })}</Txt>
           <Row gap={16} wrap>
             <Stat icon="users" text={f(d.common.members, { n: members.length })} />
             <Stat icon="book" text={f(d.repere.universitiesCount, { n: schools.length })} />

@@ -28,7 +28,7 @@ export default function ContactInbox() {
       )}
       <View style={{ gap: 12 }}>
         {list.map((c) => (
-          <Card key={c.id} style={[{ gap: 12 }, !c.read && { borderColor: colors.primary }]}>
+          <Card key={c.id} style={[{ gap: 12 }, !c.read && { borderLeftWidth: 4, borderLeftColor: colors.primary }]}>
             <Row gap={12} style={{ alignItems: 'flex-start' }}>
               <Avatar name={c.name} size={42} />
               <View style={{ flex: 1, gap: 2 }}>

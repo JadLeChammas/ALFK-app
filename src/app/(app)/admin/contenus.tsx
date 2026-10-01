@@ -76,7 +76,7 @@ export default function Content() {
                     <Txt variant="small" color="textSubtle">{formatDate(e.date)} · {f(d.events.photos, { n: db.photos.filter((p) => p.eventId === e.id).length })}</Txt>
                   </View>
                 </Tap>
-                {new Date(e.date) >= new Date() && <Badge label={d.events.upcoming} tone="violet" />}
+                {new Date(e.date) >= new Date() && <Badge label={d.events.upcoming} tone="secondary" />}
                 <IconButton icon="trash-2" size={34} color={colors.danger} onPress={() => del(e.title, () => actions.deleteEvent(e.id))} label={d.events.deleteEvent} />
               </Row>
             ))}

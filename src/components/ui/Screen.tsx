@@ -21,7 +21,9 @@ export function Screen({ children, scroll = true, maxWidth = MAX_CONTENT, conten
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const gutter = useGutter();
-  const inner = <View style={[{ width: '100%', maxWidth, alignSelf: 'center', gap: isMobile ? space.xxl : space.xxxl }, contentStyle]}>{children}</View>;
+  // Narrower pages (settings, notifications…) share the standard column's left edge instead of centring on their own.
+  const column = <View style={[{ width: '100%', maxWidth, gap: isMobile ? space.xxl : space.xxxl }, contentStyle]}>{children}</View>;
+  const inner = <View style={{ width: '100%', maxWidth: MAX_CONTENT, alignSelf: 'center' }}>{column}</View>;
   if (!scroll) return <View style={{ flex: 1, backgroundColor: colors.bg, padding: gutter }}>{inner}</View>;
   return (
     <ScrollView

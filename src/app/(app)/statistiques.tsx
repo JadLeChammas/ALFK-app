@@ -18,8 +18,8 @@ export default function Statistics() {
         title={d.stats.title}
         subtitle={d.stats.subtitle}
         icon={
-          <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: colors.warningSoft, alignItems: 'center', justifyContent: 'center' }}>
-            <Feather name="bar-chart-2" size={20} color={colors.warning} />
+          <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' }}>
+            <Feather name="bar-chart-2" size={20} color={colors.onInk} />
           </View>
         }
       />

@@ -45,7 +45,7 @@ export function Lightbox({
 
   return (
     <Modal visible={!!item} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(5,6,10,0.96)' }}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,10,32,0.96)' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: insets.top + 12, paddingHorizontal: 16, zIndex: 2 }}>
           <Txt style={{ color: '#fff', fontFamily: fonts.semibold, fontSize: 13, opacity: 0.8 }}>
             {index !== null ? `${index + 1} / ${items.length}` : ''}

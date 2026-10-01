@@ -41,12 +41,17 @@ export default function MemberProfile() {
     <Screen>
       <BackLink label={d.nav.directory} href="/annuaire" />
       <Card padded={false}>
-        <View style={{ height: isMobile ? 90 : 130, backgroundColor: colors.primarySoft }} />
-        <View style={{ paddingHorizontal: isMobile ? 20 : 32, paddingBottom: 24, marginTop: isMobile ? -48 : -60, gap: 16 }}>
-          <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 16 }}>
-            <Row gap={20} style={{ alignItems: 'flex-end' }}>
-              <Avatar uri={user.avatar} name={fullName(user)} size={isMobile ? 96 : 120} ring />
-              <View style={{ gap: 6, paddingBottom: 6, flexShrink: 1 }}>
+        <View style={{ height: isMobile ? 90 : 130, backgroundColor: colors.navy, overflow: 'hidden' }}>
+          <View style={{ position: 'absolute', right: -40, top: -70, width: 240, height: 240, borderRadius: 120, backgroundColor: colors.primary, opacity: 0.55 }} />
+          <View style={{ position: 'absolute', right: 150, top: 30, width: 120, height: 120, borderRadius: 60, backgroundColor: colors.secondary, opacity: 0.35 }} />
+        </View>
+        <View style={{ paddingHorizontal: isMobile ? 20 : 32, paddingBottom: 24, gap: 16 }}>
+          <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+            <View style={{ flexDirection: isMobile ? 'column' : 'row', alignItems: 'flex-start', gap: isMobile ? 12 : 20 }}>
+              <View style={{ marginTop: isMobile ? -48 : -60 }}>
+                <Avatar uri={user.avatar} name={fullName(user)} size={isMobile ? 96 : 120} ring />
+              </View>
+              <View style={{ gap: 6, paddingTop: isMobile ? 0 : 16, flexShrink: 1 }}>
                 <Txt variant={isMobile ? 'h1' : 'display'}>{fullName(user)}</Txt>
                 <Row gap={8} wrap>
                   <RoleBadge role={user.role} />
@@ -54,8 +59,8 @@ export default function MemberProfile() {
                   {user.fonction && <Txt color="textMuted">{user.fonction}</Txt>}
                 </Row>
               </View>
-            </Row>
-            <Row gap={10} wrap>
+            </View>
+            <Row gap={10} wrap style={{ paddingTop: isDesktop ? 20 : 0 }}>
               {isMe ? (
                 <Button label={d.profile.edit} icon="edit-2" variant="secondary" onPress={() => router.push('/profil/modifier')} />
               ) : canMessage(me, user) ? (

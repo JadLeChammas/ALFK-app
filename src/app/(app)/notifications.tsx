@@ -12,10 +12,10 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 const KIND: Record<AppNotification['kind'], [IconName, Tone]> = {
   message: ['message-circle', 'primary'],
-  event: ['calendar', 'violet'],
-  publication: ['book-open', 'info'],
-  birthday: ['gift', 'warning'],
-  approval: ['user-check', 'success'],
+  event: ['calendar', 'ink'],
+  publication: ['book-open', 'secondary'],
+  birthday: ['gift', 'primary'],
+  approval: ['user-check', 'secondary'],
   photo: ['image', 'violet'],
 };
 

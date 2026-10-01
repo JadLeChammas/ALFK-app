@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -79,11 +80,15 @@ export default function Directory() {
       {!isFiltering && (
         <View style={{ gap: 10 }}>
           <Txt variant="caption">{d.directory.jumpTo}</Txt>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-            {years.map((y) => (
-              <Chip key={y} label={String(y)} active={y === me.promo} onPress={() => router.push(`/annuaire/promo/${y}`)} count={members.filter((u) => u.promo === y).length} />
-            ))}
-          </ScrollView>
+          <View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingRight: 40 }}>
+              {years.map((y) => (
+                <Chip key={y} label={String(y)} active={y === me.promo} onPress={() => router.push(`/annuaire/promo/${y}`)} count={members.filter((u) => u.promo === y).length} />
+              ))}
+            </ScrollView>
+            {/* fade at the right edge: more years scroll into view */}
+            <LinearGradient colors={[`${colors.bg}00`, colors.bg]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} pointerEvents="none" style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 48 }} />
+          </View>
         </View>
       )}
 

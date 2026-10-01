@@ -76,13 +76,13 @@ export default function EventPage() {
       {/* Cover */}
       <View style={{ height: isMobile ? 280 : 400, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: colors.ink }}>
         <Image source={{ uri: event.cover }} style={{ position: 'absolute', width: '100%', height: '100%' }} contentFit="cover" transition={200} />
-        <LinearGradient colors={['rgba(5,6,10,0)', 'rgba(5,6,10,0.9)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <LinearGradient colors={['rgba(0,18,60,0)', 'rgba(0,18,60,0.92)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <View style={{ position: 'absolute', top: 20, left: 20 }}>
           <DateBadge iso={event.date} />
         </View>
         <View style={{ flex: 1, justifyContent: 'flex-end', padding: isMobile ? 20 : 36, gap: 10 }}>
           <Badge label={d.events.categories[event.category]} tone={CATEGORY_TONE[event.category]} />
-          <Txt style={{ color: '#fff', fontFamily: fonts.extrabold, fontSize: isMobile ? 30 : 44, lineHeight: isMobile ? 36 : 50, letterSpacing: -1 }}>{event.title}</Txt>
+          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: isMobile ? 36 : 56, lineHeight: isMobile ? 40 : 60, letterSpacing: -0.5 }}>{event.title}</Txt>
           <Row gap={18} wrap>
             <Row gap={6}>
               <Feather name="clock" size={15} color="rgba(255,255,255,0.85)" />
@@ -145,9 +145,9 @@ export default function EventPage() {
               <ListRow icon="tag" title={d.events.categories[event.category]} subtitle={d.events.category} last />
             </Card>
             {(isAdmin || event.createdBy === me.id) && (
-              <Card style={{ borderColor: colors.warning, borderStyle: 'dashed' }}>
+              <Card style={{ borderColor: colors.borderStrong, borderStyle: 'dashed' }}>
                 <Row gap={8} style={{ marginBottom: 12 }}>
-                  <Feather name="shield" size={15} color={colors.warning} />
+                  <Feather name="shield" size={15} color={colors.primary} />
                   <Txt variant="h3">{d.events.manageZone}</Txt>
                 </Row>
                 <Txt variant="small" color="textMuted" style={{ marginBottom: 14 }}>{d.events.manageHint}</Txt>
