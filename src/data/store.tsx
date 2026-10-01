@@ -24,6 +24,8 @@ import {
   proofUrl,
   uploadImage,
   uploadProof,
+  uploadCvFile,
+  cvFileUrl,
   type PickedDoc,
   type PickedImage,
 } from './remote';
@@ -57,7 +59,7 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v8';
+const STORAGE_KEY = 'lfk.demo.db.v9';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -100,7 +102,7 @@ export type SignUpInput = {
   jobTitle?: string;
 };
 
-export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle'>>;
+export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv'>>;
 
 const demoId = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 const makeId = (p: string) => (isRemote ? newId() : demoId(p));
@@ -435,6 +437,15 @@ function useStoreValue() {
       commit((d) => removeUser(d, meId));
       saveSession(null);
       return { ok: true };
+    },
+    /** Uploads a CV as a PDF and returns the path to store in `cv.file` (the demo keeps the local URI). */
+    async uploadCvFile(doc: PickedDoc): Promise<string> {
+      if (!supabase || !meId) return doc.uri;
+      return uploadCvFile(meId, doc);
+    },
+    /** Opens link for an uploaded CV. */
+    async cvFileUrl(path: string): Promise<string | null> {
+      return supabase ? cvFileUrl(path) : path;
     },
     /** Uploads a picked image (Supabase) and returns the URL to store; the demo keeps the local URI. */
     async uploadImage(img: PickedImage, folder: string): Promise<string> {

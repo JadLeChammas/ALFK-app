@@ -6,6 +6,7 @@ import { RoleBadge } from '@/components/cards';
 import { Flag } from '@/components/ui/Flag';
 import { Avatar, Button, Card, ListRow, Row, type IconName } from '@/components/ui/primitives';
 import { Columns, Screen } from '@/components/ui/Screen';
+import { CvView } from '@/components/cv/CvView';
 import { Txt } from '@/components/ui/Txt';
 import { countryByCode, countryName } from '@/data/countries';
 import { isoToFrDate } from '@/data/members';
@@ -71,6 +72,8 @@ export default function MyProfile() {
           {me.bio && <Txt color="textMuted" style={{ maxWidth: 640 }}>{me.bio}</Txt>}
         </View>
       </Card>
+
+      {me.role !== 'honneur' && <CvView user={me} />}
 
       <Columns
         main={

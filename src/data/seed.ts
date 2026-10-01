@@ -165,7 +165,25 @@ export function createSeed(now = new Date()): Db {
     email: DEMO_ACCOUNTS.admin, createdAt: ago(720), lastActiveAt: ago(0),
     bio: "Ingénieur en informatique, j'anime la plateforme de l'Amicale.",
   });
-  const sarah = add({ firstName: 'Sarah', lastName: 'Martin', gender: 'F', role: 'alumni', promo: 2020, school: 'Sciences Po', city: 'Paris', country: 'FR', birthDate: birthdayIn(2, 2002), avatar: portrait('F', 44), email: DEMO_ACCOUNTS.member, lastActiveAt: ago(0.1) });
+  const sarah = add({ firstName: 'Sarah', lastName: 'Martin', gender: 'F', role: 'alumni', promo: 2020, school: 'Sciences Po', city: 'Paris', country: 'FR', birthDate: birthdayIn(2, 2002), avatar: portrait('F', 44), email: DEMO_ACCOUNTS.member, lastActiveAt: ago(0.1),
+    cv: {
+      headline: 'Étudiante en master Affaires publiques à Sciences Po',
+      education: [
+        { id: 'e1', title: 'Master Affaires publiques', org: 'Sciences Po', place: 'Paris', start: '2023-09' },
+        { id: 'e2', title: 'Bachelor, Collège universitaire', org: 'Sciences Po', place: 'Reims', start: '2020-09', end: '2023-06', description: 'Majeure Politique et gouvernement, troisième année à l’Université de Toronto.' },
+      ],
+      experience: [
+        { id: 'x1', title: 'Stagiaire, service politique', org: 'Ambassade de France', place: 'Toronto', start: '2022-09', end: '2023-02', description: 'Notes de synthèse et préparation de visites officielles.' },
+        { id: 'x2', title: 'Monitrice de colonie', org: 'UCPA', place: 'Annecy', start: '2021-07', end: '2021-08' },
+      ],
+      projects: [{ id: 'p1', title: 'Podcast « Ailleurs »', org: 'Projet personnel', start: '2022-01', description: 'Entretiens avec des étudiants francophones expatriés.' }],
+      associations: [{ id: 's1', title: 'Trésorière', org: 'Bureau des Arts de Sciences Po', start: '2021-09', end: '2022-06' }],
+      skills: ['Rédaction', 'Prise de parole', 'Excel', 'Canva'],
+      languages: [{ name: 'Français', level: 5 }, { name: 'Anglais', level: 4 }, { name: 'Arabe', level: 2 }],
+      interests: ['Théâtre', 'Course à pied', 'Photographie'],
+      linkedin: 'https://www.linkedin.com/',
+    },
+  });
   const thomas = add({ firstName: 'Thomas', lastName: 'Petit', gender: 'M', role: 'alumni', promo: 2020, school: 'HEC Montréal', city: 'Montréal', country: 'CA', birthDate: birthdayIn(5, 2002), avatar: portrait('M', 45), lastActiveAt: ago(0.3) });
   const lea = add({ firstName: 'Léa', lastName: 'Durand', gender: 'F', role: 'alumni', promo: 2021, school: 'INSA Lyon', city: 'Lyon', country: 'FR', birthDate: birthdayIn(8, 2003), avatar: portrait('F', 65) });
   const antoine = add({ firstName: 'Antoine', lastName: 'Bernard', gender: 'M', role: 'alumni', promo: 2019, school: 'ESSEC Business School', city: 'Paris', country: 'FR', birthDate: birthdayIn(12, 2001), avatar: portrait('M', 22) });

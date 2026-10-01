@@ -58,10 +58,12 @@ export const toUser = (r: Row): User => ({
   createdAt: r.created_at,
   lastActiveAt: r.last_active_at,
   privacy: { showEmail: r.show_email, showPhone: r.show_phone, showBirthday: r.show_birthday },
+  cv: opt(r.cv),
 });
 
 const PROFILE_COLUMNS: Record<string, string> = {
   firstName: 'first_name',
+  cv: 'cv',
   lastName: 'last_name',
   phone: 'phone',
   birthDate: 'birth_date',
@@ -218,6 +220,23 @@ export async function uploadProof(userId: string, doc: PickedDoc): Promise<strin
 /** A link valid 10 minutes, for an admin reviewing a sign-up. */
 export async function proofUrl(path: string): Promise<string | null> {
   const { data } = await supabase!.storage.from('proofs').createSignedUrl(path, 600);
+  return data?.signedUrl ?? null;
+}
+
+// ——— Uploaded CVs (private bucket "cvs": the member uploads, approved members can read) ———
+
+export async function uploadCvFile(userId: string, doc: PickedDoc): Promise<string> {
+  const sb = supabase!;
+  const body = doc.file ?? (doc.base64 ? base64ToBytes(doc.base64) : await (await fetch(doc.uri)).arrayBuffer());
+  const path = `${userId}/${newId()}.pdf`;
+  const { error } = await sb.storage.from('cvs').upload(path, body, { contentType: 'application/pdf', upsert: false });
+  if (error) throw error;
+  return path;
+}
+
+/** A link valid 10 minutes. */
+export async function cvFileUrl(path: string): Promise<string | null> {
+  const { data } = await supabase!.storage.from('cvs').createSignedUrl(path, 600);
   return data?.signedUrl ?? null;
 }
 

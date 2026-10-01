@@ -39,6 +39,14 @@ export async function pickProof(): Promise<PickedDoc | null> {
   return { uri: a.uri, name: a.name, mimeType: a.mimeType, file: a.file, base64: a.base64, size: a.size ?? a.file?.size };
 }
 
+/** A CV in PDF. */
+export async function pickPdf(): Promise<PickedDoc | null> {
+  const res = await DocumentPicker.getDocumentAsync({ type: 'application/pdf', multiple: false, copyToCacheDirectory: true, base64: isRemote && Platform.OS !== 'web' });
+  if (res.canceled || !res.assets?.[0]) return null;
+  const a = res.assets[0];
+  return { uri: a.uri, name: a.name, mimeType: a.mimeType, file: a.file, base64: a.base64, size: a.size ?? a.file?.size };
+}
+
 /** Adds an event to the user's calendar: downloads an .ics on web, opens the share sheet on native. */
 export async function addToCalendar(ev: { title: string; date: string; location: string; description: string }) {
   const start = new Date(ev.date);

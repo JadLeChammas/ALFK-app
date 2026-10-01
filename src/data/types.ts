@@ -52,6 +52,8 @@ export type User = {
   createdAt: string;
   lastActiveAt: string;
   privacy: Privacy;
+  /** LinkedIn-style CV, visible to members (see components/cv). */
+  cv?: Cv;
 };
 
 export type Promo = { year: number; whatsapp?: string; groupPhoto?: string };
@@ -150,6 +152,26 @@ export type AppNotification = {
   createdAt: string;
   read: boolean;
 };
+
+/** One line of a CV section. Dates are 'YYYY-MM'; no end = still going. */
+export type CvEntry = { id: string; title: string; org?: string; place?: string; start?: string; end?: string; description?: string; url?: string };
+/** 1 notions · 2 intermediate · 3 fluent · 4 bilingual · 5 native. */
+export type CvLanguage = { name: string; level: 1 | 2 | 3 | 4 | 5 };
+export type Cv = {
+  headline?: string;
+  education?: CvEntry[];
+  experience?: CvEntry[];
+  projects?: CvEntry[];
+  associations?: CvEntry[];
+  skills?: string[];
+  languages?: CvLanguage[];
+  interests?: string[];
+  linkedin?: string;
+  website?: string;
+  /** A CV the member uploaded as a PDF (private bucket « cvs », members only). */
+  file?: { path: string; name: string; uploadedAt: string };
+};
+export type CvSection = 'education' | 'experience' | 'projects' | 'associations';
 
 export type QuestionTopic = 'etudes' | 'orientation' | 'pays' | 'metier' | 'vie' | 'autre';
 export type QuestionStatus = 'pending' | 'published' | 'rejected';
