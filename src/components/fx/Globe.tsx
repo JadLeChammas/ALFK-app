@@ -19,6 +19,9 @@ import { brand, fonts } from '@/theme/tokens';
  * Arcs all start at the LFK (Kuwait).
  */
 
+/** Pirate easter egg (treasure map instead of the globe): switched off for now, kept for later. */
+const TREASURE_MAP = false;
+
 export type GlobeMarker = { key: string; ll: [number, number]; weight?: number; active?: boolean; label?: string };
 
 type Vec = [number, number, number];
@@ -252,7 +255,7 @@ export function Globe({
   );
 
   // Easter egg: in Pirate, an old treasure map with an X on Kuwait.
-  if (lang === 'pirate') {
+  if (TREASURE_MAP && lang === 'pirate') {
     return (
       <Animated.View style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, style, fall]} onLayout={fixedSize ? undefined : (e) => setMeasured(e.nativeEvent.layout.width)}>
         {size > 0 && <TreasureMap size={size} markers={markers} label={d.eggs.treasure} title={d.eggs.mapTitle} />}
