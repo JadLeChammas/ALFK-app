@@ -51,12 +51,25 @@ export default function ManageMembers() {
     const r = await actions.adminResetPassword(u.id, pw);
     toast(r.ok ? d.admin.passwordReset : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
   };
+  /**
+   * Text windows (fonction, Bureau code, password…) open above the page, not above the member card:
+   * hide the card while one is open, then bring it back.
+   */
+  const fromCard = async (run: (u: User) => Promise<unknown>) => {
+    const u = editing;
+    if (!u) return;
+    setEditing(null);
+    // `true` means the member was deleted: nothing to come back to.
+    if ((await run(u)) !== true) setEditing(u);
+  };
   const remove = async (u: User) => {
     if (await confirm({ title: d.admin.deleteUser, message: f(d.admin.deleteUserConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.common.delete })) {
       const r = await actions.deleteUser(u.id);
       if (!r.ok) toast(d.auth.errors.unknown, 'danger');
       setEditing(null);
+      return r.ok;
     }
+    return false;
   };
 
   return (
@@ -147,13 +160,15 @@ export default function ManageMembers() {
                     icon="briefcase"
                     variant="secondary"
                     full
-                    onPress={async () => {
-                      const v = await prompt({ title: d.admin.editFonction, placeholder: d.admin.fonctionField, initial: db.users.find((u) => u.id === editing.id)?.fonction });
-                      if (v !== null) {
-                        actions.setFonction(editing.id, v);
-                        toast(d.common.saved);
-                      }
-                    }}
+                    onPress={() =>
+                      fromCard(async (u) => {
+                        const v = await prompt({ title: d.admin.editFonction, placeholder: d.admin.fonctionField, initial: db.users.find((x) => x.id === u.id)?.fonction });
+                        if (v !== null) {
+                          actions.setFonction(u.id, v);
+                          toast(d.common.saved);
+                        }
+                      })
+                    }
                   />
                 )}
                 {db.users.find((u) => u.id === editing.id)?.role === 'admin' && (
@@ -162,16 +177,18 @@ export default function ManageMembers() {
                     icon="shield"
                     variant="secondary"
                     full
-                    onPress={async () => {
-                      const v = await prompt({ title: d.admin.editBureauCode, placeholder: d.admin.bureauCodeField, initial: db.users.find((u) => u.id === editing.id)?.bureauCode });
-                      if (v === null) return;
-                      const r = await actions.setBureauCode(editing.id, v);
-                      toast(r.ok ? d.admin.codeSaved : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
-                    }}
+                    onPress={() =>
+                      fromCard(async (u) => {
+                        const v = await prompt({ title: d.admin.editBureauCode, placeholder: d.admin.bureauCodeField, initial: db.users.find((x) => x.id === u.id)?.bureauCode });
+                        if (v === null) return;
+                        const r = await actions.setBureauCode(u.id, v);
+                        toast(r.ok ? d.admin.codeSaved : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
+                      })
+                    }
                   />
                 )}
-                <Button label={d.admin.resetPassword} icon="key" variant="secondary" full onPress={() => resetPassword(editing)} />
-                {editing.id !== me.id && <Button label={d.admin.deleteUser} icon="trash-2" variant="danger" full onPress={() => remove(editing)} />}
+                <Button label={d.admin.resetPassword} icon="key" variant="secondary" full onPress={() => fromCard(resetPassword)} />
+                {editing.id !== me.id && <Button label={d.admin.deleteUser} icon="trash-2" variant="danger" full onPress={() => fromCard(remove)} />}
               </>
             )}
           </Pressable>
