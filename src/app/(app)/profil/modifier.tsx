@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { useDialogs } from '@/components/ui/Dialogs';
-import { FieldRow, Avatar, Button, Card, Input, Row, Switch, Tap } from '@/components/ui/primitives';
+import { FieldRow, Avatar, Button, Card, Input, Row, Segmented, Switch, Tap } from '@/components/ui/primitives';
 import { BackLink, Columns, PageHeader, Screen } from '@/components/ui/Screen';
 import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
@@ -14,6 +14,7 @@ import { COUNTRIES } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
 import { fullName, useMe, useStore } from '@/data/store';
+import type { Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -37,10 +38,14 @@ export default function EditProfile() {
     bio: me.bio ?? '',
     avatar: me.avatar,
     fieldOfStudy: me.fieldOfStudy ?? '',
+    employer: me.employer ?? '',
+    jobTitle: me.jobTitle ?? '',
   });
   const [mentor, setMentor] = useState(!!me.mentor);
   // Former students share their studies with the lycée students (Orientation space).
   const graduate = me.role === 'alumni' || me.role === 'admin';
+  const [situation, setSituation] = useState<Situation>(me.situation ?? 'student');
+  const working = graduate && situation === 'working';
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' });
   const [pwError, setPwError] = useState<string | null>(null);
@@ -68,6 +73,9 @@ export default function EditProfile() {
       bio: form.bio || undefined,
       fieldOfStudy: graduate ? form.fieldOfStudy || undefined : undefined,
       mentor: graduate ? mentor : undefined,
+      situation: graduate ? situation : undefined,
+      employer: working ? form.employer.trim() || undefined : undefined,
+      jobTitle: working ? form.jobTitle.trim() || undefined : undefined,
     });
     if (!r.ok) {
       if (r.error === 'birth_date' || r.error === 'phone') setFieldError(r.error);
@@ -133,11 +141,30 @@ export default function EditProfile() {
                 error={fieldError === 'birth_date' ? d.auth.errors.birth_date : undefined}
               />
             </FieldRow>
+            {graduate && (
+              <View style={{ gap: 8 }}>
+                <Txt variant="smallStrong" color="textMuted">{d.situation.label}</Txt>
+                <Segmented
+                  value={situation}
+                  onChange={setSituation}
+                  options={[
+                    { value: 'student', label: d.situation.student, icon: 'book-open' },
+                    { value: 'working', label: d.situation.working, icon: 'briefcase' },
+                  ]}
+                />
+              </View>
+            )}
+            {working && (
+              <FieldRow>
+                <Input label={d.situation.employer} icon="briefcase" value={form.employer} onChangeText={set('employer')} containerStyle={{ flex: 1 }} />
+                <Input label={`${d.situation.jobTitle} (${d.common.optional})`} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} containerStyle={{ flex: 1 }} />
+              </FieldRow>
+            )}
             <FieldRow>
               {me.role === 'eleve' ? (
                 <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} containerStyle={{ flex: 2 }} />
               ) : (
-                <Input label={d.auth.school} icon="book" value={form.school} onChangeText={set('school')} containerStyle={{ flex: 2 }} />
+                <Input label={working ? `${d.situation.graduatedFrom} (${d.common.optional})` : d.auth.school} icon="book" value={form.school} onChangeText={set('school')} containerStyle={{ flex: 2 }} />
               )}
               <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
             </FieldRow>

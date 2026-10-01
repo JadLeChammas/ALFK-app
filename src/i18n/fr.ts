@@ -279,6 +279,13 @@ const fr = {
       copyright: '© {year} Amicale LFK — Association des anciens élèves du Lycée Français de Koweït.', band: 'Rejoindre l\'Amicale',
     },
   },
+  situation: {
+    label: 'Situation actuelle', student: 'Étudiant(e)', working: 'En activité', employer: 'Entreprise / organisation',
+    jobTitle: 'Poste', graduatedFrom: 'Université (diplômé·e de)', university: 'Université', studiesAt: 'Étudie à',
+    worksAt: 'Travaille chez', students: 'Étudiants', workers: 'En activité', studies: 'Études',
+    work: 'Travail', companies: 'Entreprises', companiesIn: 'Entreprises — {country}', companiesCount: '{n} entreprises',
+    whereHint: 'Ville et pays : là où vous étudiez ou travaillez aujourd’hui.',
+  },
   months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
   monthsShort: ['JANV', 'FÉVR', 'MARS', 'AVR', 'MAI', 'JUIN', 'JUIL', 'AOÛT', 'SEPT', 'OCT', 'NOV', 'DÉC'],
   days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],

@@ -135,3 +135,13 @@ export function contactError(role: Role, birthDate?: string, phone?: string): 'b
   if (!isValidStoredPhone(phone)) return 'phone';
   return null;
 }
+
+/**
+ * One line about what a member does now: « Poste · Entreprise » when working, the university when
+ * studying, or the role title of school leadership.
+ */
+export function occupation(u: Pick<User, 'fonction' | 'situation' | 'employer' | 'jobTitle' | 'school'>): string | undefined {
+  if (u.fonction) return u.fonction;
+  if (u.situation === 'working' && (u.employer || u.jobTitle)) return [u.jobTitle, u.employer].filter(Boolean).join(' · ');
+  return u.school;
+}

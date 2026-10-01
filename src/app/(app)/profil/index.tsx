@@ -82,7 +82,8 @@ export default function MyProfile() {
               me.alumniNumber && <ListRow icon="hash" title={me.alumniNumber} subtitle={d.member.alumniNumber} />
             )}
             {me.role === 'admin' && me.bureauCode && <ListRow icon="shield" title={me.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
-            <ListRow icon="book" title={me.school ?? '—'} subtitle={d.member.school} />
+            {me.situation === 'working' && (me.employer || me.jobTitle) && <ListRow icon="briefcase" title={[me.jobTitle, me.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
+            <ListRow icon="book" title={me.school ?? '—'} subtitle={me.situation === 'working' ? d.situation.graduatedFrom : me.situation === 'student' ? d.situation.studiesAt : d.member.school} />
             <ListRow icon="map-pin" title={me.city ?? '—'} subtitle={d.auth.city} />
             <ListRow icon="flag" title={country ? countryName(me.country, lang) : '—'} subtitle={d.auth.country} right={country && <Flag code={country.code} size={18} />} />
             {me.fonction ? <ListRow icon="briefcase" title={me.fonction} subtitle={d.member.fonction} /> : <ListRow icon="award" title={me.promo ? String(me.promo) : '—'} subtitle={d.profile.promoLabel} />}

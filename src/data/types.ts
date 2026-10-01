@@ -1,4 +1,5 @@
 export type Role = 'alumni' | 'eleve' | 'honneur' | 'admin';
+export type Situation = 'student' | 'working';
 export type Gender = 'F' | 'M';
 export type ContinentKey = 'europe' | 'asia' | 'africa' | 'north_america' | 'south_america' | 'oceania';
 export type EventCategory = 'soiree' | 'sport' | 'culture' | 'networking';
@@ -21,7 +22,13 @@ export type User = {
   role: Role;
   approved: boolean;
   promo?: number;
+  /** University: where a student studies now, or where someone working graduated (optional then). */
   school?: string;
+  /** Alumni and admins: still studying, or already working. City and country are where they are now. */
+  situation?: Situation;
+  /** When working: company or organisation, and position. */
+  employer?: string;
+  jobTitle?: string;
   /** Position shown for school leadership, e.g. « Proviseur ». Set by an admin. */
   fonction?: string;
   /** 5 digits, 11111 onwards, assigned once to alumni and admins, never reused (see data/members.ts). */

@@ -281,6 +281,13 @@ const pt: Dict = {
       copyright: '© {year} Amicale LFK — Associação dos antigos alunos do Lycée Français de Koweït.', band: 'Aderir à Amicale',
     },
   },
+  situation: {
+    label: 'Situação atual', student: 'Estudante', working: 'A trabalhar', employer: 'Empresa / organização',
+    jobTitle: 'Cargo', graduatedFrom: 'Universidade (diplomado/a por)', university: 'Universidade', studiesAt: 'Estuda em',
+    worksAt: 'Trabalha em', students: 'Estudantes', workers: 'A trabalhar', studies: 'Estudos',
+    work: 'Trabalho', companies: 'Empresas', companiesIn: 'Empresas — {country}', companiesCount: '{n} empresas',
+    whereHint: 'Cidade e país: onde estuda ou trabalha hoje.',
+  },
   months: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
   monthsShort: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
   days: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],

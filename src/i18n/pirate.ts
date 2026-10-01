@@ -282,6 +282,13 @@ const pirate: Dict = {
       copyright: '© {year} Amicale LFK — Crew o’ the old hands o’ the Lycée Français de Koweït.', band: 'Join the crew',
     },
   },
+  situation: {
+    label: 'Yer current voyage', student: 'Learnin’ sailor', working: 'Workin’ sailor', employer: 'Ship / company',
+    jobTitle: 'Post aboard', graduatedFrom: 'University (graduated from)', university: 'University', studiesAt: 'Learns at',
+    worksAt: 'Sails for', students: 'Learnin’ sailors', workers: 'Workin’ sailors', studies: 'Studies',
+    work: 'Work', companies: 'Ships', companiesIn: 'Ships — {country}', companiesCount: '{n} ships',
+    whereHint: 'Port an’ land: where ye study or work today.',
+  },
   months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   monthsShort: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
   days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],

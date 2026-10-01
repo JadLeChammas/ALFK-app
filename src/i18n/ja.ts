@@ -281,6 +281,13 @@ const ja: Dict = {
       copyright: '© {year} Amicale LFK — クウェート・フランス人学校 同窓会。', band: 'Amicale に参加する',
     },
   },
+  situation: {
+    label: '現在の状況', student: '学生', working: '就業中', employer: '会社・組織',
+    jobTitle: '役職', graduatedFrom: '大学（卒業校）', university: '大学', studiesAt: '在学先',
+    worksAt: '勤務先', students: '学生', workers: '就業中', studies: '学業',
+    work: '仕事', companies: '会社', companiesIn: '会社 — {country}', companiesCount: '{n} 社',
+    whereHint: '都市と国：現在の就学先または勤務地。',
+  },
   months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
   monthsShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
   days: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],

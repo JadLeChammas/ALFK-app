@@ -13,7 +13,7 @@ import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES, countrySearchText } from '@/data/countries';
 import { fullName, useApprovedMembers, useMe } from '@/data/store';
-import type { User } from '@/data/types';
+import type { User, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -30,6 +30,7 @@ export default function Directory() {
   const [promo, setPromo] = useState<number | 'all'>('all');
   const [country, setCountry] = useState<string>('all');
   const [school, setSchool] = useState<string>('all');
+  const [situation, setSituation] = useState<Situation | 'all'>('all');
 
   const years = useMemo(() => [...new Set(members.map((u) => u.promo).filter(Boolean) as number[])].sort((a, b) => b - a), [members]);
   const schools = useMemo(() => [...new Set(members.map((u) => u.school).filter(Boolean) as string[])].sort(), [members]);
@@ -41,13 +42,14 @@ export default function Directory() {
       if (promo !== 'all' && u.promo !== promo) return false;
       if (country !== 'all' && u.country !== country) return false;
       if (school !== 'all' && u.school !== school) return false;
+      if (situation !== 'all' && u.situation !== situation) return false;
       if (!n) return true;
-      const hay = norm(`${fullName(u)} ${u.promo ?? ''} ${u.country ? countrySearchText(u.country) : ''} ${u.school ?? ''} ${u.city ?? ''}`);
+      const hay = norm(`${fullName(u)} ${u.promo ?? ''} ${u.country ? countrySearchText(u.country) : ''} ${u.school ?? ''} ${u.employer ?? ''} ${u.jobTitle ?? ''} ${u.city ?? ''}`);
       return n.split(/\s+/).every((t) => hay.includes(t));
     });
-  }, [members, q, promo, country, school]);
+  }, [members, q, promo, country, school, situation]);
 
-  const isFiltering = !!q.trim() || promo !== 'all' || country !== 'all' || school !== 'all';
+  const isFiltering = !!q.trim() || promo !== 'all' || country !== 'all' || school !== 'all' || situation !== 'all';
   const byPromo = useMemo(() => {
     const map = new Map<number, User[]>();
     for (const u of filtered) if (u.promo) map.set(u.promo, [...(map.get(u.promo) ?? []), u]);
@@ -60,6 +62,7 @@ export default function Directory() {
     setPromo('all');
     setCountry('all');
     setSchool('all');
+    setSituation('all');
   };
 
   return (
@@ -73,6 +76,17 @@ export default function Directory() {
           <Select compact value={promo} onChange={setPromo} placeholder={d.directory.filterPromo} searchable options={[{ value: 'all' as const, label: d.directory.allPromos }, ...years.map((y) => ({ value: y, label: f(d.common.promo, { year: y }) }))]} />
           <Select compact value={country} onChange={setCountry} placeholder={d.directory.filterCountry} searchable options={[{ value: 'all', label: d.directory.allCountries }, ...countries.map((c) => ({ value: c.code, label: countryOf(c.code), leading: <Flag code={c.code} /> }))]} />
           <Select compact value={school} onChange={setSchool} placeholder={d.directory.filterSchool} searchable options={[{ value: 'all', label: `${d.common.all} — ${d.directory.filterSchool}` }, ...schools.map((s) => ({ value: s, label: s }))]} />
+          <Select
+            compact
+            value={situation}
+            onChange={setSituation}
+            placeholder={d.situation.label}
+            options={[
+              { value: 'all' as const, label: `${d.common.all} — ${d.situation.label}` },
+              { value: 'student' as const, label: d.situation.students },
+              { value: 'working' as const, label: d.situation.workers },
+            ]}
+          />
           {isFiltering && <Button label={d.common.cancel} variant="ghost" size="sm" icon="x" onPress={reset} />}
         </Row>
       </View>

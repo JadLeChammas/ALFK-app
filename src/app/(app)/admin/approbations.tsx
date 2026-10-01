@@ -43,6 +43,7 @@ export default function Approvals() {
                 <View style={{ gap: 8 }}>
                   <MetaLine icon="mail" text={u.email} />
                   {u.promo && <MetaLine icon="award" text={f(d.common.promo, { year: u.promo })} />}
+                  {u.situation === 'working' && u.employer && <MetaLine icon="briefcase" text={[u.jobTitle, u.employer].filter(Boolean).join(' · ')} />}
                   {u.school && <MetaLine icon="book" text={u.school} />}
                   {c && <MetaLine icon="map-pin" text={[u.city, country(c.code)].filter(Boolean).join(', ')} />}
                   <MetaLine icon="user" text={d.gender[u.gender]} />

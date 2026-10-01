@@ -36,6 +36,7 @@ import type {
   Institution,
   KeyDate,
   LfkEvent,
+  Situation,
   Privacy,
   Publication,
   Role,
@@ -53,7 +54,7 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v5';
+const STORAGE_KEY = 'lfk.demo.db.v6';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -90,9 +91,13 @@ export type SignUpInput = {
   bureauCode?: string;
   /** Alumni: field of study, used by the orientation space. */
   fieldOfStudy?: string;
+  /** Alumni: studying or working (then company and position). */
+  situation?: Situation;
+  employer?: string;
+  jobTitle?: string;
 };
 
-export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor'>>;
+export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle'>>;
 
 const demoId = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 const makeId = (p: string) => (isRemote ? newId() : demoId(p));
@@ -311,6 +316,9 @@ function useStoreValue() {
               phone: input.phone ?? '',
               birth_date: input.birthDate ?? '',
               field_of_study: input.fieldOfStudy ?? '',
+              situation: input.situation ?? '',
+              employer: input.employer ?? '',
+              job_title: input.jobTitle ?? '',
             },
           },
         });

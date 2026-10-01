@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { View } from 'react-native';
 
 import { countryByCode, countryName } from '@/data/countries';
+import { occupation } from '@/data/members';
 import { canMessage } from '@/data/permissions';
 import { fullName, useStore } from '@/data/store';
 import type { EventCategory, LfkEvent, Publication, PublicationCategory, Role, User } from '@/data/types';
@@ -47,7 +48,7 @@ export function MemberCard({ user, showPromo }: { user: User; showPromo?: boolea
       <Avatar uri={user.avatar} name={fullName(user)} size={68} />
       <View style={{ alignItems: 'center', gap: 2, width: '100%' }}>
         <Txt variant="h3" numberOfLines={1} align="center">{fullName(user)}</Txt>
-        <Txt variant="small" color="textMuted" numberOfLines={1} align="center">{user.fonction ?? user.school ?? '—'}</Txt>
+        <Txt variant="small" color="textMuted" numberOfLines={1} align="center">{occupation(user) ?? '—'}</Txt>
         {showPromo && user.promo && <Txt variant="small" color="textSubtle">{f(d.common.promo, { year: user.promo })}</Txt>}
       </View>
       {c && (

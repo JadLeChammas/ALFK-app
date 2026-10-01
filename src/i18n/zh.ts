@@ -281,6 +281,13 @@ const zh: Dict = {
       copyright: '© {year} Amicale LFK — 科威特法国高中校友会。', band: '加入校友会',
     },
   },
+  situation: {
+    label: '当前状态', student: '在读学生', working: '已工作', employer: '公司 / 机构',
+    jobTitle: '职位', graduatedFrom: '大学（毕业于）', university: '大学', studiesAt: '就读于',
+    worksAt: '就职于', students: '学生', workers: '已工作', studies: '学业',
+    work: '工作', companies: '公司', companiesIn: '公司 — {country}', companiesCount: '{n} 家公司',
+    whereHint: '城市和国家：您目前学习或工作的地方。',
+  },
   months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
   monthsShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
   days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],

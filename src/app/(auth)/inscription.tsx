@@ -16,7 +16,7 @@ import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import type { PickedDoc } from '@/data/remote';
 import { useStore, type AuthError } from '@/data/store';
-import type { Gender, Role } from '@/data/types';
+import type { Gender, Role, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -26,7 +26,7 @@ export default function SignUp() {
   const { actions } = useStore();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [proof, setProof] = useState<PickedDoc | null>(null);
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -49,10 +49,15 @@ export default function SignUp() {
     if (!proof) return setError('proof');
     const promo = parseInt(form.promo, 10);
     setBusy(true);
-    const { birth, dial, phoneNumber, fieldOfStudy, ...rest } = form;
+    const { birth, dial, phoneNumber, fieldOfStudy, situation, employer, jobTitle, ...rest } = form;
+    const alumni = form.role === 'alumni';
+    const working = alumni && situation === 'working';
     const r = await actions.signUp({
       ...rest,
-      fieldOfStudy: form.role === 'alumni' && fieldOfStudy ? fieldOfStudy : undefined,
+      fieldOfStudy: alumni && fieldOfStudy ? fieldOfStudy : undefined,
+      situation: alumni ? situation : undefined,
+      employer: working ? employer.trim() || undefined : undefined,
+      jobTitle: working ? jobTitle.trim() || undefined : undefined,
       promo: Number.isFinite(promo) ? promo : undefined,
       school: form.role === 'eleve' ? LFK_SCHOOL : form.school || undefined,
       city: form.city || undefined,
@@ -141,6 +146,20 @@ export default function SignUp() {
       ) : step === 2 ? (
         <View style={{ gap: 16 }}>
           <Input label={d.auth.promo} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} placeholder="2020" />
+          {form.role === 'alumni' && (
+            <View style={{ gap: 8 }}>
+              <Txt variant="smallStrong" color="textMuted">{d.situation.label}</Txt>
+              <Segmented
+                value={form.situation}
+                onChange={(v) => setForm((f) => ({ ...f, situation: v }))}
+                options={[
+                  { value: 'student', label: d.situation.student, icon: 'book-open' },
+                  { value: 'working', label: d.situation.working, icon: 'briefcase' },
+                ]}
+              />
+              <Txt variant="small" color="textSubtle">{d.situation.whereHint}</Txt>
+            </View>
+          )}
           <Select
             label={d.auth.country}
             value={form.country}
@@ -152,6 +171,12 @@ export default function SignUp() {
           {form.role === 'eleve' ? (
             // Students are at the LFK: the school is set for them and cannot be changed.
             <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} />
+          ) : form.situation === 'working' ? (
+            <>
+              <Input label={d.situation.employer} icon="briefcase" value={form.employer} onChangeText={set('employer')} />
+              <Input label={`${d.situation.jobTitle} (${d.common.optional})`} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} />
+              <Input label={`${d.situation.graduatedFrom} (${d.common.optional})`} icon="book" value={form.school} onChangeText={set('school')} />
+            </>
           ) : (
             <Input label={d.auth.school} icon="book" value={form.school} onChangeText={set('school')} />
           )}
@@ -162,6 +187,7 @@ export default function SignUp() {
               ))}
             </Row>
           )}
+          {step === 2 && error === 'missing' && <Txt variant="smallStrong" color="danger">{d.auth.errors.missing}</Txt>}
           {form.role === 'alumni' && (
             <Select
               label={`${d.orientation.field} (${d.common.optional})`}
@@ -172,7 +198,17 @@ export default function SignUp() {
           )}
           <Row gap={10}>
             <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(1)} />
-            <Button label={d.auth.continue} iconRight="arrow-right" size="lg" onPress={() => setStep(3)} style={{ flex: 1 }} />
+            <Button
+              label={d.auth.continue}
+              iconRight="arrow-right"
+              size="lg"
+              style={{ flex: 1 }}
+              onPress={() => {
+                // Someone working says where.
+                if (form.role === 'alumni' && form.situation === 'working' && !form.employer.trim()) return setError('missing');
+                setStep(3);
+              }}
+            />
           </Row>
         </View>
       ) : (

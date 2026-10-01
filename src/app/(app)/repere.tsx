@@ -22,8 +22,13 @@ export default function Repere() {
   const { colors } = useTheme();
   const { isDesktop } = useLayout();
   const members = useApprovedMembers();
-  // Where alumni went to study: alumni & admins with a university on file (students are still at the LFK).
-  const alumni = members.filter((u) => (u.role === 'alumni' || u.role === 'admin') && u.country && u.school);
+  // Studies: where alumni study (or studied, when nothing says they work) — the LFK's current students are excluded.
+  // Work: where those already working are, by company.
+  const [mode, setMode] = useState<'studies' | 'work'>('studies');
+  const place = (u: User) => (mode === 'work' ? u.employer : u.school);
+  const alumni = members.filter(
+    (u) => (u.role === 'alumni' || u.role === 'admin') && u.country && (mode === 'work' ? u.situation === 'working' && u.employer : u.school && u.situation !== 'working')
+  );
 
   const initialCountry = countryByCode(params.country);
   const [continent, setContinent] = useState<ContinentKey>(initialCountry?.continent ?? 'europe');
@@ -40,7 +45,7 @@ export default function Repere() {
   const countries = COUNTRIES.filter((c) => c.continent === continent && perCountry.has(c.code)).sort((a, b) => perCountry.get(b.code)!.length - perCountry.get(a.code)!.length);
   const activeCountry = country && countries.some((c) => c.code === country) ? country : countries[0]?.code ?? null;
   const schoolMap = new Map<string, User[]>();
-  for (const u of perCountry.get(activeCountry ?? '') ?? []) schoolMap.set(u.school!, [...(schoolMap.get(u.school!) ?? []), u]);
+  for (const u of perCountry.get(activeCountry ?? '') ?? []) schoolMap.set(place(u)!, [...(schoolMap.get(place(u)!) ?? []), u]);
   const universities = [...schoolMap.entries()].sort((a, b) => b[1].length - a[1].length);
 
   const pickContinent = (c: ContinentKey) => {
@@ -95,7 +100,10 @@ export default function Repere() {
                 {list.map((u) => (
                   <Tap key={u.id} onPress={() => router.push(`/membre/${u.id}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                     <Avatar uri={u.avatar} name={fullName(u)} size={30} />
-                    <Txt variant="smallStrong" style={{ flex: 1 }}>{fullName(u)}</Txt>
+                    <View style={{ flex: 1 }}>
+                      <Txt variant="smallStrong">{fullName(u)}</Txt>
+                      {mode === 'work' && u.jobTitle && <Txt variant="small" color="textSubtle">{u.jobTitle}</Txt>}
+                    </View>
                     {u.promo && <Badge label={String(u.promo)} />}
                   </Tap>
                 ))}
@@ -110,7 +118,24 @@ export default function Repere() {
 
   return (
     <Screen>
-      <PageHeader title={d.repere.title} subtitle={d.repere.subtitle} />
+      <PageHeader
+        title={d.repere.title}
+        subtitle={d.repere.subtitle}
+        right={
+          <Segmented
+            value={mode}
+            onChange={(m) => {
+              setMode(m);
+              setCountry(null);
+              setOpenSchool(null);
+            }}
+            options={[
+              { value: 'studies', label: d.situation.studies, icon: 'book-open' },
+              { value: 'work', label: d.situation.work, icon: 'briefcase' },
+            ]}
+          />
+        }
+      />
 
       <Card>
         <Row gap={10} style={{ justifyContent: 'space-between', marginBottom: 16 }} wrap>
@@ -146,7 +171,7 @@ export default function Repere() {
             {countryList}
           </Card>
           <Card style={{ flex: 1 }}>
-            <SectionHeader title={ac ? f(d.repere.universitiesIn, { country: countryOf(ac.code) }) : d.repere.universities} icon="book" count={f(d.repere.universitiesCount, { n: universities.length })} />
+            <SectionHeader title={ac ? f(mode === 'work' ? d.situation.companiesIn : d.repere.universitiesIn, { country: countryOf(ac.code) }) : mode === 'work' ? d.situation.companies : d.repere.universities} icon={mode === 'work' ? 'briefcase' : 'book'} count={f(mode === 'work' ? d.situation.companiesCount : d.repere.universitiesCount, { n: universities.length })} />
             {universityList}
           </Card>
         </View>
@@ -169,7 +194,7 @@ export default function Repere() {
             </ScrollView>
           </View>
           <View style={{ gap: 10 }}>
-            <Txt variant="caption">3 · {ac ? f(d.repere.universitiesIn, { country: countryOf(ac.code) }) : d.repere.universities}</Txt>
+            <Txt variant="caption">3 · {ac ? f(mode === 'work' ? d.situation.companiesIn : d.repere.universitiesIn, { country: countryOf(ac.code) }) : mode === 'work' ? d.situation.companies : d.repere.universities}</Txt>
             {universityList}
           </View>
         </View>

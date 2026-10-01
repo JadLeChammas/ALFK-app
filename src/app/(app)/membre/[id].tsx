@@ -86,7 +86,8 @@ export default function MemberProfile() {
             {/* Membership numbers are shown to the person themself and to admins only. */}
             {(me.role === 'admin' || isMe) && user.role !== 'honneur' && user.alumniNumber && <ListRow icon="hash" title={user.alumniNumber} subtitle={d.member.alumniNumber} />}
             {(me.role === 'admin' || isMe) && user.role === 'admin' && user.bureauCode && <ListRow icon="shield" title={user.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
-            <ListRow icon="book" title={user.school ?? '—'} subtitle={d.member.school} />
+            {user.situation === 'working' && (user.employer || user.jobTitle) && <ListRow icon="briefcase" title={[user.jobTitle, user.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
+            <ListRow icon="book" title={user.school ?? '—'} subtitle={user.situation === 'working' ? d.situation.graduatedFrom : user.situation === 'student' ? d.situation.studiesAt : d.member.school} />
             <ListRow icon="map-pin" title={[user.city, countryName(user.country, lang)].filter(Boolean).join(', ')} subtitle={d.member.location} right={country && <Flag code={country.code} size={18} />} />
             {user.promo && <ListRow icon="award" title={String(user.promo)} subtitle={d.profile.promoLabel} />}
             {user.birthDate && user.privacy.showBirthday && <ListRow icon="gift" title={formatDate(user.birthDate + 'T12:00:00', { year: false })} subtitle={d.member.birthday} />}

@@ -85,6 +85,37 @@ const FIELD_BY_SCHOOL: [RegExp, string][] = [
   [/sorbonne|lyon|bordeaux|toulouse|lille|strasbourg/i, 'lettres'],
   [/architect|beaux-arts|design|arts/i, 'arts'],
 ];
+/** Demo employers by country, and positions by field of study (alumni already working). */
+const EMPLOYERS: Record<string, string[]> = {
+  FR: ['TotalEnergies', 'BNP Paribas', 'L’Oréal', 'Airbus', 'Capgemini', 'AP-HP'],
+  GB: ['HSBC', 'Deloitte UK', 'BBC', 'Barclays'],
+  CH: ['Nestlé', 'UBS', 'CERN', 'Novartis'],
+  BE: ['Commission européenne', 'Solvay', 'ING Belgique'],
+  ES: ['Santander', 'Inditex', 'Telefónica'],
+  KW: ['Kuwait Petroleum Corporation', 'Zain', 'National Bank of Kuwait', 'Agility'],
+  LB: ['Banque Audi', 'Hôtel-Dieu de France', 'Murex'],
+  AE: ['Emirates', 'ADNOC', 'Careem', 'Mubadala'],
+  JP: ['Sony', 'Toyota', 'Rakuten'],
+  CA: ['Ubisoft Montréal', 'Banque Nationale', 'Bombardier'],
+  US: ['Google', 'Goldman Sachs', 'Mayo Clinic', 'McKinsey'],
+  BR: ['Petrobras', 'Itaú Unibanco'],
+  EG: ['Orascom', 'Commercial International Bank'],
+  MA: ['OCP Group', 'Attijariwafa Bank'],
+  AU: ['Atlassian', 'Commonwealth Bank'],
+};
+const JOBS: Record<string, string[]> = {
+  medecine: ['Médecin', 'Interne en médecine', 'Pharmacienne'],
+  droit: ['Avocat', 'Juriste'],
+  economie: ['Analyste financier', 'Consultante', 'Chef de produit'],
+  ingenierie: ['Ingénieure', 'Ingénieur projet'],
+  informatique: ['Développeur', 'Data scientist'],
+  sciences: ['Chercheuse', 'Ingénieur R&D'],
+  sciencesPo: ['Chargée de mission', 'Consultant'],
+  lettres: ['Journaliste', 'Traductrice'],
+  arts: ['Designer', 'Architecte'],
+  autre: ['Chef de projet', 'Responsable marketing'],
+};
+
 const fieldFor = (school: string) => FIELD_BY_SCHOOL.find(([re]) => re.test(school))?.[1] ?? 'autre';
 
 export function createSeed(now = new Date()): Db {
@@ -209,6 +240,13 @@ export function createSeed(now = new Date()): Db {
       if ((u.role === 'alumni' || u.role === 'admin') && u.school) {
         u.fieldOfStudy = fieldFor(u.school);
         u.mentor = r() > 0.25;
+        // Older Promos LFK are mostly working by now; younger ones are still studying.
+        const working = (u.promo ?? 2030) <= 2018 && r() > 0.2;
+        u.situation = working ? 'working' : 'student';
+        if (working) {
+          u.employer = pick(EMPLOYERS[u.country ?? 'FR'] ?? EMPLOYERS.FR);
+          u.jobTitle = pick(JOBS[u.fieldOfStudy] ?? JOBS.autre);
+        }
       }
       // Pending sign-ups carry their proof of schooling (except the "En attente" demo account).
       if (!u.approved && u.email !== DEMO_ACCOUNTS.pending) {

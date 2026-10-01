@@ -31,7 +31,7 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
     const n = norm(q.trim());
     if (n.length < 2) return null;
     const m = members
-      .filter((u) => norm(`${fullName(u)} ${u.school ?? ''} ${u.promo ?? ''} ${u.city ?? ''}`).includes(n))
+      .filter((u) => norm(`${fullName(u)} ${u.school ?? ''} ${u.employer ?? ''} ${u.jobTitle ?? ''} ${u.promo ?? ''} ${u.city ?? ''}`).includes(n))
       .slice(0, 6);
     const years = [...new Set(members.map((u) => u.promo).filter(Boolean) as number[])].sort((a, b) => b - a);
     const promos = years.filter((y) => String(y).includes(n) || norm(f(d.common.promo, { year: y })).includes(n)).slice(0, 4);
