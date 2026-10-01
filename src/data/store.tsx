@@ -55,7 +55,7 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v6';
+const STORAGE_KEY = 'lfk.demo.db.v7';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =

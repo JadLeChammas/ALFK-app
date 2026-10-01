@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
 import { DateBadge } from '@/components/cards';
+import { ProceduresCard } from '@/components/ProceduresCard';
 import { GlobeCard, StatsRow, useDestinationMarkers } from '@/components/site/blocks';
 import { Avatar, Badge, Button, Card, CountBadge, MetaLine, Row, SectionHeader, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, Screen } from '@/components/ui/Screen';
@@ -119,6 +120,9 @@ export default function Home() {
           <SectionFooter label={d.home.seeEvent} onPress={() => router.push(nextEvent ? `/evenements/${nextEvent.id}` : '/evenements')} />
         </Card>
         )}
+
+        {/* Students: Parcoursup, exams, applications */}
+        {me.role === 'eleve' && <ProceduresCard />}
 
         {/* News */}
         <Card style={{ height: '100%' }}>

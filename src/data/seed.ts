@@ -366,6 +366,8 @@ export function createSeed(now = new Date()): Db {
       description: "L'établissement où tout a commencé : l'Amicale réunit ses anciens élèves et reste liée à sa direction, à ses équipes et à ses élèves." },
   ];
 
+  const nowDate = new Date();
+  const examYear = nowDate.getMonth() >= 7 ? nowDate.getFullYear() + 1 : nowDate.getFullYear();
   // Key dates shown in the calendar every year (AEFE and LFK dates are added by admins).
   const keyDates: Db['keyDates'] = [
     { id: 'kd1', title: 'Fête nationale du Koweït', month: 2, day: 25, category: 'koweit' },
@@ -374,6 +376,12 @@ export function createSeed(now = new Date()): Db {
     { id: 'kd4', title: 'Victoire du 8 mai 1945', month: 5, day: 8, category: 'france' },
     { id: 'kd5', title: 'Fête nationale française', month: 7, day: 14, category: 'france' },
     { id: 'kd6', title: 'Armistice du 11 novembre 1918', month: 11, day: 11, category: 'france' },
+    // Demo procedures for the coming exam year (admins enter the official dates each year).
+    { id: 'kd7', title: 'Campus France : dossier « Études en France »', month: 10, day: 1, endMonth: 12, endDay: 15, year: examYear - 1, category: 'demarches', url: 'https://www.campusfrance.org' },
+    { id: 'kd8', title: 'Parcoursup : inscription et formulation des vœux', month: 1, day: 14, endMonth: 3, endDay: 12, year: examYear, category: 'demarches', url: 'https://www.parcoursup.gouv.fr' },
+    { id: 'kd9', title: 'Parcoursup : dernier jour pour confirmer ses vœux', month: 4, day: 1, year: examYear, category: 'demarches', url: 'https://www.parcoursup.gouv.fr' },
+    { id: 'kd10', title: 'Concours : inscriptions aux écoles post-bac', month: 12, day: 1, endMonth: 3, endDay: 15, year: examYear - 1, category: 'demarches' },
+    { id: 'kd11', title: 'Parcoursup : phase d’admission', month: 6, day: 2, endMonth: 7, endDay: 10, year: examYear, category: 'demarches', url: 'https://www.parcoursup.gouv.fr' },
   ];
 
   return {

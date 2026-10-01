@@ -87,9 +87,12 @@ export type PublicationStatus = 'pending' | 'published' | 'rejected';
 /** Honorary members that are institutions (LFK, SCAC…), shown on the Membres d'honneur page. */
 export type Institution = { id: string; name: string; description: string; logo?: string; website?: string; order: number };
 
-export type KeyDateCategory = 'francophonie' | 'aefe' | 'lfk' | 'france' | 'koweit' | 'amicale';
-/** A yearly date (month/day) shown in the calendar; `year` set = a one-off date. */
-export type KeyDate = { id: string; title: string; month: number; day: number; year?: number; category: KeyDateCategory };
+export type KeyDateCategory = 'francophonie' | 'aefe' | 'lfk' | 'france' | 'koweit' | 'amicale' | 'demarches';
+/**
+ * A yearly date (month/day) shown in the calendar; `year` set = a one-off date. With `endMonth`/`endDay`
+ * it is a period (e.g. Parcoursup wishes); `url` points to the official page.
+ */
+export type KeyDate = { id: string; title: string; month: number; day: number; year?: number; category: KeyDateCategory; endMonth?: number; endDay?: number; url?: string };
 
 /** `placeAliases`: admin merges of universities / companies, JSON { alias key: place key } (see data/places.ts). */
 export type AppSettings = { whatsappCommunity?: string; placeAliases?: string };

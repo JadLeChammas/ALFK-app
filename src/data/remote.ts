@@ -100,7 +100,7 @@ const toEvent = (r: Row): LfkEvent => ({ id: r.id, title: r.title, date: r.date,
 const toPhoto = (r: Row): EventPhoto => ({ id: r.id, eventId: r.event_id, uri: r.uri, uploadedBy: r.uploaded_by ?? '', createdAt: r.created_at });
 const toPublication = (r: Row): Publication => ({ id: r.id, title: r.title, category: r.category, date: r.date, cover: r.cover, excerpt: r.excerpt, body: r.body, authorId: r.author_id ?? '', status: r.status ?? 'published' });
 const toInstitution = (r: Row): Institution => ({ id: r.id, name: r.name, description: r.description ?? '', logo: opt(r.logo), website: opt(r.website), order: r.sort_order ?? 0 });
-const toKeyDate = (r: Row): KeyDate => ({ id: r.id, title: r.title, month: r.month, day: r.day, year: opt(r.year), category: r.category });
+const toKeyDate = (r: Row): KeyDate => ({ id: r.id, title: r.title, month: r.month, day: r.day, year: opt(r.year), category: r.category, endMonth: opt(r.end_month), endDay: opt(r.end_day), url: opt(r.url) });
 export const toConversation = (r: Row): Conversation => ({ id: r.id, members: [r.members[0], r.members[1]], lastRead: r.last_read ?? {}, report: opt(r.report) });
 export const toMessage = (r: Row): Message => ({ id: r.id, conversationId: r.conversation_id, senderId: r.sender_id ?? '', text: r.text, createdAt: r.created_at });
 const toContact = (r: Row): ContactMessage => ({ id: r.id, name: r.name, email: r.email, subject: r.subject, message: r.message, createdAt: r.created_at, read: r.read });
@@ -156,7 +156,12 @@ export async function loadDb(): Promise<Db> {
 export const eventRow = (e: LfkEvent) => ({ id: e.id, title: e.title, date: e.date, location: e.location, category: e.category, description: e.description, cover: e.cover, created_by: e.createdBy });
 export const publicationRow = (p: Publication) => ({ id: p.id, title: p.title, category: p.category, date: p.date, cover: p.cover, excerpt: p.excerpt, body: p.body, author_id: p.authorId, status: p.status });
 export const institutionRow = (i: Institution) => ({ id: i.id, name: i.name, description: i.description, logo: i.logo ?? null, website: i.website ?? null, sort_order: i.order });
-export const keyDateRow = (k: KeyDate) => ({ id: k.id, title: k.title, month: k.month, day: k.day, year: k.year ?? null, category: k.category });
+// Period and link columns only when used, so plain dates still save before migration 008.
+export const keyDateRow = (k: KeyDate) => ({
+  id: k.id, title: k.title, month: k.month, day: k.day, year: k.year ?? null, category: k.category,
+  ...(k.endMonth && k.endDay ? { end_month: k.endMonth, end_day: k.endDay } : {}),
+  ...(k.url ? { url: k.url } : {}),
+});
 export const logRow = (l: AdminLog) => ({ id: l.id, actor_id: l.actorId, action: l.action, target: l.target, meta: l.meta ?? null, created_at: l.createdAt });
 
 // ——— Photo upload ———

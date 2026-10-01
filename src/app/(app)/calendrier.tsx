@@ -1,13 +1,15 @@
 import { Feather } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 
 import { Sheet } from '@/components/forms';
+import { ProceduresCard } from '@/components/ProceduresCard';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, Card, Chip, IconButton, Input, Row, SectionHeader, Tap, toneColors, type IconName, type Tone } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { occurrencesAround, type Occurrence } from '@/data/keyDates';
 import { can } from '@/data/permissions';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { KeyDate, KeyDateCategory } from '@/data/types';
@@ -15,14 +17,14 @@ import { LANGUAGES, useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const CATEGORIES: KeyDateCategory[] = ['francophonie', 'aefe', 'lfk', 'france', 'koweit', 'amicale'];
-const CATEGORY_TONE: Record<KeyDateCategory, Tone> = { francophonie: 'violet', aefe: 'info', lfk: 'primary', france: 'danger', koweit: 'success', amicale: 'ink' };
+const CATEGORIES: KeyDateCategory[] = ['demarches', 'francophonie', 'aefe', 'lfk', 'france', 'koweit', 'amicale'];
+const CATEGORY_TONE: Record<KeyDateCategory, Tone> = { francophonie: 'violet', aefe: 'info', lfk: 'primary', france: 'danger', koweit: 'success', amicale: 'ink', demarches: 'secondary' };
 
-type Item = { key: string; kind: 'date' | 'birthday' | 'event'; title: string; tone: Tone; icon: IconName; href?: string; avatar?: { uri?: string; name: string }; keyDate?: KeyDate };
+type Item = { key: string; kind: 'date' | 'birthday' | 'event'; title: string; tone: Tone; icon: IconName; href?: string; avatar?: { uri?: string; name: string }; keyDate?: KeyDate; occ?: Occurrence; phase?: 'start' | 'end' };
 
 const ymd = (y: number, m: number, day: number) => `${y}-${String(m + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-/** Important dates (Francophonie, AEFE, LFK, France…), members' birthdays and events, month by month. */
+/** Important dates (Francophonie, AEFE, LFK, France…), procedures (Parcoursup, exams…), members' birthdays and events, month by month. */
 export default function Calendar() {
   const { d, f, lang } = useI18n();
   const { colors } = useTheme();
@@ -36,6 +38,9 @@ export default function Calendar() {
   const [cursor, setCursor] = useState({ y: today.getFullYear(), m: today.getMonth() });
   const [selected, setSelected] = useState<string>(ymd(today.getFullYear(), today.getMonth(), today.getDate()));
   const [adding, setAdding] = useState(false);
+  const params = useLocalSearchParams<{ only?: string }>();
+  // « Démarches » only: what students look at.
+  const [onlyProcedures, setOnlyProcedures] = useState(params.only === 'demarches');
   const locale = LANGUAGES.find((l) => l.code === lang)?.locale ?? 'fr-FR';
 
   // Everything happening in the displayed month, by YYYY-MM-DD.
@@ -44,9 +49,16 @@ export default function Calendar() {
     const push = (day: string, it: Item) => map.set(day, [...(map.get(day) ?? []), it]);
     const { y, m } = cursor;
     for (const k of db.keyDates) {
-      if (k.month - 1 !== m || (k.year && k.year !== y)) continue;
-      push(ymd(y, m, k.day), { key: k.id, kind: 'date', title: k.title, tone: CATEGORY_TONE[k.category], icon: 'star', keyDate: k });
+      if (onlyProcedures && k.category !== 'demarches') continue;
+      const icon: IconName = k.category === 'demarches' ? 'clipboard' : 'star';
+      // A period shows on its first and last day; the days in between are listed when selected.
+      for (const o of occurrencesAround(k, y)) {
+        const base = { kind: 'date' as const, title: k.title, tone: CATEGORY_TONE[k.category], icon, keyDate: k, occ: o };
+        if (o.start.getFullYear() === y && o.start.getMonth() === m) push(ymd(y, m, o.start.getDate()), { ...base, key: `${k.id}s`, phase: o.range ? 'start' : undefined });
+        if (o.range && o.end.getFullYear() === y && o.end.getMonth() === m) push(ymd(y, m, o.end.getDate()), { ...base, key: `${k.id}e`, phase: 'end' });
+      }
     }
+    if (onlyProcedures) return map;
     for (const u of members) {
       if (!u.birthDate || (!u.privacy.showBirthday && u.id !== me.id && !admin)) continue;
       const [, bm, bd] = u.birthDate.split('-').map(Number);
@@ -61,7 +73,7 @@ export default function Calendar() {
       }
     }
     return map;
-  }, [cursor, db.keyDates, db.events, members, me, admin, d, f]);
+  }, [cursor, db.keyDates, db.events, members, me, admin, d, f, onlyProcedures]);
 
   const { y, m } = cursor;
   const first = new Date(y, m, 1);
@@ -80,6 +92,15 @@ export default function Calendar() {
   const monthItems = [...byDay.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1));
   const selectedItems = byDay.get(selected) ?? [];
   const selDay = Number(selected.slice(8));
+  // Periods running through the selected day (not starting or ending on it).
+  const selDate = new Date(y, m, selDay);
+  const during: Item[] = db.keyDates.flatMap((k) =>
+    (onlyProcedures && k.category !== 'demarches') ? [] :
+    occurrencesAround(k, y)
+      .filter((o) => o.range && o.start < selDate && o.end > selDate)
+      .map((o) => ({ key: `${k.id}d`, kind: 'date' as const, title: k.title, tone: CATEGORY_TONE[k.category], icon: (k.category === 'demarches' ? 'clipboard' : 'star') as IconName, keyDate: k, occ: o })),
+  );
+  const short = (dt: Date) => `${dt.getDate()} ${d.months[dt.getMonth()]}`;
 
   const removeDate = async (k: KeyDate) => {
     if (await confirm({ title: d.common.delete, message: k.title, danger: true, confirmLabel: d.common.delete })) actions.deleteKeyDate(k.id);
@@ -87,6 +108,10 @@ export default function Calendar() {
 
   const grid = (
     <Card style={{ gap: 14 }}>
+      <Row gap={8} wrap>
+        <Chip label={d.calendar.all} active={!onlyProcedures} onPress={() => setOnlyProcedures(false)} />
+        <Chip label={d.calendar.onlyProcedures} icon="clipboard" active={onlyProcedures} onPress={() => setOnlyProcedures(true)} />
+      </Row>
       <Row wrap style={{ justifyContent: 'space-between' }}>
         <Txt variant="h2" style={{ textTransform: 'capitalize' }}>{`${d.months[m]} ${y}`}</Txt>
         <Row gap={8}>
@@ -137,11 +162,13 @@ export default function Calendar() {
           </View>
         ))}
       </View>
-      <Row gap={6} wrap>
-        <Badge label={d.calendar.birthdays} tone="warning" icon="gift" />
-        {CATEGORIES.map((c) => <Badge key={c} label={d.calendar.categories[c]} tone={CATEGORY_TONE[c]} />)}
-        {can(me, 'viewEvents') && <Badge label={d.nav.events} tone="neutral" icon="calendar" />}
-      </Row>
+      {!onlyProcedures && (
+        <Row gap={6} wrap>
+          <Badge label={d.calendar.birthdays} tone="warning" icon="gift" />
+          {CATEGORIES.map((c) => <Badge key={c} label={d.calendar.categories[c]} tone={CATEGORY_TONE[c]} />)}
+          {can(me, 'viewEvents') && <Badge label={d.nav.events} tone="neutral" icon="calendar" />}
+        </Row>
+      )}
     </Card>
   );
 
@@ -156,12 +183,17 @@ export default function Calendar() {
           </View>
         )}
         <View style={{ flex: 1 }}>
-          <Txt variant="bodyStrong" numberOfLines={2}>{it.title}</Txt>
+          <Txt variant="bodyStrong" numberOfLines={2}>{it.phase ? `${it.phase === 'start' ? d.calendar.start : d.calendar.end} · ${it.title}` : it.title}</Txt>
           <Txt variant="small" color="textSubtle">
-            {[withDate, it.keyDate ? d.calendar.categories[it.keyDate.category] : it.kind === 'birthday' ? d.calendar.birthdays : d.nav.events].filter(Boolean).join(' · ')}
+            {[
+              withDate,
+              it.occ?.range && `${short(it.occ.start)} → ${short(it.occ.end)}`,
+              it.keyDate ? d.calendar.categories[it.keyDate.category] : it.kind === 'birthday' ? d.calendar.birthdays : d.nav.events,
+            ].filter(Boolean).join(' · ')}
           </Txt>
         </View>
       </Tap>
+      {!!it.keyDate?.url && <IconButton icon="external-link" size={32} onPress={() => Linking.openURL(it.keyDate!.url!)} label={d.calendar.openLink} />}
       {admin && it.keyDate && <IconButton icon="trash-2" size={32} onPress={() => removeDate(it.keyDate!)} label={d.common.delete} />}
     </Row>
   );
@@ -170,8 +202,15 @@ export default function Calendar() {
     <Grid min={300} gap={16}>
       <Card style={{ gap: 12 }}>
         <SectionHeader title={`${selDay} ${d.months[m]}`} icon="sun" />
-        {selectedItems.length === 0 ? <Txt color="textMuted">{d.calendar.nothing}</Txt> : selectedItems.map((it) => renderItem(it))}
+        {selectedItems.length === 0 && during.length === 0 ? <Txt color="textMuted">{d.calendar.nothing}</Txt> : selectedItems.map((it) => renderItem(it))}
+        {during.length > 0 && (
+          <>
+            <Txt variant="caption" style={{ marginTop: selectedItems.length ? 6 : 0 }}>{d.calendar.during}</Txt>
+            {during.map((it) => renderItem(it))}
+          </>
+        )}
       </Card>
+      <ProceduresCard footer={false} />
       <Card style={{ gap: 12 }}>
         <SectionHeader title={d.calendar.thisMonth} icon="list" count={String(monthItems.reduce((a, [, l]) => a + l.length, 0))} />
         {monthItems.length === 0 ? <Txt color="textMuted">{d.calendar.nothing}</Txt> : monthItems.flatMap(([day, list]) => list.map((it) => renderItem(it, `${Number(day.slice(8))} ${d.months[m]}`)))}
@@ -193,12 +232,21 @@ function KeyDateForm({ visible, onClose }: { visible: boolean; onClose: () => vo
   const { d } = useI18n();
   const { actions } = useStore();
   const { toast } = useDialogs();
-  const blank = { title: '', date: '', year: '', category: 'lfk' as KeyDateCategory };
+  const blank = { title: '', date: '', end: '', period: false, url: '', year: '', category: 'lfk' as KeyDateCategory };
   const [form, setForm] = useState(blank);
-  const [dd, mm] = form.date.split('/').map((s) => parseInt(s, 10));
   const year = form.year ? parseInt(form.year, 10) : undefined;
-  const validDate = !!dd && !!mm && mm >= 1 && mm <= 12 && dd >= 1 && dd <= new Date(year ?? 2024, mm, 0).getDate();
+  const parse = (v: string) => {
+    const [day, month] = v.split('/').map((x) => parseInt(x, 10));
+    return { day, month, ok: !!day && !!month && month >= 1 && month <= 12 && day >= 1 && day <= new Date(year ?? 2024, month, 0).getDate() };
+  };
+  const start = parse(form.date);
+  const end = parse(form.end);
+  const dd = start.day;
+  const mm = start.month;
+  const validDate = start.ok;
+  const validEnd = !form.period || (end.ok && (end.day !== dd || end.month !== mm));
   const validYear = !form.year || (!!year && year >= 1900 && year <= 2100);
+  const url = form.url.trim() && !/^https?:\/\//i.test(form.url.trim()) ? `https://${form.url.trim()}` : form.url.trim();
   const maskDayMonth = (v: string) => {
     const digits = v.replace(/\D/g, '').slice(0, 4);
     return digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
@@ -211,6 +259,14 @@ function KeyDateForm({ visible, onClose }: { visible: boolean; onClose: () => vo
         <Input label={d.calendar.yearField} value={form.year} onChangeText={(v) => setForm((f) => ({ ...f, year: v.replace(/\D/g, '') }))} placeholder="2027" keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
       </Row>
       <Txt variant="small" color="textSubtle">{d.calendar.yearHint}</Txt>
+      <Row gap={8} wrap>
+        <Chip label={d.calendar.oneDay} active={!form.period} onPress={() => setForm((f) => ({ ...f, period: false }))} />
+        <Chip label={d.calendar.period} icon="arrow-right" active={form.period} onPress={() => setForm((f) => ({ ...f, period: true }))} />
+      </Row>
+      {form.period && (
+        <Input label={d.calendar.endField} value={form.end} onChangeText={(v) => setForm((f) => ({ ...f, end: maskDayMonth(v) }))} placeholder="12/03" keyboardType="number-pad" maxLength={5} error={form.end.length === 5 && !validEnd ? d.calendar.invalidDate : undefined} />
+      )}
+      <Input label={d.calendar.urlField} value={form.url} onChangeText={(v) => setForm((f) => ({ ...f, url: v }))} placeholder="https://www.parcoursup.gouv.fr" autoCapitalize="none" keyboardType="url" />
       <View style={{ gap: 8 }}>
         <Txt variant="smallStrong" color="textMuted">{d.calendar.category}</Txt>
         <Row gap={8} wrap>
@@ -223,9 +279,9 @@ function KeyDateForm({ visible, onClose }: { visible: boolean; onClose: () => vo
         label={d.common.add}
         full
         size="lg"
-        disabled={!form.title.trim() || !validDate || !validYear}
+        disabled={!form.title.trim() || !validDate || !validYear || !validEnd}
         onPress={() => {
-          actions.addKeyDate({ title: form.title.trim(), day: dd, month: mm, year, category: form.category });
+          actions.addKeyDate({ title: form.title.trim(), day: dd, month: mm, year, category: form.category, ...(form.period ? { endDay: end.day, endMonth: end.month } : {}), ...(url ? { url } : {}) });
           toast(d.common.saved);
           setForm(blank);
           onClose();
