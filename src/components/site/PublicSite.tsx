@@ -12,6 +12,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
+import { AppShell } from '../shell/AppShell';
 import { Flag } from '../ui/Flag';
 import { LogoMark } from '../ui/Logo';
 import { Button, Tap } from '../ui/primitives';
@@ -255,6 +256,8 @@ export function CtaSection() {
   const { d } = useI18n();
   const { me } = useStore();
   const { isMobile } = useLayout();
+  // Members are already in: no "join" call to action inside their space.
+  if (me?.approved) return null;
   return (
     <View style={{ backgroundColor: NAVY_DEEP, paddingVertical: isMobile ? 56 : 96 }}>
       <Container style={{ alignItems: 'center', gap: 18 }}>
@@ -318,9 +321,22 @@ function Footer() {
   );
 }
 
-/** Frame of every public page: navy menu, content, red band, footer. */
+/**
+ * Frame of every public page: navy menu, content, red band, footer. Approved members get the
+ * same page inside their space, with the sidebar on the left.
+ */
 export function PublicSite({ children }: { children: ReactNode }) {
   const { colors } = useTheme();
+  const { me, session } = useStore();
+  if (me?.approved && !session?.recovery) {
+    return (
+      <AppShell>
+        <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ flexGrow: 1, paddingBottom: 96 }}>
+          {children}
+        </ScrollView>
+      </AppShell>
+    );
+  }
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <Header />

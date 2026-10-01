@@ -1,7 +1,7 @@
 export type ColorScheme = 'light' | 'dark';
 
 const light = {
-  bg: '#EEF2F8',
+  bg: '#E4EAF4',
   surface: '#FFFFFF',
   surfaceAlt: '#E9EEF6',
   surfaceHover: '#F2F5FA',
@@ -18,6 +18,10 @@ const light = {
   accentPressed: '#8F0000',
   accentSoft: '#FBE8E8',
   onAccent: '#FFFFFF',
+  /** Navy sidebar and phone tab bar (the same brand navy in both themes). */
+  nav: '#00206A',
+  navText: '#C8D3E5',
+  navActive: 'rgba(255, 255, 255, 0.12)',
   ink: '#00206A',
   onInk: '#FFFFFF',
   silver: '#A7ADBA',
@@ -57,6 +61,9 @@ const dark: typeof light = {
   accentPressed: '#C22F2F',
   accentSoft: '#341418',
   onAccent: '#FFFFFF',
+  nav: '#0B1A44',
+  navText: '#A5B0C8',
+  navActive: 'rgba(255, 255, 255, 0.10)',
   ink: '#EEF2F8',
   onInk: '#060B19',
   silver: '#C9CED8',

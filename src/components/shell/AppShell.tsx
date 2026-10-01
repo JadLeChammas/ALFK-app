@@ -38,15 +38,19 @@ function useNav() {
   const events: NavItem[] = can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'star', label: d.nav.events }] : [];
   const publications: NavItem = { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort, badge: toReview };
   const messages: NavItem = { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread };
-  const community: NavItem[] = [
-    { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
+  const community: NavItem[] = [{ href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp }];
+  // The Amicale's own pages (also public), opened inside the member space.
+  const amicale: NavItem[] = [
+    { href: '/association', icon: 'heart', label: d.site.nav.association },
+    { href: '/bureau', icon: 'users', label: d.site.nav.bureau },
     { href: '/partenaires', icon: 'award', label: d.nav.honorary },
   ];
   return {
     main: [home, directory, repere, orientation, calendar, ...events, publications, messages],
     community,
+    amicale,
     bar: [home, directory, repere, publications, messages],
-    more: [...events, orientation, calendar, ...community],
+    more: [...events, orientation, calendar, ...community, ...amicale],
   };
 }
 
@@ -90,7 +94,7 @@ function Sidebar({ compact }: { compact: boolean }) {
   const me = useMe();
   const { db } = useStore();
   const pathname = usePathname();
-  const { main, community } = useNav();
+  const { main, community, amicale } = useNav();
   const notif = useUnreadNotifications();
   const pending = db.users.filter((u) => !u.approved).length;
   const bottom: NavItem[] = [
@@ -102,15 +106,13 @@ function Sidebar({ compact }: { compact: boolean }) {
     <View
       style={{
         width: compact ? 76 : 248,
-        backgroundColor: colors.surface,
-        borderRightWidth: 1,
-        borderRightColor: colors.border,
+        backgroundColor: colors.nav,
         paddingVertical: 20,
         paddingHorizontal: compact ? 12 : 16,
         ...(Platform.OS === 'web' ? ({ height: '100vh', position: 'sticky', top: 0 } as object) : {}),
       }}>
-      <Tap onPress={() => router.push('/')} style={{ paddingHorizontal: compact ? 5 : 8, marginBottom: 28 }}>
-        {compact ? <LogoMark size={40} /> : <LogoLockup />}
+      <Tap onPress={() => router.push('/')} style={{ paddingHorizontal: compact ? 5 : 8, marginBottom: 20 }}>
+        {compact ? <LogoMark size={40} /> : <LogoLockup light />}
       </Tap>
       <ScrollView style={{ flex: 1, marginHorizontal: -4 }} contentContainerStyle={{ paddingHorizontal: 4 }} showsVerticalScrollIndicator={false}>
       <View style={{ gap: 2 }}>
@@ -118,26 +120,27 @@ function Sidebar({ compact }: { compact: boolean }) {
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
         ))}
       </View>
-      <View style={{ marginTop: 18, gap: 2 }}>
-        {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.community}</Txt>}
-        {community.map((item) => (
+      <View style={{ marginTop: 12, gap: 2 }}>
+        {!compact && <NavCaption label={d.nav.community} />}
+        {[...community, ...amicale].map((item) => (
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
         ))}
       </View>
+
       {me.role === 'admin' && (
-        <View style={{ marginTop: 18, gap: 4 }}>
-          {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.admin}</Txt>}
+        <View style={{ marginTop: 12, gap: 4 }}>
+          {!compact && <NavCaption label={d.nav.admin} />}
           <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} />
         </View>
       )}
       {me.role !== 'admin' && can(me, 'viewStats') && (
-        <View style={{ marginTop: 18, gap: 4 }}>
-          {!compact && <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6 }}>{d.nav.leadership}</Txt>}
+        <View style={{ marginTop: 12, gap: 4 }}>
+          {!compact && <NavCaption label={d.nav.leadership} />}
           <SideLink item={{ href: '/statistiques', icon: 'bar-chart-2', label: d.nav.stats }} active={isActive(pathname, { href: '/statistiques', icon: 'bar-chart-2', label: '' })} compact={compact} />
         </View>
       )}
       </ScrollView>
-      <View style={{ gap: 4, marginBottom: 14, marginTop: 12 }}>
+      <View style={{ gap: 2, marginBottom: 10, marginTop: 8 }}>
         {bottom.map((item) => (
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
         ))}
@@ -145,16 +148,16 @@ function Sidebar({ compact }: { compact: boolean }) {
       <Tap
         onPress={() => router.push('/profil')}
         accessibilityLabel={d.nav.profile}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: compact ? 6 : 10, borderRadius: 16, borderWidth: 1, borderColor: pathname.startsWith('/profil') ? colors.primary : colors.border, backgroundColor: pathname.startsWith('/profil') ? colors.primarySoft : 'transparent', justifyContent: compact ? 'center' : 'flex-start' }}
-        hoverStyle={{ backgroundColor: colors.surfaceAlt }}>
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: compact ? 6 : 10, borderRadius: 16, borderWidth: 1, borderColor: pathname.startsWith('/profil') ? '#FFFFFF' : 'rgba(255, 255, 255, 0.16)', backgroundColor: pathname.startsWith('/profil') ? colors.navActive : 'transparent', justifyContent: compact ? 'center' : 'flex-start' }}
+        hoverStyle={{ backgroundColor: colors.navActive }}>
         <Avatar uri={me.avatar} name={fullName(me)} size={36} />
         {!compact && (
           <>
             <View style={{ flex: 1 }}>
-              <Txt variant="smallStrong" numberOfLines={1}>{fullName(me)}</Txt>
-              <Txt variant="small" color="textSubtle" numberOfLines={1}>{d.roles[me.role]}</Txt>
+              <Txt variant="smallStrong" numberOfLines={1} style={{ color: '#FFFFFF' }}>{fullName(me)}</Txt>
+              <Txt variant="small" numberOfLines={1} style={{ color: colors.navText }}>{d.roles[me.role]}</Txt>
             </View>
-            <Feather name="chevron-right" size={16} color={colors.textSubtle} />
+            <Feather name="chevron-right" size={16} color={colors.navText} />
           </>
         )}
       </Tap>
@@ -162,8 +165,14 @@ function Sidebar({ compact }: { compact: boolean }) {
   );
 }
 
+function NavCaption({ label }: { label: string }) {
+  const { colors } = useTheme();
+  return <Txt variant="caption" style={{ paddingHorizontal: 12, marginBottom: 6, color: colors.navText, opacity: 0.7 }}>{label}</Txt>;
+}
+
 function SideLink({ item, active, compact }: { item: NavItem; active: boolean; compact: boolean }) {
   const { colors } = useTheme();
+  const fg = active ? '#FFFFFF' : colors.navText;
   return (
     <Tap
       onPress={() => router.push(item.href as never)}
@@ -172,20 +181,22 @@ function SideLink({ item, active, compact }: { item: NavItem; active: boolean; c
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        height: 42,
+        height: 36,
         paddingHorizontal: compact ? 0 : 12,
         justifyContent: compact ? 'center' : 'flex-start',
-        borderRadius: 14,
-        backgroundColor: active ? colors.primarySoft : 'transparent',
+        borderRadius: 12,
+        backgroundColor: active ? colors.navActive : 'transparent',
       }}
-      hoverStyle={!active && { backgroundColor: colors.surfaceAlt }}>
+      hoverStyle={!active && { backgroundColor: 'rgba(255, 255, 255, 0.06)' }}>
+      {/* Red marker on the open section */}
+      {active && <View style={{ position: 'absolute', left: compact ? 2 : -2, top: 9, width: 3, height: 18, borderRadius: 2, backgroundColor: colors.accent }} />}
       <View>
-        <Feather name={item.icon} size={19} color={active ? colors.primary : colors.textMuted} />
-        {compact && !!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -8, right: -10 }} />}
+        <Feather name={item.icon} size={18} color={fg} />
+        {compact && !!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -8, right: -10, borderColor: colors.nav }} />}
       </View>
       {!compact && (
         <>
-          <Txt variant="bodyStrong" style={{ flex: 1, color: active ? colors.primary : colors.text, fontSize: 14 }}>{item.label}</Txt>
+          <Txt variant="bodyStrong" style={{ flex: 1, color: fg, fontSize: 14 }}>{item.label}</Txt>
           {!!item.badge && <CountBadge n={item.badge} style={{ borderColor: 'transparent' }} />}
         </>
       )}
@@ -252,15 +263,15 @@ function BottomNav() {
   const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href) };
   const tab = (item: NavItem, active: boolean, onPress: () => void) => (
     <Tap key={item.href} onPress={onPress} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
-      <View style={{ width: 46, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? colors.primarySoft : 'transparent' }}>
-        <Feather name={item.icon} size={20} color={active ? colors.primary : colors.textMuted} />
-        {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -4, right: 4 }} />}
+      <View style={{ width: 46, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? colors.navActive : 'transparent' }}>
+        <Feather name={item.icon} size={20} color={active ? '#FFFFFF' : colors.navText} />
+        {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -4, right: 4, borderColor: colors.nav }} />}
       </View>
-      <Txt numberOfLines={1} style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 10, letterSpacing: -0.1, color: active ? colors.primary : colors.textMuted }}>{item.short ?? item.label}</Txt>
+      <Txt numberOfLines={1} style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 10, letterSpacing: -0.1, color: active ? '#FFFFFF' : colors.navText }}>{item.short ?? item.label}</Txt>
     </Tap>
   );
   return (
-    <View style={{ flexDirection: 'row', backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: Math.max(insets.bottom, 8), paddingTop: 8 }}>
+    <View style={{ flexDirection: 'row', backgroundColor: colors.nav, paddingBottom: Math.max(insets.bottom, 8), paddingTop: 8 }}>
       {bar.map((item) => tab(item, isActive(pathname, item), () => router.navigate(item.href as never)))}
       {tab(moreItem, open || more.some((m) => isActive(pathname, m)), () => setOpen(true))}
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>

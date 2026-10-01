@@ -110,7 +110,7 @@ export function Button({
 }) {
   const { colors } = useTheme();
   const palette: Record<ButtonVariant, { bg: string; fg: string; border: string; hover: string }> = {
-    primary: { bg: colors.primary, fg: colors.onPrimary, border: colors.primary, hover: colors.primaryPressed },
+    primary: { bg: colors.accent, fg: colors.onAccent, border: colors.accent, hover: colors.accentPressed },
     accent: { bg: colors.accent, fg: colors.onAccent, border: colors.accent, hover: colors.accentPressed },
     ink: { bg: colors.ink, fg: colors.onInk, border: colors.ink, hover: colors.ink },
     secondary: { bg: colors.surface, fg: colors.text, border: colors.border, hover: colors.surfaceHover },
@@ -205,7 +205,7 @@ export function CountBadge({ n, style }: { n: number; style?: StyleProp<ViewStyl
   return (
     <View
       style={[
-        { minWidth: 18, height: 18, borderRadius: 9, paddingHorizontal: 5, backgroundColor: colors.danger, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.surface },
+        { minWidth: 18, height: 18, borderRadius: 9, paddingHorizontal: 5, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.surface },
         style,
       ]}>
       <Txt style={{ color: '#fff', fontFamily: fonts.bold, fontSize: 10, lineHeight: 12 }}>{n > 99 ? '99+' : n}</Txt>

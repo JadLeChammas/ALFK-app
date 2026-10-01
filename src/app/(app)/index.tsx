@@ -1,6 +1,5 @@
 import { Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
@@ -8,8 +7,10 @@ import { DateBadge } from '@/components/cards';
 import { Avatar, Badge, Button, Card, MetaLine, Row, SectionHeader, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES } from '@/data/countries';
+import { WorldArcs } from '@/components/ui/WorldDots';
+import { COUNTRIES, countryByCode } from '@/data/countries';
 import { contactError } from '@/data/members';
+import { usePublicOverview } from '@/data/public';
 import { can } from '@/data/permissions';
 import { fullName, useApprovedMembers, useInbox, useMe, usePublished, useStore, useUpcomingBirthdays } from '@/data/store';
 import { Flag } from '@/components/ui/Flag';
@@ -18,13 +19,12 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
 
-const campus = require('@/assets/images/lfk-campus.png');
-
 export default function Home() {
   const { colors } = useTheme();
   const { d, f, formatDate } = useI18n();
-  const { isMobile } = useLayout();
+  const { isMobile, isDesktop } = useLayout();
   const me = useMe();
+  const overview = usePublicOverview();
   const { db } = useStore();
   const published = usePublished();
   const { unread } = useInbox();
@@ -53,17 +53,31 @@ export default function Home() {
 
   return (
     <Screen>
-      {/* Greeting */}
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <View style={{ gap: 4, flexShrink: 1 }}>
-          <Txt variant={isMobile ? 'h1' : 'display'}>{f(d.home.hello, { name: me.firstName })}</Txt>
-          <Txt color="textMuted">
-            {formatDate(new Date(), { weekday: true })} · {me.fonction ?? d.roles[me.role]} · {d.app.name}
-          </Txt>
+      {/* Greeting, key figures and the map of where alumni went (navy banner) */}
+      <View style={{ borderRadius: radius.hero, backgroundColor: colors.nav, padding: isMobile ? 22 : 36, flexDirection: isDesktop ? 'row' : 'column', gap: 24, overflow: 'hidden' }}>
+        <View style={{ flex: 1, gap: 6 }}>
+          <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 36 : 48, lineHeight: isMobile ? 40 : 52, color: '#fff' }}>{f(d.home.hello, { name: me.firstName })}</Txt>
+          <Txt style={{ color: colors.navText }}>{formatDate(new Date(), { weekday: true })} · {me.fonction ?? d.roles[me.role]}</Txt>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 18, rowGap: 16 }}>
+            {([
+              [overview.alumni, d.site.home.statAlumni],
+              [overview.countries, d.site.home.statCountries],
+              [overview.promos, d.site.home.statPromos],
+              [overview.universities, d.site.home.statUniversities],
+            ] as const).map(([n, label], i) => (
+              <View key={label} style={{ flexBasis: isMobile ? '50%' : '25%', minWidth: 110, paddingLeft: i % (isMobile ? 2 : 4) ? 14 : 0, borderLeftWidth: i % (isMobile ? 2 : 4) ? 1 : 0, borderLeftColor: 'rgba(255,255,255,0.18)' }}>
+                <Txt style={{ fontFamily: fonts.extrabold, fontSize: isMobile ? 26 : 32, lineHeight: isMobile ? 30 : 36, color: '#fff' }}>{n}</Txt>
+                <Txt style={{ fontFamily: fonts.semibold, fontSize: 10, letterSpacing: 1.1, textTransform: 'uppercase', color: colors.navText }}>{label}</Txt>
+              </View>
+            ))}
+          </View>
+          {me.role === 'admin' && pending > 0 && (
+            <Button label={f(d.home.adminShortcutSub, { n: pending })} icon="shield" size="sm" onPress={() => router.push('/admin/approbations')} style={{ marginTop: 18 }} />
+          )}
         </View>
-        {me.role === 'admin' && pending > 0 && (
-          <Button label={f(d.home.adminShortcutSub, { n: pending })} icon="shield" variant="soft" size="sm" onPress={() => router.push('/admin/approbations')} />
-        )}
+        <View style={{ width: isDesktop ? 380 : '100%', justifyContent: 'center' }}>
+          <WorldArcs origin={countryByCode('KW')!.pin} targets={overview.destinations.flatMap((t) => { const c = countryByCode(t.code); return c ? [{ col: c.pin[0], row: c.pin[1], n: t.n }] : []; })} />
+        </View>
       </View>
 
       {/* Accounts created before birth date and phone became mandatory */}
@@ -78,15 +92,6 @@ export default function Home() {
         </Row>
       )}
 
-      {/* Hero */}
-      <View style={{ height: isMobile ? 230 : 260, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: '#000' }}>
-        <Image source={campus} style={{ position: 'absolute', width: '100%', height: '100%' }} contentFit="cover" />
-        <LinearGradient colors={['rgba(8,10,20,0.15)', 'rgba(8,10,20,0.85)']} start={{ x: 0.6, y: 0 }} end={{ x: 0, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-        <View style={{ flex: 1, justifyContent: 'flex-end', padding: isMobile ? 20 : 32, gap: 8 }}>
-          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: isMobile ? 30 : 42, lineHeight: isMobile ? 34 : 46 }}>{d.home.heroTitle}</Txt>
-          <Txt style={{ color: 'rgba(255,255,255,0.8)', fontFamily: fonts.medium, fontSize: isMobile ? 13 : 15, lineHeight: 21, maxWidth: 520 }}>{d.home.heroSub}</Txt>
-        </View>
-      </View>
 
       {/* Quick actions */}
       <View>

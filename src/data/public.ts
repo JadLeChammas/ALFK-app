@@ -54,12 +54,14 @@ function fromDb(db: Db): PublicOverview {
 }
 
 export function usePublicOverview(): PublicOverview {
-  const { db, isRemote } = useStore();
-  const local = useMemo(() => (isRemote ? null : fromDb(db)), [db, isRemote]);
+  const { db, isRemote, me } = useStore();
+  // Approved members already have the data (row-level security lets them read it).
+  const fromLocal = !isRemote || !!me?.approved;
+  const local = useMemo(() => (fromLocal ? fromDb(db) : null), [db, fromLocal]);
   const [remote, setRemote] = useState<PublicOverview | null>(null);
 
   useEffect(() => {
-    if (!isRemote || !supabase) return;
+    if (fromLocal || !supabase) return;
     let alive = true;
     supabase.rpc('public_overview').then(({ data, error }) => {
       if (!alive || error || !data) return;
@@ -79,7 +81,7 @@ export function usePublicOverview(): PublicOverview {
     return () => {
       alive = false;
     };
-  }, [isRemote]);
+  }, [fromLocal]);
 
   return local ?? remote ?? EMPTY;
 }

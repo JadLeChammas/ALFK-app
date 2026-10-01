@@ -96,12 +96,13 @@ src/app/
 
 ## 3. Navigation
 
-- **Desktop (≥ 1024 px)** : sidebar fixe 248 px — logo, sections (Accueil, Annuaire, Repère,
-  Orientation, Calendrier, Événements, Publications, Messages), groupe « Communauté » (WhatsApp,
-  Partenaires), puis Paramètres, Notifications et la carte avatar qui ouvre « Mon profil ».
-  Section « Administration » visible seulement pour les admins.
+- **Desktop (≥ 1024 px)** : sidebar bleu marine fixe 248 px (onglet actif en blanc avec un repère
+  rouge) — logo, sections (Accueil, Annuaire, Repère, Orientation, Calendrier, Événements,
+  Publications, Messages), groupe « Communauté » (WhatsApp, L'Amicale, Le bureau, Partenaires : les
+  pages publiques s'ouvrent dans l'espace membre), puis Paramètres, Notifications et la carte avatar
+  qui ouvre « Mon profil ». Section « Administration » visible seulement pour les admins.
 - **Tablette (768–1023 px)** : sidebar compacte (icônes seules, 76 px).
-- **Mobile (< 768 px)** : la barre de gauche devient la barre du bas — Accueil · Annuaire · Repère ·
+- **Mobile (< 768 px)** : la barre de gauche devient la barre du bas (bleu marine) — Accueil · Annuaire · Repère ·
   Actus · Messages · **Plus** (feuille avec Événements, Orientation, Calendrier, WhatsApp,
   Partenaires ; sans Événements pour les élèves).
   Le profil s'ouvre avec l'avatar en haut à droite ; Paramètres, Admin et Statistiques sont dans le profil. Repère, Publications, Paramètres, Admin sont accessibles depuis l'Accueil
@@ -127,14 +128,15 @@ Identité : bleu marine et rouge (charte tricolore), avec l'argent du logo.
 
 | Token | Clair | Sombre | Usage |
 |---|---|---|---|
-| `bg` | `#EEF2F8` | `#060B19` | Fond d'application |
+| `bg` | `#E4EAF4` | `#060B19` | Fond d'application |
 | `surface` | `#FFFFFF` | `#14171F` | Cards |
 | `surfaceAlt` | `#E9EEF6` | `#152038` | Inputs, zones secondaires |
 | `border` | `#DCE3EE` | `#22304F` | Bordures fines |
 | `text` | `#0A1530` | `#EEF2F8` | Texte principal (blanc cassé en sombre) |
 | `textMuted` | `#4E5B78` | `#A5B0C8` | Texte secondaire |
 | `primary` | `#00206A` | `#7E9BF0` | Bleu marine — actions, sélection |
-| `accent` | `#AE0000` | `#D93A3A` | Rouge — appels à l'action (Rejoindre…) |
+| `accent` | `#AE0000` | `#D93A3A` | Rouge — boutons principaux, compteurs, repère de l'onglet actif |
+| `nav` | `#00206A` | `#0B1A44` | Sidebar et barre du bas |
 | `primarySoft` | `#E4EAF4` | `#16224A` | Fonds d'accent |
 | `ink` | `#00206A` | `#EEF2F8` | Bouton fort / sidebar active |
 | `silver` | `#A7ADBA` | `#C9CED8` | Détails « métal » du logo |
