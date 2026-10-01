@@ -83,7 +83,7 @@ export function Card({
   return <View style={base}>{children}</View>;
 }
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'ink' | 'soft';
+type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger' | 'ink' | 'soft';
 
 export function Button({
   label,
@@ -111,6 +111,7 @@ export function Button({
   const { colors } = useTheme();
   const palette: Record<ButtonVariant, { bg: string; fg: string; border: string; hover: string }> = {
     primary: { bg: colors.primary, fg: colors.onPrimary, border: colors.primary, hover: colors.primaryPressed },
+    accent: { bg: colors.accent, fg: colors.onAccent, border: colors.accent, hover: colors.accentPressed },
     ink: { bg: colors.ink, fg: colors.onInk, border: colors.ink, hover: colors.ink },
     secondary: { bg: colors.surface, fg: colors.text, border: colors.border, hover: colors.surfaceHover },
     ghost: { bg: 'transparent', fg: colors.text, border: 'transparent', hover: colors.surfaceAlt },

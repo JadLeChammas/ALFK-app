@@ -141,7 +141,7 @@ export default function ManageMembers() {
                     ))}
                   </Row>
                 </View>
-                {db.users.find((u) => u.id === editing.id)?.role === 'honneur' && (
+                {['honneur', 'admin'].includes(db.users.find((u) => u.id === editing.id)?.role ?? '') && (
                   <Button
                     label={d.admin.editFonction}
                     icon="briefcase"

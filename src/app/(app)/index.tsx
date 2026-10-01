@@ -83,7 +83,7 @@ export default function Home() {
         <Image source={campus} style={{ position: 'absolute', width: '100%', height: '100%' }} contentFit="cover" />
         <LinearGradient colors={['rgba(8,10,20,0.15)', 'rgba(8,10,20,0.85)']} start={{ x: 0.6, y: 0 }} end={{ x: 0, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <View style={{ flex: 1, justifyContent: 'flex-end', padding: isMobile ? 20 : 32, gap: 8 }}>
-          <Txt style={{ color: '#fff', fontFamily: fonts.extrabold, fontSize: isMobile ? 24 : 32, lineHeight: isMobile ? 30 : 38, letterSpacing: -0.8 }}>{d.home.heroTitle}</Txt>
+          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: isMobile ? 30 : 42, lineHeight: isMobile ? 34 : 46 }}>{d.home.heroTitle}</Txt>
           <Txt style={{ color: 'rgba(255,255,255,0.8)', fontFamily: fonts.medium, fontSize: isMobile ? 13 : 15, lineHeight: 21, maxWidth: 520 }}>{d.home.heroSub}</Txt>
         </View>
       </View>

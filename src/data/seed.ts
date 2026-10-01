@@ -129,7 +129,7 @@ export function createSeed(now = new Date()): Db {
 
   // Named members used across the demo.
   const jad = add({
-    firstName: 'Jad', lastName: 'El Chammas', gender: 'M', role: 'admin', promo: 2020, school: 'INSA Lyon',
+    firstName: 'Jad', lastName: 'El Chammas', gender: 'M', role: 'admin', fonction: 'Président', promo: 2020, school: 'INSA Lyon',
     city: 'Paris', country: 'FR', phone: '+33 612345678', birthDate: '2002-03-12', avatar: portrait('M', 32),
     email: DEMO_ACCOUNTS.admin, createdAt: ago(720), lastActiveAt: ago(0),
     bio: "Ingénieur en informatique, j'anime la plateforme de l'Amicale.",

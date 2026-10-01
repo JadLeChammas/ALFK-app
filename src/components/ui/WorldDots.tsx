@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { Platform, Pressable, View } from 'react-native';
-import Svg, { Circle, G } from 'react-native-svg';
+import Svg, { Circle, G, Path } from 'react-native-svg';
 
 import type { ContinentKey } from '@/data/types';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -139,6 +139,46 @@ export function WorldDots({
         </Pressable>
       ) : (
         <View ref={ref}>{svg}</View>
+      )}
+    </View>
+  );
+}
+
+/**
+ * The same map on a dark (navy) background, with an arc from the lycée to every country
+ * where former students study. Used on the public pages.
+ */
+export function WorldArcs({ origin, targets }: { origin: [number, number]; targets: { col: number; row: number; n: number }[] }) {
+  const [w, setW] = useState(0);
+  const dots = useMemo(() => ROWS.flatMap((segs, r) => segs.flatMap(([a, b]) => Array.from({ length: b - a + 1 }, (_, i) => [a + i, r] as const))), []);
+  const cell = w / MAP_COLS;
+  const h = cell * MAP_ROWS;
+  const at = (c: number, r: number) => [c * cell + cell / 2, r * cell + cell / 2] as const;
+  const [ox, oy] = at(origin[0], origin[1]);
+  const max = Math.max(1, ...targets.map((t) => t.n));
+  return (
+    <View onLayout={(e) => setW(e.nativeEvent.layout.width)} style={{ width: '100%', height: h || 180 }} pointerEvents="none">
+      {w > 0 && (
+        <Svg width={w} height={h}>
+          {dots.map(([c, r]) => (
+            <Circle key={`${c}-${r}`} cx={c * cell + cell / 2} cy={r * cell + cell / 2} r={cell * 0.26} fill="#FFFFFF" opacity={0.16} />
+          ))}
+          {targets.map((t, i) => {
+            const [tx, ty] = at(t.col, t.row);
+            if (Math.abs(tx - ox) < 1 && Math.abs(ty - oy) < 1) return null;
+            // A quadratic curve lifted above the straight line, higher for longer trips.
+            const mx = (ox + tx) / 2;
+            const my = (oy + ty) / 2 - Math.hypot(tx - ox, ty - oy) * 0.35;
+            return (
+              <G key={i}>
+                <Path d={`M${ox},${oy} Q${mx},${my} ${tx},${ty}`} stroke="#C8D3E5" strokeWidth={1.4} fill="none" opacity={0.75} />
+                <Circle cx={tx} cy={ty} r={cell * (0.35 + (t.n / max) * 0.5)} fill="#FFFFFF" />
+              </G>
+            );
+          })}
+          <Circle cx={ox} cy={oy} r={cell * 1.6} fill="#AE0000" opacity={0.3} />
+          <Circle cx={ox} cy={oy} r={cell * 0.75} fill="#AE0000" stroke="#FFFFFF" strokeWidth={2} />
+        </Svg>
       )}
     </View>
   );

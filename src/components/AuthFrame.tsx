@@ -65,7 +65,7 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
           <View style={{ flex: 1, padding: 48, justifyContent: 'space-between' }}>
             <LogoFull size={200} />
             <View style={{ gap: 16, maxWidth: 520 }}>
-              <Txt style={{ color: '#fff', fontFamily: fonts.extrabold, fontSize: 40, lineHeight: 46, letterSpacing: -1 }}>{d.home.heroTitle}</Txt>
+              <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 52, lineHeight: 56 }}>{d.home.heroTitle}</Txt>
               <Txt style={{ color: 'rgba(255,255,255,0.75)', fontFamily: fonts.medium, fontSize: 16, lineHeight: 24 }}>{d.home.heroSub}</Txt>
               <Row gap={8} style={{ marginTop: 8 }}>
                 <Feather name="lock" size={14} color="rgba(255,255,255,0.7)" />

@@ -39,7 +39,8 @@ Sans configuration, l'app tourne en **démo locale**. Avec les variables Supabas
 2. Puis, dans l'ordre, chaque fichier de [`supabase/migrations/`](supabase/migrations) → **Run**
    (`002_numeros_et_coordonnees.sql` : numéro Alumni, code Bureau, date de naissance et téléphone obligatoires ;
    `003_justificatif_annonces_calendrier.sql` : justificatif de scolarité, annonces vérifiées, orientation,
-   calendrier, membres d'honneur, communauté WhatsApp).
+   calendrier, membres d'honneur, communauté WhatsApp ;
+   `004_pages_publiques.sql` : chiffres, bureau et partenaires des pages publiques, sans exposer les profils).
    Facultatif : faire pareil avec [`supabase/seed.sql`](supabase/seed.sql) (promos, événements et publications d'exemple).
 2. *Authentication → URL Configuration* : **Site URL** = l'adresse Vercel (ex. `https://alfk-app.vercel.app`),
    et ajouter `https://alfk-app.vercel.app/**` dans **Redirect URLs** (liens de réinitialisation du mot de passe).

@@ -9,7 +9,7 @@ Ce document fixe l'architecture, les pages, les composants et le design system a
 
 | État | Ce que voit l'utilisateur |
 |---|---|
-| Non connecté | `/bienvenue` (page d'accueil publique), `/connexion`, `/inscription`, `/mot-de-passe-oublie` + pages légales |
+| Non connecté | `/bienvenue` (accueil public), `/association`, `/bureau`, `/partenaires`, `/adherer`, `/connexion`, `/inscription`, `/mot-de-passe-oublie` + pages légales |
 | Connecté, non approuvé | `/en-attente` uniquement (avec l'envoi du justificatif s'il manque) |
 | Session de récupération | `/nouveau-mot-de-passe` — prioritaire sur tout le reste |
 | Approuvé (Alumni, Élève, Membre d'honneur) | Espace membre complet |
@@ -111,30 +111,40 @@ src/app/
 
 ## 4. Design system
 
+### Identité : bleu marine + rouge, Instrument Serif + Inter
+
+Les pages publiques (`src/components/site/PublicSite.tsx`) suivent la charte tricolore : bandeau et
+menu bleu marine `#00206A`, boutons d'appel rouges `#AE0000`, gris-bleu `#C8D3E5`, grands titres en
+**Instrument Serif** (avec une partie en italique), texte en **Inter**. L'espace membre reprend les
+mêmes couleurs via les tokens (`primary` = marine, `accent` = rouge) ; les titres `display` et `h1`
+sont en Instrument Serif. Les chiffres, le bureau et les partenaires visibles sans compte viennent de
+la fonction `public_overview()` (migration `004`) : uniquement des totaux, noms et fonctions.
+
 ### Couleurs (tokens dans `src/theme/tokens.ts`)
 Drapeaux : images (`components/ui/Flag.tsx`) — les emojis drapeaux ne s'affichent pas sous Windows.
 
-Identité tirée du logo (argent / noir profond) + le bleu historique du LFK.
+Identité : bleu marine et rouge (charte tricolore), avec l'argent du logo.
 
 | Token | Clair | Sombre | Usage |
 |---|---|---|---|
-| `bg` | `#F6F7FB` | `#0B0D12` | Fond d'application |
+| `bg` | `#EEF2F8` | `#060B19` | Fond d'application |
 | `surface` | `#FFFFFF` | `#14171F` | Cards |
-| `surfaceAlt` | `#F0F2F7` | `#1B1F29` | Inputs, zones secondaires |
-| `border` | `#E6E8EF` | `#262B36` | Bordures fines |
-| `text` | `#0E1320` | `#EEF0F5` | Texte principal (blanc cassé en sombre) |
-| `textMuted` | `#5B6275` | `#9AA1B2` | Texte secondaire |
-| `primary` | `#2E45D6` | `#6C7FFF` | Bleu LFK — actions, sélection |
-| `primarySoft` | `#E9ECFF` | `#1C2250` | Fonds d'accent |
-| `ink` | `#111726` | `#EEF0F5` | Bouton fort / sidebar active |
+| `surfaceAlt` | `#E9EEF6` | `#152038` | Inputs, zones secondaires |
+| `border` | `#DCE3EE` | `#22304F` | Bordures fines |
+| `text` | `#0A1530` | `#EEF2F8` | Texte principal (blanc cassé en sombre) |
+| `textMuted` | `#4E5B78` | `#A5B0C8` | Texte secondaire |
+| `primary` | `#00206A` | `#7E9BF0` | Bleu marine — actions, sélection |
+| `accent` | `#AE0000` | `#D93A3A` | Rouge — appels à l'action (Rejoindre…) |
+| `primarySoft` | `#E4EAF4` | `#16224A` | Fonds d'accent |
+| `ink` | `#00206A` | `#EEF2F8` | Bouton fort / sidebar active |
 | `silver` | `#A7ADBA` | `#C9CED8` | Détails « métal » du logo |
 
 Couleurs de statut : `success #12A150`, `warning #E0A100`, `danger #E5484D`, `info #0EA5E9`.
 Catégories d'événements : Soirée (violet), Sport (vert), Culture (ambre), Networking (bleu).
 Rôles : Alumni (bleu), Élève (vert), Membre d'honneur (ambre), Admin (ink).
 
-### Typographie — Plus Jakarta Sans
-Display 34/800 · H1 28/800 · H2 20/700 · H3 16/700 · Body 15/500 · Small 13/500 · Caption 11/700 capitales espacées.
+### Typographie — Instrument Serif (titres) + Inter (texte)
+Display 42 serif · H1 34 serif · H2 20/700 · H3 16/700 · Body 15/500 · Small 13/500 · Caption 11/700 capitales espacées.
 
 ### Forme & espace
 - Espacements : 4 · 8 · 12 · 16 · 20 · 24 · 32 · 48
