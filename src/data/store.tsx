@@ -40,6 +40,8 @@ import type {
   Situation,
   Privacy,
   Publication,
+  Question,
+  QuestionTopic,
   Role,
   Session,
   User,
@@ -55,7 +57,7 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v7';
+const STORAGE_KEY = 'lfk.demo.db.v8';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -577,6 +579,64 @@ function useStoreValue() {
         return log({ ...d, publications: d.publications.filter((x) => x.id !== id) }, 'delete_publication', p?.title ?? id);
       });
       if (supabase) send(supabase.from('publications').delete().eq('id', id));
+    },
+
+    // ——— Anonymous questions ———
+    /** Students: ask a question. It stays hidden until an admin publishes it; the name is never shown. */
+    askQuestion(text: string, topic: QuestionTopic) {
+      if (!meId) return;
+      const q: Question = { id: makeId('q'), text, topic, status: 'pending', createdAt: nowIso(), authorId: meId };
+      if (supabase) send(supabase.rpc('ask_question', { p_id: q.id, p_text: text, p_topic: topic }));
+      commit((d) => {
+        const next = { ...d, questions: [q, ...d.questions] };
+        if (supabase) return next;
+        const alerts = d.users
+          .filter((a) => a.role === 'admin' && a.approved)
+          .map((a) => ({ id: demoId('n'), userId: a.id, kind: 'question' as const, template: 'questionToReview' as const, params: { title: text.slice(0, 80) }, href: '/admin/questions', createdAt: nowIso(), read: false }));
+        return { ...next, notifications: [...alerts, ...next.notifications] };
+      });
+    },
+    /** Admins: publish (possibly after rewording, e.g. to remove a detail that gives the author away) or reject. */
+    reviewQuestion(id: string, decision: 'published' | 'rejected', text?: string) {
+      const at = nowIso();
+      commit((d) => {
+        const q = d.questions.find((x) => x.id === id);
+        if (!q) return d;
+        const title = (text ?? q.text).slice(0, 80);
+        const next = {
+          ...d,
+          questions: d.questions.map((x) => (x.id === id ? { ...x, status: decision, text: text ?? x.text, publishedAt: decision === 'published' ? at : x.publishedAt } : x)),
+        };
+        if (!supabase) {
+          const alerts = [
+            ...(q.authorId ? [{ userId: q.authorId, template: decision === 'published' ? ('questionPublished' as const) : ('questionRejected' as const) }] : []),
+            ...(decision === 'published' ? d.users.filter((u) => u.role === 'alumni' && u.approved).map((u) => ({ userId: u.id, template: 'questionNew' as const })) : []),
+          ].map((a) => ({ id: demoId('n'), ...a, kind: 'question' as const, params: { title }, href: `/questions/${id}`, createdAt: at, read: false }));
+          next.notifications = [...alerts, ...d.notifications];
+        }
+        return log(next, decision === 'published' ? 'approve_question' : 'reject_question', title);
+      });
+      if (supabase) send(supabase.from('questions').update({ status: decision, ...(text ? { text } : {}), ...(decision === 'published' ? { published_at: at } : {}) }).eq('id', id));
+    },
+    deleteQuestion(id: string) {
+      commit((d) => ({ ...d, questions: d.questions.filter((x) => x.id !== id), answers: d.answers.filter((a) => a.questionId !== id) }));
+      if (supabase) send(supabase.from('questions').delete().eq('id', id));
+    },
+    /** Alumni: answer a published question (answers are signed). */
+    answerQuestion(questionId: string, text: string) {
+      if (!meId) return;
+      const a = { id: makeId('a'), questionId, authorId: meId, text, createdAt: nowIso() };
+      if (supabase) send(supabase.from('answers').insert({ id: a.id, question_id: questionId, author_id: meId, text }));
+      commit((d) => {
+        const next = { ...d, answers: [...d.answers, a] };
+        const q = d.questions.find((x) => x.id === questionId);
+        if (supabase || !q?.authorId || q.authorId === meId) return next;
+        return { ...next, notifications: [{ id: demoId('n'), userId: q.authorId, kind: 'question' as const, template: 'questionAnswered' as const, params: { title: q.text.slice(0, 80) }, href: `/questions/${questionId}`, createdAt: a.createdAt, read: false }, ...next.notifications] };
+      });
+    },
+    deleteAnswer(id: string) {
+      commit((d) => ({ ...d, answers: d.answers.filter((a) => a.id !== id) }));
+      if (supabase) send(supabase.from('answers').delete().eq('id', id));
     },
 
     // ——— Promos ———

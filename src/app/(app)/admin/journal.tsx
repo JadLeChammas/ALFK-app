@@ -13,6 +13,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 const ICON: Record<AdminLogAction, [IconName, Tone]> = {
   approve: ['user-check', 'secondary'],
   refuse: ['user-x', 'danger'],
+  approve_question: ['help-circle', 'secondary'],
+  reject_question: ['help-circle', 'danger'],
   create_user: ['user-plus', 'primary'],
   change_role: ['sliders', 'ink'],
   reset_password: ['key', 'secondary'],

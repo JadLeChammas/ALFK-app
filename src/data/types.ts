@@ -131,16 +131,18 @@ export type AdminLogAction =
   | 'open_reported_conversation'
   | 'resolve_report'
   | 'approve_publication'
-  | 'reject_publication';
+  | 'reject_publication'
+  | 'approve_question'
+  | 'reject_question';
 
 export type AdminLog = { id: string; actorId: string; action: AdminLogAction; target: string; meta?: { role?: Role }; createdAt: string };
 
-export type NotificationTemplate = 'message' | 'pendingOne' | 'pendingMany' | 'approved' | 'birthday' | 'photos' | 'publication' | 'publicationApproved' | 'publicationRejected' | 'publicationToReview';
+export type NotificationTemplate = 'message' | 'pendingOne' | 'pendingMany' | 'approved' | 'birthday' | 'photos' | 'publication' | 'publicationApproved' | 'publicationRejected' | 'publicationToReview' | 'questionToReview' | 'questionPublished' | 'questionRejected' | 'questionNew' | 'questionAnswered';
 
 export type AppNotification = {
   id: string;
   userId: string;
-  kind: 'message' | 'event' | 'publication' | 'birthday' | 'approval' | 'photo';
+  kind: 'message' | 'event' | 'publication' | 'birthday' | 'approval' | 'photo' | 'question';
   /** Rendered in the viewer's language — see `notifications.t` in the i18n dictionaries. */
   template: NotificationTemplate;
   params?: Record<string, string | number>;
@@ -148,6 +150,16 @@ export type AppNotification = {
   createdAt: string;
   read: boolean;
 };
+
+export type QuestionTopic = 'etudes' | 'orientation' | 'pays' | 'metier' | 'vie' | 'autre';
+export type QuestionStatus = 'pending' | 'published' | 'rejected';
+/**
+ * An anonymous question from a student. `authorId` is only known to admins and to the author
+ * (separate table on Supabase): never show it to anyone else.
+ */
+export type Question = { id: string; text: string; topic: QuestionTopic; status: QuestionStatus; createdAt: string; publishedAt?: string; authorId?: string };
+/** Answers are signed by the alumni who write them. */
+export type Answer = { id: string; questionId: string; authorId?: string; text: string; createdAt: string };
 
 export type Db = {
   /** Demo only: next Alumni number to hand out (numbers are never reused). */
@@ -164,6 +176,8 @@ export type Db = {
   notifications: AppNotification[];
   institutions: Institution[];
   keyDates: KeyDate[];
+  questions: Question[];
+  answers: Answer[];
   settings: AppSettings;
 };
 

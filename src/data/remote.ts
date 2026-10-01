@@ -10,6 +10,8 @@ import type {
   EventPhoto,
   Institution,
   KeyDate,
+  Question,
+  Answer,
   LfkEvent,
   Message,
   Promo,
@@ -24,7 +26,7 @@ const opt = <T,>(v: T | null | undefined) => (v === null || v === undefined ? un
 
 export const newId = () => Crypto.randomUUID();
 
-export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], settings: {} };
+export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], settings: {} };
 
 export const toUser = (r: Row): User => ({
   id: r.id,
@@ -100,6 +102,8 @@ const toEvent = (r: Row): LfkEvent => ({ id: r.id, title: r.title, date: r.date,
 const toPhoto = (r: Row): EventPhoto => ({ id: r.id, eventId: r.event_id, uri: r.uri, uploadedBy: r.uploaded_by ?? '', createdAt: r.created_at });
 const toPublication = (r: Row): Publication => ({ id: r.id, title: r.title, category: r.category, date: r.date, cover: r.cover, excerpt: r.excerpt, body: r.body, authorId: r.author_id ?? '', status: r.status ?? 'published' });
 const toInstitution = (r: Row): Institution => ({ id: r.id, name: r.name, description: r.description ?? '', logo: opt(r.logo), website: opt(r.website), order: r.sort_order ?? 0 });
+const toQuestion = (r: Row): Question => ({ id: r.id, text: r.text, topic: r.topic, status: r.status, createdAt: r.created_at, publishedAt: opt(r.published_at) });
+const toAnswer = (r: Row): Answer => ({ id: r.id, questionId: r.question_id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
 const toKeyDate = (r: Row): KeyDate => ({ id: r.id, title: r.title, month: r.month, day: r.day, year: opt(r.year), category: r.category, endMonth: opt(r.end_month), endDay: opt(r.end_day), url: opt(r.url) });
 export const toConversation = (r: Row): Conversation => ({ id: r.id, members: [r.members[0], r.members[1]], lastRead: r.last_read ?? {}, report: opt(r.report) });
 export const toMessage = (r: Row): Message => ({ id: r.id, conversationId: r.conversation_id, senderId: r.sender_id ?? '', text: r.text, createdAt: r.created_at });
@@ -119,7 +123,7 @@ export async function loadDb(): Promise<Db> {
   };
   // Tables added by migration 003: an empty list until it has been run, instead of breaking the app.
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
-  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings] = await Promise.all([
+  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers] = await Promise.all([
     all('profiles'),
     all('promos'),
     all('events', 'date'),
@@ -133,7 +137,12 @@ export async function loadDb(): Promise<Db> {
     optional('institutions'),
     optional('key_dates'),
     optional('app_settings'),
+    optional('questions'),
+    optional('question_authors'),
+    optional('answers'),
   ]);
+  // Only the user's own questions (or all of them for admins) come back with an author.
+  const askedBy = new Map(questionAuthors.map((r: Row) => [r.question_id, r.user_id]));
   return {
     users: users.map(toUser),
     promos: promos.map(toPromo),
@@ -147,6 +156,8 @@ export async function loadDb(): Promise<Db> {
     notifications: notifications.map(toNotification),
     institutions: institutions.map(toInstitution).sort((a, b) => a.order - b.order),
     keyDates: keyDates.map(toKeyDate),
+    questions: questions.map((r: Row) => ({ ...toQuestion(r), authorId: askedBy.get(r.id) })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+    answers: answers.map(toAnswer).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
     settings: Object.fromEntries(settings.map((s: Row) => [s.key, s.value])),
   };
 }

@@ -17,6 +17,10 @@ const GRANTS: Record<Role, Permission[]> = {
   eleve: [],
 };
 
+/** Anonymous questions: current students ask, alumni answer (admins do both, to test and moderate). */
+export const canAsk = (user: Pick<User, 'role'> | null | undefined) => !!user && (user.role === 'eleve' || user.role === 'admin');
+export const canAnswer = (user: Pick<User, 'role'> | null | undefined) => !!user && (user.role === 'alumni' || user.role === 'admin');
+
 export const can = (user: Pick<User, 'role'> | null | undefined, perm: Permission) => !!user && GRANTS[user.role].includes(perm);
 
 /**

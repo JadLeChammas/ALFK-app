@@ -366,6 +366,20 @@ export function createSeed(now = new Date()): Db {
       description: "L'établissement où tout a commencé : l'Amicale réunit ses anciens élèves et reste liée à sa direction, à ses équipes et à ses élèves." },
   ];
 
+  // Anonymous questions from students (the author is only visible to admins), answered by alumni.
+  const questions: Db['questions'] = [
+    { id: 'q1', text: 'Est-ce que c’est difficile de s’adapter à Paris quand on a grandi au Koweït ? Comment vous avez trouvé un logement ?', topic: 'vie', status: 'published', createdAt: ago(9), publishedAt: ago(8), authorId: nour.id },
+    { id: 'q2', text: 'Prépa ou école post-bac directement : qu’est-ce que vous conseilleriez pour viser une école d’ingénieur ?', topic: 'orientation', status: 'published', createdAt: ago(6), publishedAt: ago(5), authorId: nour.id },
+    { id: 'q3', text: 'Quelqu’un a fait ses études au Canada ? Les démarches pour le permis d’études sont longues ?', topic: 'pays', status: 'published', createdAt: ago(3), publishedAt: ago(2), authorId: nour.id },
+    { id: 'q4', text: 'Comment se passent les oraux de Sciences Po ? Quelles questions on vous a posées ?', topic: 'etudes', status: 'pending', createdAt: ago(0.5), authorId: nour.id },
+  ];
+  const answers: Db['answers'] = [
+    { id: 'a1', questionId: 'q1', authorId: sarah.id, text: 'Les premières semaines surprennent (le froid, le rythme), mais on s’y fait vite. Pour le logement, demandez le CROUS dès l’admission et regardez aussi les résidences étudiantes privées.', createdAt: ago(7) },
+    { id: 'a2', questionId: 'q1', authorId: antoine.id, text: 'Rejoins le groupe WhatsApp de ta Promo LFK : on s’entraide beaucoup pour les colocations à Paris.', createdAt: ago(6.5) },
+    { id: 'a3', questionId: 'q2', authorId: adrien.id, text: 'La prépa est exigeante mais ouvre beaucoup de portes. Si tu sais déjà ce que tu veux, une école post-bac (INSA, UT…) est aussi un très bon choix.', createdAt: ago(4) },
+    { id: 'a4', questionId: 'q3', authorId: thomas.id, text: 'Oui, à Montréal ! Compte 2 à 3 mois pour le CAQ puis le permis d’études : commence dès que tu as ta lettre d’admission.', createdAt: ago(1) },
+  ];
+
   const nowDate = new Date();
   const examYear = nowDate.getMonth() >= 7 ? nowDate.getFullYear() + 1 : nowDate.getFullYear();
   // Key dates shown in the calendar every year (AEFE and LFK dates are added by admins).
@@ -386,6 +400,6 @@ export function createSeed(now = new Date()): Db {
 
   return {
     nextAlumniNumber: nextNumber, users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications,
-    institutions, keyDates, settings: { whatsappCommunity: 'https://chat.whatsapp.com/lfk-communaute' },
+    institutions, keyDates, questions, answers, settings: { whatsappCommunity: 'https://chat.whatsapp.com/lfk-communaute' },
   };
 }

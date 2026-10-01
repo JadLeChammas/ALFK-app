@@ -13,6 +13,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 const KIND: Record<AppNotification['kind'], [IconName, Tone]> = {
   message: ['message-circle', 'primary'],
   event: ['calendar', 'ink'],
+  question: ['help-circle', 'secondary'],
   publication: ['book-open', 'secondary'],
   birthday: ['gift', 'primary'],
   approval: ['user-check', 'secondary'],
