@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { View } from 'react-native';
 
 import { PublicPage } from '@/components/PublicPage';
-import { LogoMark } from '@/components/ui/Logo';
+import { LogoFull } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { useI18n } from '@/i18n';
@@ -13,7 +13,7 @@ export default function NotFound() {
   return (
     <PublicPage title="">
       <View style={{ alignItems: 'center', gap: 16, paddingVertical: 48 }}>
-        <LogoMark size={96} />
+        <LogoFull size={150} />
         <Txt style={{ fontFamily: fonts.display, fontSize: 120, lineHeight: 120 }} color="primary">404</Txt>
         <Txt variant="h1" align="center">{d.legal.notFound}</Txt>
         <Txt color="textMuted" align="center">{d.legal.notFoundSub}</Txt>

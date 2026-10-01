@@ -11,7 +11,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
 import { Globe } from './fx/Globe';
 import { useDestinationMarkers } from './site/blocks';
-import { LogoMark } from './ui/Logo';
+import { PublicSettingsButton } from './site/PublicSettings';
+import { LogoFull, LogoMark } from './ui/Logo';
 import { Row, Tap } from './ui/primitives';
 import { Txt } from './ui/Txt';
 
@@ -28,18 +29,22 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
 
   const form = (
     <View style={{ width: '100%', maxWidth: 440, gap: 24 }}>
-      {!me && (
-        <Link href="/bienvenue" style={{ alignSelf: 'flex-start' }}>
-          <Row gap={6}>
-            <Feather name="arrow-left" size={14} color={colors.textMuted} />
-            <Txt variant="smallStrong" color="textMuted">{d.nav.home}</Txt>
-          </Row>
-        </Link>
-      )}
+      <Row style={{ justifyContent: 'space-between' }}>
+        {!me ? (
+          <Link href="/bienvenue">
+            <Row gap={6}>
+              <Feather name="arrow-left" size={14} color={colors.textMuted} />
+              <Txt variant="smallStrong" color="textMuted">{d.nav.home}</Txt>
+            </Row>
+          </Link>
+        ) : (
+          <View />
+        )}
+        <PublicSettingsButton />
+      </Row>
       {!isDesktop && (
         <Tap onPress={home} disabled={!home} style={{ alignItems: 'center', gap: 12, marginBottom: 8 }}>
-          <LogoMark size={72} />
-          <Txt variant="caption">{d.app.long}</Txt>
+          <LogoFull size={130} />
         </Tap>
       )}
       <View style={{ gap: 8 }}>

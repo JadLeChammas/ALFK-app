@@ -5,16 +5,14 @@ import { useI18n } from '@/i18n';
 import { fonts } from '@/theme/tokens';
 import { Txt } from './Txt';
 
-const emblem = require('@/assets/images/logo-emblem.png');
-const full = require('@/assets/images/logo-alfk.webp');
+/** Transparent silver logo: the emblem alone (small sizes) and the full logo with « ALFK ». */
+const emblem = require('@/assets/images/logo-emblem-clear.png');
+const full = require('@/assets/images/logo-alfk-clear.png');
+const FULL_RATIO = 330 / 442;
 
-/** Silver emblem on its native black tile — reads well on both themes. */
+/** The silver emblem (Eiffel Tower and Kuwait Towers in a ring), no background. */
 export function LogoMark({ size = 40 }: { size?: number }) {
-  return (
-    <View style={{ width: size, height: size, borderRadius: size * 0.28, overflow: 'hidden', backgroundColor: '#000' }}>
-      <Image source={emblem} style={{ width: '100%', height: '100%' }} contentFit="cover" />
-    </View>
-  );
+  return <Image source={emblem} style={{ width: size, height: size }} contentFit="contain" accessibilityLabel="Amicale LFK" />;
 }
 
 /** Emblem + name. `light` = on the navy sidebar. */
@@ -31,10 +29,7 @@ export function LogoLockup({ compact, light }: { compact?: boolean; light?: bool
   );
 }
 
+/** Full logo with « ALFK » and the Amicale's name; `size` is its height. */
 export function LogoFull({ size = 220 }: { size?: number }) {
-  return (
-    <View style={{ width: size, height: size, borderRadius: size * 0.12, overflow: 'hidden', backgroundColor: '#000' }}>
-      <Image source={full} style={{ width: '100%', height: '100%' }} contentFit="cover" />
-    </View>
-  );
+  return <Image source={full} style={{ width: size * FULL_RATIO, height: size }} contentFit="contain" accessibilityLabel="Amicale LFK" />;
 }

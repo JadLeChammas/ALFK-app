@@ -16,6 +16,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
+import { PublicSettingsButton } from './PublicSettings';
 import { Reveal } from './Reveal';
 
 export const SITE_MAX = 1152; // max-w-6xl
@@ -214,10 +215,10 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
 
   return (
     <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, paddingTop: insets.top, zIndex: 10 }, bar]}>
-      <Container style={{ height: HEADER_H, flexDirection: 'row', alignItems: 'center', gap: 24 }}>
+      <Container style={{ height: HEADER_H, flexDirection: 'row', alignItems: 'center', gap: isDesktop ? 24 : 10 }}>
         <Tap onPress={() => go(me ? '/' : '/bienvenue')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: isDesktop ? undefined : 1 }}>
           <LogoMark size={30} />
-          <Txt style={{ fontFamily: fonts.serif, fontSize: 22, lineHeight: 26, color: '#fff' }}>{d.app.name}</Txt>
+          <Txt numberOfLines={1} style={{ fontFamily: fonts.serif, fontSize: isDesktop ? 22 : 20, lineHeight: 26, color: '#fff', flexShrink: 1 }}>{d.app.name}</Txt>
         </Tap>
         {isDesktop && (
           <View style={{ flex: 1, flexDirection: 'row', gap: 28 }}>
@@ -231,6 +232,7 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
             })}
           </View>
         )}
+        <PublicSettingsButton light />
         {me ? (
           <Button label={d.site.nav.mySpace} size="sm" onPress={() => router.replace('/')} />
         ) : (
