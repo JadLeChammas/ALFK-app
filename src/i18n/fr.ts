@@ -287,6 +287,12 @@ const fr = {
     work: 'Travail', companies: 'Entreprises', companiesIn: 'Entreprises — {country}', companiesCount: '{n} entreprises',
     whereHint: 'Ville et pays : là où vous étudiez ou travaillez aujourd’hui.',
   },
+  uni: {
+    pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',
+    elsewhere: 'Ailleurs — {country}', none: 'Aucun établissement trouvé', notListed: 'Mon établissement n’est pas dans la liste',
+    typeIt: 'Nom de l’établissement', backToList: 'Revenir à la liste', source: 'Liste des établissements : OpenAlex',
+    cities: 'Villes :',
+  },
   months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
   monthsShort: ['JANV', 'FÉVR', 'MARS', 'AVR', 'MAI', 'JUIN', 'JUIL', 'AOÛT', 'SEPT', 'OCT', 'NOV', 'DÉC'],
   days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],

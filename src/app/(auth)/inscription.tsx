@@ -5,17 +5,18 @@ import { View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
 import { PlaceSuggestions } from '@/components/PlaceSuggestions';
+import { UniversityPicker } from '@/components/UniversityPicker';
+import { useUniversities } from '@/data/universities';
 import { ProofPicker } from '@/components/ProofPicker';
 import { FieldRow, Button, Chip, Input, Row, Segmented } from '@/components/ui/primitives';
 import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES, UNIVERSITIES } from '@/data/countries';
+import { COUNTRIES } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
-import { usePublicOverview } from '@/data/public';
 import type { PickedDoc } from '@/data/remote';
 import { useStore, type AuthError } from '@/data/store';
 import type { Gender, Role, Situation } from '@/data/types';
@@ -26,11 +27,11 @@ export default function SignUp() {
   const { d, country } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
-  // Names already used on the platform (public list) and the usual universities, to avoid new spellings.
-  const overview = usePublicOverview();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [proof, setProof] = useState<PickedDoc | null>(null);
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
+  // Cities with universities in the chosen country, offered while typing the city.
+  const { cities } = useUniversities(form.country);
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -85,8 +86,6 @@ export default function SignUp() {
     );
   }
 
-  const suggestions = UNIVERSITIES[form.country] ?? [];
-  const knownSchools = [...overview.schools, ...Object.values(UNIVERSITIES).flat()];
 
   return (
     <AuthFrame
@@ -173,6 +172,7 @@ export default function SignUp() {
             options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))}
           />
           <Input label={d.auth.city} icon="map-pin" value={form.city} onChangeText={set('city')} />
+          {form.role !== 'eleve' && <PlaceSuggestions value={form.city} options={cities} onPick={set('city')} />}
           {form.role === 'eleve' ? (
             // Students are at the LFK: the school is set for them and cannot be changed.
             <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} />
@@ -180,20 +180,10 @@ export default function SignUp() {
             <>
               <Input label={d.situation.employer} icon="briefcase" value={form.employer} onChangeText={set('employer')} />
               <Input label={`${d.situation.jobTitle} (${d.common.optional})`} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} />
-              <Input label={`${d.situation.graduatedFrom} (${d.common.optional})`} icon="book" value={form.school} onChangeText={set('school')} />
+              <UniversityPicker label={d.situation.graduatedFrom} optional value={form.school} onChange={set('school')} country={form.country} city={form.city} />
             </>
           ) : (
-            <Input label={d.auth.school} icon="book" value={form.school} onChangeText={set('school')} />
-          )}
-          {form.role !== 'eleve' && form.school.trim().length >= 2 && (
-            <PlaceSuggestions value={form.school} options={knownSchools} onPick={(v) => setForm((f) => ({ ...f, school: v }))} />
-          )}
-          {form.role !== 'eleve' && !form.school.trim() && suggestions.length > 0 && (
-            <Row gap={6} wrap>
-              {suggestions.slice(0, 5).map((s) => (
-                <Chip key={s} label={s} active={form.school === s} onPress={() => setForm((f) => ({ ...f, school: s }))} />
-              ))}
-            </Row>
+            <UniversityPicker label={d.auth.school} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
           )}
           {step === 2 && error === 'missing' && <Txt variant="smallStrong" color="danger">{d.auth.errors.missing}</Txt>}
           {form.role === 'alumni' && (

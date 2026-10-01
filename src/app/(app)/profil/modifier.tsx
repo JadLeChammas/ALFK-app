@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { PlaceSuggestions } from '@/components/PlaceSuggestions';
+import { UniversityPicker } from '@/components/UniversityPicker';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { FieldRow, Avatar, Button, Card, Input, Row, Segmented, Switch, Tap } from '@/components/ui/primitives';
 import { BackLink, Columns, PageHeader, Screen } from '@/components/ui/Screen';
@@ -11,7 +12,7 @@ import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES, UNIVERSITIES } from '@/data/countries';
+import { COUNTRIES } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
@@ -47,7 +48,6 @@ export default function EditProfile() {
   const graduate = me.role === 'alumni' || me.role === 'admin';
   // Universities and companies other members already entered (to pick the same spelling).
   const members = useApprovedMembers();
-  const knownSchools = [...members.map((u) => u.school).filter((x): x is string => !!x && x !== LFK_SCHOOL), ...Object.values(UNIVERSITIES).flat()];
   const knownEmployers = members.map((u) => u.employer).filter((x): x is string => !!x);
   const [situation, setSituation] = useState<Situation>(me.situation ?? 'student');
   const working = graduate && situation === 'working';
@@ -172,9 +172,8 @@ export default function EditProfile() {
               {me.role === 'eleve' ? (
                 <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} containerStyle={{ flex: 2 }} />
               ) : (
-                <View style={{ flex: 2, gap: 8 }}>
-                  <Input label={working ? `${d.situation.graduatedFrom} (${d.common.optional})` : d.auth.school} icon="book" value={form.school} onChangeText={set('school')} />
-                  <PlaceSuggestions value={form.school} options={knownSchools} onPick={set('school')} max={4} />
+                <View style={{ flex: 2 }}>
+                  <UniversityPicker label={working ? d.situation.graduatedFrom : d.auth.school} optional={working} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
                 </View>
               )}
               <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />

@@ -290,6 +290,12 @@ const pirate: Dict = {
     work: 'Work', companies: 'Ships', companiesIn: 'Ships — {country}', companiesCount: '{n} ships',
     whereHint: 'Port an’ land: where ye study or work today.',
   },
+  uni: {
+    pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
+    elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',
+    typeIt: 'Name o’ the school', backToList: 'Back to the chart', source: 'Chart o’ schools: OpenAlex',
+    cities: 'Ports:',
+  },
   months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   monthsShort: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
   days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],

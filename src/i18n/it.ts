@@ -289,6 +289,12 @@ const it: Dict = {
     work: 'Lavoro', companies: 'Aziende', companiesIn: 'Aziende — {country}', companiesCount: '{n} aziende',
     whereHint: 'Città e paese: dove studia o lavora oggi.',
   },
+  uni: {
+    pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',
+    elsewhere: 'Altrove — {country}', none: 'Nessun istituto trovato', notListed: 'Il mio istituto non è nell’elenco',
+    typeIt: 'Nome dell’istituto', backToList: 'Torna all’elenco', source: 'Elenco degli istituti: OpenAlex',
+    cities: 'Città:',
+  },
   months: ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'],
   monthsShort: ['GEN', 'FEB', 'MAR', 'APR', 'MAG', 'GIU', 'LUG', 'AGO', 'SET', 'OTT', 'NOV', 'DIC'],
   days: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],

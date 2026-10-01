@@ -289,6 +289,12 @@ const zh: Dict = {
     work: '工作', companies: '公司', companiesIn: '公司 — {country}', companiesCount: '{n} 家公司',
     whereHint: '城市和国家：您目前学习或工作的地方。',
   },
+  uni: {
+    pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',
+    elsewhere: '其他地方 — {country}', none: '未找到院校', notListed: '我的学校不在列表中',
+    typeIt: '学校名称', backToList: '返回列表', source: '院校列表：OpenAlex',
+    cities: '城市：',
+  },
   months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
   monthsShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
   days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
