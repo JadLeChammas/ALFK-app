@@ -85,6 +85,7 @@ const es: Dict = {
     fonction: 'Cargo', messagingDisabled: 'La mensajería privada está desactivada entre la dirección del liceo y los alumnos.', alumniNumber: 'N.º Alumni', bureauCode: 'Código de Bureau', honorary: 'Estado: Miembro de honor', birthday: 'Cumpleaños', phone: 'Teléfono', email: 'Correo', location: 'Ubicación', school: 'Escuela / Universidad', notFound: 'Miembro no encontrado',
   },
   repere: {
+    alsoWritten: 'También escrito: {list}', merge: 'Fusionar con…', mergeTitle: 'Fusionar «{name}»', mergeSub: 'Elija la misma universidad o empresa escrita de otra forma: ambas serán una sola entrada en toda la app.', merged: 'Fusión guardada', mergedHere: 'Ya fusionados aquí', unmerge: 'Separar', suggestions: 'Ya usados:',
     viewGlobe: 'Globo', viewMap: 'Mapa',
     title: 'Repère', subtitle: 'Explora las universidades y países adonde fueron los antiguos alumnos del LFK.',
     continent: 'Continente', country: 'País', universities: 'Universidades', pickContinent: 'Elige un continente en el mapa o en la lista.',

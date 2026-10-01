@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 
+import { PlaceSuggestions } from '@/components/PlaceSuggestions';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { FieldRow, Avatar, Button, Card, Input, Row, Segmented, Switch, Tap } from '@/components/ui/primitives';
 import { BackLink, Columns, PageHeader, Screen } from '@/components/ui/Screen';
@@ -10,10 +11,10 @@ import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES } from '@/data/countries';
+import { COUNTRIES, UNIVERSITIES } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
-import { fullName, useMe, useStore } from '@/data/store';
+import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
@@ -44,6 +45,10 @@ export default function EditProfile() {
   const [mentor, setMentor] = useState(!!me.mentor);
   // Former students share their studies with the lycée students (Orientation space).
   const graduate = me.role === 'alumni' || me.role === 'admin';
+  // Universities and companies other members already entered (to pick the same spelling).
+  const members = useApprovedMembers();
+  const knownSchools = [...members.map((u) => u.school).filter((x): x is string => !!x && x !== LFK_SCHOOL), ...Object.values(UNIVERSITIES).flat()];
+  const knownEmployers = members.map((u) => u.employer).filter((x): x is string => !!x);
   const [situation, setSituation] = useState<Situation>(me.situation ?? 'student');
   const working = graduate && situation === 'working';
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
@@ -156,7 +161,10 @@ export default function EditProfile() {
             )}
             {working && (
               <FieldRow>
-                <Input label={d.situation.employer} icon="briefcase" value={form.employer} onChangeText={set('employer')} containerStyle={{ flex: 1 }} />
+                <View style={{ flex: 1, gap: 8 }}>
+                  <Input label={d.situation.employer} icon="briefcase" value={form.employer} onChangeText={set('employer')} />
+                  <PlaceSuggestions value={form.employer} options={knownEmployers} onPick={set('employer')} max={4} />
+                </View>
                 <Input label={`${d.situation.jobTitle} (${d.common.optional})`} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} containerStyle={{ flex: 1 }} />
               </FieldRow>
             )}
@@ -164,7 +172,10 @@ export default function EditProfile() {
               {me.role === 'eleve' ? (
                 <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} containerStyle={{ flex: 2 }} />
               ) : (
-                <Input label={working ? `${d.situation.graduatedFrom} (${d.common.optional})` : d.auth.school} icon="book" value={form.school} onChangeText={set('school')} containerStyle={{ flex: 2 }} />
+                <View style={{ flex: 2, gap: 8 }}>
+                  <Input label={working ? `${d.situation.graduatedFrom} (${d.common.optional})` : d.auth.school} icon="book" value={form.school} onChangeText={set('school')} />
+                  <PlaceSuggestions value={form.school} options={knownSchools} onPick={set('school')} max={4} />
+                </View>
               )}
               <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
             </FieldRow>

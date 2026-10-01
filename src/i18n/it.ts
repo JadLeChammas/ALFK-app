@@ -85,6 +85,7 @@ const it: Dict = {
     fonction: 'Ruolo', messagingDisabled: 'La messaggistica privata è disattivata tra la direzione del liceo e gli studenti.', alumniNumber: 'N. Alumni', bureauCode: 'Codice Bureau', honorary: "Stato: Membro d'onore", birthday: 'Compleanno', phone: 'Telefono', email: 'E-mail', location: 'Luogo', school: 'Scuola / Università', notFound: 'Membro non trovato',
   },
   repere: {
+    alsoWritten: 'Scritto anche: {list}', merge: 'Unisci con…', mergeTitle: 'Unisci «{name}»', mergeSub: 'Scegli la stessa università o azienda scritta in altro modo: diventeranno una sola voce in tutta l’app.', merged: 'Unione salvata', mergedHere: 'Già uniti qui', unmerge: 'Separa', suggestions: 'Già usati:',
     viewGlobe: 'Globo', viewMap: 'Mappa',
     title: 'Repère', subtitle: 'Esplora le università e i paesi dove sono andati gli ex alunni del LFK.',
     continent: 'Continente', country: 'Paese', universities: 'Università', pickContinent: 'Scegli un continente sulla mappa o nella lista.',

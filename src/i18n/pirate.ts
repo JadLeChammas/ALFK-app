@@ -86,6 +86,7 @@ const pirate: Dict = {
     fonction: 'Post', messagingDisabled: 'Private bottles be forbidden between the Lycée admiralty an’ the cabin boys.', alumniNumber: 'Old Hand no.', bureauCode: 'Bureau code', honorary: 'Rank: Honorary Buccaneer', birthday: 'Birthday', phone: 'Horn', email: 'Email', location: 'Port', school: 'School / University', notFound: 'This sailor be lost at sea',
   },
   repere: {
+    alsoWritten: 'Also scribbled: {list}', merge: 'Lash together with…', mergeTitle: 'Lash “{name}” to another', mergeSub: 'Pick the same university or ship written another way: they become one, all over the ship.', merged: 'Lashed together', mergedHere: 'Already lashed here', unmerge: 'Cut loose', suggestions: 'Already used:',
     viewGlobe: 'Globe', viewMap: 'Chart',
     title: 'Repère', subtitle: 'Explore the universities an’ lands where LFK old hands dropped anchor.',
     continent: 'Continent', country: 'Land', universities: 'Universities', pickContinent: 'Pick a continent on the map or in the list.',

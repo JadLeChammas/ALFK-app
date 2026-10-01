@@ -10,6 +10,7 @@ import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Select } from '@/components/ui/Select';
 import { Txt } from '@/components/ui/Txt';
 import { FIELDS, isField, type FieldKey } from '@/data/fields';
+import { groupByPlace, resolvePlace, usePlaceAliases } from '@/data/places';
 import { canMessage } from '@/data/permissions';
 import { fullName, useApprovedMembers, useMe } from '@/data/store';
 import type { User } from '@/data/types';
@@ -30,6 +31,8 @@ export default function Orientation() {
   const [country, setCountry] = useState<string>('all');
   const [q, setQ] = useState('');
   const [mentorsOnly, setMentorsOnly] = useState(false);
+  const [schoolKey, setSchoolKey] = useState<string | null>(null);
+  const aliases = usePlaceAliases();
 
   const counts = useMemo(() => {
     const m = new Map<string, number>();
@@ -43,11 +46,12 @@ export default function Orientation() {
     .filter((u) => field === 'all' || u.fieldOfStudy === field)
     .filter((u) => country === 'all' || u.country === country)
     .filter((u) => !mentorsOnly || u.mentor)
+    .filter((u) => !schoolKey || resolvePlace(u.school, aliases) === schoolKey)
     .filter((u) => !n || norm(`${u.school} ${u.city ?? ''} ${fullName(u)}`).includes(n))
     .sort((a, b) => Number(!!b.mentor) - Number(!!a.mentor) || (b.promo ?? 0) - (a.promo ?? 0));
 
   // Institutions most represented in the current selection.
-  const schools = [...list.reduce((m, u) => m.set(u.school!, (m.get(u.school!) ?? 0) + 1), new Map<string, number>())].sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const schools = groupByPlace(list, (u) => u.school, aliases).slice(0, 8);
 
   return (
     <Screen>
@@ -90,8 +94,8 @@ export default function Orientation() {
         <View style={{ gap: 10 }}>
           <Txt variant="caption">{d.orientation.institutions}</Txt>
           <Row gap={8} wrap>
-            {schools.map(([s, c]) => (
-              <Chip key={s} label={s} count={c} active={norm(q) === norm(s)} onPress={() => setQ(norm(q) === norm(s) ? '' : s)} />
+            {schools.map((g) => (
+              <Chip key={g.key} label={g.label} count={g.items.length} active={schoolKey === g.key} onPress={() => setSchoolKey(schoolKey === g.key ? null : g.key)} />
             ))}
           </Row>
         </View>

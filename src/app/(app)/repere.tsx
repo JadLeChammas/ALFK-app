@@ -4,13 +4,17 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { Globe } from '@/components/fx/Globe';
-import { Avatar, Badge, Card, Chip, EmptyState, Row, SectionHeader, Segmented, Tap } from '@/components/ui/primitives';
+import { Sheet } from '@/components/forms';
+import { useDialogs } from '@/components/ui/Dialogs';
+import { Avatar, Badge, Button, Card, Chip, EmptyState, Row, SearchBar, SectionHeader, Segmented, Tap } from '@/components/ui/primitives';
+import { norm } from '@/components/shell/GlobalSearch';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { WorldMap } from '@/components/fx/WorldMap';
 import { CONTINENTS, COUNTRIES, countryByCode } from '@/data/countries';
-import { fullName, useApprovedMembers } from '@/data/store';
+import { groupByPlace, type PlaceAliases, usePlaceAliases } from '@/data/places';
+import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { ContinentKey, User } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -22,6 +26,7 @@ export default function Repere() {
   const { colors } = useTheme();
   const { isDesktop } = useLayout();
   const members = useApprovedMembers();
+  const me = useMe();
   // Studies: where alumni study (or studied, when nothing says they work) — the LFK's current students are excluded.
   // Work: where those already working are, by company.
   const [mode, setMode] = useState<'studies' | 'work'>('studies');
@@ -44,9 +49,10 @@ export default function Repere() {
   ) as Record<ContinentKey, number>;
   const countries = COUNTRIES.filter((c) => c.continent === continent && perCountry.has(c.code)).sort((a, b) => perCountry.get(b.code)!.length - perCountry.get(a.code)!.length);
   const activeCountry = country && countries.some((c) => c.code === country) ? country : countries[0]?.code ?? null;
-  const schoolMap = new Map<string, User[]>();
-  for (const u of perCountry.get(activeCountry ?? '') ?? []) schoolMap.set(place(u)!, [...(schoolMap.get(place(u)!) ?? []), u]);
-  const universities = [...schoolMap.entries()].sort((a, b) => b[1].length - a[1].length);
+  // Same place written differently (« ISEP », « Isep », full name…) = one entry (see data/places.ts).
+  const aliases = usePlaceAliases();
+  const universities = groupByPlace(perCountry.get(activeCountry ?? '') ?? [], place, aliases);
+  const [merging, setMerging] = useState<{ key: string; label: string } | null>(null);
 
   const pickContinent = (c: ContinentKey) => {
     setContinent(c);
@@ -74,7 +80,7 @@ export default function Repere() {
   );
   const universityList = (
     <View style={{ gap: 8 }}>
-      {universities.map(([school, list], i) => {
+      {universities.map(({ key: school, label, items: list, spellings }, i) => {
         const open = openSchool === school;
         return (
           <View key={school} style={{ borderRadius: 16, borderWidth: 1, borderColor: open ? colors.primary : colors.border, backgroundColor: colors.surface, overflow: 'hidden' }}>
@@ -83,7 +89,7 @@ export default function Repere() {
                 <Txt variant="smallStrong" style={{ color: i === 0 ? colors.onPrimary : colors.secondaryStrong }}>{i + 1}</Txt>
               </View>
               <View style={{ flex: 1 }}>
-                <Txt variant="bodyStrong" numberOfLines={1}>{school}</Txt>
+                <Txt variant="bodyStrong" numberOfLines={1}>{label}</Txt>
                 <Txt variant="small" color="textMuted">{f(d.common.alumniCount, { n: list.length })}</Txt>
               </View>
               <Row gap={0}>
@@ -97,6 +103,12 @@ export default function Repere() {
             </Tap>
             {open && (
               <View style={{ paddingHorizontal: 14, paddingBottom: 14, gap: 10 }}>
+                {spellings.size > 1 && (
+                  <Txt variant="small" color="textSubtle">{f(d.repere.alsoWritten, { list: [...spellings.keys()].filter((x) => x !== label).join(', ') })}</Txt>
+                )}
+                {me.role === 'admin' && (
+                  <Button label={d.repere.merge} icon="git-merge" size="sm" variant="secondary" onPress={() => setMerging({ key: school, label })} />
+                )}
                 {list.map((u) => (
                   <Tap key={u.id} onPress={() => router.push(`/membre/${u.id}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                     <Avatar uri={u.avatar} name={fullName(u)} size={30} />
@@ -199,7 +211,62 @@ export default function Repere() {
           </View>
         </View>
       )}
+      {merging && (
+        <MergeSheet
+          from={merging}
+          groups={groupByPlace(alumni, place, aliases).map((g) => ({ key: g.key, label: g.label, n: g.items.length }))}
+          aliases={aliases}
+          onClose={() => setMerging(null)}
+        />
+      )}
     </Screen>
+  );
+}
+
+/** Admins: say that a university / company is the same as another one (one entry instead of two). */
+function MergeSheet({ from, groups, aliases, onClose }: { from: { key: string; label: string }; groups: { key: string; label: string; n: number }[]; aliases: PlaceAliases; onClose: () => void }) {
+  const { d, f } = useI18n();
+  const { colors } = useTheme();
+  const { actions } = useStore();
+  const { toast } = useDialogs();
+  const [q, setQ] = useState('');
+  const others = groups.filter((g) => g.key !== from.key && (!q.trim() || norm(g.label).includes(norm(q.trim()))));
+  // Spellings already merged into this one (admin merges only), so they can be separated again.
+  const mergedHere = Object.entries(aliases).filter(([, to]) => to === from.key).map(([k]) => k);
+  return (
+    <Sheet visible title={f(d.repere.mergeTitle, { name: from.label })} onClose={onClose}>
+      <Txt color="textMuted">{d.repere.mergeSub}</Txt>
+      <SearchBar value={q} onChangeText={setQ} placeholder={d.common.search} />
+      <View style={{ gap: 6 }}>
+        {others.slice(0, 30).map((g) => (
+          <Tap
+            key={g.key}
+            onPress={() => {
+              actions.mergePlace(from.key, g.key);
+              toast(d.repere.merged);
+              onClose();
+            }}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.border }}
+            hoverStyle={{ backgroundColor: colors.surfaceAlt }}>
+            <Feather name="git-merge" size={15} color={colors.secondary} />
+            <Txt variant="bodyStrong" numberOfLines={1} style={{ flex: 1, fontSize: 14 }}>{g.label}</Txt>
+            <Txt variant="small" color="textSubtle">{g.n}</Txt>
+          </Tap>
+        ))}
+        {others.length === 0 && <Txt color="textMuted">{d.common.noResults}</Txt>}
+      </View>
+      {mergedHere.length > 0 && (
+        <View style={{ gap: 8 }}>
+          <Txt variant="caption">{d.repere.mergedHere}</Txt>
+          {mergedHere.map((k) => (
+            <Row key={k} gap={10}>
+              <Txt style={{ flex: 1 }} numberOfLines={1}>{k}</Txt>
+              <Button label={d.repere.unmerge} size="sm" variant="secondary" onPress={() => actions.mergePlace(k, null)} />
+            </Row>
+          ))}
+        </View>
+      )}
+    </Sheet>
   );
 }
 

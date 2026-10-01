@@ -13,6 +13,7 @@ import { Avatar, Badge, Button, Card, Row, SectionHeader, Tap } from '@/componen
 import { BackLink, Columns, Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
+import { groupByPlace, usePlaceAliases } from '@/data/places';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -32,7 +33,9 @@ export default function PromoPage() {
   const info = db.promos.find((p) => p.year === year);
   const [now] = useState(() => Date.now());
 
-  const schools = useMemo(() => countBy(members.map((u) => u.school)), [members]);
+  const aliases = usePlaceAliases();
+  // Same university written differently counts once (data/places.ts).
+  const schools = useMemo(() => groupByPlace(members, (u) => u.school, aliases).map((g) => [g.label, g.items.length] as [string, number]), [members, aliases]);
   const countries = useMemo(() => countBy(members.map((u) => u.country)), [members]);
   const recent = [...members].sort((a, b) => (a.lastActiveAt < b.lastActiveAt ? 1 : -1)).slice(0, 5);
 

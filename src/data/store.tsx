@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import { isRemote, supabase } from '@/lib/supabase';
 import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL } from './members';
 import { can, canMessage, SELF_SIGNUP_ROLES } from './permissions';
+import { parseAliases } from './places';
 import {
   callAdminApi,
   EMPTY_DB,
@@ -783,6 +784,19 @@ function useStoreValue() {
       const value = url.trim() || undefined;
       commit((d) => ({ ...d, settings: { ...d.settings, whatsappCommunity: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'whatsappCommunity', value: value ?? null }));
+    },
+    /** Admins: treat `from` as the same university / company as `to` (or undo with `to` = null). */
+    mergePlace(fromKey: string, toKey: string | null) {
+      const current = parseAliases(dbRef.current?.settings.placeAliases);
+      if (toKey && toKey !== fromKey) {
+        current[fromKey] = toKey;
+        // Merging back the other way replaces the earlier merge instead of making a loop.
+        if (current[toKey] === fromKey) delete current[toKey];
+      }
+      else delete current[fromKey];
+      const value = Object.keys(current).length ? JSON.stringify(current) : undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, placeAliases: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'placeAliases', value: value ?? null }));
     },
     addInstitution(inst: Omit<Institution, 'id' | 'order'>) {
       const row: Institution = { ...inst, id: makeId('inst'), order: (dbRef.current?.institutions.length ?? 0) + 1 };

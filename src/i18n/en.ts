@@ -85,6 +85,7 @@ const en: Dict = {
     fonction: 'Position', messagingDisabled: 'Private messaging is disabled between school leadership and students.', alumniNumber: 'Alumni no.', bureauCode: 'Bureau code', honorary: 'Status: Honorary member', birthday: 'Birthday', phone: 'Phone', email: 'Email', location: 'Location', school: 'School / University', notFound: 'Member not found',
   },
   repere: {
+    alsoWritten: 'Also written: {list}', merge: 'Merge with…', mergeTitle: 'Merge “{name}”', mergeSub: 'Pick the same university or company written differently: both become one entry, everywhere in the app.', merged: 'Merge saved', mergedHere: 'Already merged here', unmerge: 'Separate', suggestions: 'Already used:',
     viewGlobe: 'Globe', viewMap: 'Map',
     title: 'Repère', subtitle: 'Explore the universities and countries where LFK alumni went to study.',
     continent: 'Continent', country: 'Country', universities: 'Universities', pickContinent: 'Pick a continent on the map or in the list.',

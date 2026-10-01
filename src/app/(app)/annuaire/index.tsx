@@ -12,6 +12,7 @@ import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES, countrySearchText } from '@/data/countries';
+import { groupByPlace, resolvePlace, usePlaceAliases } from '@/data/places';
 import { fullName, useApprovedMembers, useMe } from '@/data/store';
 import type { User, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -33,7 +34,8 @@ export default function Directory() {
   const [situation, setSituation] = useState<Situation | 'all'>('all');
 
   const years = useMemo(() => [...new Set(members.map((u) => u.promo).filter(Boolean) as number[])].sort((a, b) => b - a), [members]);
-  const schools = useMemo(() => [...new Set(members.map((u) => u.school).filter(Boolean) as string[])].sort(), [members]);
+  const aliases = usePlaceAliases();
+  const schools = useMemo(() => groupByPlace(members, (u) => u.school, aliases).sort((a, b) => a.label.localeCompare(b.label)), [members, aliases]);
   const countries = useMemo(() => COUNTRIES.filter((c) => members.some((u) => u.country === c.code)), [members]);
 
   const filtered = useMemo(() => {
@@ -41,13 +43,13 @@ export default function Directory() {
     return members.filter((u) => {
       if (promo !== 'all' && u.promo !== promo) return false;
       if (country !== 'all' && u.country !== country) return false;
-      if (school !== 'all' && u.school !== school) return false;
+      if (school !== 'all' && resolvePlace(u.school, aliases) !== school) return false;
       if (situation !== 'all' && u.situation !== situation) return false;
       if (!n) return true;
       const hay = norm(`${fullName(u)} ${u.promo ?? ''} ${u.country ? countrySearchText(u.country) : ''} ${u.school ?? ''} ${u.employer ?? ''} ${u.jobTitle ?? ''} ${u.city ?? ''}`);
       return n.split(/\s+/).every((t) => hay.includes(t));
     });
-  }, [members, q, promo, country, school, situation]);
+  }, [members, q, promo, country, school, situation, aliases]);
 
   const isFiltering = !!q.trim() || promo !== 'all' || country !== 'all' || school !== 'all' || situation !== 'all';
   const byPromo = useMemo(() => {
@@ -75,7 +77,7 @@ export default function Directory() {
           <Feather name="sliders" size={16} color={colors.textMuted} />
           <Select compact value={promo} onChange={setPromo} placeholder={d.directory.filterPromo} searchable options={[{ value: 'all' as const, label: d.directory.allPromos }, ...years.map((y) => ({ value: y, label: f(d.common.promo, { year: y }) }))]} />
           <Select compact value={country} onChange={setCountry} placeholder={d.directory.filterCountry} searchable options={[{ value: 'all', label: d.directory.allCountries }, ...countries.map((c) => ({ value: c.code, label: countryOf(c.code), leading: <Flag code={c.code} /> }))]} />
-          <Select compact value={school} onChange={setSchool} placeholder={d.directory.filterSchool} searchable options={[{ value: 'all', label: `${d.common.all} — ${d.directory.filterSchool}` }, ...schools.map((s) => ({ value: s, label: s }))]} />
+          <Select compact value={school} onChange={setSchool} placeholder={d.directory.filterSchool} searchable options={[{ value: 'all', label: `${d.common.all} — ${d.directory.filterSchool}` }, ...schools.map((g) => ({ value: g.key, label: g.label }))]} />
           <Select
             compact
             value={situation}

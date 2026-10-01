@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { supabase } from '@/lib/supabase';
+import { groupByPlace, parseAliases } from './places';
 import { useStore } from './store';
 import type { Db, Institution } from './types';
 
@@ -36,7 +37,8 @@ function fromDb(db: Db): PublicOverview {
     return [...m].sort((a, b) => b[1] - a[1]);
   };
   const countries = count(grads.map((u) => u.country));
-  const schools = count(grads.map((u) => u.school));
+  // The same university written differently counts once (data/places.ts).
+  const schools = groupByPlace(grads, (u) => u.school, parseAliases(db.settings.placeAliases)).map((g) => [g.label, g.items.length] as const);
   const bureau = db.users
     .filter((u) => u.approved && (u.role === 'admin' || u.role === 'honneur'))
     .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }))

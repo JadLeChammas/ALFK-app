@@ -83,6 +83,7 @@ const fr = {
     fonction: 'Fonction', messagingDisabled: 'La messagerie privée est désactivée entre la direction du lycée et les élèves.', alumniNumber: 'N° Alumni', bureauCode: 'Code Bureau', honorary: 'Statut : Membre d’honneur', birthday: 'Anniversaire', phone: 'Téléphone', email: 'E-mail', location: 'Localisation', school: 'École / Université', notFound: 'Membre introuvable',
   },
   repere: {
+    alsoWritten: 'Écrit aussi : {list}', merge: 'Fusionner avec…', mergeTitle: 'Fusionner « {name} »', mergeSub: 'Choisissez la même université ou entreprise écrite autrement : les deux n’en feront plus qu’une, partout dans l’app.', merged: 'Fusion enregistrée', mergedHere: 'Déjà fusionnés ici', unmerge: 'Séparer', suggestions: 'Déjà utilisés :',
     viewGlobe: 'Globe', viewMap: 'Carte',
     title: 'Repère', subtitle: 'Explorez les universités et pays où sont partis les anciens élèves du LFK.',
     continent: 'Continent', country: 'Pays', universities: 'Universités', pickContinent: 'Choisissez un continent sur la carte ou dans la liste.',

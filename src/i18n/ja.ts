@@ -85,6 +85,7 @@ const ja: Dict = {
     fonction: '役職', messagingDisabled: '学校管理職と在校生の間のプライベートメッセージは無効です。', alumniNumber: '卒業生番号', bureauCode: 'ビューロー番号', honorary: '区分：名誉会員', birthday: '誕生日', phone: '電話番号', email: 'メール', location: '所在地', school: '学校・大学', notFound: 'メンバーが見つかりません',
   },
   repere: {
+    alsoWritten: '別の表記：{list}', merge: '統合する…', mergeTitle: '「{name}」を統合', mergeSub: '別の表記の同じ大学・会社を選んでください。アプリ全体でひとつの項目になります。', merged: '統合しました', mergedHere: 'ここに統合済み', unmerge: '分離', suggestions: '既存の表記：',
     viewGlobe: '地球儀', viewMap: '地図',
     title: 'Repère', subtitle: 'LFK卒業生が進学した大学と国を探索しましょう。',
     continent: '大陸', country: '国', universities: '大学', pickContinent: '地図またはリストから大陸を選んでください。',

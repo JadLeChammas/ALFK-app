@@ -85,6 +85,7 @@ const ar: Dict = {
     fonction: 'المنصب', messagingDisabled: 'المراسلة الخاصة معطّلة بين إدارة الثانوية والطلاب.', alumniNumber: 'رقم الخريج', bureauCode: 'رمز المكتب', honorary: 'الصفة: عضو شرف', birthday: 'عيد الميلاد', phone: 'الهاتف', email: 'البريد الإلكتروني', location: 'الموقع', school: 'المدرسة / الجامعة', notFound: 'العضو غير موجود',
   },
   repere: {
+    alsoWritten: 'يُكتب أيضًا: {list}', merge: 'دمج مع…', mergeTitle: 'دمج «{name}»', mergeSub: 'اختر الجامعة أو الشركة نفسها مكتوبة بطريقة أخرى: ستصبحان إدخالًا واحدًا في كل التطبيق.', merged: 'تم حفظ الدمج', mergedHere: 'مدمجة هنا مسبقًا', unmerge: 'فصل', suggestions: 'مستخدمة مسبقًا:',
     viewGlobe: 'الكرة الأرضية', viewMap: 'الخريطة',
     title: 'Repère', subtitle: 'استكشف الجامعات والدول التي ذهب إليها خريجو الثانوية الفرنسية.',
     continent: 'القارة', country: 'الدولة', universities: 'الجامعات', pickContinent: 'اختر قارة من الخريطة أو من القائمة.',

@@ -85,6 +85,7 @@ const de: Dict = {
     fonction: 'Funktion', messagingDisabled: 'Private Nachrichten zwischen Schulleitung und Schülern sind deaktiviert.', alumniNumber: 'Alumni-Nr.', bureauCode: 'Bureau-Code', honorary: 'Status: Ehrenmitglied', birthday: 'Geburtstag', phone: 'Telefon', email: 'E-Mail', location: 'Ort', school: 'Schule / Universität', notFound: 'Mitglied nicht gefunden',
   },
   repere: {
+    alsoWritten: 'Auch geschrieben: {list}', merge: 'Zusammenführen mit…', mergeTitle: '„{name}“ zusammenführen', mergeSub: 'Wählen Sie dieselbe Universität oder Firma in anderer Schreibweise: Beide werden überall in der App zu einem Eintrag.', merged: 'Zusammenführung gespeichert', mergedHere: 'Hier bereits zusammengeführt', unmerge: 'Trennen', suggestions: 'Bereits verwendet:',
     viewGlobe: 'Globus', viewMap: 'Karte',
     title: 'Repère', subtitle: 'Entdecken Sie die Universitäten und Länder, in die die LFK-Ehemaligen gegangen sind.',
     continent: 'Kontinent', country: 'Land', universities: 'Universitäten', pickContinent: 'Wählen Sie einen Kontinent auf der Karte oder in der Liste.',

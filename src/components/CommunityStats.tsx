@@ -8,6 +8,7 @@ import { Badge, Card, Row, SectionHeader } from '@/components/ui/primitives';
 import { Grid } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { useApprovedMembers } from '@/data/store';
+import { groupByPlace, usePlaceAliases } from '@/data/places';
 import type { Role } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -20,6 +21,7 @@ export function CommunityStats() {
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const members = useApprovedMembers();
+  const aliases = usePlaceAliases();
   const now = new Date();
 
   const roleOrder: Role[] = ['alumni', 'honneur', 'admin', 'eleve']; // fixed order = fixed chart colors
@@ -37,14 +39,9 @@ export function CommunityStats() {
   const byPromo = [...promoMap.entries()].sort((a, b) => b[0] - a[0]).slice(0, 8).map(([y, v]) => ({ label: f(d.common.promo, { year: y }), value: v }));
 
   // Where alumni went to study (same population as Repère).
-  const schoolMap = new Map<string, { n: number; country?: string }>();
-  members
-    .filter((u) => (u.role === 'alumni' || u.role === 'admin') && u.school)
-    .forEach((u) => schoolMap.set(u.school!, { n: (schoolMap.get(u.school!)?.n ?? 0) + 1, country: u.country }));
-  const bySchool = [...schoolMap.entries()]
-    .sort((a, b) => b[1].n - a[1].n)
+  const bySchool = groupByPlace(members.filter((u) => u.role === 'alumni' || u.role === 'admin'), (u) => u.school, aliases)
     .slice(0, 8)
-    .map(([s, v]) => ({ label: s, value: v.n, leading: v.country ? <Flag code={v.country} size={12} /> : undefined }));
+    .map((g) => ({ label: g.label, value: g.items.length, leading: g.items[0].country ? <Flag code={g.items[0].country} size={12} /> : undefined }));
 
   // Last 12 months: new sign-ups and cumulative total.
   const months = Array.from({ length: 12 }, (_, i) => new Date(now.getFullYear(), now.getMonth() - 11 + i, 1));

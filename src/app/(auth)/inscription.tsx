@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { PlaceSuggestions } from '@/components/PlaceSuggestions';
 import { ProofPicker } from '@/components/ProofPicker';
 import { FieldRow, Button, Chip, Input, Row, Segmented } from '@/components/ui/primitives';
 import { DateField, PhoneField } from '@/components/ui/fields';
@@ -14,6 +15,7 @@ import { COUNTRIES, UNIVERSITIES } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
+import { usePublicOverview } from '@/data/public';
 import type { PickedDoc } from '@/data/remote';
 import { useStore, type AuthError } from '@/data/store';
 import type { Gender, Role, Situation } from '@/data/types';
@@ -24,6 +26,8 @@ export default function SignUp() {
   const { d, country } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
+  // Names already used on the platform (public list) and the usual universities, to avoid new spellings.
+  const overview = usePublicOverview();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [proof, setProof] = useState<PickedDoc | null>(null);
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
@@ -82,6 +86,7 @@ export default function SignUp() {
   }
 
   const suggestions = UNIVERSITIES[form.country] ?? [];
+  const knownSchools = [...overview.schools, ...Object.values(UNIVERSITIES).flat()];
 
   return (
     <AuthFrame
@@ -180,7 +185,10 @@ export default function SignUp() {
           ) : (
             <Input label={d.auth.school} icon="book" value={form.school} onChangeText={set('school')} />
           )}
-          {form.role !== 'eleve' && suggestions.length > 0 && (
+          {form.role !== 'eleve' && form.school.trim().length >= 2 && (
+            <PlaceSuggestions value={form.school} options={knownSchools} onPick={(v) => setForm((f) => ({ ...f, school: v }))} />
+          )}
+          {form.role !== 'eleve' && !form.school.trim() && suggestions.length > 0 && (
             <Row gap={6} wrap>
               {suggestions.slice(0, 5).map((s) => (
                 <Chip key={s} label={s} active={form.school === s} onPress={() => setForm((f) => ({ ...f, school: s }))} />

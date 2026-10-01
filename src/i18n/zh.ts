@@ -85,6 +85,7 @@ const zh: Dict = {
     fonction: '职务', messagingDisabled: '学校领导与在校生之间的私信已关闭。', alumniNumber: '校友编号', bureauCode: '理事会编号', honorary: '身份：荣誉会员', birthday: '生日', phone: '电话', email: '邮箱', location: '所在地', school: '学校 / 大学', notFound: '未找到该成员',
   },
   repere: {
+    alsoWritten: '其他写法：{list}', merge: '合并到…', mergeTitle: '合并“{name}”', mergeSub: '选择以其他方式书写的同一所大学或公司：在整个应用中将合并为一项。', merged: '已合并', mergedHere: '已合并到此处', unmerge: '拆分', suggestions: '已有名称：',
     viewGlobe: '地球', viewMap: '地图',
     title: 'Repère', subtitle: '探索 LFK 校友前往就读的大学和国家。',
     continent: '大洲', country: '国家', universities: '大学', pickContinent: '在地图或列表中选择一个大洲。',

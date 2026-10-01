@@ -91,7 +91,8 @@ export type KeyDateCategory = 'francophonie' | 'aefe' | 'lfk' | 'france' | 'kowe
 /** A yearly date (month/day) shown in the calendar; `year` set = a one-off date. */
 export type KeyDate = { id: string; title: string; month: number; day: number; year?: number; category: KeyDateCategory };
 
-export type AppSettings = { whatsappCommunity?: string };
+/** `placeAliases`: admin merges of universities / companies, JSON { alias key: place key } (see data/places.ts). */
+export type AppSettings = { whatsappCommunity?: string; placeAliases?: string };
 
 export type Conversation = {
   id: string;
