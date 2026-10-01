@@ -1,7 +1,6 @@
-import { useRef } from 'react';
-
 import { useDialogs } from '@/components/ui/Dialogs';
-import { useI18n } from '@/i18n';
+import { isLang, useI18n } from '@/i18n';
+import { logoTap, previousLang, rememberLang } from '@/lib/eggs';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /** Switches the retro mode on or off, with a word about it. */
@@ -16,22 +15,28 @@ export function useToggleRetro() {
 }
 
 /**
- * The hidden switch of the retro mode: tapping the logo 5 times in a row (within 3 seconds).
- * Returns a handler to call on each tap; `then` runs on ordinary taps (e.g. go home).
+ * The hidden switches on the logo: 5 taps in a row = retro mode, 7 taps = Pirate language (and back).
+ * Returns a handler to call on each tap; `then` runs on the first tap (e.g. go home).
  */
 export function useRetroTaps(then?: () => void) {
   const toggle = useToggleRetro();
-  const taps = useRef<number[]>([]);
-  return () => {
-    const now = Date.now();
-    taps.current = [...taps.current.filter((t) => now - t < 3000), now];
-    if (taps.current.length >= 5) {
-      taps.current = [];
-      toggle();
-      return;
-    }
-    then?.();
-  };
+  const { lang, setLang } = useI18n();
+  const { toast } = useDialogs();
+  return () =>
+    logoTap({
+      first: then,
+      five: () => toggle(),
+      seven: async () => {
+        if (lang === 'pirate') {
+          const back = await previousLang();
+          setLang(isLang(back) && back !== 'pirate' ? back : 'fr');
+          return;
+        }
+        rememberLang(lang);
+        setLang('pirate');
+        toast('Arrr! All hands on deck! 🏴‍☠️');
+      },
+    });
 }
 
 /** ↑ ↑ ↓ ↓ ← → ← → B A on a keyboard. */

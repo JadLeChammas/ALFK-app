@@ -6,13 +6,16 @@ import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider, Stack } fro
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { View } from 'react-native';
 
 import { DemoBadge } from '@/components/DemoBadge';
+import { EasterEggs } from '@/components/EasterEggs';
 import { RetroLayer } from '@/components/RetroLayer';
 import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
 import { StoreProvider, useStore } from '@/data/store';
 import { I18nProvider, useI18n } from '@/i18n';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
+import { markActive } from '@/lib/eggs';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -22,10 +25,13 @@ export default function RootLayout() {
       <I18nProvider>
         <StoreProvider>
           <DialogProvider>
-            <RootNavigator />
+            <View style={{ flex: 1 }} onTouchStart={markActive}>
+              <RootNavigator />
+            </View>
             <StoreErrorToast />
             <DemoBadge />
             <RetroLayer />
+            <EasterEggs />
           </DialogProvider>
         </StoreProvider>
       </I18nProvider>

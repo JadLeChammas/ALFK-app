@@ -31,7 +31,7 @@ export const LANGUAGES = [
 export type Lang = (typeof LANGUAGES)[number]['code'];
 
 const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, ar, ja, zh, pirate };
-const isLang = (v: string | null): v is Lang => !!v && v in dicts;
+export const isLang = (v: string | null): v is Lang => !!v && v in dicts;
 export const isRtl = (l: Lang) => l === 'ar';
 
 const STORAGE_KEY = 'lfk.lang';

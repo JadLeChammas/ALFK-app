@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { RoleBadge } from '@/components/cards';
 import { Flag } from '@/components/ui/Flag';
-import { Avatar, Button, Card, ListRow, Row, type IconName } from '@/components/ui/primitives';
+import { Avatar, Badge, Button, Card, ListRow, Row, type IconName } from '@/components/ui/primitives';
 import { Columns, Screen } from '@/components/ui/Screen';
 import { CvFileCard, CvView } from '@/components/cv/CvView';
 import { Txt } from '@/components/ui/Txt';
@@ -16,6 +16,8 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
+import { birthdayToday } from '@/lib/eggs';
+import { Balloons } from '@/components/EasterEggs';
 
 export default function MyProfile() {
   const { d, f, lang } = useI18n();
@@ -45,6 +47,7 @@ export default function MyProfile() {
 
   return (
     <Screen>
+      {birthdayToday(me, me) && <Balloons />}
       <Card padded={false}>
         <View style={{ height: isMobile ? 110 : 160, backgroundColor: colors.navy, overflow: 'hidden' }}>
           <View style={{ position: 'absolute', right: -40, top: -60, width: 260, height: 260, borderRadius: 130, backgroundColor: colors.primary, opacity: 0.55 }} />
@@ -60,6 +63,7 @@ export default function MyProfile() {
                 <Txt variant={isMobile ? 'h1' : 'display'}>{fullName(me)}</Txt>
                 <Row gap={8} wrap>
                   <RoleBadge role={me.role} />
+                  {birthdayToday(me, me) && <Badge label={d.eggs.birthday} tone="warning" icon="gift" />}
                   <Txt color="textMuted">{[d.roles[me.role], me.fonction, me.promo && f(d.common.promo, { year: me.promo })].filter(Boolean).join(' · ')}</Txt>
                 </Row>
               </View>

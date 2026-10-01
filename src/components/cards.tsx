@@ -11,6 +11,8 @@ import type { EventCategory, LfkEvent, Publication, PublicationCategory, Role, U
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
+import { birthdayToday } from '@/lib/eggs';
+import { SparkleName } from './EasterEggs';
 import { Avatar, Badge, Button, Card, MetaLine, Tap, type Tone } from './ui/primitives';
 import { Flag } from './ui/Flag';
 import { Txt } from './ui/Txt';
@@ -47,7 +49,7 @@ export function MemberCard({ user, showPromo }: { user: User; showPromo?: boolea
     <Card onPress={() => router.push(`/membre/${user.id}`)} padded={false} style={{ padding: 18, alignItems: 'center', gap: 10, height: '100%' }}>
       <Avatar uri={user.avatar} name={fullName(user)} size={68} />
       <View style={{ alignItems: 'center', gap: 2, width: '100%' }}>
-        <Txt variant="h3" numberOfLines={1} align="center">{fullName(user)}</Txt>
+        {birthdayToday(user, me) ? <SparkleName name={fullName(user)} /> : <Txt variant="h3" numberOfLines={1} align="center">{fullName(user)}</Txt>}
         <Txt variant="small" color="textMuted" numberOfLines={1} align="center">{occupation(user) ?? '—'}</Txt>
         {showPromo && user.promo && <Txt variant="small" color="textSubtle">{f(d.common.promo, { year: user.promo })}</Txt>}
       </View>

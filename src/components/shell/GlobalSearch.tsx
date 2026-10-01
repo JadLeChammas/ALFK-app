@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,6 +12,8 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
+import { eggs, isCreatorQuery, isSandWord } from '@/lib/eggs';
+import { CreatorCard, SandstormLayer } from '../EasterEggs';
 import { Avatar, SearchBar, Tap, type IconName } from '../ui/primitives';
 import { Flag } from '../ui/Flag';
 import { Txt } from '../ui/Txt';
@@ -41,6 +43,12 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
     return { m, promos, countries, events, pubs };
   }, [q, members, db.events, db.publications, d, f, me]);
 
+  // Easter eggs: sandstorm words, and the creator's card.
+  useEffect(() => {
+    if (isSandWord(q)) eggs.emit('sandstorm');
+  }, [q]);
+  const creator = isCreatorQuery(q);
+
   const go = (href: string) => {
     onClose();
     setQ('');
@@ -62,8 +70,9 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
             </Tap>
           </View>
           <ScrollView contentContainerStyle={{ padding: 10 }} keyboardShouldPersistTaps="handled">
+            {creator && <CreatorCard onOpen={go} />}
             {!results && <Txt variant="small" color="textSubtle" style={{ padding: 16 }}>{d.search.empty}</Txt>}
-            {results && count === 0 && <Txt variant="small" color="textSubtle" style={{ padding: 16 }}>{d.common.noResults}</Txt>}
+            {results && count === 0 && !creator && <Txt variant="small" color="textSubtle" style={{ padding: 16 }}>{d.common.noResults}</Txt>}
             {results && results.m.length > 0 && (
               <Group title={d.search.members}>
                 {results.m.map((u) => (
@@ -101,6 +110,7 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
             )}
           </ScrollView>
         </Pressable>
+        <SandstormLayer />
       </Pressable>
     </Modal>
   );

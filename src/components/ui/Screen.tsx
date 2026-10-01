@@ -7,6 +7,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { space } from '@/theme/tokens';
+import { eggs } from '@/lib/eggs';
 import { Tap } from './primitives';
 import { Txt } from './Txt';
 
@@ -31,6 +32,10 @@ export function Screen({ children, scroll = true, maxWidth = MAX_CONTENT, conten
       contentContainerStyle={{ paddingHorizontal: gutter, paddingTop: isMobile ? space.lg : space.xxl, paddingBottom: isMobile ? 120 : space.huge }}
       keyboardShouldPersistTaps="handled">
       {inner}
+      {/* Easter egg: the © rolls the end credits. */}
+      <Txt variant="small" color="textSubtle" align="center" onPress={() => eggs.emit('credits')} suppressHighlighting style={{ marginTop: space.xxxl, opacity: 0.7 }}>
+        {`© ${new Date().getFullYear()} Amicale LFK`}
+      </Txt>
     </ScrollView>
   );
 }

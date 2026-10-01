@@ -17,6 +17,7 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
 import { useRetroTaps } from '@/lib/retro';
+import { rollCredits } from '@/components/EasterEggs';
 import { PublicSettingsButton } from './PublicSettings';
 import { Reveal } from './Reveal';
 
@@ -312,7 +313,7 @@ function SiteFooter() {
           <Link href="/contact">
             <Txt style={[upper, { color: '#FF8A8C' }]}>{d.site.footer.contact} &rarr;</Txt>
           </Link>
-          <Txt style={[upper, { color: 'rgba(200,211,229,0.6)' }]}>{f(d.site.footer.copyright, { year: new Date().getFullYear() })}</Txt>
+          <Txt style={[upper, { color: 'rgba(200,211,229,0.6)' }]} onPress={rollCredits} suppressHighlighting>{f(d.site.footer.copyright, { year: new Date().getFullYear() })}</Txt>
         </View>
       </Container>
       <Txt

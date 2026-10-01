@@ -1,0 +1,119 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+
+import type { User } from '@/data/types';
+
+/**
+ * Easter eggs (the full list with how to find them is in EASTER_EGGS.md).
+ * A tiny event bus lets a search box, a shake or the footer trigger an effect drawn at the root.
+ */
+export type EggEvent = 'shake' | 'sandstorm' | 'credits';
+
+const listeners = new Map<EggEvent, Set<() => void>>();
+export const eggs = {
+  on(e: EggEvent, fn: () => void) {
+    if (!listeners.has(e)) listeners.set(e, new Set());
+    listeners.get(e)!.add(fn);
+    return () => {
+      listeners.get(e)!.delete(fn);
+    };
+  },
+  emit(e: EggEvent) {
+    listeners.get(e)?.forEach((fn) => fn());
+  },
+};
+
+const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+/** « chameau », « 50°C » or « shamal » (the hot sand wind of Kuwait) → sandstorm. */
+export function isSandWord(q: string) {
+  const n = norm(q).replace(/\s+/g, '');
+  return n === 'chameau' || n === 'shamal' || n === '50°c' || n === '50c' || n === '50°';
+}
+
+/** The site's creator. */
+export const CREATOR = 'Jad El Chammas';
+export function isCreatorQuery(q: string) {
+  const n = norm(q);
+  return n.length >= 3 && ['jad', 'jad el chammas', 'el chammas', 'chammas', 'jadlechammas'].some((k) => k === n || (n.length >= 5 && k.startsWith(n)));
+}
+
+/** People credited in the end-of-film credits (besides the board). */
+export const CONTRIBUTORS: { name: string; role: 'dev' | 'design' }[] = [
+  { name: 'Jad El Chammas', role: 'dev' },
+  { name: 'anwarbitar', role: 'design' },
+];
+
+/** Birthday today, and allowed to be seen by this viewer. */
+export function birthdayToday(u: Pick<User, 'id' | 'birthDate' | 'privacy'>, viewer?: Pick<User, 'id' | 'role'> | null) {
+  if (!u.birthDate) return false;
+  if (!u.privacy.showBirthday && viewer?.id !== u.id && viewer?.role !== 'admin') return false;
+  const [, m, d] = u.birthDate.split('-').map(Number);
+  const t = new Date();
+  return t.getMonth() + 1 === m && t.getDate() === d;
+}
+
+// ——— Logo taps: 5 in a row = retro mode, 7 = Pirate ———
+// Kept outside React: the first tap may change page and remount the header that was tapped.
+let burst = 0;
+let burstTimer: ReturnType<typeof setTimeout> | null = null;
+export function logoTap(handlers: { first?: () => void; five: () => void; seven: () => void }) {
+  burst += 1;
+  if (burst === 1) handlers.first?.();
+  if (burstTimer) clearTimeout(burstTimer);
+  burstTimer = setTimeout(() => {
+    const n = burst;
+    burst = 0;
+    if (n >= 7) handlers.seven();
+    else if (n >= 5) handlers.five();
+  }, 700);
+}
+
+/** The language to come back to when leaving Pirate. */
+const PREV_LANG = 'lfk.prevLang';
+export const rememberLang = (l: string) => AsyncStorage.setItem(PREV_LANG, l).catch(() => {});
+export const previousLang = async () => (await AsyncStorage.getItem(PREV_LANG).catch(() => null)) ?? 'fr';
+
+// ——— Activity (for the idle camel) ———
+let lastActive = Date.now();
+export const markActive = () => {
+  lastActive = Date.now();
+};
+export const idleFor = () => Date.now() - lastActive;
+
+// ——— Shake (mobile web, devicemotion) ———
+let motionAsked = false;
+/** iPhone asks for permission to read motion; call from a tap (e.g. on the globe). */
+export function askMotionPermission() {
+  if (motionAsked || Platform.OS !== 'web' || typeof DeviceMotionEvent === 'undefined') return;
+  motionAsked = true;
+  const req = (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> }).requestPermission;
+  if (req) req().catch(() => {});
+}
+
+export function listenForShake() {
+  if (Platform.OS !== 'web' || typeof window === 'undefined' || typeof DeviceMotionEvent === 'undefined') return () => {};
+  let prev: [number, number, number] | null = null;
+  let hits: number[] = [];
+  let cooldown = 0;
+  const onMotion = (e: DeviceMotionEvent) => {
+    const a = e.accelerationIncludingGravity;
+    if (!a || a.x === null || a.y === null || a.z === null) return;
+    const cur: [number, number, number] = [a.x, a.y, a.z];
+    if (prev) {
+      const jolt = Math.abs(cur[0] - prev[0]) + Math.abs(cur[1] - prev[1]) + Math.abs(cur[2] - prev[2]);
+      const now = Date.now();
+      if (jolt > 28) {
+        hits = [...hits.filter((t) => now - t < 1000), now];
+        if (hits.length >= 3 && now > cooldown) {
+          hits = [];
+          cooldown = now + 2500;
+          eggs.emit('shake');
+        }
+      }
+    }
+    prev = cur;
+  };
+  window.addEventListener('devicemotion', onMotion);
+  return () => window.removeEventListener('devicemotion', onMotion);
+}

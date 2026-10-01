@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { MemberCard } from '@/components/cards';
@@ -18,6 +18,8 @@ import type { User, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
+import { eggs, isCreatorQuery, isSandWord } from '@/lib/eggs';
+import { CreatorCard } from '@/components/EasterEggs';
 
 const PREVIEW = 8;
 
@@ -67,12 +69,17 @@ export default function Directory() {
     setSituation('all');
   };
 
+  useEffect(() => {
+    if (isSandWord(q)) eggs.emit('sandstorm');
+  }, [q]);
+
   return (
     <Screen>
       <PageHeader title={d.directory.title} subtitle={d.directory.subtitle} />
 
       <View style={{ gap: 14 }}>
         <SearchBar value={q} onChangeText={setQ} placeholder={d.directory.searchPlaceholder} style={{ height: 52 }} />
+        {isCreatorQuery(q) && <CreatorCard onOpen={(href) => router.push(href as never)} />}
         <Row gap={10} wrap>
           <Feather name="sliders" size={16} color={colors.textMuted} />
           <Select compact value={promo} onChange={setPromo} placeholder={d.directory.filterPromo} searchable options={[{ value: 'all' as const, label: d.directory.allPromos }, ...years.map((y) => ({ value: y, label: f(d.common.promo, { year: y }) }))]} />

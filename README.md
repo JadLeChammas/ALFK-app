@@ -5,6 +5,8 @@ Le réseau privé des anciens du Lycée Français de Koweït. Une seule base de 
 
 Architecture, pages et design system : voir [DESIGN.md](DESIGN.md).
 
+Surprises cachées dans le site : voir [EASTER_EGGS.md](EASTER_EGGS.md) 🥚
+
 ## Lancer le projet
 
 ```bash

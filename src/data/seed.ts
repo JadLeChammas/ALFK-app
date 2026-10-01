@@ -413,6 +413,7 @@ export function createSeed(now = new Date()): Db {
     { id: 'kd8', title: 'Parcoursup : inscription et formulation des vœux', month: 1, day: 14, endMonth: 3, endDay: 12, year: examYear, category: 'demarches', url: 'https://www.parcoursup.gouv.fr' },
     { id: 'kd9', title: 'Parcoursup : dernier jour pour confirmer ses vœux', month: 4, day: 1, year: examYear, category: 'demarches', url: 'https://www.parcoursup.gouv.fr' },
     { id: 'kd10', title: 'Concours : inscriptions aux écoles post-bac', month: 12, day: 1, endMonth: 3, endDay: 15, year: examYear - 1, category: 'demarches' },
+    { id: 'kd12', title: 'Bac : épreuve de philosophie', month: 6, day: 15, year: examYear, category: 'lfk' },
     { id: 'kd11', title: 'Parcoursup : phase d’admission', month: 6, day: 2, endMonth: 7, endDay: 10, year: examYear, category: 'demarches', url: 'https://www.parcoursup.gouv.fr' },
   ];
 

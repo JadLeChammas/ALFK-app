@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useReducedMotion } from 'react-native-reanimated';
-import Svg, { Circle, G, Path, Text as SvgText } from 'react-native-svg';
+import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import Svg, { Circle, Defs, G, Line, Path, RadialGradient, Rect, Stop, Text as SvgText } from 'react-native-svg';
 
 import { LFK_LL } from '@/data/countries';
-import { globeDots } from '@/data/worldDots';
+import { globeDots, mapDots } from '@/data/worldDots';
+import { useI18n } from '@/i18n';
+import { askMotionPermission, eggs } from '@/lib/eggs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
 
@@ -80,6 +82,20 @@ export function Globe({
   const [measured, setMeasured] = useState(0);
   const size = fixedSize ?? Math.min(measured, maxSize);
   const onDark = tone === 'dark' || scheme === 'dark';
+  const { lang, d } = useI18n();
+
+  // Easter egg: shake the phone and the globe drops, then bounces back.
+  const drop = useSharedValue(0);
+  const spin = useSharedValue(0);
+  useEffect(
+    () =>
+      eggs.on('shake', () => {
+        drop.value = withSequence(withTiming(180, { duration: 420, easing: Easing.in(Easing.quad) }), withSpring(0, { damping: 4, stiffness: 140 }));
+        spin.value = withSequence(withTiming(25, { duration: 420 }), withSpring(0, { damping: 5 }));
+      }),
+    [drop, spin],
+  );
+  const fall = useAnimatedStyle(() => ({ transform: [{ translateY: drop.value }, { rotate: `${spin.value}deg` }] }));
 
   const land = useMemo(() => globeDots().map(([la, lo]) => toVec(la, lo)), []);
   const origin = useMemo(() => toVec(LFK_LL[0], LFK_LL[1]), []);
@@ -132,6 +148,7 @@ export function Globe({
 
   type Touch = { nativeEvent: { pageX: number; pageY: number } };
   const onGrant = (e: Touch) => {
+    askMotionPermission();
     start.current = { x: e.nativeEvent.pageX, y: e.nativeEvent.pageY };
     drag.current = { active: true, dx: 0, dy: 0, phi0: live.current.phi, theta0: live.current.theta };
   };
@@ -234,7 +251,17 @@ export function Globe({
     </G>
   );
 
+  // Easter egg: in Pirate, an old treasure map with an X on Kuwait.
+  if (lang === 'pirate') {
+    return (
+      <Animated.View style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, style, fall]} onLayout={fixedSize ? undefined : (e) => setMeasured(e.nativeEvent.layout.width)}>
+        {size > 0 && <TreasureMap size={size} markers={markers} label={d.eggs.treasure} />}
+      </Animated.View>
+    );
+  }
+
   return (
+    <Animated.View style={[{ alignSelf: 'center', width: fixedSize ?? '100%', maxWidth: maxSize }, fall]}>
     <View
       style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, style]}
       onLayout={fixedSize ? undefined : (e) => setMeasured(e.nativeEvent.layout.width)}
@@ -257,5 +284,57 @@ export function Globe({
         </Svg>
       )}
     </View>
+    </Animated.View>
+  );
+}
+
+/** Pirate easter egg: parchment world map, a dotted trail and a red X on the LFK. */
+function TreasureMap({ size, markers, label }: { size: number; markers: GlobeMarker[]; label: string }) {
+  const dots = useMemo(() => mapDots(), []);
+  const pad = size * 0.07;
+  const w = size - pad * 2;
+  const h = w / 2;
+  const top = (size - h) / 2 - size * 0.04;
+  const at = (lat: number, lng: number) => ({ x: pad + ((lng + 180) / 360) * w, y: top + ((90 - lat) / 180) * h });
+  const land = dots.map(([la, lo]) => {
+    const p = at(la, lo);
+    return dot(p.x, p.y, Math.max(0.7, size / 420));
+  }).join('');
+  const x = at(LFK_LL[0], LFK_LL[1]);
+  const start = at(-35, -30);
+  const xr = size * 0.025;
+  const torn = `M${size * 0.03},${size * 0.05} L${size * 0.3},${size * 0.02} L${size * 0.55},${size * 0.06} L${size * 0.8},${size * 0.02} L${size * 0.97},${size * 0.06} L${size * 0.95},${size * 0.4} L${size * 0.98},${size * 0.7} L${size * 0.95},${size * 0.96} L${size * 0.6},${size * 0.93} L${size * 0.35},${size * 0.98} L${size * 0.04},${size * 0.94} L${size * 0.02},${size * 0.6} L${size * 0.05},${size * 0.3} Z`;
+  const cx = size * 0.84;
+  const cy = size * 0.8;
+  const cr = size * 0.07;
+  return (
+    <Svg width={size} height={size}>
+      <Defs>
+        <RadialGradient id="parchment" cx="50%" cy="50%" r="60%">
+          <Stop offset="0" stopColor="#F4E4BC" />
+          <Stop offset="0.7" stopColor="#E3C88E" />
+          <Stop offset="1" stopColor="#B88A4A" />
+        </RadialGradient>
+      </Defs>
+      <Path d={torn} fill="url(#parchment)" stroke="#7A5230" strokeWidth={1.5} />
+      <Rect x={pad * 0.9} y={top - pad * 0.3} width={w + pad * 0.2} height={h + pad * 0.6} fill="none" stroke="#7A5230" strokeWidth={1} strokeDasharray="2 3" opacity={0.6} />
+      <Path d={land} fill="#7A5230" opacity={0.55} />
+      {markers.map((m) => {
+        const p = at(m.ll[0], m.ll[1]);
+        return <Circle key={m.key} cx={p.x} cy={p.y} r={Math.max(1.5, size / 200)} fill="#5C3A1A" />;
+      })}
+      <Path d={`M${start.x},${start.y} Q${(start.x + x.x) / 2},${start.y - h * 0.9} ${x.x},${x.y}`} stroke="#8B1A1A" strokeWidth={Math.max(1.2, size / 260)} strokeDasharray="5 5" fill="none" />
+      <Line x1={x.x - xr} y1={x.y - xr} x2={x.x + xr} y2={x.y + xr} stroke="#B00000" strokeWidth={Math.max(2.5, size / 110)} strokeLinecap="round" />
+      <Line x1={x.x + xr} y1={x.y - xr} x2={x.x - xr} y2={x.y + xr} stroke="#B00000" strokeWidth={Math.max(2.5, size / 110)} strokeLinecap="round" />
+      <SvgText x={x.x} y={x.y - xr * 2} fill="#5C1A1A" fontSize={Math.max(10, size / 30)} fontFamily={fonts.serifItalic} textAnchor="middle">
+        {label}
+      </SvgText>
+      <G opacity={0.75}>
+        <Circle cx={cx} cy={cy} r={cr} fill="none" stroke="#7A5230" strokeWidth={1} />
+        <Path d={`M${cx},${cy - cr * 1.3} L${cx + cr * 0.22},${cy} L${cx},${cy + cr * 1.3} L${cx - cr * 0.22},${cy} Z`} fill="#7A5230" />
+        <Path d={`M${cx - cr * 1.3},${cy} L${cx},${cy - cr * 0.22} L${cx + cr * 1.3},${cy} L${cx},${cy + cr * 0.22} Z`} fill="#A0784A" />
+        <SvgText x={cx} y={cy - cr * 1.45} fill="#5C3A1A" fontSize={Math.max(8, size / 45)} fontFamily={fonts.semibold} textAnchor="middle">N</SvgText>
+      </G>
+    </Svg>
   );
 }

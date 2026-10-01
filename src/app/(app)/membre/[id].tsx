@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { RoleBadge, useStartConversation } from '@/components/cards';
 import { Flag } from '@/components/ui/Flag';
-import { Avatar, Button, Card, EmptyState, ListRow, Row } from '@/components/ui/primitives';
+import { Avatar, Badge, Button, Card, EmptyState, ListRow, Row } from '@/components/ui/primitives';
 import { BackLink, Columns, Screen } from '@/components/ui/Screen';
 import { CvFileCard, CvView } from '@/components/cv/CvView';
 import { Txt } from '@/components/ui/Txt';
@@ -14,6 +14,8 @@ import { fullName, useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
+import { birthdayToday } from '@/lib/eggs';
+import { Balloons } from '@/components/EasterEggs';
 
 export default function MemberProfile() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -41,6 +43,7 @@ export default function MemberProfile() {
   return (
     <Screen>
       <BackLink label={d.nav.directory} href="/annuaire" />
+      {birthdayToday(user, me) && <Balloons />}
       <Card padded={false}>
         <View style={{ height: isMobile ? 90 : 130, backgroundColor: colors.navy, overflow: 'hidden' }}>
           <View style={{ position: 'absolute', right: -40, top: -70, width: 240, height: 240, borderRadius: 120, backgroundColor: colors.primary, opacity: 0.55 }} />
@@ -56,6 +59,7 @@ export default function MemberProfile() {
                 <Txt variant={isMobile ? 'h1' : 'display'}>{fullName(user)}</Txt>
                 <Row gap={8} wrap>
                   <RoleBadge role={user.role} />
+                  {birthdayToday(user, me) && <Badge label={d.eggs.birthday} tone="warning" icon="gift" />}
                   {user.promo && <Txt color="textMuted">{f(d.common.promo, { year: user.promo })}</Txt>}
                   {user.fonction && <Txt color="textMuted">{user.fonction}</Txt>}
                 </Row>
