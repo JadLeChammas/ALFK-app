@@ -37,6 +37,7 @@ function useNav() {
   const orientation: NavItem = { href: '/orientation', icon: 'compass', label: d.nav.orientation };
   const calendar: NavItem = { href: '/calendrier', icon: 'calendar', label: d.nav.calendar };
   const questionsToReview = me.role === 'admin' ? db.questions.filter((q) => q.status === 'pending').length : 0;
+  const guide: NavItem = { href: '/guide', icon: 'map', label: d.nav.guide };
   const questions: NavItem = { href: '/questions', icon: 'help-circle', label: d.nav.questions, badge: questionsToReview };
   const events: NavItem[] = can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'star', label: d.nav.events }] : [];
   const publications: NavItem = { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort, badge: toReview };
@@ -49,11 +50,11 @@ function useNav() {
     { href: '/partenaires', icon: 'award', label: d.nav.honorary },
   ];
   return {
-    main: [home, directory, repere, orientation, questions, calendar, ...events, publications, messages],
+    main: [home, directory, repere, orientation, guide, questions, calendar, ...events, publications, messages],
     community,
     amicale,
     bar: [home, directory, repere, publications, messages],
-    more: [...events, orientation, questions, calendar, ...community, ...amicale],
+    more: [...events, orientation, guide, questions, calendar, ...community, ...amicale],
   };
 }
 

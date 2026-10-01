@@ -47,6 +47,7 @@ export default function Home() {
     // Students first look for guidance; alumni for their Promo LFK WhatsApp group.
     me.role === 'eleve' ? { icon: 'compass', label: d.nav.orientation, href: '/orientation' } : { icon: 'message-square', label: d.nav.whatsapp, href: '/whatsapp' },
     { icon: 'calendar', label: d.nav.calendar, href: '/calendrier' },
+    { icon: 'map', label: d.nav.guide, href: '/guide' },
   ];
 
   return (

@@ -1,12 +1,14 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { Linking, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Linking, Platform, View } from 'react-native';
 
 import { countryName } from '@/data/countries';
 import { fullName, useMe, useStore } from '@/data/store';
 import type { Cv, CvEntry, User } from '@/data/types';
 import { LANGUAGES, useI18n } from '@/i18n';
 import { exportCvPdf, period, sortEntries, type CvDoc } from '@/lib/cvPdf';
+import { pickPdf, PROOF_MAX_BYTES } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useDialogs } from '../ui/Dialogs';
 import { Button, Card, Row } from '../ui/primitives';
@@ -16,7 +18,7 @@ export const LFK_NAME = 'Lycée Français du Koweït';
 
 export function cvIsEmpty(cv?: Cv) {
   if (!cv) return true;
-  return !cv.headline && !cv.linkedin && !cv.website && !cv.file && !(['education', 'experience', 'projects', 'associations', 'skills', 'languages', 'interests'] as const).some((k) => cv[k]?.length);
+  return !cv.headline && !cv.linkedin && !cv.website && !(['education', 'experience', 'projects', 'associations', 'skills', 'languages', 'interests'] as const).some((k) => cv[k]?.length);
 }
 
 /** The LFK line at the bottom of Education: baccalauréat (promo year), or in progress for students. */
@@ -58,13 +60,13 @@ export function useCvDoc(user: User): CvDoc {
 export function CvView({ user }: { user: User }) {
   const { d } = useI18n();
   const { colors } = useTheme();
-  const { actions } = useStore();
   const { toast } = useDialogs();
   const me = useMe();
   const isMe = me.id === user.id;
   const doc = useCvDoc(user);
   const cv = user.cv ?? {};
   const empty = cvIsEmpty(user.cv);
+  const upload = useCvUpload();
 
   if (empty && !isMe) return null;
   if (empty) {
@@ -81,16 +83,12 @@ export function CvView({ user }: { user: User }) {
         </Row>
         <Row gap={8} wrap>
           <Button label={d.cv.create} icon="plus" onPress={() => router.push('/profil/cv')} />
+          {!cv.file && <Button label={upload.uploading ? d.cv.uploading : d.cv.upload} icon="upload" variant="secondary" disabled={upload.uploading} onPress={upload.attach} />}
         </Row>
       </Card>
     );
   }
 
-  const openFile = async () => {
-    if (!cv.file) return;
-    const url = await actions.cvFileUrl(cv.file.path);
-    if (url) Linking.openURL(url);
-  };
   const pdf = async () => {
     if (!(await exportCvPdf(doc))) toast(d.cv.pdfPopup, 'danger');
   };
@@ -105,8 +103,8 @@ export function CvView({ user }: { user: User }) {
         </View>
         <Row gap={8} wrap>
           <Button label={d.cv.pdf} icon="download" size="sm" onPress={pdf} />
-          {cv.file && <Button label={d.cv.openFile} icon="paperclip" size="sm" variant="secondary" onPress={openFile} />}
           {isMe && <Button label={d.cv.edit} icon="edit-2" size="sm" variant="secondary" onPress={() => router.push('/profil/cv')} />}
+          {isMe && !cv.file && <Button label={upload.uploading ? d.cv.uploading : d.cv.upload} icon="upload" size="sm" variant="secondary" disabled={upload.uploading} onPress={upload.attach} />}
         </Row>
       </Row>
 
@@ -201,5 +199,83 @@ function Timeline({ title, icon, entries }: { title: string; icon: React.Compone
         </Row>
       ))}
     </Block>
+  );
+}
+
+/** Upload / remove one's own CV as a PDF; saved on the profile right away. */
+export function useCvUpload() {
+  const { d } = useI18n();
+  const { actions } = useStore();
+  const { toast, confirm } = useDialogs();
+  const me = useMe();
+  const [uploading, setUploading] = useState(false);
+  const attach = async () => {
+    const doc = await pickPdf();
+    if (!doc) return;
+    if (doc.size && doc.size > PROOF_MAX_BYTES) {
+      toast(d.cv.fileTooBig, 'danger');
+      return;
+    }
+    setUploading(true);
+    try {
+      const path = await actions.uploadCvFile(doc);
+      const r = actions.updateProfile({ cv: { ...me.cv, file: { path, name: doc.name, uploadedAt: new Date().toISOString() } } });
+      toast(r.ok ? d.cv.posted : d.errors.saveFailed, r.ok ? 'success' : 'danger');
+    } catch {
+      toast(d.errors.saveFailed, 'danger');
+    } finally {
+      setUploading(false);
+    }
+  };
+  const remove = async () => {
+    if (await confirm({ title: d.cv.removeFile, danger: true, confirmLabel: d.cv.removeFile })) actions.updateProfile({ cv: { ...me.cv, file: undefined } });
+  };
+  return { attach, remove, uploading };
+}
+
+/** The CV a member posted as a PDF, shown at the top of their page (with a preview on the web). */
+export function CvFileCard({ user }: { user: User }) {
+  const { d, f, formatDate } = useI18n();
+  const { colors } = useTheme();
+  const { actions } = useStore();
+  const me = useMe();
+  const isMe = me.id === user.id;
+  const file = user.cv?.file;
+  const upload = useCvUpload();
+  const [url, setUrl] = useState<{ path: string; url: string | null } | null>(null);
+
+  useEffect(() => {
+    if (!file) return;
+    let alive = true;
+    actions.cvFileUrl(file.path).then((u) => alive && setUrl({ path: file.path, url: u }));
+    return () => {
+      alive = false;
+    };
+  }, [file, actions]);
+  const link = url && url.path === file?.path ? url.url : null;
+
+  if (!file) return null;
+  return (
+    <Card style={{ gap: 14 }}>
+      <Row gap={12} wrap>
+        <View style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' }}>
+          <Feather name="file-text" size={22} color="#fff" />
+        </View>
+        <View style={{ flex: 1, minWidth: 180, gap: 2 }}>
+          <Txt variant="h3">{isMe ? d.cv.postedMine : f(d.cv.postedBy, { name: user.firstName })}</Txt>
+          <Txt variant="small" color="textSubtle" numberOfLines={1}>{`${file.name} · ${f(d.cv.postedOn, { date: formatDate(file.uploadedAt) })}`}</Txt>
+        </View>
+        <Row gap={8} wrap>
+          <Button label={d.cv.openFile} icon="eye" size="sm" disabled={!link} onPress={() => link && Linking.openURL(link)} />
+          {isMe && <Button label={upload.uploading ? d.cv.uploading : d.cv.replaceFile} icon="upload" size="sm" variant="secondary" disabled={upload.uploading} onPress={upload.attach} />}
+          {isMe && <Button label={d.cv.removeFile} icon="x" size="sm" variant="ghost" onPress={upload.remove} />}
+        </Row>
+      </Row>
+      {Platform.OS === 'web' && link && (
+        <View style={{ height: 560, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceAlt }}>
+          <iframe title={file.name} src={link} style={{ width: '100%', height: '100%', border: 0 }} />
+        </View>
+      )}
+    </Card>
   );
 }

@@ -856,6 +856,12 @@ function useStoreValue() {
       commit((d) => ({ ...d, settings: { ...d.settings, whatsappCommunity: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'whatsappCommunity', value: value ?? null }));
     },
+    /** Admins: save the « Arriver en France » guide (null = back to the default text). */
+    saveGuide(steps: { id: string }[] | null) {
+      const value = steps ? JSON.stringify(steps) : undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, guideFrance: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'guideFrance', value: value ?? null }));
+    },
     /** Admins: treat `from` as the same university / company as `to` (or undo with `to` = null). */
     mergePlace(fromKey: string, toKey: string | null) {
       const current = parseAliases(dbRef.current?.settings.placeAliases);
