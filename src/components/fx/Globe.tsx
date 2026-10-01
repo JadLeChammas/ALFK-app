@@ -255,7 +255,7 @@ export function Globe({
   if (lang === 'pirate') {
     return (
       <Animated.View style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, style, fall]} onLayout={fixedSize ? undefined : (e) => setMeasured(e.nativeEvent.layout.width)}>
-        {size > 0 && <TreasureMap size={size} markers={markers} label={d.eggs.treasure} />}
+        {size > 0 && <TreasureMap size={size} markers={markers} label={d.eggs.treasure} title={d.eggs.mapTitle} />}
       </Animated.View>
     );
   }
@@ -288,52 +288,157 @@ export function Globe({
   );
 }
 
-/** Pirate easter egg: parchment world map, a dotted trail and a red X on the LFK. */
-function TreasureMap({ size, markers, label }: { size: number; markers: GlobeMarker[]; label: string }) {
-  const dots = useMemo(() => mapDots(), []);
-  const pad = size * 0.07;
-  const w = size - pad * 2;
-  const h = w / 2;
-  const top = (size - h) / 2 - size * 0.04;
-  const at = (lat: number, lng: number) => ({ x: pad + ((lng + 180) / 360) * w, y: top + ((90 - lat) / 180) * h });
-  const land = dots.map(([la, lo]) => {
-    const p = at(la, lo);
-    return dot(p.x, p.y, Math.max(0.7, size / 420));
-  }).join('');
+/** Pirate easter egg: an old treasure map — routes from the LFK to where alumni went, an X on Kuwait. */
+const LAT_TOP = 78;
+const LAT_SPAN = 134;
+
+function TreasureMap({ size, markers, label, title }: { size: number; markers: GlobeMarker[]; label: string; title: string }) {
+  const ink = '#4A2C12';
+  const red = '#A3120F';
+  const k = size / 500;
+  // Map area: latitudes 78°N → 56°S, all longitudes, filling most of the width.
+  const left = size * 0.06;
+  const w = size * 0.88;
+  // Old maps were drawn taller than a true projection: it fills the parchment better.
+  const h = w * 0.62;
+  const top = size * 0.19;
+  const at = (lat: number, lng: number) => ({ x: left + ((lng + 180) / 360) * w, y: top + ((LAT_TOP - lat) / LAT_SPAN) * h });
+
+  const land = useMemo(() => {
+    const l = size * 0.06;
+    const ww = size * 0.88;
+    const hh = ww * 0.62;
+    const t = size * 0.19;
+    const r = Math.max(0.9, (1.45 * size) / 500);
+    return mapDots()
+      .filter(([la]) => la <= LAT_TOP && la >= LAT_TOP - LAT_SPAN)
+      .map(([la, lo]) => dot(l + ((lo + 180) / 360) * ww, t + ((LAT_TOP - la) / LAT_SPAN) * hh, r))
+      .join('');
+  }, [size]);
+
   const x = at(LFK_LL[0], LFK_LL[1]);
-  const start = at(-35, -30);
-  const xr = size * 0.025;
-  const torn = `M${size * 0.03},${size * 0.05} L${size * 0.3},${size * 0.02} L${size * 0.55},${size * 0.06} L${size * 0.8},${size * 0.02} L${size * 0.97},${size * 0.06} L${size * 0.95},${size * 0.4} L${size * 0.98},${size * 0.7} L${size * 0.95},${size * 0.96} L${size * 0.6},${size * 0.93} L${size * 0.35},${size * 0.98} L${size * 0.04},${size * 0.94} L${size * 0.02},${size * 0.6} L${size * 0.05},${size * 0.3} Z`;
-  const cx = size * 0.84;
-  const cy = size * 0.8;
-  const cr = size * 0.07;
+  const xr = 11 * k;
+  // Routes: from the X to the main destinations, like a navigator's chart.
+  const routes = [...markers].sort((a, b) => (b.weight ?? 0) - (a.weight ?? 0)).slice(0, 8);
+  const graticule: string[] = [];
+  for (let lng = -150; lng <= 150; lng += 30) {
+    const a = at(LAT_TOP, lng);
+    const b = at(LAT_TOP - LAT_SPAN, lng);
+    graticule.push(`M${a.x},${a.y}V${b.y}`);
+  }
+  for (let lat = 60; lat >= -50; lat -= 30) {
+    const a = at(lat, -180);
+    graticule.push(`M${a.x},${a.y}H${a.x + w}`);
+  }
+  const wave = (lat: number, lng: number) => {
+    const q = at(lat, lng);
+    const s = 7 * k;
+    return `M${q.x - s * 2},${q.y} q${s / 2},${-s / 2} ${s},0 t${s},0 t${s},0 t${s},0`;
+  };
+  const waves = [wave(28, -45), wave(5, -28), wave(-30, -20), wave(10, -150), wave(-20, -120), wave(30, 160), wave(-25, 75), wave(-45, 120)].join('');
+  const z = size;
+  const torn = `M${z * 0.03},${z * 0.06} L${z * 0.18},${z * 0.025} L${z * 0.34},${z * 0.05} L${z * 0.52},${z * 0.02} L${z * 0.7},${z * 0.045} L${z * 0.86},${z * 0.02} L${z * 0.975},${z * 0.07} L${z * 0.96},${z * 0.3} L${z * 0.985},${z * 0.52} L${z * 0.96},${z * 0.75} L${z * 0.975},${z * 0.95} L${z * 0.78},${z * 0.975} L${z * 0.6},${z * 0.95} L${z * 0.42},${z * 0.98} L${z * 0.22},${z * 0.955} L${z * 0.03},${z * 0.97} L${z * 0.045},${z * 0.74} L${z * 0.015},${z * 0.5} L${z * 0.04},${z * 0.27} Z`;
+  // Compass rose (bottom right), ship (bottom left), sea serpent (Pacific).
+  const cx = z * 0.85;
+  const cy = z * 0.875;
+  const cr = 24 * k;
+  const ship = { x: z * 0.16, y: z * 0.9 };
+  const serpent = at(-35, -125);
+  const bw = Math.min(z * 0.78, 360 * k);
+  const bh = 34 * k;
+  const by = z * 0.105;
+  const bx = z / 2;
+
   return (
     <Svg width={size} height={size}>
       <Defs>
-        <RadialGradient id="parchment" cx="50%" cy="50%" r="60%">
-          <Stop offset="0" stopColor="#F4E4BC" />
-          <Stop offset="0.7" stopColor="#E3C88E" />
-          <Stop offset="1" stopColor="#B88A4A" />
+        <RadialGradient id="parchment" cx="50%" cy="45%" r="62%">
+          <Stop offset="0" stopColor="#F6E7C1" />
+          <Stop offset="0.65" stopColor="#E6CC93" />
+          <Stop offset="1" stopColor="#B8864A" />
+        </RadialGradient>
+        <RadialGradient id="stain" cx="50%" cy="50%" r="50%">
+          <Stop offset="0.7" stopColor="#8A5A2B" stopOpacity="0" />
+          <Stop offset="0.92" stopColor="#8A5A2B" stopOpacity="0.18" />
+          <Stop offset="1" stopColor="#8A5A2B" stopOpacity="0" />
         </RadialGradient>
       </Defs>
-      <Path d={torn} fill="url(#parchment)" stroke="#7A5230" strokeWidth={1.5} />
-      <Rect x={pad * 0.9} y={top - pad * 0.3} width={w + pad * 0.2} height={h + pad * 0.6} fill="none" stroke="#7A5230" strokeWidth={1} strokeDasharray="2 3" opacity={0.6} />
-      <Path d={land} fill="#7A5230" opacity={0.55} />
-      {markers.map((m) => {
-        const p = at(m.ll[0], m.ll[1]);
-        return <Circle key={m.key} cx={p.x} cy={p.y} r={Math.max(1.5, size / 200)} fill="#5C3A1A" />;
+      {/* Parchment with burnt edges and coffee stains */}
+      <Path d={torn} fill="#3B2410" opacity={0.35} transform={`translate(${3 * k},${4 * k})`} />
+      <Path d={torn} fill="url(#parchment)" stroke="#6B4220" strokeWidth={2 * k} />
+      <Path d={torn} fill="none" stroke="#8A5A2B" strokeWidth={10 * k} opacity={0.18} />
+      <Circle cx={z * 0.5} cy={z * 0.9} r={30 * k} fill="url(#stain)" opacity={0.6} />
+
+      {/* Title cartouche */}
+      <Path
+        d={`M${bx - bw / 2},${by - bh / 2} H${bx + bw / 2} l${-10 * k},${bh / 2} l${10 * k},${bh / 2} H${bx - bw / 2} l${10 * k},${-bh / 2} Z`}
+        fill="#EAD3A0"
+        stroke={ink}
+        strokeWidth={1.4 * k}
+      />
+      <SvgText x={bx} y={by + 6 * k} fill={ink} fontSize={17 * k} fontFamily={fonts.serifItalic} textAnchor="middle">
+        {title}
+      </SvgText>
+
+      {/* Graticule, waves, land */}
+      <Path d={graticule.join('')} stroke={ink} strokeWidth={0.6 * k} opacity={0.18} />
+      <Rect x={left} y={top} width={w} height={h} fill="none" stroke={ink} strokeWidth={1.2 * k} opacity={0.45} />
+      <Path d={waves} stroke={ink} strokeWidth={1.1 * k} fill="none" opacity={0.35} />
+      <Path d={land} fill={ink} opacity={0.62} />
+
+      {/* Sea serpent */}
+      <Path
+        d={`M${serpent.x - 22 * k},${serpent.y} q${5 * k},${-14 * k} ${10 * k},0 q${5 * k},${-14 * k} ${10 * k},0 q${5 * k},${-14 * k} ${10 * k},0 q${4 * k},${-10 * k} ${12 * k},${-8 * k}`}
+        stroke="#2F5D50"
+        strokeWidth={3 * k}
+        fill="none"
+        strokeLinecap="round"
+      />
+      <Circle cx={serpent.x + 21 * k} cy={serpent.y - 9 * k} r={1.4 * k} fill={ink} />
+
+      {/* Ship */}
+      <G transform={`translate(${ship.x},${ship.y}) scale(${k})`}>
+        <Path d="M-16,0 L16,0 L11,8 L-11,8 Z" fill="#5C3A1A" />
+        <Path d="M0,0 V-24" stroke="#5C3A1A" strokeWidth={1.6} />
+        <Path d="M1,-22 L14,-6 L1,-6 Z" fill="#F3E6C8" stroke="#5C3A1A" strokeWidth={0.8} />
+        <Path d="M-1,-20 L-12,-6 L-1,-6 Z" fill="#F3E6C8" stroke="#5C3A1A" strokeWidth={0.8} />
+        <Path d="M0,-24 L7,-27 L0,-29" fill="#141414" />
+      </G>
+
+      {/* Routes from the LFK to where alumni went */}
+      {routes.map((m) => {
+        const b = at(m.ll[0], m.ll[1]);
+        const mx = (x.x + b.x) / 2;
+        const my = Math.min(x.y, b.y) - Math.abs(b.x - x.x) * 0.22 - 8 * k;
+        return (
+          <G key={m.key}>
+            <Path d={`M${x.x},${x.y} Q${mx},${my} ${b.x},${b.y}`} stroke={red} strokeWidth={1.3 * k} strokeDasharray={`${5 * k} ${4 * k}`} fill="none" opacity={0.75} />
+            <Circle cx={b.x} cy={b.y} r={3 * k} fill="#F6E7C1" stroke={ink} strokeWidth={1.2 * k} />
+          </G>
+        );
       })}
-      <Path d={`M${start.x},${start.y} Q${(start.x + x.x) / 2},${start.y - h * 0.9} ${x.x},${x.y}`} stroke="#8B1A1A" strokeWidth={Math.max(1.2, size / 260)} strokeDasharray="5 5" fill="none" />
-      <Line x1={x.x - xr} y1={x.y - xr} x2={x.x + xr} y2={x.y + xr} stroke="#B00000" strokeWidth={Math.max(2.5, size / 110)} strokeLinecap="round" />
-      <Line x1={x.x + xr} y1={x.y - xr} x2={x.x - xr} y2={x.y + xr} stroke="#B00000" strokeWidth={Math.max(2.5, size / 110)} strokeLinecap="round" />
-      <SvgText x={x.x} y={x.y - xr * 2} fill="#5C1A1A" fontSize={Math.max(10, size / 30)} fontFamily={fonts.serifItalic} textAnchor="middle">
+
+      {/* X marks the spot */}
+      <Circle cx={x.x} cy={x.y} r={xr * 1.7} fill="none" stroke={red} strokeWidth={1.4 * k} strokeDasharray={`${3 * k} ${2 * k}`} />
+      <Line x1={x.x - xr} y1={x.y - xr} x2={x.x + xr} y2={x.y + xr} stroke={red} strokeWidth={4.5 * k} strokeLinecap="round" />
+      <Line x1={x.x + xr} y1={x.y - xr} x2={x.x - xr} y2={x.y + xr} stroke={red} strokeWidth={4.5 * k} strokeLinecap="round" />
+      <Rect x={x.x - 62 * k} y={x.y + xr * 2.1} width={124 * k} height={20 * k} rx={3 * k} fill="#F3E2B6" stroke={ink} strokeWidth={0.8 * k} opacity={0.95} />
+      <SvgText x={x.x} y={x.y + xr * 2.1 + 14 * k} fill={red} fontSize={12.5 * k} fontFamily={fonts.serifItalic} textAnchor="middle">
         {label}
       </SvgText>
-      <G opacity={0.75}>
-        <Circle cx={cx} cy={cy} r={cr} fill="none" stroke="#7A5230" strokeWidth={1} />
-        <Path d={`M${cx},${cy - cr * 1.3} L${cx + cr * 0.22},${cy} L${cx},${cy + cr * 1.3} L${cx - cr * 0.22},${cy} Z`} fill="#7A5230" />
-        <Path d={`M${cx - cr * 1.3},${cy} L${cx},${cy - cr * 0.22} L${cx + cr * 1.3},${cy} L${cx},${cy + cr * 0.22} Z`} fill="#A0784A" />
-        <SvgText x={cx} y={cy - cr * 1.45} fill="#5C3A1A" fontSize={Math.max(8, size / 45)} fontFamily={fonts.semibold} textAnchor="middle">N</SvgText>
+
+      {/* Compass rose */}
+      <G opacity={0.85}>
+        <Circle cx={cx} cy={cy} r={cr} fill="none" stroke={ink} strokeWidth={1 * k} />
+        <Circle cx={cx} cy={cy} r={cr * 0.72} fill="none" stroke={ink} strokeWidth={0.6 * k} strokeDasharray={`${2 * k} ${2 * k}`} />
+        <Path d={`M${cx},${cy - cr * 1.25} L${cx + cr * 0.2},${cy} L${cx},${cy + cr * 1.25} L${cx - cr * 0.2},${cy} Z`} fill={ink} />
+        <Path d={`M${cx - cr * 1.25},${cy} L${cx},${cy - cr * 0.2} L${cx + cr * 1.25},${cy} L${cx},${cy + cr * 0.2} Z`} fill="#8A5A2B" />
+        <Path d={`M${cx - cr * 0.7},${cy - cr * 0.7} L${cx + cr * 0.1},${cy - cr * 0.1} L${cx + cr * 0.7},${cy + cr * 0.7} L${cx - cr * 0.1},${cy + cr * 0.1} Z`} fill="#A0784A" opacity={0.7} />
+        <Path d={`M${cx + cr * 0.7},${cy - cr * 0.7} L${cx + cr * 0.1},${cy + cr * 0.1} L${cx - cr * 0.7},${cy + cr * 0.7} L${cx - cr * 0.1},${cy - cr * 0.1} Z`} fill="#A0784A" opacity={0.7} />
+        <Circle cx={cx} cy={cy} r={3 * k} fill={red} />
+        <SvgText x={cx} y={cy - cr * 1.35} fill={ink} fontSize={11 * k} fontFamily={fonts.semibold} textAnchor="middle">
+          N
+        </SvgText>
       </G>
     </Svg>
   );

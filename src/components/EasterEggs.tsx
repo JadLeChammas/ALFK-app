@@ -5,10 +5,11 @@ import Animated, { cancelAnimation, Easing, runOnJS, useAnimatedStyle, useShared
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Ellipse, Path } from 'react-native-svg';
 
+import { useCreditsConfig, type CreditsConfig } from '@/data/credits';
 import { usePublicOverview } from '@/data/public';
 import { fullName, useApprovedMembers, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
-import { CONTRIBUTORS, CREATOR, eggs, idleFor, listenForShake, markActive } from '@/lib/eggs';
+import { CREATOR, eggs, idleFor, listenForShake, markActive, takeCreditsPreview } from '@/lib/eggs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
 import { Avatar, Badge, Tap } from './ui/primitives';
@@ -152,9 +153,19 @@ function Credits() {
   const { bureau } = usePublicOverview();
   const members = useApprovedMembers();
   const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState<CreditsConfig | null>(null);
+  const { config: saved } = useCreditsConfig(open);
+  const config = preview ?? saved;
   const [contentH, setContentH] = useState(0);
   const y = useSharedValue(height);
-  useEffect(() => eggs.on('credits', () => setOpen(true)), []);
+  useEffect(
+    () =>
+      eggs.on('credits', () => {
+        setPreview(takeCreditsPreview<CreditsConfig>());
+        setOpen(true);
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (!open || !contentH) return;
@@ -164,30 +175,35 @@ function Credits() {
   }, [open, contentH, height, y]);
   const roll = useAnimatedStyle(() => ({ transform: [{ translateY: y.value }] }));
 
-  const role = (r: 'dev' | 'design') => (r === 'dev' ? d.eggs.creditsDev : d.eggs.creditsDesign);
   const line = (a: string, b?: string, key?: string) => (
     <View key={key ?? a} style={{ alignItems: 'center', marginBottom: 14 }}>
       <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 26, lineHeight: 30, textAlign: 'center' }}>{a}</Txt>
       {!!b && <Txt style={{ color: '#9AA4BA', fontSize: 13, letterSpacing: 1.5, textTransform: 'uppercase', textAlign: 'center' }}>{b}</Txt>}
     </View>
   );
-  const heading = (t: string) => <Txt style={{ color: '#FF5A5C', fontFamily: fonts.semibold, fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', marginTop: 40, marginBottom: 18, textAlign: 'center' }}>{t}</Txt>;
+  const heading = (t: string, key?: string) => (
+    <Txt key={key} style={{ color: '#FF5A5C', fontFamily: fonts.semibold, fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', marginTop: 40, marginBottom: 18, textAlign: 'center' }}>{t}</Txt>
+  );
 
   return (
     <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
       <Pressable onPress={() => setOpen(false)} style={{ flex: 1, backgroundColor: '#000', overflow: 'hidden' }}>
         <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, alignItems: 'center', paddingHorizontal: 24 }, roll]} onLayout={(e) => setContentH(e.nativeEvent.layout.height)}>
-          <Txt style={{ color: '#9AA4BA', fontSize: 13, letterSpacing: 3, textTransform: 'uppercase', marginBottom: 12 }}>{d.eggs.creditsTitle}</Txt>
+          <Txt style={{ color: '#9AA4BA', fontSize: 13, letterSpacing: 3, textTransform: 'uppercase', marginBottom: 12, textAlign: 'center' }}>{config.title || d.eggs.creditsTitle}</Txt>
           <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 56, lineHeight: 60, textAlign: 'center' }}>{d.app.name}</Txt>
-          {heading(d.eggs.creditsBureau)}
-          {bureau.map((p) => line(p.name, p.fonction || (p.role === 'admin' ? d.site.bureau.member : d.roles.honneur), `b-${p.name}`))}
-          {heading(d.eggs.creditsMade)}
-          {CONTRIBUTORS.map((c) => line(c.name, role(c.role), `c-${c.name}`))}
-          {heading(d.eggs.creditsStarring)}
-          {line(f(d.eggs.creditsMembers, { n: Math.max(members.length, 1) }))}
+          {config.showBureau && bureau.length > 0 && heading(d.eggs.creditsBureau)}
+          {config.showBureau && bureau.map((p) => line(p.name, p.fonction || (p.role === 'admin' ? d.site.bureau.member : d.roles.honneur), `b-${p.name}`))}
+          {config.sections.map((s) => (
+            <View key={s.id} style={{ alignItems: 'center' }}>
+              {!!s.heading && heading(s.heading)}
+              {s.lines.filter((l) => l.name.trim()).map((l) => line(l.name, l.role, l.id))}
+            </View>
+          ))}
+          {config.showMembers && heading(d.eggs.creditsStarring)}
+          {config.showMembers && line(f(d.eggs.creditsMembers, { n: Math.max(members.length, 1) }))}
           <View style={{ height: 60 }} />
-          <Txt style={{ color: '#fff', fontFamily: fonts.serifItalic, fontSize: 24, textAlign: 'center' }}>{d.eggs.creditsThanks}</Txt>
-          <Txt style={{ color: '#9AA4BA', fontSize: 13, marginTop: 30, textAlign: 'center' }}>{d.eggs.creditsCamel}</Txt>
+          <Txt style={{ color: '#fff', fontFamily: fonts.serifItalic, fontSize: 24, textAlign: 'center' }}>{config.thanks || d.eggs.creditsThanks}</Txt>
+          <Txt style={{ color: '#9AA4BA', fontSize: 13, marginTop: 30, textAlign: 'center' }}>{config.closing || d.eggs.creditsCamel}</Txt>
           <View style={{ height: 80 }} />
         </Animated.View>
         <Txt style={{ position: 'absolute', bottom: 16, alignSelf: 'center', color: '#5A6378', fontSize: 11 }}>{d.eggs.creditsClose}</Txt>

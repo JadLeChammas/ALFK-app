@@ -10,6 +10,18 @@ import type { User } from '@/data/types';
 export type EggEvent = 'shake' | 'sandstorm' | 'credits';
 
 const listeners = new Map<EggEvent, Set<() => void>>();
+/** Credits shown once instead of the saved ones (admin preview of unsaved changes). */
+let creditsPreview: unknown = null;
+export function previewCredits(config: unknown) {
+  creditsPreview = config;
+  eggs.emit('credits');
+}
+export function takeCreditsPreview<T>(): T | null {
+  const c = creditsPreview as T | null;
+  creditsPreview = null;
+  return c;
+}
+
 export const eggs = {
   on(e: EggEvent, fn: () => void) {
     if (!listeners.has(e)) listeners.set(e, new Set());
@@ -37,12 +49,6 @@ export function isCreatorQuery(q: string) {
   const n = norm(q);
   return n.length >= 3 && ['jad', 'jad el chammas', 'el chammas', 'chammas', 'jadlechammas'].some((k) => k === n || (n.length >= 5 && k.startsWith(n)));
 }
-
-/** People credited in the end-of-film credits (besides the board). */
-export const CONTRIBUTORS: { name: string; role: 'dev' | 'design' }[] = [
-  { name: 'Jad El Chammas', role: 'dev' },
-  { name: 'anwarbitar', role: 'design' },
-];
 
 /** Birthday today, and allowed to be seen by this viewer. */
 export function birthdayToday(u: Pick<User, 'id' | 'birthDate' | 'privacy'>, viewer?: Pick<User, 'id' | 'role'> | null) {
