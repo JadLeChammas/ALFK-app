@@ -45,9 +45,9 @@ export function isSandWord(q: string) {
 
 /** The site's creator. */
 export const CREATOR = 'Jad El Chammas';
+/** Only the full name, « Jad El Chammas » (any case, accents or spacing). */
 export function isCreatorQuery(q: string) {
-  const n = norm(q);
-  return n.length >= 3 && ['jad', 'jad el chammas', 'el chammas', 'chammas', 'jadlechammas'].some((k) => k === n || (n.length >= 5 && k.startsWith(n)));
+  return norm(q).replace(/\s+/g, ' ') === 'jad el chammas';
 }
 
 /** Birthday today, and allowed to be seen by this viewer. */

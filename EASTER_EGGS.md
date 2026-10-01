@@ -11,7 +11,7 @@ Des surprises cachées dans le site. Chut, ne le dites pas à tout le monde 🤫
 | 5 | **Jour du bac** : bannière « Bon courage aux Terminales ! » | Automatique le jour d'une date du calendrier dont le titre contient « **Bac** » (un admin ajoute par exemple « Bac : épreuve de philosophie » à la bonne date). |
 | 6 | **Le globe qui tombe** : le globe chute puis rebondit | Sur téléphone (navigateur), **secouer le téléphone** sur une page avec un globe. Sur iPhone, toucher d'abord le globe une fois pour autoriser les capteurs de mouvement. |
 | 7 | **Le chameau** 🐪 : un petit chameau traverse l'écran | Rester **inactif 5 minutes** sans toucher la souris, le clavier ni l'écran. |
-| 8 | **Développeur légendaire** : une fiche spéciale avec un badge 🏆 | Rechercher « **Jad** » ou « **El Chammas** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
+| 8 | **Développeur légendaire** : une fiche spéciale avec un badge 🏆 | Rechercher le nom complet « **Jad El Chammas** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 9 | **Tempête de sable** : quelques secondes de vent de sable sur l'écran | Rechercher « **chameau** », « **50°C** » ou « **shamal** » dans la recherche ou l'Annuaire. |
 
 ## Pour les développeurs
