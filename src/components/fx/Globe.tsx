@@ -304,16 +304,20 @@ function TreasureMap({ size, markers, label, title }: { size: number; markers: G
   const top = size * 0.19;
   const at = (lat: number, lng: number) => ({ x: left + ((lng + 180) / 360) * w, y: top + ((LAT_TOP - lat) / LAT_SPAN) * h });
 
+  // Overlapping dots make solid continents; a slightly bigger dark pass underneath draws the coastline.
   const land = useMemo(() => {
     const l = size * 0.06;
     const ww = size * 0.88;
     const hh = ww * 0.62;
     const t = size * 0.19;
-    const r = Math.max(0.9, (1.45 * size) / 500);
-    return mapDots()
+    const kk = size / 500;
+    const pts = mapDots()
       .filter(([la]) => la <= LAT_TOP && la >= LAT_TOP - LAT_SPAN)
-      .map(([la, lo]) => dot(l + ((lo + 180) / 360) * ww, t + ((LAT_TOP - la) / LAT_SPAN) * hh, r))
-      .join('');
+      .map(([la, lo]) => [l + ((lo + 180) / 360) * ww, t + ((LAT_TOP - la) / LAT_SPAN) * hh] as const);
+    return {
+      coast: pts.map(([px, py]) => dot(px, py, 3.5 * kk)).join(''),
+      fill: pts.map(([px, py]) => dot(px, py, 2.6 * kk)).join(''),
+    };
   }, [size]);
 
   const x = at(LFK_LL[0], LFK_LL[1]);
@@ -335,6 +339,14 @@ function TreasureMap({ size, markers, label, title }: { size: number; markers: G
     const s = 7 * k;
     return `M${q.x - s * 2},${q.y} q${s / 2},${-s / 2} ${s},0 t${s},0 t${s},0 t${s},0`;
   };
+  const peak = (lat: number, lng: number, n = 3) => {
+    const q = at(lat, lng);
+    const s = 4.5 * k;
+    let d = '';
+    for (let i = 0; i < n; i++) d += `M${q.x + (i - (n - 1) / 2) * s * 1.6 - s},${q.y + s * 0.6} l${s},${-s * 1.4} l${s},${s * 1.4}`;
+    return d;
+  };
+  const mountains = [peak(32, 82), peak(-18, -67, 2), peak(42, -110), peak(46, 9, 2), peak(-5, 37, 2)].join('');
   const waves = [wave(28, -45), wave(5, -28), wave(-30, -20), wave(10, -150), wave(-20, -120), wave(30, 160), wave(-25, 75), wave(-45, 120)].join('');
   const z = size;
   const torn = `M${z * 0.03},${z * 0.06} L${z * 0.18},${z * 0.025} L${z * 0.34},${z * 0.05} L${z * 0.52},${z * 0.02} L${z * 0.7},${z * 0.045} L${z * 0.86},${z * 0.02} L${z * 0.975},${z * 0.07} L${z * 0.96},${z * 0.3} L${z * 0.985},${z * 0.52} L${z * 0.96},${z * 0.75} L${z * 0.975},${z * 0.95} L${z * 0.78},${z * 0.975} L${z * 0.6},${z * 0.95} L${z * 0.42},${z * 0.98} L${z * 0.22},${z * 0.955} L${z * 0.03},${z * 0.97} L${z * 0.045},${z * 0.74} L${z * 0.015},${z * 0.5} L${z * 0.04},${z * 0.27} Z`;
@@ -384,7 +396,11 @@ function TreasureMap({ size, markers, label, title }: { size: number; markers: G
       <Path d={graticule.join('')} stroke={ink} strokeWidth={0.6 * k} opacity={0.18} />
       <Rect x={left} y={top} width={w} height={h} fill="none" stroke={ink} strokeWidth={1.2 * k} opacity={0.45} />
       <Path d={waves} stroke={ink} strokeWidth={1.1 * k} fill="none" opacity={0.35} />
-      <Path d={land} fill={ink} opacity={0.62} />
+      <Path d={land.coast} fill={ink} opacity={0.85} />
+      <Path d={land.fill} fill="#D4B477" />
+      <Path d={land.fill} fill="#8E6A2E" opacity={0.12} transform={`translate(${0.8 * k},${0.8 * k})`} />
+      {/* Mountains */}
+      <Path d={mountains} stroke={ink} strokeWidth={1.1 * k} fill="none" strokeLinejoin="round" opacity={0.8} />
 
       {/* Sea serpent */}
       <Path
@@ -395,6 +411,9 @@ function TreasureMap({ size, markers, label, title }: { size: number; markers: G
         strokeLinecap="round"
       />
       <Circle cx={serpent.x + 21 * k} cy={serpent.y - 9 * k} r={1.4 * k} fill={ink} />
+      <SvgText x={serpent.x} y={serpent.y + 14 * k} fill={ink} fontSize={9 * k} fontFamily={fonts.serifItalic} textAnchor="middle" opacity={0.75}>
+        Hic sunt dracones
+      </SvgText>
 
       {/* Ship */}
       <G transform={`translate(${ship.x},${ship.y}) scale(${k})`}>

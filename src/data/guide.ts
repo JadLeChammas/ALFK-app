@@ -3,12 +3,24 @@ import { useMemo } from 'react';
 import { useStore } from './store';
 
 /**
- * « Arriver en France »: the steps before leaving and after arriving (visa, residence permit,
- * social security…). Admins edit it in the app; it is saved as JSON in app_settings (`guideFrance`).
- * Until an admin saves it, the default text below is shown.
+ * Country guides (« Arriver en France », later other countries): the steps before leaving and after
+ * arriving (visa, residence permit, social security…). Admins manage them in the dashboard; they are
+ * saved as JSON in app_settings (`guides`). Until then, the France guide below is shown (or the
+ * France-only guide saved earlier under `guideFrance`).
  */
 export type GuidePhase = 'before' | 'arrival' | 'months' | 'year';
 export type GuideStep = { id: string; phase: GuidePhase; title: string; body: string; url?: string; urlLabel?: string };
+export type CountryGuide = {
+  id: string;
+  /** ISO code, see countries.ts */
+  country: string;
+  /** Written by the admins; empty = « Guide — {country} » in the reader's language. */
+  title?: string;
+  intro?: string;
+  /** Drafts are only visible to admins. */
+  published: boolean;
+  steps: GuideStep[];
+};
 
 export const PHASES: GuidePhase[] = ['before', 'arrival', 'months', 'year'];
 
@@ -96,19 +108,28 @@ export const DEFAULT_GUIDE: GuideStep[] = [
   },
 ];
 
-export function parseGuide(raw?: string): GuideStep[] | null {
+const parse = <T,>(raw?: string): T | null => {
   if (!raw) return null;
   try {
-    const v = JSON.parse(raw);
-    return Array.isArray(v) ? (v as GuideStep[]) : null;
+    return JSON.parse(raw) as T;
   } catch {
     return null;
   }
-}
+};
 
-/** The guide as saved by the admins, or the default one. */
-export function useGuide() {
+export const defaultGuides = (franceSteps?: GuideStep[] | null): CountryGuide[] => [
+  { id: 'guide-fr', country: 'FR', title: 'Arriver en France', published: true, steps: franceSteps ?? DEFAULT_GUIDE },
+];
+
+/** All country guides (drafts included; filter on `published` for members). */
+export function useGuides() {
   const { db } = useStore();
-  const raw = db.settings.guideFrance;
-  return useMemo(() => ({ steps: parseGuide(raw) ?? DEFAULT_GUIDE, custom: !!parseGuide(raw) }), [raw]);
+  const raw = db.settings.guides;
+  const legacy = db.settings.guideFrance;
+  return useMemo(() => {
+    const saved = parse<CountryGuide[]>(raw);
+    if (Array.isArray(saved)) return { guides: saved, custom: true };
+    const france = parse<GuideStep[]>(legacy);
+    return { guides: defaultGuides(Array.isArray(france) ? france : null), custom: false };
+  }, [raw, legacy]);
 }

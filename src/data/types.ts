@@ -97,9 +97,9 @@ export type KeyDateCategory = 'francophonie' | 'aefe' | 'lfk' | 'france' | 'kowe
 export type KeyDate = { id: string; title: string; month: number; day: number; year?: number; category: KeyDateCategory; endMonth?: number; endDay?: number; url?: string };
 
 /** `placeAliases`: admin merges of universities / companies, JSON { alias key: place key } (see data/places.ts). */
-/** `guideFrance`: the « Arriver en France » guide edited by admins, JSON (see data/guide.ts). */
+/** `guides`: the country guides edited by admins, JSON (see data/guide.ts); `guideFrance` is the older France-only one. */
 /** `credits`: the end credits edited by admins, JSON (see data/credits.ts). */
-export type AppSettings = { whatsappCommunity?: string; placeAliases?: string; guideFrance?: string; credits?: string };
+export type AppSettings = { whatsappCommunity?: string; placeAliases?: string; guideFrance?: string; guides?: string; credits?: string };
 
 export type Conversation = {
   id: string;

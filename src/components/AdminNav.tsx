@@ -19,6 +19,7 @@ export function AdminNav() {
     { href: '/admin/contenus', label: d.nav.content, icon: 'layers', count: reports || undefined },
     { href: '/admin/contact', label: d.nav.contact, icon: 'inbox', count: unread || undefined },
     { href: '/admin/journal', label: d.nav.logs, icon: 'list' },
+    { href: '/admin/guides', label: d.guide.adminNav, icon: 'map' },
     { href: '/admin/generique', label: d.credits.nav, icon: 'film' },
   ];
   return (

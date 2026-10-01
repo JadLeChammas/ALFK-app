@@ -862,11 +862,11 @@ function useStoreValue() {
       commit((d) => ({ ...d, settings: { ...d.settings, credits: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'credits', value: value ?? null }));
     },
-    /** Admins: save the « Arriver en France » guide (null = back to the default text). */
-    saveGuide(steps: { id: string }[] | null) {
-      const value = steps ? JSON.stringify(steps) : undefined;
-      commit((d) => ({ ...d, settings: { ...d.settings, guideFrance: value } }));
-      if (supabase) send(supabase.from('app_settings').upsert({ key: 'guideFrance', value: value ?? null }));
+    /** Admins: save the country guides (null = back to the default France guide). */
+    saveGuides(guides: object[] | null) {
+      const value = guides ? JSON.stringify(guides) : undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, guides: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'guides', value: value ?? null }));
     },
     /** Admins: treat `from` as the same university / company as `to` (or undo with `to` = null). */
     mergePlace(fromKey: string, toKey: string | null) {
