@@ -23,6 +23,7 @@ const es: Dict = {
     hidden: 'Oculta para los visitantes',
     shownToast: 'La demo es visible en la portada',
     hiddenToast: 'La demo está oculta',
+    inDemoNote: 'Estás en modo demo: esto solo cambia la demo. Sal de la demo e inicia sesión con tu cuenta de admin real para cambiarlo en el sitio.',
   },
   time: { justNow: 'ahora mismo', minutesAgo: 'hace {n} min' },
   errors: { saveFailed: 'No se pudo guardar el cambio: {msg}' },
@@ -61,6 +62,7 @@ const es: Dict = {
     pendingSub: '¡Gracias, {name}! Hemos recibido tu registro. Un administrador de la Amicale revisará tus datos — tendrás acceso a toda la plataforma en cuanto sea aprobada.',
     pendingStep1: 'Registro enviado', pendingStep2: 'Revisión por un administrador', pendingStep3: 'Acceso a la comunidad',
     demoAccounts: 'Cuentas de demostración', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Alumno', demoPending: 'Pendiente', demoDirection: 'Dirección',
+    photo: 'Foto de perfil', addPhoto: 'Añadir una foto',
   },
   home: {
     hello: 'Hola, {name}', heroTitle: 'Una sola comunidad,\nmiles de historias.',

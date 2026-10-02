@@ -23,6 +23,7 @@ const zh: Dict = {
     hidden: '对访客隐藏',
     shownToast: '演示已在首页显示',
     hiddenToast: '演示已隐藏',
+    inDemoNote: '你正处于演示模式：这里只会更改演示数据。请退出演示，并用真实的管理员账号登录后在网站上更改。',
   },
   time: { justNow: '刚刚', minutesAgo: '{n} 分钟前' },
   errors: { saveFailed: '无法保存修改：{msg}' },
@@ -61,6 +62,7 @@ const zh: Dict = {
     pendingSub: '谢谢你，{name}！我们已收到你的注册。校友会管理员将核实你的信息 — 审核通过后即可使用全部功能。',
     pendingStep1: '已提交注册', pendingStep2: '管理员审核', pendingStep3: '进入社区',
     demoAccounts: '演示账号', demoAdmin: '管理员', demoMember: '校友', demoEleve: '在校生', demoPending: '待审核', demoDirection: '学校领导',
+    photo: '头像', addPhoto: '添加照片',
   },
   home: {
     hello: '你好，{name}', heroTitle: '一个社区，\n千万个故事。',

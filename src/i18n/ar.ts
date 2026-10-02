@@ -23,6 +23,7 @@ const ar: Dict = {
     hidden: 'مخفي عن الزوار',
     shownToast: 'العرض التجريبي ظاهر في الصفحة الرئيسية',
     hiddenToast: 'العرض التجريبي مخفي',
+    inDemoNote: 'أنت في وضع العرض التجريبي: هذا يغيّر العرض التجريبي فقط. اخرج منه وسجّل الدخول بحساب المشرف الحقيقي لتغييره على الموقع.',
   },
   time: { justNow: 'الآن', minutesAgo: 'منذ {n} د' },
   errors: { saveFailed: 'تعذّر حفظ التعديل: {msg}' },
@@ -61,6 +62,7 @@ const ar: Dict = {
     pendingSub: 'شكرًا {name}! استلمنا تسجيلك. سيراجع مسؤول في الرابطة معلوماتك — وستتمكن من استخدام المنصة كاملة فور الموافقة.',
     pendingStep1: 'تم إرسال التسجيل', pendingStep2: 'مراجعة من قبل مسؤول', pendingStep3: 'الدخول إلى المجتمع',
     demoAccounts: 'حسابات تجريبية', demoAdmin: 'مسؤول', demoMember: 'خريج', demoEleve: 'طالب', demoPending: 'قيد الانتظار', demoDirection: 'الإدارة',
+    photo: 'صورة الملف الشخصي', addPhoto: 'إضافة صورة',
   },
   home: {
     hello: 'مرحبًا {name}', heroTitle: 'مجتمع واحد،\nوآلاف القصص.',

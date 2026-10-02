@@ -100,6 +100,10 @@ export type SignUpInput = {
   situation?: Situation;
   employer?: string;
   jobTitle?: string;
+  /** Same as on the profile: nationalities, a few words, and (alumni) accepting student questions. */
+  nationalities?: string[];
+  bio?: string;
+  mentor?: boolean;
 };
 
 export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities'>>;
@@ -296,7 +300,7 @@ function useStoreValue() {
       saveSession({ userId: u.id });
       return { ok: true };
     },
-    async signUp(input: SignUpInput, proof: PickedDoc | null): Promise<Result> {
+    async signUp(input: SignUpInput, proof: PickedDoc | null, photo?: PickedImage | null): Promise<Result> {
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
       if (!proof) return { ok: false, error: 'proof' };
       if (!SELF_SIGNUP_ROLES.includes(input.role)) return { ok: false, error: 'unknown' };
@@ -324,6 +328,9 @@ function useStoreValue() {
               situation: input.situation ?? '',
               employer: input.employer ?? '',
               job_title: input.jobTitle ?? '',
+              nationalities: input.nationalities ?? [],
+              bio: input.bio ?? '',
+              mentor: input.mentor ? 'true' : '',
             },
           },
         });
@@ -336,6 +343,14 @@ function useStoreValue() {
         } catch {
           // The account exists; the pending screen offers to send the proof again.
         }
+        if (photo) {
+          try {
+            const avatar = await uploadImage(data.user.id, photo, 'avatars');
+            await supabase.from('profiles').update({ avatar }).eq('id', data.user.id);
+          } catch {
+            // The photo can be added later from the profile.
+          }
+        }
         return { ok: true };
       }
       if (findByEmail(input.email)) return { ok: false, error: 'email_taken' };
@@ -343,6 +358,7 @@ function useStoreValue() {
         ...input,
         bureauCode: undefined,
         proof: { path: proof.uri, name: proof.name, mimeType: proof.mimeType ?? undefined, uploadedAt: nowIso() },
+        avatar: photo?.uri,
         email: input.email.trim(),
         id: demoId('u'),
         approved: false,

@@ -21,6 +21,7 @@ const fr = {
     hidden: 'Masquée pour les visiteurs',
     shownToast: 'La démo est visible sur l’accueil',
     hiddenToast: 'La démo est masquée',
+    inDemoNote: 'Vous êtes en mode démo : ce réglage ne change que la démo. Quittez la démo et connectez-vous avec votre vrai compte admin pour le changer sur le site.',
   },
   time: { justNow: 'à l’instant', minutesAgo: 'il y a {n} min' },
   errors: { saveFailed: 'La modification n’a pas pu être enregistrée : {msg}' },
@@ -59,6 +60,7 @@ const fr = {
     pendingSub: "Merci {name} ! Votre inscription a bien été reçue. Un administrateur de l'Amicale va vérifier vos informations — vous aurez accès à toute la plateforme dès son approbation.",
     pendingStep1: 'Inscription envoyée', pendingStep2: 'Vérification par un administrateur', pendingStep3: 'Accès à la communauté',
     demoAccounts: 'Comptes de démonstration', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Élève', demoPending: 'En attente', demoDirection: 'Direction',
+    photo: 'Photo de profil', addPhoto: 'Ajouter une photo',
   },
   home: {
     hello: 'Bonjour {name}', heroTitle: "Une seule communauté,\ndes milliers d'histoires.",

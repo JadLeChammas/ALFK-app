@@ -1,14 +1,15 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Switch, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { NationalityPicker } from '@/components/NationalityPicker';
 import { PlaceSuggestions } from '@/components/PlaceSuggestions';
 import { UniversityPicker } from '@/components/UniversityPicker';
 import { useUniversities } from '@/data/universities';
 import { ProofPicker } from '@/components/ProofPicker';
-import { FieldRow, Button, Chip, Input, Row, Segmented } from '@/components/ui/primitives';
+import { Avatar, FieldRow, Button, Chip, Input, Row, Segmented, Tap } from '@/components/ui/primitives';
 import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
@@ -17,7 +18,8 @@ import { COUNTRIES } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
-import type { PickedDoc } from '@/data/remote';
+import type { PickedDoc, PickedImage } from '@/data/remote';
+import { pickImages } from '@/lib/media';
 import { useStore, type AuthError } from '@/data/store';
 import type { Gender, Role, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -29,6 +31,15 @@ export default function SignUp() {
   const { actions } = useStore();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [proof, setProof] = useState<PickedDoc | null>(null);
+  // Same questions as the profile: nationalities, photo, a few words, and (alumni) answering students.
+  const [nationalities, setNationalities] = useState<string[]>([]);
+  const [photo, setPhoto] = useState<PickedImage | null>(null);
+  const [bio, setBio] = useState('');
+  const [mentor, setMentor] = useState(false);
+  const choosePhoto = async () => {
+    const [img] = await pickImages(false);
+    if (img) setPhoto(img);
+  };
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
   // Cities with universities in the chosen country, offered while typing the city.
   const { cities } = useUniversities(form.country);
@@ -68,7 +79,10 @@ export default function SignUp() {
       city: form.city || undefined,
       birthDate: parseFrDate(birth) ?? undefined,
       phone: formatPhone(dial, phoneNumber),
-    }, proof);
+      nationalities: nationalities.length ? nationalities : undefined,
+      bio: bio.trim() || undefined,
+      mentor: alumni ? mentor : undefined,
+    }, proof, photo);
     setBusy(false);
     if (!r.ok) {
       setError(r.error);
@@ -185,6 +199,7 @@ export default function SignUp() {
           ) : (
             <UniversityPicker label={d.auth.school} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
           )}
+          <NationalityPicker value={nationalities} onChange={setNationalities} />
           {step === 2 && error === 'missing' && <Txt variant="smallStrong" color="danger">{d.auth.errors.missing}</Txt>}
           {form.role === 'alumni' && (
             <Select
@@ -193,6 +208,16 @@ export default function SignUp() {
               onChange={set('fieldOfStudy')}
               options={[{ value: '', label: '—' }, ...FIELDS.map((k) => ({ value: k, label: d.fields[k] }))]}
             />
+          )}
+          {form.role === 'alumni' && (
+            <Row gap={12} style={{ padding: 14, borderRadius: 14, backgroundColor: colors.surfaceAlt }}>
+              <Feather name="compass" size={18} color={colors.primary} />
+              <View style={{ flex: 1 }}>
+                <Txt variant="bodyStrong">{d.profile.mentor}</Txt>
+                <Txt variant="small" color="textMuted">{d.profile.mentorHint}</Txt>
+              </View>
+              <Switch value={mentor} onValueChange={setMentor} />
+            </Row>
           )}
           <Row gap={10}>
             <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(1)} />
@@ -211,6 +236,19 @@ export default function SignUp() {
         </View>
       ) : (
         <View style={{ gap: 16 }}>
+          <Row gap={16} style={{ padding: 14, borderRadius: 18, backgroundColor: colors.surfaceAlt }}>
+            <Tap onPress={choosePhoto} accessibilityLabel={d.profile.changePhoto}>
+              <Avatar uri={photo?.uri} name={`${form.firstName} ${form.lastName}`.trim() || '?'} size={72} />
+              <View style={{ position: 'absolute', right: -2, bottom: -2, width: 28, height: 28, borderRadius: 14, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.surface }}>
+                <Feather name="camera" size={13} color="#fff" />
+              </View>
+            </Tap>
+            <View style={{ flex: 1, gap: 6 }}>
+              <Txt variant="bodyStrong">{`${d.auth.photo} (${d.common.optional})`}</Txt>
+              <Button label={photo ? d.profile.changePhoto : d.auth.addPhoto} icon="image" size="sm" variant="secondary" onPress={choosePhoto} style={{ alignSelf: 'flex-start' }} />
+            </View>
+          </Row>
+          <Input label={`${d.profile.bio} (${d.common.optional})`} value={bio} onChangeText={setBio} multiline maxLength={600} />
           <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} />
           <Row gap={8} style={{ alignItems: 'flex-start' }}>
             <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />

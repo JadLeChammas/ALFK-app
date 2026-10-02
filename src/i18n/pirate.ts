@@ -24,6 +24,7 @@ const pirate: Dict = {
     hidden: 'Hidden from landlubbers',
     shownToast: 'Th\' demo be visible on th\' home page',
     hiddenToast: 'Th\' demo be hidden',
+    inDemoNote: 'Ye be in demo mode: this only changes th\' demo. Leave th\' demo an\' sign in with yer real captain account to change it on th\' site.',
   },
   time: { justNow: 'this very moment', minutesAgo: '{n} min ago' },
   errors: { saveFailed: 'Blimey, yer change be lost at sea: {msg}' },
@@ -62,6 +63,7 @@ const pirate: Dict = {
     pendingSub: 'Thank ye {name}! Yer papers be received. A captain o’ the Amicale will look ’em over — ye’ll have the run o’ the ship once approved.',
     pendingStep1: 'Papers sent', pendingStep2: 'Checked by a captain', pendingStep3: 'Welcome aboard',
     demoAccounts: 'Demo sailors', demoAdmin: 'Captain', demoMember: 'Old Hand', demoEleve: 'Cabin Boy', demoPending: 'Waitin’', demoDirection: 'Admiralty',
+    photo: 'Yer portrait', addPhoto: 'Add a portrait',
   },
   home: {
     hello: 'Ahoy {name}', heroTitle: 'One crew,\na thousand tall tales.',

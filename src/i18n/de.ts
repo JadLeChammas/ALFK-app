@@ -23,6 +23,7 @@ const de: Dict = {
     hidden: 'Für Besucher ausgeblendet',
     shownToast: 'Die Demo ist auf der Startseite sichtbar',
     hiddenToast: 'Die Demo ist ausgeblendet',
+    inDemoNote: 'Du bist im Demo-Modus: Das ändert nur die Demo. Verlasse die Demo und melde dich mit deinem echten Admin-Konto an, um es auf der Seite zu ändern.',
   },
   time: { justNow: 'gerade eben', minutesAgo: 'vor {n} Min.' },
   errors: { saveFailed: 'Die Änderung konnte nicht gespeichert werden: {msg}' },
@@ -61,6 +62,7 @@ const de: Dict = {
     pendingSub: 'Danke, {name}! Ihre Registrierung ist eingegangen. Ein Administrator der Amicale prüft Ihre Angaben — nach der Freigabe haben Sie Zugriff auf die ganze Plattform.',
     pendingStep1: 'Registrierung gesendet', pendingStep2: 'Prüfung durch einen Administrator', pendingStep3: 'Zugang zur Gemeinschaft',
     demoAccounts: 'Demo-Konten', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Schüler', demoPending: 'Ausstehend', demoDirection: 'Schulleitung',
+    photo: 'Profilfoto', addPhoto: 'Foto hinzufügen',
   },
   home: {
     hello: 'Hallo {name}', heroTitle: 'Eine Gemeinschaft,\ntausende Geschichten.',

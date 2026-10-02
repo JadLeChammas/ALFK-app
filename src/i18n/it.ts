@@ -23,6 +23,7 @@ const it: Dict = {
     hidden: 'Nascosta ai visitatori',
     shownToast: 'La demo è visibile nella home',
     hiddenToast: 'La demo è nascosta',
+    inDemoNote: 'Sei in modalità demo: cambia solo la demo. Esci dalla demo e accedi con il tuo vero account admin per cambiarlo sul sito.',
   },
   time: { justNow: 'proprio ora', minutesAgo: '{n} min fa' },
   errors: { saveFailed: 'Impossibile salvare la modifica: {msg}' },
@@ -61,6 +62,7 @@ const it: Dict = {
     pendingSub: "Grazie, {name}! Abbiamo ricevuto la tua iscrizione. Un amministratore dell'Amicale verificherà i tuoi dati — avrai accesso a tutta la piattaforma appena approvata.",
     pendingStep1: 'Iscrizione inviata', pendingStep2: 'Verifica da parte di un amministratore', pendingStep3: 'Accesso alla comunità',
     demoAccounts: 'Account demo', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Studente', demoPending: 'In attesa', demoDirection: 'Direzione',
+    photo: 'Foto del profilo', addPhoto: 'Aggiungi una foto',
   },
   home: {
     hello: 'Ciao {name}', heroTitle: 'Una sola comunità,\nmigliaia di storie.',
