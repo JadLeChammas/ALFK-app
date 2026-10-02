@@ -10,7 +10,7 @@ const fr = {
     contact: 'Contact', logs: 'Journal', stats: 'Statistiques', leadership: 'Direction du lycée', more: 'Plus', back: 'Retour', legal: 'Mentions légales', sitemap: 'Plan du site',
   },
   roles: { alumni: 'Alumni', eleve: 'Élève', honneur: "Membre d'honneur", admin: 'Admin' },
-  gender: { F: 'Femme', M: 'Homme' },
+  gender: { F: 'Femme', M: 'Homme', N: 'Je préfère ne pas dire' },
   continents: { europe: 'Europe', asia: 'Asie & Moyen-Orient', africa: 'Afrique', north_america: 'Amérique du Nord', south_america: 'Amérique du Sud', oceania: 'Océanie' },
   demo: {
     tryTitle: 'Découvrir l’app sans compte', trySub: 'Explorez la démo : membres, événements et messages fictifs, avec tous les rôles (Admin, Alumni, Élève, Direction).',

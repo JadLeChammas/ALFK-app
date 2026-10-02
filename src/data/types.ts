@@ -1,6 +1,7 @@
 export type Role = 'alumni' | 'eleve' | 'honneur' | 'admin';
 export type Situation = 'student' | 'working';
-export type Gender = 'F' | 'M';
+/** F, M, or N = « Je préfère ne pas dire ». */
+export type Gender = 'F' | 'M' | 'N';
 export type ContinentKey = 'europe' | 'asia' | 'africa' | 'north_america' | 'south_america' | 'oceania';
 export type EventCategory = 'soiree' | 'sport' | 'culture' | 'networking';
 export type PublicationCategory = 'actualite' | 'article' | 'annonce';

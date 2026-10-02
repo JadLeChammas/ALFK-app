@@ -12,7 +12,7 @@ const zh: Dict = {
     contact: '联系我们', logs: '日志', stats: '统计', leadership: '学校领导', more: '更多', back: '返回', legal: '法律声明', sitemap: '网站地图',
   },
   roles: { alumni: '校友', eleve: '在校生', honneur: '荣誉会员', admin: '管理员' },
-  gender: { F: '女', M: '男' },
+  gender: { F: '女', M: '男', N: '不愿透露' },
   continents: { europe: '欧洲', asia: '亚洲与中东', africa: '非洲', north_america: '北美洲', south_america: '南美洲', oceania: '大洋洲' },
   demo: {
     tryTitle: '无需账号即可体验', trySub: '试用演示：虚构的成员、活动和消息，涵盖所有角色（管理员、校友、在校生、学校领导）。',

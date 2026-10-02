@@ -24,7 +24,7 @@ type Body = {
   email?: string;
   firstName?: string;
   lastName?: string;
-  gender?: 'F' | 'M';
+  gender?: 'F' | 'M' | 'N';
   role?: 'alumni' | 'eleve' | 'honneur' | 'admin';
   promo?: number;
   phone?: string;

@@ -147,7 +147,7 @@ export default function SignUp() {
           />
           <View style={{ gap: 8 }}>
             <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
-            <Segmented value={form.gender} onChange={(g) => setForm((f) => ({ ...f, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }]} />
+            <Segmented value={form.gender} onChange={(g) => setForm((f) => ({ ...f, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }, { value: 'N', label: d.gender.N }]} />
             <Row gap={6}>
               <Feather name="lock" size={12} color={colors.textSubtle} />
               <Txt variant="small" color="textSubtle">{d.auth.genderLocked}</Txt>

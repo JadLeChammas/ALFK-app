@@ -13,7 +13,7 @@ const pirate: Dict = {
     contact: 'Hail Us', logs: 'Captain’s Ledger', stats: 'Treasure Tally', leadership: 'Admiralty o’ the Lycée', more: 'More', back: 'Back', legal: 'Articles o’ Agreement', sitemap: 'Map o’ the Ship',
   },
   roles: { alumni: 'Old Hand', eleve: 'Cabin Boy', honneur: 'Honorary Buccaneer', admin: 'Captain' },
-  gender: { F: 'Lass', M: 'Lad' },
+  gender: { F: 'Lass', M: 'Lad', N: 'Rather not say' },
   continents: { europe: 'Europe', asia: 'Asia & the Middle Seas', africa: 'Africa', north_america: 'North America', south_america: 'South America', oceania: 'The South Seas' },
   demo: {
     tryTitle: 'Board the ship without papers', trySub: 'Try the demo: make-believe crew, shore leaves an’ bottles, with every rank (Captain, Old Hand, Cabin Boy, Admiralty).',

@@ -254,7 +254,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
             <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
             <View style={{ gap: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
-              <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }]} />
+              <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }, { value: 'N', label: d.gender.N }]} />
             </View>
             <View style={{ gap: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.admin.role}</Txt>

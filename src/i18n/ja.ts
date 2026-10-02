@@ -12,7 +12,7 @@ const ja: Dict = {
     contact: 'お問い合わせ', logs: 'ログ', stats: '統計', leadership: '学校管理職', more: 'その他', back: '戻る', legal: '法的表示', sitemap: 'サイトマップ',
   },
   roles: { alumni: '卒業生', eleve: '在校生', honneur: '名誉会員', admin: '管理者' },
-  gender: { F: '女性', M: '男性' },
+  gender: { F: '女性', M: '男性', N: '回答しない' },
   continents: { europe: 'ヨーロッパ', asia: 'アジア・中東', africa: 'アフリカ', north_america: '北アメリカ', south_america: '南アメリカ', oceania: 'オセアニア' },
   demo: {
     tryTitle: 'アカウントなしでアプリを体験', trySub: 'デモを試す：架空のメンバー・イベント・メッセージで、すべての役割（管理者・卒業生・在校生・学校管理職）を体験できます。',

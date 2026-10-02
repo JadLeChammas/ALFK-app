@@ -12,7 +12,7 @@ const de: Dict = {
     contact: 'Kontakt', logs: 'Protokoll', stats: 'Statistiken', leadership: 'Schulleitung', more: 'Mehr', back: 'Zurück', legal: 'Impressum', sitemap: 'Sitemap',
   },
   roles: { alumni: 'Alumni', eleve: 'Schüler/in', honneur: 'Ehrenmitglied', admin: 'Admin' },
-  gender: { F: 'Weiblich', M: 'Männlich' },
+  gender: { F: 'Weiblich', M: 'Männlich', N: 'Keine Angabe' },
   continents: { europe: 'Europa', asia: 'Asien & Naher Osten', africa: 'Afrika', north_america: 'Nordamerika', south_america: 'Südamerika', oceania: 'Ozeanien' },
   demo: {
     tryTitle: 'Die App ohne Konto entdecken', trySub: 'Testen Sie die Demo: fiktive Mitglieder, Veranstaltungen und Nachrichten, mit allen Rollen (Admin, Alumni, Schüler, Schulleitung).',
