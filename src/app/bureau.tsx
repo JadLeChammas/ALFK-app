@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { Seo } from '@/components/Seo';
 import { View } from 'react-native';
 
 import { EditorialImageHero, TeamShowcase, type TeamMember } from '@/components/site/blocks';
@@ -22,6 +23,7 @@ export default function Board() {
 
   return (
     <SiteFrame overlay>
+      <Seo title={b.title} description={b.sub} />
       <EditorialImageHero tagline={d.app.long} title={b.title} description={b.sub} image={IMAGES.meeting} />
 
       <Section style={{ paddingTop: 0 }}>

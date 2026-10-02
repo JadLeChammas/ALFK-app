@@ -46,8 +46,8 @@ Sans configuration, l'app tourne en **démo locale**. Avec les variables Supabas
    `005_situation_etudes_travail.sql` : « étudiant » ou « en activité », entreprise et poste ;
    `006_regroupement_universites.sql` : une université écrite de plusieurs façons ne compte qu'une fois).
    Facultatif : faire pareil avec [`supabase/seed.sql`](supabase/seed.sql) (promos, événements et publications d'exemple).
-2. *Authentication → URL Configuration* : **Site URL** = l'adresse Vercel (ex. `https://alfk-app.vercel.app`),
-   et ajouter `https://alfk-app.vercel.app/**` dans **Redirect URLs** (liens de réinitialisation du mot de passe).
+2. *Authentication → URL Configuration* : **Site URL** = `https://www.alfk.org` (le domaine du site, servi par Vercel),
+   et ajouter `https://www.alfk.org/**` (et `https://alfk-app.vercel.app/**` pour les aperçus) dans **Redirect URLs** (liens de réinitialisation du mot de passe).
 3. *Authentication → Sign In / Providers → Email* : « Confirm email » peut être désactivé, puisque chaque
    compte est de toute façon validé par un admin.
 4. *Project Settings → API Keys* : noter la **Publishable key** et la **Secret key** (la secrète ne se partage jamais).

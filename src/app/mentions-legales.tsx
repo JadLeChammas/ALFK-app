@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 
 import { PublicPage } from '@/components/PublicPage';
 import { Button, Card } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
+import { PHOTOS } from '@/data/photos';
 import { useI18n } from '@/i18n';
 
 const SECTIONS_FR: [string, string][] = [
@@ -33,6 +34,17 @@ export default function Legal() {
             <Txt variant="h3">{h}</Txt>
             <Txt color="textMuted">{p}</Txt>
           </View>
+        ))}
+      </Card>
+      {/* Wikimedia Commons photos used on the public pages: author, licence and source, as the licences require. */}
+      <Card style={{ gap: 12 }}>
+        <Txt variant="h3">{lang === 'fr' ? 'Crédits photos' : 'Photo credits'}</Txt>
+        {Object.values(PHOTOS).map((p) => (
+          <Txt key={p.page} color="textMuted">
+            « {p.title} » — {p.author},{' '}
+            <Txt color="primary" onPress={() => Linking.openURL(p.licenseUrl)}>{p.license}</Txt>, {lang === 'fr' ? 'via' : 'via'}{' '}
+            <Txt color="primary" onPress={() => Linking.openURL(p.page)}>Wikimedia Commons</Txt>
+          </Txt>
         ))}
       </Card>
       <Button label={d.legal.privacy} icon="shield" variant="secondary" onPress={() => router.push('/confidentialite')} />

@@ -27,7 +27,7 @@ const pirate: Dict = {
   },
   time: { justNow: 'this very moment', minutesAgo: '{n} min ago' },
   errors: { saveFailed: 'Blimey, yer change be lost at sea: {msg}' },
-  common: {
+  common: { typeToConfirm: 'T’ confirm, write the full name below:',
     search: 'Spy', seeAll: 'See the lot', see: 'Have a look', save: 'Stow it', cancel: 'Belay that', delete: 'Feed to the sharks',
     confirm: 'Aye', edit: 'Mend', close: 'Batten down', send: 'Send', add: 'Add', create: 'Forge', done: 'Done',
     members: '{n} hands', member: '{n} hand', promo: 'LFK Crew o’ {year}', today: 'This day', tomorrow: 'Morrow',
@@ -82,7 +82,7 @@ const pirate: Dict = {
     title: 'Crew Roster', subtitle: 'Find yer shipmates by LFK crew, land or search.',
     searchPlaceholder: 'Search by name, LFK crew, land or school…', filterPromo: 'LFK crew', filterCountry: 'Land', filterSchool: 'School',
     allPromos: 'All LFK crews', allCountries: 'All lands', seePromo: 'See the LFK crew', results: '{n} sailors found',
-    honorary: 'Admiralty o’ the Lycée', noPromo: 'No LFK crew', jumpTo: 'Sail to',
+    honorary: 'Admiralty o’ the Lycée', noPromo: 'No LFK crew', jumpTo: 'Sail to', filters: 'Sieves', clearAll: 'Scuttle all', showResults: 'Show {n} hearties',
   },
   promo: {
     title: 'LFK Crew o’ {year}', whatsapp: 'Join the WhatsApp crew', noWhatsapp: 'No WhatsApp crew yet',
@@ -185,7 +185,7 @@ const pirate: Dict = {
   legal: {
     title: 'Articles o’ Agreement', sitemap: 'Map o’ the Ship', privacy: 'Code o’ Secrecy', privacyUpdated: 'Last amended: September 30, 2026', notFound: 'This page be lost at sea', notFoundSub: 'This page don’t exist or has sailed off.',
     goHome: 'Back to home port', contactTitle: 'Hail us', contactSub: 'A question? The Amicale crew will answer ye.',
-    subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank ye kindly!',
+    subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank ye kindly!', contactLead: 'Joinin’, shindigs, alliances or just a question: send word, an’ an officer o’ the crew will answer ye.', topic: 'Matter', topicMembership: 'Joinin’', topicEvents: 'Shindigs', topicPartnership: 'Alliance', topicOrientation: 'Headin’', topicOther: 'Other', replyTime: 'Answer within 48 bells', privateNote: 'Only the officers read yer message', otherWays: 'Other ways t’ hail us', wayBoardSub: 'The hands that sail the Amicale', wayJoinSub: 'Join the crew o’ old hands', wayAssociationSub: 'Our tale an’ our quest', sentTitle: 'Message sent', sentSub: 'Thankee! An officer will answer ye soon, by letter.', sendAnother: 'Send another message', messagePlaceholder: 'Tell us in a few words…', emailInvalid: 'That email be no good',
   },
   proof: {
     title: 'Proof ye sailed with the LFK', sub: 'Required: report card, school certificate, attestation or a simple portrait showin’ ye studied at the LFK.', pick: 'Pick a scroll',
@@ -304,7 +304,7 @@ const pirate: Dict = {
     },
     footer: {
       tagline: 'One fleet, one logbook, one crew across the seas.', contact: 'Hail us', createAccount: 'Sign the Articles',
-      copyright: '© {year} Amicale LFK — Crew o’ the old hands o’ the Lycée Français de Koweït.', band: 'Join the crew',
+      copyright: '© {year} Amicale LFK — Crew o’ the old hands o’ the Lycée Français de Koweït.', band: 'Join the crew', poweredBy: 'Rigged by',
     },
   },
   situation: {

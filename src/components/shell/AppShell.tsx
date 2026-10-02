@@ -1,7 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { router, usePathname } from 'expo-router';
 import { useEffect, useState, type ReactNode } from 'react';
-import { Modal, Platform, Pressable, ScrollView, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { can } from '@/data/permissions';
@@ -11,7 +12,7 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
 import { useRetroTaps } from '@/lib/retro';
-import { LogoMark } from '../ui/Logo';
+import { Logo, LogoMark } from '../ui/Logo';
 import { Avatar, CountBadge, IconButton, Tap, type IconName } from '../ui/primitives';
 import { Txt } from '../ui/Txt';
 import { GlobalSearch } from './GlobalSearch';
@@ -106,11 +107,17 @@ function Sidebar({ compact }: { compact: boolean }) {
   const { main, community, amicale } = useNav();
   const notif = useUnreadNotifications();
   const pending = db.users.filter((u) => !u.approved).length;
+  // Laptop-height windows: slightly tighter rows so the whole menu fits without scrolling;
+  // if it still overflows, a fade at the bottom shows there is more below.
+  const { height } = useWindowDimensions();
+  const dense = height < 1000;
+  const [scroll, setScroll] = useState({ y: 0, h: 0, content: 0 });
+  const more = scroll.content - (scroll.y + scroll.h) > 4;
   const bottom: NavItem[] = [
     { href: '/parametres', icon: 'settings', label: d.nav.settings },
     { href: '/notifications', icon: 'bell', label: d.nav.notifications, badge: notif },
   ];
-  const section = (label: string) => !compact && <Txt style={{ fontFamily: fonts.medium, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: 'rgba(231, 236, 242,0.55)', paddingHorizontal: 12, marginBottom: 6 }}>{label}</Txt>;
+  const section = (label: string) => !compact && <Txt style={{ fontFamily: fonts.medium, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: 'rgba(231, 236, 242,0.55)', paddingHorizontal: 12, marginBottom: dense ? 4 : 6 }}>{label}</Txt>;
 
   return (
     <View
@@ -123,44 +130,54 @@ function Sidebar({ compact }: { compact: boolean }) {
         paddingHorizontal: compact ? 12 : 14,
         ...(Platform.OS === 'web' ? ({ height: '100vh', position: 'sticky', top: 0 } as object) : {}),
       }}>
-      <Tap onPress={logoTap} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: compact ? 5 : 8, marginBottom: 16 }}>
-        <LogoMark size={compact ? 40 : 34} />
-        {!compact && (
-          <View>
-            <Txt style={{ fontFamily: fonts.serif, fontSize: 22, lineHeight: 24, color: '#fff' }}>{d.app.name}</Txt>
-            <Txt style={{ fontFamily: fonts.medium, fontSize: 9, letterSpacing: 1.6, color: RAIL.text }}>ALFK · KOWEÏT</Txt>
-          </View>
-        )}
+      <Tap onPress={logoTap} accessibilityLabel={d.nav.home} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: compact ? 5 : 4, marginBottom: 16 }}>
+        {compact ? <LogoMark size={40} onDark /> : <Logo height={64} onDark />}
       </Tap>
-      <ScrollView style={{ flex: 1, marginHorizontal: -4 }} contentContainerStyle={{ paddingHorizontal: 4 }} showsVerticalScrollIndicator={false}>
+      <View style={{ flex: 1 }}>
+      <ScrollView
+        style={{ flex: 1, marginHorizontal: -4 }}
+        contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: 8 }}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={32}
+        onLayout={(e) => {
+          const h = e.nativeEvent.layout.height;
+          setScroll((x) => ({ ...x, h }));
+        }}
+        onContentSizeChange={(_, content) => setScroll((x) => ({ ...x, content }))}
+        onScroll={(e) => {
+          const y = e.nativeEvent.contentOffset.y;
+          setScroll((x) => ({ ...x, y }));
+        }}>
       <View style={{ gap: 2 }}>
         {main.map((item) => (
-          <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
+          <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
         ))}
       </View>
-      <View style={{ marginTop: 12, gap: 2 }}>
+      <View style={{ marginTop: dense ? 8 : 12, gap: 2 }}>
         {section(d.nav.community)}
         {[...community, ...amicale].map((item) => (
-          <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
+          <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
         ))}
       </View>
 
       {me.role === 'admin' && (
-        <View style={{ marginTop: 12, gap: 2 }}>
+        <View style={{ marginTop: dense ? 8 : 12, gap: 2 }}>
           {section(d.nav.admin)}
-          <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} />
+          <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} dense={dense} />
         </View>
       )}
       {me.role !== 'admin' && can(me, 'viewStats') && (
-        <View style={{ marginTop: 12, gap: 2 }}>
+        <View style={{ marginTop: dense ? 8 : 12, gap: 2 }}>
           {section(d.nav.leadership)}
-          <SideLink item={{ href: '/statistiques', icon: 'bar-chart-2', label: d.nav.stats }} active={isActive(pathname, { href: '/statistiques', icon: 'bar-chart-2', label: '' })} compact={compact} />
+          <SideLink item={{ href: '/statistiques', icon: 'bar-chart-2', label: d.nav.stats }} active={isActive(pathname, { href: '/statistiques', icon: 'bar-chart-2', label: '' })} compact={compact} dense={dense} />
         </View>
       )}
       </ScrollView>
+      {more && <LinearGradient pointerEvents="none" colors={[`${colors.rail}00`, colors.rail]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 36 }} />}
+      </View>
       <View style={{ gap: 2, marginBottom: 10, marginTop: 8 }}>
         {bottom.map((item) => (
-          <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} />
+          <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
         ))}
       </View>
       <Tap
@@ -183,7 +200,7 @@ function Sidebar({ compact }: { compact: boolean }) {
   );
 }
 
-function SideLink({ item, active, compact }: { item: NavItem; active: boolean; compact: boolean }) {
+function SideLink({ item, active, compact, dense }: { item: NavItem; active: boolean; compact: boolean; dense?: boolean }) {
   const { colors } = useTheme();
   return (
     <Tap
@@ -193,14 +210,14 @@ function SideLink({ item, active, compact }: { item: NavItem; active: boolean; c
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        height: 35,
+        height: dense ? 32 : 35,
         paddingHorizontal: compact ? 0 : 12,
         justifyContent: compact ? 'center' : 'flex-start',
         borderRadius: radius.input,
         backgroundColor: active ? RAIL.activeBg : 'transparent',
       }}
       hoverStyle={!active && { backgroundColor: RAIL.hover }}>
-      {active && <View style={{ position: 'absolute', left: compact ? 4 : 0, top: 9, bottom: 9, width: 3, borderRadius: 2, backgroundColor: brand.red }} />}
+      {active && <View style={{ position: 'absolute', left: compact ? 4 : 0, top: dense ? 8 : 9, bottom: dense ? 8 : 9, width: 3, borderRadius: 2, backgroundColor: brand.red }} />}
       <View>
         <Feather name={item.icon} size={18} color={active ? '#fff' : RAIL.text} />
         {compact && !!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -8, right: -10, borderColor: colors.rail }} />}
@@ -253,9 +270,8 @@ function MobileTopBar({ onSearch }: { onSearch: () => void }) {
   const onProfile = pathname.startsWith('/profil');
   return (
     <View style={{ paddingTop: insets.top + 8, paddingBottom: 8, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.rail }}>
-      <Tap onPress={logoTap} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <LogoMark size={30} />
-        <Txt style={{ fontFamily: fonts.serif, fontSize: 21, lineHeight: 24, color: '#fff' }}>{d.app.name}</Txt>
+      <Tap onPress={logoTap} accessibilityLabel={d.nav.home} style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <Logo height={44} onDark />
       </Tap>
       <IconButton icon="search" onPress={onSearch} size={38} variant="ghost" color="#fff" label={d.common.search} />
       <IconButton icon="bell" badge={notif} onPress={() => router.push('/notifications')} size={38} variant="ghost" color="#fff" label={d.nav.notifications} />

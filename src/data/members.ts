@@ -1,3 +1,4 @@
+import { resolvePlace, type PlaceAliases } from './placeKey';
 import type { Role, User } from './types';
 
 /**
@@ -141,12 +142,21 @@ export function occupation(u: Pick<User, 'fonction' | 'situation' | 'employer' |
  * second degree), each in its own country. Used by Repère and the statistics.
  */
 export type StudyEntry<U> = U & { exchange?: boolean; extra?: boolean };
-export function studyEntries<U extends Pick<User, 'school' | 'country' | 'otherSchools'>>(users: U[]): StudyEntry<U>[] {
+export function studyEntries<U extends Pick<User, 'school' | 'country' | 'otherSchools'>>(users: U[], aliases: PlaceAliases = {}): StudyEntry<U>[] {
   const out: StudyEntry<U>[] = [];
   for (const u of users) {
-    if (u.school) out.push(u);
+    // A person counts once per university: the same school entered twice (main + other, or two
+    // spellings merged by an admin) is kept only the first time.
+    const seen = new Set<string>();
+    const add = (e: StudyEntry<U>) => {
+      const k = resolvePlace(e.school, aliases);
+      if (!k || seen.has(k)) return;
+      seen.add(k);
+      out.push(e);
+    };
+    if (u.school) add(u);
     for (const s of u.otherSchools ?? []) {
-      if (s.name) out.push({ ...u, school: s.name, country: s.country ?? u.country, exchange: !!s.exchange, extra: true });
+      if (s.name) add({ ...u, school: s.name, country: s.country ?? u.country, exchange: !!s.exchange, extra: true });
     }
   }
   return out;

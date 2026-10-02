@@ -26,7 +26,7 @@ const de: Dict = {
   },
   time: { justNow: 'gerade eben', minutesAgo: 'vor {n} Min.' },
   errors: { saveFailed: 'Die Änderung konnte nicht gespeichert werden: {msg}' },
-  common: {
+  common: { typeToConfirm: 'Zur Bestätigung den vollständigen Namen unten eingeben:',
     search: 'Suchen', seeAll: 'Alle anzeigen', see: 'Ansehen', save: 'Speichern', cancel: 'Abbrechen', delete: 'Löschen',
     confirm: 'Bestätigen', edit: 'Bearbeiten', close: 'Schließen', send: 'Senden', add: 'Hinzufügen', create: 'Erstellen', done: 'Fertig',
     members: '{n} Mitglieder', member: '{n} Mitglied', promo: 'LFK-Jahrgang {year}', today: 'Heute', tomorrow: 'Morgen',
@@ -81,7 +81,7 @@ const de: Dict = {
     title: 'Verzeichnis', subtitle: 'Finden Sie Mitglieder nach LFK-Jahrgang, Land oder Suche.',
     searchPlaceholder: 'Nach Name, LFK-Jahrgang, Land oder Schule suchen…', filterPromo: 'LFK-Jahrgang', filterCountry: 'Land', filterSchool: 'Schule',
     allPromos: 'Alle LFK-Jahrgänge', allCountries: 'Alle Länder', seePromo: 'LFK-Jahrgang ansehen', results: '{n} Ergebnisse',
-    honorary: 'Schulleitung', noPromo: 'Ohne LFK-Jahrgang', jumpTo: 'Springe zu',
+    honorary: 'Schulleitung', noPromo: 'Ohne LFK-Jahrgang', jumpTo: 'Springe zu', filters: 'Filter', clearAll: 'Alle löschen', showResults: '{n} Mitglieder anzeigen',
   },
   promo: {
     title: 'LFK-Jahrgang {year}', whatsapp: 'WhatsApp-Gruppe beitreten', noWhatsapp: 'Noch keine WhatsApp-Gruppe',
@@ -184,7 +184,7 @@ const de: Dict = {
   legal: {
     title: 'Impressum', sitemap: 'Sitemap', privacy: 'Datenschutzerklärung', privacyUpdated: 'Zuletzt aktualisiert: 30. September 2026', notFound: 'Seite nicht gefunden', notFoundSub: 'Diese Seite existiert nicht oder wurde verschoben.',
     goHome: 'Zur Startseite', contactTitle: 'Kontakt', contactSub: 'Eine Frage? Das Team der Amicale antwortet Ihnen.',
-    subject: 'Betreff', message: 'Nachricht', name: 'Name', sent: 'Nachricht gesendet, danke!',
+    subject: 'Betreff', message: 'Nachricht', name: 'Name', sent: 'Nachricht gesendet, danke!', contactLead: 'Mitgliedschaft, Veranstaltungen, Partnerschaften oder einfach eine Frage: Schreiben Sie uns, ein Vorstandsmitglied antwortet Ihnen.', topic: 'Thema', topicMembership: 'Mitgliedschaft', topicEvents: 'Veranstaltungen', topicPartnership: 'Partnerschaft', topicOrientation: 'Orientierung', topicOther: 'Sonstiges', replyTime: 'Antwort innerhalb von 48 Std.', privateNote: 'Nur der Vorstand liest Ihre Nachricht', otherWays: 'Weitere Kontaktwege', wayBoardSub: 'Die Menschen hinter der Amicale', wayJoinSub: 'Dem Alumni-Netzwerk beitreten', wayAssociationSub: 'Unsere Geschichte und Aufgaben', sentTitle: 'Nachricht gesendet', sentSub: 'Danke! Ein Vorstandsmitglied antwortet Ihnen bald per E-Mail.', sendAnother: 'Weitere Nachricht senden', messagePlaceholder: 'Schreiben Sie uns in wenigen Worten…', emailInvalid: 'Ungültige E-Mail-Adresse',
   },
   proof: {
     title: 'Schulnachweis des LFK', sub: 'Pflicht: Zeugnis, Schulbescheinigung, Bestätigung oder ein einfaches Foto, das Ihren Schulbesuch am LFK belegt.', pick: 'Datei auswählen',
@@ -303,7 +303,7 @@ const de: Dict = {
     },
     footer: {
       tagline: 'Ein Netzwerk, eine Erinnerung, eine internationale Gemeinschaft.', contact: 'Kontakt', createAccount: 'Konto erstellen',
-      copyright: '© {year} Amicale LFK — Verein der Ehemaligen des Lycée Français de Koweït.', band: 'Der Amicale beitreten',
+      copyright: '© {year} Amicale LFK — Verein der Ehemaligen des Lycée Français de Koweït.', band: 'Der Amicale beitreten', poweredBy: 'Entwickelt von',
     },
   },
   situation: {

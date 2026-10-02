@@ -1,8 +1,10 @@
 import { router } from 'expo-router';
 
+import { Seo } from '@/components/Seo';
 import { ClosingCta, ContentGrid, EditorialImageHero, EditorialTestimonial, GlobeCard, RuleColumns, StatsRow, useDestinationMarkers, useQuoteCards } from '@/components/site/blocks';
 import { Container, Reveal, Section, SerifHeading, SiteFrame } from '@/components/site/SiteFrame';
 import { useCommunity } from '@/data/community';
+import { PHOTOS } from '@/data/photos';
 import { IMAGES } from '@/data/seed';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -18,11 +20,12 @@ export default function Association() {
 
   return (
     <SiteFrame overlay>
+      <Seo title={d.site.nav.association} description={a.sub} />
       <EditorialImageHero
         tagline={a.eyebrow}
         title={`${a.title} ${a.italic}`}
         description={a.sub}
-        image={IMAGES.graduation}
+        image={PHOTOS.kuwaitSunset.uri}
         primary={me ? undefined : { label: d.site.home.cta1, onPress: () => router.push('/inscription') }}
         secondary={{ label: d.site.nav.bureau, onPress: () => router.push('/bureau') }}
       />

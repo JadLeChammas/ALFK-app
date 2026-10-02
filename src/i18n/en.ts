@@ -26,7 +26,7 @@ const en: Dict = {
   },
   time: { justNow: 'just now', minutesAgo: '{n} min ago' },
   errors: { saveFailed: 'Your change could not be saved: {msg}' },
-  common: {
+  common: { typeToConfirm: 'To confirm, type the full name below:',
     search: 'Search', seeAll: 'See all', see: 'View', save: 'Save', cancel: 'Cancel', delete: 'Delete',
     confirm: 'Confirm', edit: 'Edit', close: 'Close', send: 'Send', add: 'Add', create: 'Create', done: 'Done',
     members: '{n} members', member: '{n} member', promo: 'LFK Class of {year}', today: 'Today', tomorrow: 'Tomorrow',
@@ -81,7 +81,7 @@ const en: Dict = {
     title: 'Directory', subtitle: 'Find community members by LFK Class, country or search.',
     searchPlaceholder: 'Search by name, LFK Class, country or school…', filterPromo: 'LFK Class', filterCountry: 'Country', filterSchool: 'School',
     allPromos: 'All LFK Classes', allCountries: 'All countries', seePromo: 'View LFK Class', results: '{n} results',
-    honorary: 'School leadership', noPromo: 'No LFK Class', jumpTo: 'Jump to',
+    honorary: 'School leadership', noPromo: 'No LFK Class', jumpTo: 'Jump to', filters: 'Filters', clearAll: 'Clear all', showResults: 'Show {n} members',
   },
   promo: {
     title: 'LFK Class of {year}', whatsapp: 'Join the WhatsApp group', noWhatsapp: 'No WhatsApp group yet',
@@ -184,7 +184,7 @@ const en: Dict = {
   legal: {
     title: 'Legal notice', sitemap: 'Sitemap', privacy: 'Privacy policy', privacyUpdated: 'Last updated: September 30, 2026', notFound: 'Page not found', notFoundSub: "This page doesn't exist or has moved.",
     goHome: 'Back to home', contactTitle: 'Contact us', contactSub: 'A question? The Amicale team will get back to you.',
-    subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank you!',
+    subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank you!', contactLead: 'Membership, events, partnerships or a simple question: write to us and a board member will reply.', topic: 'Topic', topicMembership: 'Membership', topicEvents: 'Events', topicPartnership: 'Partnership', topicOrientation: 'Guidance', topicOther: 'Other', replyTime: 'Reply within 48 h', privateNote: 'Only the board reads your message', otherWays: 'Other ways to reach us', wayBoardSub: 'The people who run the Amicale', wayJoinSub: 'Join the alumni network', wayAssociationSub: 'Our story and our mission', sentTitle: 'Message sent', sentSub: 'Thank you! A board member will get back to you soon, by email.', sendAnother: 'Send another message', messagePlaceholder: 'Tell us in a few words…', emailInvalid: 'Invalid email address',
   },
   proof: {
     title: 'Proof of schooling at the LFK', sub: 'Required: report card, school certificate, attestation or a simple photo showing you studied at the LFK.', pick: 'Choose a file',
@@ -303,7 +303,7 @@ const en: Dict = {
     },
     footer: {
       tagline: 'One network, one memory, one international community.', contact: 'Contact us', createAccount: 'Create an account',
-      copyright: '© {year} Amicale LFK — Alumni association of the Lycée Français de Koweït.', band: 'Join the Amicale',
+      copyright: '© {year} Amicale LFK — Alumni association of the Lycée Français de Koweït.', band: 'Join the Amicale', poweredBy: 'Powered by',
     },
   },
   situation: {

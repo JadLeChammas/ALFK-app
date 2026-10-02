@@ -10,7 +10,7 @@ import { placeKey } from './places';
  */
 export type University = { name: string; city: string; acronyms: string[]; rank: number };
 
-const SITE = process.env.EXPO_PUBLIC_SITE_URL ?? 'https://alfk-app.vercel.app';
+const SITE = process.env.EXPO_PUBLIC_SITE_URL ?? 'https://www.alfk.org';
 const base = Platform.OS === 'web' ? '' : SITE;
 const cache = new Map<string, Promise<University[]>>();
 

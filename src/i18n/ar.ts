@@ -26,7 +26,7 @@ const ar: Dict = {
   },
   time: { justNow: 'الآن', minutesAgo: 'منذ {n} د' },
   errors: { saveFailed: 'تعذّر حفظ التعديل: {msg}' },
-  common: {
+  common: { typeToConfirm: 'للتأكيد، اكتب الاسم الكامل أدناه:',
     search: 'بحث', seeAll: 'عرض الكل', see: 'عرض', save: 'حفظ', cancel: 'إلغاء', delete: 'حذف',
     confirm: 'تأكيد', edit: 'تعديل', close: 'إغلاق', send: 'إرسال', add: 'إضافة', create: 'إنشاء', done: 'تم',
     members: '{n} عضو', member: '{n} عضو', promo: 'دفعة LFK {year}', today: 'اليوم', tomorrow: 'غدًا',
@@ -81,7 +81,7 @@ const ar: Dict = {
     title: 'الدليل', subtitle: 'اعثر على أعضاء المجتمع حسب دفعة LFK أو الدولة أو بالبحث.',
     searchPlaceholder: 'ابحث بالاسم أو دفعة LFK أو الدولة أو المدرسة…', filterPromo: 'دفعة LFK', filterCountry: 'الدولة', filterSchool: 'المدرسة',
     allPromos: 'كل دفعات LFK', allCountries: 'كل الدول', seePromo: 'عرض دفعة LFK', results: '{n} نتيجة',
-    honorary: 'إدارة الثانوية', noPromo: 'بدون دفعة LFK', jumpTo: 'انتقل إلى',
+    honorary: 'إدارة الثانوية', noPromo: 'بدون دفعة LFK', jumpTo: 'انتقل إلى', filters: 'عوامل التصفية', clearAll: 'مسح الكل', showResults: 'عرض {n} عضو',
   },
   promo: {
     title: 'دفعة LFK {year}', whatsapp: 'الانضمام إلى مجموعة واتساب', noWhatsapp: 'لا توجد مجموعة واتساب بعد',
@@ -184,7 +184,7 @@ const ar: Dict = {
   legal: {
     title: 'الإشعارات القانونية', sitemap: 'خريطة الموقع', privacy: 'سياسة الخصوصية', privacyUpdated: 'آخر تحديث: 30 سبتمبر 2026', notFound: 'الصفحة غير موجودة', notFoundSub: 'هذه الصفحة غير موجودة أو تم نقلها.',
     goHome: 'العودة إلى الرئيسية', contactTitle: 'اتصل بنا', contactSub: 'لديك سؤال؟ فريق الرابطة يجيبك.',
-    subject: 'الموضوع', message: 'الرسالة', name: 'الاسم', sent: 'تم إرسال الرسالة، شكرًا!',
+    subject: 'الموضوع', message: 'الرسالة', name: 'الاسم', sent: 'تم إرسال الرسالة، شكرًا!', contactLead: 'العضوية أو الفعاليات أو الشراكات أو مجرد سؤال: راسلونا وسيرد عليكم أحد أعضاء المكتب.', topic: 'الموضوع', topicMembership: 'العضوية', topicEvents: 'الفعاليات', topicPartnership: 'شراكة', topicOrientation: 'التوجيه', topicOther: 'أخرى', replyTime: 'الرد خلال 48 ساعة', privateNote: 'لا يقرأ رسالتك إلا المكتب', otherWays: 'طرق أخرى للتواصل معنا', wayBoardSub: 'الأعضاء الذين يحيون الجمعية', wayJoinSub: 'انضم إلى شبكة الخريجين', wayAssociationSub: 'تاريخنا ومهامنا', sentTitle: 'تم إرسال الرسالة', sentSub: 'شكرًا! سيرد عليك أحد أعضاء المكتب قريبًا عبر البريد الإلكتروني.', sendAnother: 'إرسال رسالة أخرى', messagePlaceholder: 'أخبرنا ببضع كلمات…', emailInvalid: 'عنوان بريد إلكتروني غير صالح',
   },
   proof: {
     title: 'إثبات الدراسة في الثانوية الفرنسية', sub: 'إلزامي: كشف درجات أو شهادة مدرسية أو إفادة أو مجرد صورة تثبت دراستك في الثانوية.', pick: 'اختر ملفًا',
@@ -303,7 +303,7 @@ const ar: Dict = {
     },
     footer: {
       tagline: 'شبكة واحدة، ذاكرة واحدة، مجتمع دولي واحد.', contact: 'تواصل معنا', createAccount: 'إنشاء حساب',
-      copyright: '© {year} Amicale LFK — جمعية خريجي الثانوية الفرنسية في الكويت.', band: 'انضم إلى الرابطة',
+      copyright: '© {year} Amicale LFK — جمعية خريجي الثانوية الفرنسية في الكويت.', band: 'انضم إلى الرابطة', poweredBy: 'بدعم من',
     },
   },
   situation: {

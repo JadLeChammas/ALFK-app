@@ -12,12 +12,11 @@ import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
+import { partnerLogo, sortPartners } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /** Logos shipped with the app; any other value is an image URL. */
-const LOGOS: Record<string, number> = { lfk: require('@/assets/images/institution-lfk.png') };
-const logoSource = (logo?: string) => (logo ? (LOGOS[logo] ?? { uri: logo }) : undefined);
 
 /** Members' Partners page: institutions (admins add or remove them) and the school's leadership. */
 export function PartnersManager() {
@@ -28,7 +27,7 @@ export function PartnersManager() {
   const me = useMe();
   const admin = me.role === 'admin';
   const people = useApprovedMembers().filter((u) => u.role === 'honneur');
-  const institutions = [...db.institutions].sort((a, b) => a.order - b.order);
+  const institutions = sortPartners(db.institutions);
   const [adding, setAdding] = useState(false);
 
   return (
@@ -96,7 +95,7 @@ export function PartnersManager() {
 function InstitutionCard({ inst, onDelete }: { inst: Institution; onDelete?: () => void }) {
   const { d } = useI18n();
   const { colors } = useTheme();
-  const logo = logoSource(inst.logo);
+  const logo = partnerLogo(inst);
   return (
     <Card style={{ gap: 14, height: '100%' }}>
       <Row gap={14}>

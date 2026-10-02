@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Seo } from '@/components/Seo';
 import { View } from 'react-native';
 
 import { SiteFrame } from './site/SiteFrame';
@@ -12,6 +13,7 @@ export function PublicPage({ title, subtitle, children }: { title: string; subti
   const gutter = useGutter();
   return (
     <SiteFrame>
+      <Seo title={title || undefined} description={subtitle} />
       <View style={{ width: '100%', maxWidth: 820 + gutter * 2, alignSelf: 'center', paddingHorizontal: gutter, paddingTop: 40, gap: 28 }}>
         <View style={{ gap: 8 }}>
           <View style={{ width: 36, height: 4, borderRadius: 2, backgroundColor: colors.primary, marginBottom: 6 }} />

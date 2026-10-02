@@ -33,11 +33,12 @@ export default function Repere() {
   const [mode, setMode] = useState<'studies' | 'work'>('studies');
   const place = (u: User) => (mode === 'work' ? u.employer : u.school);
   const graduates = members.filter((u) => u.role === 'alumni' || u.role === 'admin');
+  const aliases = usePlaceAliases();
   // Exchange semesters and other universities count too, each in its own country.
   const alumni: StudyEntry<User>[] =
     mode === 'work'
       ? graduates.filter((u) => u.country && u.situation === 'working' && u.employer)
-      : studyEntries(graduates).filter((e) => e.country && (e.extra || e.situation !== 'working'));
+      : studyEntries(graduates, aliases).filter((e) => e.country && (e.extra || e.situation !== 'working'));
 
   const initialCountry = countryByCode(params.country);
   const [continent, setContinent] = useState<ContinentKey>(initialCountry?.continent ?? 'europe');
@@ -54,7 +55,6 @@ export default function Repere() {
   const countries = COUNTRIES.filter((c) => c.continent === continent && perCountry.has(c.code)).sort((a, b) => perCountry.get(b.code)!.length - perCountry.get(a.code)!.length);
   const activeCountry = country && countries.some((c) => c.code === country) ? country : countries[0]?.code ?? null;
   // Same place written differently (« ISEP », « Isep », full name…) = one entry (see data/places.ts).
-  const aliases = usePlaceAliases();
   const universities = groupByPlace(perCountry.get(activeCountry ?? '') ?? [], place, aliases);
   const [merging, setMerging] = useState<{ key: string; label: string } | null>(null);
 

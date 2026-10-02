@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import Svg, { Circle, Defs, G, Line, Path, RadialGradient, Rect, Stop, Text as SvgText } from 'react-native-svg';
 
@@ -9,6 +9,7 @@ import { useI18n } from '@/i18n';
 import { askMotionPermission, eggs } from '@/lib/eggs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
+import { useOnScreen } from './useOnScreen';
 
 /**
  * React Native port of 21st.dev "Interactive Globe" (dev.yadhakim) — the original draws on a
@@ -27,6 +28,13 @@ export type GlobeMarker = { key: string; ll: [number, number]; weight?: number; 
 type Vec = [number, number, number];
 const DEG = Math.PI / 180;
 const FPS = 30;
+/** Depth bands for the land dots, front to back: lower bound of the band, its typical depth (dot size) and opacity. */
+const BANDS = [
+  { from: 0.75, depth: 0.87, opacity: 0.85 },
+  { from: 0.5, depth: 0.62, opacity: 0.7 },
+  { from: 0.28, depth: 0.39, opacity: 0.52 },
+  { from: -1, depth: 0.14, opacity: 0.3 },
+];
 
 const toVec = (lat: number, lng: number): Vec => {
   const la = lat * DEG;
@@ -34,19 +42,11 @@ const toVec = (lat: number, lng: number): Vec => {
   return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)];
 };
 
-/** Longitude spin `phi`, then tilt `theta`; +z faces the viewer. */
-function rotate([x, y, z]: Vec, phi: number, theta: number): Vec {
-  const cp = Math.cos(phi);
-  const sp = Math.sin(phi);
-  const x1 = x * cp + z * sp;
-  const z1 = -x * sp + z * cp;
-  const ct = Math.cos(theta);
-  const st = Math.sin(theta);
-  return [x1, y * ct - z1 * st, z1 * ct + y * st];
-}
-
 const dot = (x: number, y: number, r: number) =>
   `M${(x - r).toFixed(1)},${y.toFixed(1)}a${r.toFixed(2)},${r.toFixed(2)} 0 1,0 ${(2 * r).toFixed(2)},0a${r.toFixed(2)},${r.toFixed(2)} 0 1,0 ${(-2 * r).toFixed(2)},0`;
+
+/** Web: the browser keeps vertical swipes (page scroll) and hands sideways ones to the globe. */
+const PAN_Y = (Platform.OS === 'web' ? { touchAction: 'pan-y' } : {}) as object;
 
 const shortest = (from: number, to: number) => {
   let d = (to - from) % (2 * Math.PI);
@@ -86,6 +86,7 @@ export function Globe({
   const size = fixedSize ?? Math.min(measured, maxSize);
   const onDark = tone === 'dark' || scheme === 'dark';
   const { lang, d } = useI18n();
+  const [box, onScreen] = useOnScreen();
 
   // Easter egg: shake the phone and the globe drops, then bounces back.
   const drop = useSharedValue(0);
@@ -106,7 +107,7 @@ export function Globe({
 
   const [view, setView] = useState({ phi: -35 * DEG, theta: 0.38, t: 0 });
   const focusKey = focus ? `${focus[0]},${focus[1]}` : '';
-  const live = useRef({ phi: -35 * DEG, theta: 0.38, focus: focus ?? null, focusKey, ignoredFocus: '', autoRotate, idleUntil: 0 });
+  const live = useRef({ phi: -35 * DEG, theta: 0.38, t: 0, focus: focus ?? null, focusKey, ignoredFocus: '', autoRotate, idleUntil: 0 });
   const drag = useRef({ active: false, dx: 0, dy: 0, phi0: 0, theta0: 0 });
   const start = useRef({ x: 0, y: 0 });
 
@@ -116,17 +117,20 @@ export function Globe({
     live.current.autoRotate = autoRotate;
   });
 
+  // The animation loop only runs while the globe is on screen (and the tab visible): off screen it
+  // used to re-render 30 times a second and slowed the whole page down.
   useEffect(() => {
+    if (!onScreen) return;
     let raf = 0;
     let last = performance.now();
     let lastPaint = 0;
-    let t = 0;
+    let painted = '';
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      t += dt;
       const s = live.current;
+      s.t += dt;
       const g = drag.current;
       if (g.active) {
         // Same feel as the original: 0.005 rad per dragged pixel, tilt clamped.
@@ -142,17 +146,22 @@ export function Globe({
       }
       if (now - lastPaint >= 1000 / FPS) {
         lastPaint = now;
-        setView({ phi: s.phi, theta: s.theta, t: reduced ? 0.8 : t });
+        const t = reduced ? 0.8 : s.t;
+        // Nothing moved (reduced motion, no drag): skip the render.
+        const key = `${s.phi.toFixed(4)}|${s.theta.toFixed(4)}|${t.toFixed(2)}`;
+        if (key !== painted) {
+          painted = key;
+          setView({ phi: s.phi, theta: s.theta, t });
+        }
       }
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [reduced]);
+  }, [reduced, onScreen]);
 
   type Touch = { nativeEvent: { pageX: number; pageY: number } };
-  const onGrant = (e: Touch) => {
+  const onGrant = () => {
     askMotionPermission();
-    start.current = { x: e.nativeEvent.pageX, y: e.nativeEvent.pageY };
     drag.current = { active: true, dx: 0, dy: 0, phi0: live.current.phi, theta0: live.current.theta };
   };
   const onMove = (e: Touch) => {
@@ -176,21 +185,39 @@ export function Globe({
   const rim = R / Math.sqrt(1 - limb * limb);
   const k = Math.max(0.6, size / 460); // scales the original's pixel sizes
 
+  // Rotation terms computed once per frame instead of once per dot.
+  const cp = Math.cos(phi);
+  const sp = Math.sin(phi);
+  const ct = Math.cos(theta);
+  const st = Math.sin(theta);
   const project = (v: Vec, h = 1) => {
-    const [x, y, z] = rotate(v, phi, theta);
+    const x1 = v[0] * cp + v[2] * sp;
+    const z1 = -v[0] * sp + v[2] * cp;
+    const y = v[1] * ct - z1 * st;
+    const z = z1 * ct + v[1] * st;
     const s = fov / (fov - z * R * h);
-    return { x: c + x * R * h * s, y: c - y * R * h * s, z };
+    return { x: c + x1 * R * h * s, y: c - y * R * h * s, z };
   };
 
-  // Dots — three depth bands (the canvas version sets alpha per dot).
-  const bands = ['', '', ''];
+  // Dots — depth bands (the canvas version sets alpha per dot); each band has one dot size, so the
+  // circle arcs are written once per band and every dot only adds its position.
+  const bands = BANDS.map(() => '');
   if (size > 0) {
-    for (const p of land) {
-      const q = project(p);
-      if (q.z <= limb) continue;
-      const depth = (q.z - limb) / (1 - limb);
-      const b = depth > 0.6 ? 0 : depth > 0.28 ? 1 : 2;
-      bands[b] += dot(q.x, q.y, (1 + depth * 0.8) * 0.72 * k);
+    const tails = BANDS.map(({ depth }) => {
+      const r = (1 + depth * 0.8) * 0.72 * k;
+      return { r, tail: `a${r.toFixed(2)},${r.toFixed(2)} 0 1,0 ${(2 * r).toFixed(2)},0a${r.toFixed(2)},${r.toFixed(2)} 0 1,0 ${(-2 * r).toFixed(2)},0` };
+    });
+    for (const v of land) {
+      const x1 = v[0] * cp + v[2] * sp;
+      const z1 = -v[0] * sp + v[2] * cp;
+      const z = z1 * ct + v[1] * st;
+      if (z <= limb) continue;
+      const y = v[1] * ct - z1 * st;
+      const s = fov / (fov - z * R);
+      const depth = (z - limb) / (1 - limb);
+      let b = 0;
+      while (b < BANDS.length - 1 && depth <= BANDS[b].from) b++;
+      bands[b] += `M${(c + x1 * R * s - tails[b].r).toFixed(1)},${(c - y * R * s).toFixed(1)}${tails[b].tail}`;
     }
   }
 
@@ -266,10 +293,19 @@ export function Globe({
   return (
     <Animated.View style={[{ alignSelf: 'center', width: fixedSize ?? '100%', maxWidth: maxSize }, fall]}>
     <View
-      style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, style]}
+      ref={box}
+      style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, PAN_Y, style]}
       onLayout={fixedSize ? undefined : (e) => setMeasured(e.nativeEvent.layout.width)}
-      onStartShouldSetResponder={() => true}
-      onMoveShouldSetResponder={() => true}
+      // Only a sideways drag turns the globe: a vertical swipe over it keeps scrolling the page (phones).
+      onStartShouldSetResponderCapture={(e: Touch) => {
+        start.current = { x: e.nativeEvent.pageX, y: e.nativeEvent.pageY };
+        return false;
+      }}
+      onMoveShouldSetResponder={(e: Touch) => {
+        const dx = e.nativeEvent.pageX - start.current.x;
+        const dy = e.nativeEvent.pageY - start.current.y;
+        return Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy);
+      }}
       onResponderTerminationRequest={() => false}
       onResponderGrant={onGrant}
       onResponderMove={onMove}
@@ -278,9 +314,9 @@ export function Globe({
       {size > 0 && (
         <Svg width={size} height={size}>
           <Circle cx={c} cy={c} r={rim} fill="none" stroke={onDark ? 'rgba(231, 236, 242,0.14)' : 'rgba(14, 42, 71,0.1)'} strokeWidth={1} />
-          <Path d={bands[2]} fill={dotFill} opacity={0.3} />
-          <Path d={bands[1]} fill={dotFill} opacity={0.55} />
-          <Path d={bands[0]} fill={dotFill} opacity={onDark ? 0.9 : 0.85} />
+          {BANDS.map((band, b) => (
+            <Path key={b} d={bands[b]} fill={dotFill} opacity={b === 0 && onDark ? 0.9 : band.opacity} />
+          )).reverse()}
           {arcEls}
           {markerEls}
           {originEl}

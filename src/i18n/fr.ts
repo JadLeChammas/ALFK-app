@@ -24,7 +24,7 @@ const fr = {
   },
   time: { justNow: 'à l’instant', minutesAgo: 'il y a {n} min' },
   errors: { saveFailed: 'La modification n’a pas pu être enregistrée : {msg}' },
-  common: {
+  common: { typeToConfirm: 'Pour confirmer, écrivez le nom complet ci-dessous :',
     search: 'Rechercher', seeAll: 'Voir tout', see: 'Voir', save: 'Enregistrer', cancel: 'Annuler', delete: 'Supprimer',
     confirm: 'Confirmer', edit: 'Modifier', close: 'Fermer', send: 'Envoyer', add: 'Ajouter', create: 'Créer', done: 'Terminé',
     members: '{n} membres', member: '{n} membre', promo: 'Promo LFK {year}', today: "Aujourd'hui", tomorrow: 'Demain',
@@ -79,7 +79,7 @@ const fr = {
     title: 'Annuaire', subtitle: 'Retrouvez les membres de la communauté par Promo LFK, pays ou recherche.',
     searchPlaceholder: 'Rechercher par nom, Promo LFK, pays ou école…', filterPromo: 'Promo LFK', filterCountry: 'Pays', filterSchool: 'École',
     allPromos: 'Toutes les Promos LFK', allCountries: 'Tous les pays', seePromo: 'Voir la Promo LFK', results: '{n} résultats',
-    honorary: 'Direction du lycée', noPromo: 'Sans Promo LFK', jumpTo: 'Aller à',
+    honorary: 'Direction du lycée', noPromo: 'Sans Promo LFK', jumpTo: 'Aller à', filters: 'Filtres', clearAll: 'Tout effacer', showResults: 'Voir {n} membres',
   },
   promo: {
     title: 'Promo LFK {year}', whatsapp: 'Rejoindre le groupe WhatsApp', noWhatsapp: 'Pas encore de groupe WhatsApp',
@@ -182,7 +182,7 @@ const fr = {
   legal: {
     title: 'Mentions légales', sitemap: 'Plan du site', privacy: 'Politique de confidentialité', privacyUpdated: 'Dernière mise à jour : 30 septembre 2026', notFound: 'Page introuvable', notFoundSub: "Cette page n'existe pas ou a été déplacée.",
     goHome: "Retour à l'accueil", contactTitle: 'Nous contacter', contactSub: "Une question ? L'équipe de l'Amicale vous répond.",
-    subject: 'Objet', message: 'Message', name: 'Nom', sent: 'Message envoyé, merci !',
+    subject: 'Objet', message: 'Message', name: 'Nom', sent: 'Message envoyé, merci !', contactLead: 'Adhésion, événements, partenariat ou simple question : écrivez-nous, un membre du bureau vous répond.', topic: 'Sujet', topicMembership: 'Adhésion', topicEvents: 'Événements', topicPartnership: 'Partenariat', topicOrientation: 'Orientation', topicOther: 'Autre', replyTime: 'Réponse sous 48 h', privateNote: 'Seul le bureau lit votre message', otherWays: 'Autres façons de nous joindre', wayBoardSub: 'Les membres qui font vivre l’Amicale', wayJoinSub: 'Rejoindre le réseau des anciens', wayAssociationSub: 'Notre histoire et nos missions', sentTitle: 'Message envoyé', sentSub: 'Merci ! Un membre du bureau vous répond très vite, par e-mail.', sendAnother: 'Envoyer un autre message', messagePlaceholder: 'Dites-nous en quelques mots…', emailInvalid: 'Adresse e-mail invalide',
   },
   proof: {
     title: 'Justificatif de scolarité au LFK', sub: 'Obligatoire : bulletin scolaire, certificat de scolarité, attestation ou simple photo prouvant votre passage au LFK.', pick: 'Choisir un fichier',
@@ -301,7 +301,7 @@ const fr = {
     },
     footer: {
       tagline: 'Un réseau, une mémoire, une communauté internationale.', contact: 'Nous contacter', createAccount: 'Créer un compte',
-      copyright: '© {year} Amicale LFK — Association des anciens élèves du Lycée Français de Koweït.', band: 'Rejoindre l\'Amicale',
+      copyright: '© {year} Amicale LFK — Association des anciens élèves du Lycée Français de Koweït.', band: 'Rejoindre l\'Amicale', poweredBy: 'Propulsé par',
     },
   },
   situation: {

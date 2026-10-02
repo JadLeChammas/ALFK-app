@@ -1,14 +1,16 @@
 import { Feather } from '@expo/vector-icons';
+import { Seo } from '@/components/Seo';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Platform, View } from 'react-native';
 
+import { Marquee } from '@/components/fx/Marquee';
 import { WorldMap } from '@/components/fx/WorldMap';
 import { BigStatement, ClosingCta, EditorialTestimonial, GlobeCard, RuleColumns, StatsRow, UniversityRibbon, useDestinationMarkers, useQuoteCards } from '@/components/site/blocks';
 import { PillarSlider, type PillarSlide } from '@/components/site/PillarSlider';
 import { Container, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Flag } from '@/components/ui/Flag';
-import { Button } from '@/components/ui/primitives';
+import { Button, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { useCommunity } from '@/data/community';
 import { usePublicOverview } from '@/data/public';
@@ -16,12 +18,12 @@ import { IMAGES } from '@/data/seed';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useDemoVisible } from '@/data/demoSetting';
+import { partnerLogo } from '@/data/partners';
 import { enterDemo } from '@/lib/supabase';
 import { useLayout } from '@/theme/layout';
 import { brand, fonts, radius } from '@/theme/tokens';
 
 const campus = require('@/assets/images/lfk-campus.png');
-const LOGOS: Record<string, number> = { lfk: require('@/assets/images/institution-lfk.png') };
 
 /**
  * Public landing page of the association — what signed-out visitors see first.
@@ -49,6 +51,7 @@ export default function Landing() {
 
   return (
     <SiteFrame overlay>
+      <Seo />
       <PillarSlider slides={slides} />
 
       <UniversityRibbon />
@@ -111,32 +114,45 @@ function Destinations() {
   );
 }
 
-/** Partner institutions (only those that agreed to appear — managed by the admins). */
+/**
+ * Partner institutions (only those that agreed to appear — managed by the admins) on an endless,
+ * auto-scrolling strip (21st.dev « Logo Cloud Marquee »). It reads the live partner list, so a
+ * partner added by an admin joins the carousel by itself; Hi Dev Mobile Inc stays last in the order.
+ */
 function Partners() {
   const t = useTone();
   const { d } = useI18n();
   const { isDesktop } = useLayout();
   const { institutions } = usePublicOverview();
   if (!institutions.length) return null;
-  return (
-    <Container style={{ paddingVertical: 48, flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'center' : 'flex-start', gap: isDesktop ? 48 : 20 }}>
-      <Txt style={{ fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: t.muted }}>{d.site.partners.eyebrow}</Txt>
+  const label = (
+    <Txt style={{ fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: t.muted }}>{d.site.partners.eyebrow}</Txt>
+  );
+  const strip = (
+    <Marquee fade={t.bg} speed={34} gap={56}>
       {institutions.map((p) => {
-        const logo = p.logo ? (LOGOS[p.logo] ?? { uri: p.logo }) : undefined;
+        const logo = partnerLogo(p);
         return (
-          <View key={p.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            {logo ? (
-              <View style={{ width: 36, height: 36, borderRadius: radius.input, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                <Image source={logo} style={{ width: 30, height: 30 }} contentFit="contain" />
-              </View>
-            ) : (
-              <Feather name="home" size={22} color={t.fg} />
-            )}
-            <Txt style={{ fontFamily: fonts.serif, fontSize: 24, color: t.fg }}>{p.name}</Txt>
-          </View>
+          <Tap key={p.id} onPress={() => router.push('/partenaires')} accessibilityLabel={p.name} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, height: 64 }} hoverStyle={{ opacity: 0.8 }}>
+            <View style={{ width: 44, height: 44, borderRadius: radius.input, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+              {logo ? <Image source={logo} style={{ width: 34, height: 34 }} contentFit="contain" /> : <Feather name="home" size={20} color={brand.navy} />}
+            </View>
+            <Txt numberOfLines={1} style={{ fontFamily: fonts.serif, fontSize: 26, color: t.fg }}>{p.name}</Txt>
+          </Tap>
         );
       })}
+    </Marquee>
+  );
+  return isDesktop ? (
+    <Container style={{ paddingVertical: 40, flexDirection: 'row', alignItems: 'center', gap: 40 }}>
+      {label}
+      <View style={{ flex: 1, minWidth: 0 }}>{strip}</View>
     </Container>
+  ) : (
+    <View style={{ paddingVertical: 32, gap: 14 }}>
+      <Container>{label}</Container>
+      {strip}
+    </View>
   );
 }
 

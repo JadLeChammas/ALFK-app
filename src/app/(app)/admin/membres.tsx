@@ -57,7 +57,7 @@ export default function ManageMembers() {
     if ((await run(u)) !== true) setEditing(u);
   };
   const remove = async (u: User) => {
-    if (await confirm({ title: d.admin.deleteUser, message: f(d.admin.deleteUserConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.common.delete })) {
+    if (await confirm({ title: d.admin.deleteUser, message: f(d.admin.deleteUserConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.common.delete, typeToConfirm: fullName(u) })) {
       const r = await actions.deleteUser(u.id);
       if (!r.ok) toast(d.auth.errors.unknown, 'danger');
       setEditing(null);

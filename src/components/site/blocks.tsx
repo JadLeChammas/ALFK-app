@@ -17,6 +17,7 @@ import { TextRoll } from '@/components/fx/TextRoll';
 import { Flag } from '@/components/ui/Flag';
 import { Button, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
+import { useUniLogo } from '@/data/uniLogos';
 import { useCommunity, usePublishedQuotes } from '@/data/community';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -359,17 +360,46 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
     { v: c.universities, l: d.site.home.statUniversities },
     { v: c.nationalities, l: d.site.home.statNationalities },
   ];
+  const [w, setW] = useState(0);
+  const rule = light ? 'rgba(231, 236, 242,0.2)' : t.rule;
+  const figure = (it: { v: number; l: string }, i: number, size: number) => (
+    <>
+      <TextRoll style={{ fontFamily: fonts.display, fontSize: size, lineHeight: size + 4, color: fg }} delay={0.1 + i * 0.15}>
+        {String(it.v)}
+      </TextRoll>
+      <Txt numberOfLines={2} style={{ fontFamily: fonts.medium, fontSize: dense || isMobile ? 10 : 11, lineHeight: dense || isMobile ? 13 : 15, letterSpacing: dense || isMobile ? 0.8 : 1.2, textTransform: 'uppercase', textAlign: 'center', color: light ? brand.sky : t.muted }}>
+        {it.l}
+      </Txt>
+    </>
+  );
+
+  // The figures measure their own space: one row of equal columns when they all fit (≥ 112 px
+  // each), otherwise an even grid — three on the first row, the rest sharing the next ones — so a
+  // figure is never left alone on a line. Numbers are centred over their labels, hairlines between.
+  const fitsOneRow = !isMobile && w >= list.length * (dense ? 104 : 120);
+  const rows: (typeof list)[] = [];
+  if (fitsOneRow) rows.push(list);
+  else {
+    for (let k = 0; k < list.length; ) {
+      const left = list.length - k;
+      const take = left === 4 ? 2 : Math.min(3, left);
+      rows.push(list.slice(k, k + take));
+      k += take;
+    }
+  }
+  const size = isMobile ? 36 : dense ? 42 : 52;
+  let n = 0;
   return (
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 16 }}>
-      {list.map((it, i) => (
-        <View key={it.l} style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {i > 0 && !(isMobile && i % 2 === 0) && <View style={{ width: 1, height: 36, backgroundColor: light ? 'rgba(231, 236, 242,0.25)' : t.rule, marginHorizontal: isMobile || dense ? 14 : 24 }} />}
-          <View style={{ minWidth: isMobile ? 110 : undefined }}>
-            <TextRoll style={{ fontFamily: fonts.display, fontSize: isMobile ? 40 : dense ? 44 : 52, lineHeight: isMobile ? 44 : dense ? 48 : 56, color: fg }} delay={0.1 + i * 0.15}>
-              {String(it.v)}
-            </TextRoll>
-            <Txt style={{ fontFamily: fonts.medium, fontSize: dense ? 10 : 11, letterSpacing: dense ? 0.8 : 1.2, textTransform: 'uppercase', color: light ? brand.sky : t.muted }}>{it.l}</Txt>
-          </View>
+    <View onLayout={(e) => setW(e.nativeEvent.layout.width)} style={{ opacity: w ? 1 : 0, borderTopWidth: fitsOneRow ? 0 : 1, borderBottomWidth: fitsOneRow ? 0 : 1, borderColor: rule }}>
+      {rows.map((row, r) => (
+        <View key={r} style={{ flexDirection: 'row', borderTopWidth: r ? 1 : 0, borderTopColor: rule }}>
+          {row.map((it, k) => (
+            <View
+              key={it.l}
+              style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4, paddingVertical: fitsOneRow ? 4 : 14, paddingHorizontal: 4, borderLeftWidth: k ? 1 : 0, borderLeftColor: rule }}>
+              {figure(it, n++, size)}
+            </View>
+          ))}
         </View>
       ))}
     </View>
@@ -447,11 +477,23 @@ function RibbonInner({ caption, schools }: { caption: string; schools: { name: s
       <Marquee fade={t.bg} speed={30} gap={56}>
         {schools.map((s) => (
           <View key={s.name} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, height: 44 }}>
+            <UniLogo name={s.name} />
             {s.country && <Flag code={s.country} size={13} />}
             <Txt style={{ fontFamily: fonts.serif, fontSize: 26, color: t.fg }} numberOfLines={1}>{s.name}</Txt>
           </View>
         ))}
       </Marquee>
+    </View>
+  );
+}
+
+/** A university's logo, found automatically (data/uniLogos.ts); nothing is shown until one is found. */
+function UniLogo({ name }: { name: string }) {
+  const url = useUniLogo(name);
+  if (!url) return null;
+  return (
+    <View style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <Image source={{ uri: url }} style={{ width: 26, height: 26 }} contentFit="contain" transition={200} accessibilityIgnoresInvertColors />
     </View>
   );
 }

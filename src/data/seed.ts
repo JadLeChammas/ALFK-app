@@ -12,7 +12,7 @@ export const DEMO_ACCOUNTS = {
   direction: 'direction@amicale-lfk.demo',
 };
 
-const img = (id: string, w = 1200) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
+const img = (id: string, w = 1200) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=78`;
 export const IMAGES = {
   party: img('1492684223066-81342ee5ff30'),
   conference: img('1540575467063-178a50c2df87'),
@@ -389,6 +389,8 @@ export function createSeed(now = new Date()): Db {
   const institutions: Db['institutions'] = [
     { id: 'inst-lfk', order: 1, name: 'Lycée Français du Koweït', logo: 'lfk', website: 'https://www.lfkoweit.edu.kw',
       description: "L'établissement où tout a commencé : l'Amicale réunit ses anciens élèves et reste liée à sa direction, à ses équipes et à ses élèves." },
+    { id: 'inst-hidev', order: 1000, name: 'Hi Dev Mobile Inc', logo: 'hidev', website: 'https://www.hidevmobile.com',
+      description: "Studio de développement mobile et web, partenaire technique de l'Amicale : conception et développement de la plateforme ALFK." },
   ];
 
   // Anonymous questions from students (the author is only visible to admins), answered by alumni.

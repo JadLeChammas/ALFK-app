@@ -8,7 +8,7 @@ import { useI18n } from '@/i18n';
 
 /**
  * Privacy policy — public URL required by Google Play and the App Store
- * (https://alfk-app.vercel.app/confidentialite). Also documents account deletion.
+ * (https://alfk.org/confidentialite). Also documents account deletion.
  */
 
 type Section = [string, string];

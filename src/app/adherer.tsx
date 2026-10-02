@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { Seo } from '@/components/Seo';
 import { View } from 'react-native';
 
 import { Accordion, ClosingCta, EditorialImageHero, RuleColumns } from '@/components/site/blocks';
@@ -23,6 +24,7 @@ export default function Join() {
 
   return (
     <SiteFrame overlay>
+      <Seo title={d.site.nav.join} description={j.sub} />
       <EditorialImageHero
         tagline={j.eyebrow}
         title={`${j.title} ${j.italic}`}

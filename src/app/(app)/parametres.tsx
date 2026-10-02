@@ -8,7 +8,7 @@ import { Flag } from '@/components/ui/Flag';
 import { Card, ListRow, Row, Switch, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { useMe, useStore } from '@/data/store';
+import { fullName, useMe, useStore } from '@/data/store';
 import { LANGUAGES, useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme, type ThemePreference } from '@/theme/ThemeProvider';
@@ -139,7 +139,7 @@ export default function Settings() {
           danger
           last
           onPress={async () => {
-            if (await confirm({ title: d.settings.deleteAccount, message: d.settings.deleteAccountHint, danger: true, confirmLabel: d.common.delete })) {
+            if (await confirm({ title: d.settings.deleteAccount, message: d.settings.deleteAccountHint, danger: true, confirmLabel: d.common.delete, typeToConfirm: fullName(me) })) {
               const r = await actions.deleteMyAccount();
               if (!r.ok) toast(d.auth.errors.unknown, 'danger');
             }

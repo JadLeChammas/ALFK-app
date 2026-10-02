@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { Seo } from '@/components/Seo';
 import { Link, router } from 'expo-router';
 import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
@@ -13,13 +14,13 @@ import { useRetroTaps } from '@/lib/retro';
 import { Globe } from './fx/Globe';
 import { useDestinationMarkers } from './site/blocks';
 import { PublicSettingsButton } from './site/PublicSettings';
-import { LogoFull, LogoMark } from './ui/Logo';
+import { Logo } from './ui/Logo';
 import { Row, Tap } from './ui/primitives';
 import { Txt } from './ui/Txt';
 
 /** Split layout for auth screens: navy panel with the spinning globe on desktop, compact header on mobile. */
 export function AuthFrame({ title, subtitle, children, footer }: { title: string; subtitle?: string; children: ReactNode; footer?: ReactNode }) {
-  const { colors } = useTheme();
+  const { colors, scheme } = useTheme();
   const { d } = useI18n();
   const { me } = useStore();
   const { isDesktop } = useLayout();
@@ -45,8 +46,8 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
         <PublicSettingsButton />
       </Row>
       {!isDesktop && (
-        <Tap onPress={logoTap} style={{ alignItems: 'center', gap: 12, marginBottom: 8 }}>
-          <LogoFull size={130} />
+        <Tap onPress={logoTap} accessibilityLabel={d.nav.home} style={{ alignItems: 'center', marginBottom: 8 }}>
+          <Logo height={72} onDark={scheme === 'dark'} />
         </Tap>
       )}
       <View style={{ gap: 8 }}>
@@ -66,15 +67,12 @@ export function AuthFrame({ title, subtitle, children, footer }: { title: string
 
   return (
     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: colors.bg }}>
+      <Seo title={title} description={subtitle} />
       {isDesktop && (
         <View style={{ flex: 1.05, margin: 16, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: brand.navy }}>
           <View style={{ flex: 1, padding: 48, justifyContent: 'space-between', gap: 24 }}>
-            <Tap onPress={logoTap} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, alignSelf: 'flex-start' }}>
-              <LogoMark size={48} />
-              <View>
-                <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 24, lineHeight: 26 }}>{d.app.name}</Txt>
-                <Txt style={{ color: brand.sky, fontFamily: fonts.medium, fontSize: 10, letterSpacing: 1.6 }}>ALFK · KOWEÏT</Txt>
-              </View>
+            <Tap onPress={logoTap} accessibilityLabel={d.nav.home} style={{ alignSelf: 'flex-start' }}>
+              <Logo height={64} onDark />
             </Tap>
             <View style={{ flex: 1, justifyContent: 'center' }}>
               <Globe tone="dark" markers={markers} maxSize={440} />

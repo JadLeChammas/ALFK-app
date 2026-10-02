@@ -8,7 +8,7 @@
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://xirmnclncldwlnyufaxt.supabase.co",
         "EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_8lEcgNJHZ3gNXWghMPDtjA_iB9Ok2gy",
-        "EXPO_PUBLIC_API_URL": "https://alfk-app.vercel.app"
+        "EXPO_PUBLIC_API_URL": "https://www.alfk.org"
       }
     },
     "preview": {

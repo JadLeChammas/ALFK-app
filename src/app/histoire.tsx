@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { Seo } from '@/components/Seo';
 import { View } from 'react-native';
 
 import { EditorialImageHero } from '@/components/site/blocks';
@@ -7,7 +8,7 @@ import { Section, SerifHeading, SiteFrame, useTone } from '@/components/site/Sit
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { useLfkStory, type FunFact, type StoryEvent } from '@/data/lfkStory';
-import { IMAGES } from '@/data/seed';
+import { PHOTOS } from '@/data/photos';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -23,11 +24,12 @@ export default function LfkStoryPage() {
 
   return (
     <SiteFrame overlay>
+      <Seo title={h.title} description={h.sub} />
       <EditorialImageHero
         tagline={h.eyebrow}
         title={h.title}
         description={story.intro?.trim() || h.sub}
-        image={IMAGES.students}
+        image={PHOTOS.kuwaitTowersDusk.uri}
         primary={admin ? { label: h.edit, onPress: () => router.push('/admin/histoire' as never) } : undefined}
         secondary={{ label: d.site.nav.association, onPress: () => router.push('/association') }}
       />

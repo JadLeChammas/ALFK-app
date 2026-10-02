@@ -26,7 +26,7 @@ const ja: Dict = {
   },
   time: { justNow: 'たった今', minutesAgo: '{n}分前' },
   errors: { saveFailed: '変更を保存できませんでした：{msg}' },
-  common: {
+  common: { typeToConfirm: '確認のため、下に氏名を入力してください:',
     search: '検索', seeAll: 'すべて表示', see: '表示', save: '保存', cancel: 'キャンセル', delete: '削除',
     confirm: '確認', edit: '編集', close: '閉じる', send: '送信', add: '追加', create: '作成', done: '完了',
     members: 'メンバー{n}人', member: 'メンバー{n}人', promo: 'LFK {year}年卒', today: '今日', tomorrow: '明日',
@@ -81,7 +81,7 @@ const ja: Dict = {
     title: '名簿', subtitle: 'LFK学年、国、または検索でメンバーを探せます。',
     searchPlaceholder: '名前、LFK学年、国、学校で検索…', filterPromo: 'LFK学年', filterCountry: '国', filterSchool: '学校',
     allPromos: 'すべてのLFK学年', allCountries: 'すべての国', seePromo: 'LFK学年を見る', results: '{n}件',
-    honorary: '学校管理職', noPromo: 'LFK学年なし', jumpTo: '移動',
+    honorary: '学校管理職', noPromo: 'LFK学年なし', jumpTo: '移動', filters: 'フィルター', clearAll: 'すべてクリア', showResults: '{n}人のメンバーを表示',
   },
   promo: {
     title: 'LFK {year}年卒', whatsapp: 'WhatsAppグループに参加', noWhatsapp: 'WhatsAppグループはまだありません',
@@ -184,7 +184,7 @@ const ja: Dict = {
   legal: {
     title: '法的表示', sitemap: 'サイトマップ', privacy: 'プライバシーポリシー', privacyUpdated: '最終更新日：2026年9月30日', notFound: 'ページが見つかりません', notFoundSub: 'このページは存在しないか、移動しました。',
     goHome: 'ホームに戻る', contactTitle: 'お問い合わせ', contactSub: 'ご質問がありますか？同窓会のチームがお答えします。',
-    subject: '件名', message: 'メッセージ', name: 'お名前', sent: 'メッセージを送信しました。ありがとうございます！',
+    subject: '件名', message: 'メッセージ', name: 'お名前', sent: 'メッセージを送信しました。ありがとうございます！', contactLead: '入会、イベント、パートナーシップ、またはちょっとした質問など、お気軽にご連絡ください。役員がお答えします。', topic: '件名', topicMembership: '入会', topicEvents: 'イベント', topicPartnership: 'パートナーシップ', topicOrientation: '進路', topicOther: 'その他', replyTime: '48時間以内に返信', privateNote: 'メッセージは役員のみが読みます', otherWays: 'その他の連絡方法', wayBoardSub: 'アミカルを支えるメンバー', wayJoinSub: '卒業生ネットワークに参加', wayAssociationSub: '私たちの歩みと使命', sentTitle: '送信しました', sentSub: 'ありがとうございます！役員より近日中にメールでご返信します。', sendAnother: '別のメッセージを送る', messagePlaceholder: '簡単にご記入ください…', emailInvalid: 'メールアドレスが無効です',
   },
   proof: {
     title: 'LFK の在籍証明書類', sub: '必須：成績表、在学証明書、証明書、または LFK に在籍していたことがわかる写真。', pick: 'ファイルを選択',
@@ -303,7 +303,7 @@ const ja: Dict = {
     },
     footer: {
       tagline: 'ひとつのネットワーク、ひとつの記憶、ひとつの国際コミュニティ。', contact: 'お問い合わせ', createAccount: 'アカウントを作成',
-      copyright: '© {year} Amicale LFK — クウェート・フランス人学校 同窓会。', band: 'Amicale に参加する',
+      copyright: '© {year} Amicale LFK — クウェート・フランス人学校 同窓会。', band: 'Amicale に参加する', poweredBy: '制作',
     },
   },
   situation: {

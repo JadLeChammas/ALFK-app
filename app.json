@@ -5,21 +5,21 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "amicalelfk",
+    "scheme": "alfk",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "bundleIdentifier": "com.amicalelfk.app",
+      "bundleIdentifier": "org.alfk.app",
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#000000",
+        "backgroundColor": "#F8FAFC",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.amicalelfk.app",
+      "package": "org.alfk.app",
       "blockedPermissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
@@ -33,16 +33,17 @@
     "web": {
       "output": "single",
       "favicon": "./assets/images/favicon.png",
-      "name": "Amicale LFK",
-      "shortName": "Amicale LFK",
-      "themeColor": "#2E45D6"
+      "name": "ALFK Alumni — Amicale des anciens élèves du Lycée Français de Koweït",
+      "shortName": "ALFK Alumni",
+      "themeColor": "#0E2A47",
+      "lang": "fr"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#00206A",
+          "backgroundColor": "#0E2A47",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200
         }

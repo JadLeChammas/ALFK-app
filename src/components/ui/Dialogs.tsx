@@ -8,7 +8,11 @@ import { radius, space } from '@/theme/tokens';
 import { Button, Input } from './primitives';
 import { Txt } from './Txt';
 
-type ConfirmOpts = { title: string; message?: string; confirmLabel?: string; danger?: boolean };
+/** `typeToConfirm`: the confirm button stays disabled until this text (e.g. a full name) is typed. */
+type ConfirmOpts = { title: string; message?: string; confirmLabel?: string; danger?: boolean; typeToConfirm?: string };
+
+/** Case-, accent- and spacing-insensitive comparison for the type-to-confirm field. */
+const loose = (v: string) => v.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
 type PromptOpts = ConfirmOpts & { placeholder?: string; initial?: string; secure?: boolean; multiline?: boolean };
 
 type DialogState =
@@ -33,7 +37,14 @@ export function DialogProvider({ children }: { children: ReactNode }) {
   const [opacity] = useState(() => new Animated.Value(0));
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const confirm = useCallback((o: ConfirmOpts) => new Promise<boolean>((resolve) => setDialog({ kind: 'confirm', resolve, ...o })), []);
+  const confirm = useCallback(
+    (o: ConfirmOpts) =>
+      new Promise<boolean>((resolve) => {
+        setValue('');
+        setDialog({ kind: 'confirm', resolve, ...o });
+      }),
+    []
+  );
   const prompt = useCallback(
     (o: PromptOpts) =>
       new Promise<string | null>((resolve) => {
@@ -80,6 +91,24 @@ export function DialogProvider({ children }: { children: ReactNode }) {
               <Txt variant="h2">{dialog?.title}</Txt>
               {dialog?.message && <Txt color="textMuted">{dialog.message}</Txt>}
             </View>
+            {dialog?.kind === 'confirm' && dialog.typeToConfirm && (
+              <View style={{ gap: 10 }}>
+                <Txt variant="small" color="textMuted">{d.common.typeToConfirm}</Txt>
+                <View style={{ alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.input, backgroundColor: colors.dangerSoft, borderWidth: 1, borderColor: colors.danger }}>
+                  <Txt selectable variant="bodyStrong" style={{ color: colors.danger }}>{dialog.typeToConfirm}</Txt>
+                </View>
+                <Input
+                  autoFocus
+                  value={value}
+                  onChangeText={setValue}
+                  placeholder={dialog.typeToConfirm}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  accessibilityLabel={d.common.typeToConfirm}
+                  onSubmitEditing={() => loose(value) === loose(dialog.typeToConfirm ?? '') && close(true)}
+                />
+              </View>
+            )}
             {dialog?.kind === 'prompt' && (
               <Input
                 autoFocus
@@ -97,7 +126,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                 label={dialog?.confirmLabel ?? d.common.confirm}
                 variant={dialog?.danger ? 'danger' : 'primary'}
                 onPress={() => close(true)}
-                disabled={dialog?.kind === 'prompt' && !value.trim()}
+                disabled={(dialog?.kind === 'prompt' && !value.trim()) || (dialog?.kind === 'confirm' && !!dialog.typeToConfirm && loose(value) !== loose(dialog.typeToConfirm))}
               />
             </View>
           </Pressable>

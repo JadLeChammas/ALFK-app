@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { MaskedText } from '@/components/fx/MaskedText';
 import { AppShell } from '@/components/shell/AppShell';
-import { LogoMark } from '@/components/ui/Logo';
+import { Logo, LogoMark } from '@/components/ui/Logo';
 import { Button, Tap, type IconName } from '@/components/ui/primitives';
 import { useGutter } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
@@ -15,9 +15,10 @@ import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
-import { brand, fonts, radius } from '@/theme/tokens';
+import { brand, fonts } from '@/theme/tokens';
 import { useRetroTaps } from '@/lib/retro';
 import { rollCredits } from '@/components/EasterEggs';
+import { HiDevCredit } from './HiDevCredit';
 import { PublicSettingsButton } from './PublicSettings';
 import { Reveal } from './Reveal';
 
@@ -137,7 +138,7 @@ function PageWipe() {
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
       <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: brand.red }, under]} />
       <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: brand.navy, alignItems: 'center', justifyContent: 'center' }, top]}>
-        <LogoMark size={56} />
+        <LogoMark size={72} onDark />
       </Animated.View>
     </View>
   );
@@ -221,9 +222,8 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
   return (
     <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, paddingTop: insets.top, zIndex: 10 }, bar]}>
       <Container style={{ height: HEADER_H, flexDirection: 'row', alignItems: 'center', gap: isDesktop ? 24 : 10 }}>
-        <Tap onPress={logoTap} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: isDesktop ? undefined : 1 }}>
-          <LogoMark size={30} />
-          <Txt numberOfLines={1} style={{ fontFamily: fonts.serif, fontSize: isDesktop ? 22 : 20, lineHeight: 26, color: '#fff', flexShrink: 1 }}>{d.app.name}</Txt>
+        <Tap onPress={logoTap} accessibilityLabel={d.nav.home} style={{ flexDirection: 'row', alignItems: 'center', flex: isDesktop ? undefined : 1 }}>
+          <Logo height={isDesktop ? 48 : 42} onDark />
         </Tap>
         {isDesktop && (
           <View style={{ flex: 1, flexDirection: 'row', gap: 28 }}>
@@ -274,67 +274,92 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
 }
 
 /**
- * Port of 21st.dev "Footer with Suite" (scrollxui): two columns of small uppercase tracked
- * links, an oversized wordmark spanning the width, and a thin bottom bar.
+ * Port of 21st.dev « Agency Footer » (shadcnspace footer-01): a brand column (logo, tagline,
+ * call to action) next to grouped link columns, a hairline, then the bar with the legal links,
+ * copyright and credit. Phones first: full-width stacked buttons, two tight link columns,
+ * legal links as one small row. A huge, faint « ALFK » in the logo's wide tracking closes the page.
  */
 function SiteFooter() {
   const { d, f } = useI18n();
-  const { width, isMobile } = useLayout();
+  const { width, isMobile, isDesktop } = useLayout();
+  const { me } = useStore();
   const links = useSiteLinks();
-  const gutter = useGutter();
-  const nav = links.slice(1).map((l) => ({ label: l.label, href: l.href }));
-  const more = [
-    { label: d.auth.signUp, href: '/inscription' },
-    { label: d.nav.contact, href: '/contact' },
+  const groups = [
+    { title: d.site.nav.association, links: links.slice(1).map((l) => ({ label: l.label, href: l.href })) },
+    {
+      title: d.nav.more,
+      links: [
+        me ? { label: d.site.nav.mySpace, href: '/' } : { label: d.site.nav.signIn, href: '/connexion' },
+        ...(me ? [] : [{ label: d.auth.signUp, href: '/inscription' }]),
+        { label: d.nav.contact, href: '/contact' },
+      ],
+    },
+  ];
+  const legal = [
     { label: d.nav.legal, href: '/mentions-legales' },
+    { label: d.legal.privacy, href: '/confidentialite' },
     { label: d.nav.sitemap, href: '/plan-du-site' },
   ];
-  const upper = { fontFamily: fonts.medium, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase' as const, lineHeight: 20 };
-  const wordSize = Math.max(48, Math.min(208, width * 0.13));
-  const rule = 'rgba(231, 236, 242,0.15)';
+  const muted = 'rgba(231, 236, 242,0.68)';
+  const rule = 'rgba(231, 236, 242,0.14)';
+  const giant = Math.max(96, Math.min(300, width * 0.2));
 
   return (
     <View style={{ backgroundColor: brand.navy, overflow: 'hidden' }}>
-      <Container style={{ flexDirection: 'row', gap: 32, paddingTop: 56, paddingBottom: 16 }}>
-        <View style={{ flex: 1 }}>
-          {nav.map((l) => (
-            <Link key={l.href} href={l.href as never}>
-              <Txt style={[upper, { color: '#fff' }]}>{l.label}</Txt>
-            </Link>
-          ))}
-          <View style={{ height: 20 }} />
-          {more.map((l) => (
-            <Link key={l.href} href={l.href as never}>
-              <Txt style={[upper, { color: brand.sky }]}>{l.label}</Txt>
-            </Link>
-          ))}
-        </View>
-        <View style={{ flex: 1, gap: 16 }}>
-          <Txt style={[upper, { color: '#fff' }]}>{d.app.long}</Txt>
-          <Txt style={[upper, { color: brand.sky }]}>{d.site.footer.tagline}</Txt>
-          <Link href="/contact">
-            <Txt style={[upper, { color: '#FF8A8C' }]}>{d.site.footer.contact} &rarr;</Txt>
-          </Link>
-          <Txt style={[upper, { color: 'rgba(231, 236, 242,0.6)' }]} onPress={rollCredits} suppressHighlighting>{f(d.site.footer.copyright, { year: new Date().getFullYear() })}</Txt>
-        </View>
-      </Container>
-      <Txt
-        numberOfLines={1}
-        adjustsFontSizeToFit
-        style={{ fontFamily: fonts.serif, fontSize: wordSize, lineHeight: wordSize * 1.05, color: '#fff', textAlign: 'center', paddingHorizontal: isMobile ? gutter : 0, letterSpacing: -wordSize * 0.02 }}>
-        {d.app.name}
-      </Txt>
-      <View style={{ borderTopWidth: 1, borderTopColor: rule, marginTop: 4 }}>
-        <Container style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 12, gap: 12 }}>
-          <Txt style={{ fontFamily: fonts.medium, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: brand.sky, flexShrink: 1 }} numberOfLines={1}>
-            ALFK · Koweït
-          </Txt>
-          <View style={{ flexDirection: 'row', gap: 4 }}>
-            {[brand.red, brand.white, brand.sky, brand.blue].map((c) => (
-              <View key={c} style={{ width: 14, height: 4, borderRadius: radius.sm, backgroundColor: c }} />
+      <Container style={{ paddingTop: isMobile ? 44 : 72, paddingBottom: isMobile ? 28 : 48 }}>
+        <View style={{ flexDirection: isDesktop ? 'row' : 'column', gap: isDesktop ? 48 : 32 }}>
+          {/* Brand */}
+          <View style={{ flex: isDesktop ? 5 : undefined, gap: isMobile ? 16 : 20, maxWidth: isMobile ? undefined : 440 }}>
+            <Logo height={isMobile ? 60 : 76} onDark />
+            <Txt style={{ fontFamily: fonts.regular, fontSize: isMobile ? 14 : 15, lineHeight: isMobile ? 21 : 24, color: muted }}>{d.site.footer.tagline}</Txt>
+            <View style={isMobile ? { gap: 10, marginTop: 4 } : { flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+              <Button full={isMobile} label={d.site.footer.band} variant="white" iconRight="arrow-right" onPress={() => router.push('/adherer')} />
+              <Button full={isMobile} label={d.site.footer.contact} variant="onDark" icon="mail" onPress={() => router.push('/contact')} />
+            </View>
+          </View>
+          {isDesktop && <View style={{ flex: 1 }} />}
+          {/* Link columns */}
+          <View style={{ flex: isDesktop ? 5 : undefined, flexDirection: 'row', gap: isMobile ? 16 : 24, paddingTop: isMobile ? 24 : 0, borderTopWidth: isMobile ? 1 : 0, borderTopColor: rule }}>
+            {groups.map((g) => (
+              <View key={g.title} style={{ flex: 1, gap: isMobile ? 12 : 14 }}>
+                <Txt style={{ fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: brand.blue }}>{g.title}</Txt>
+                {g.links.map((l) => (
+                  <Link key={l.href} href={l.href as never}>
+                    <Txt numberOfLines={1} style={{ fontFamily: fonts.medium, fontSize: isMobile ? 14 : 15, color: '#FFFFFF' }}>{l.label}</Txt>
+                  </Link>
+                ))}
+              </View>
             ))}
           </View>
+        </View>
+      </Container>
+
+      <View style={{ borderTopWidth: 1, borderTopColor: rule }}>
+        <Container style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'center' : 'stretch', justifyContent: 'space-between', paddingVertical: isMobile ? 20 : 18, gap: isMobile ? 14 : 12 }}>
+          <View style={{ gap: 8, flexShrink: 1 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 18, rowGap: 6 }}>
+              {legal.map((l) => (
+                <Link key={l.href} href={l.href as never}>
+                  <Txt style={{ fontFamily: fonts.medium, fontSize: 12, color: 'rgba(231, 236, 242,0.85)', textDecorationLine: 'underline', textDecorationColor: 'rgba(231, 236, 242,0.3)' }}>{l.label}</Txt>
+                </Link>
+              ))}
+            </View>
+            <Txt style={{ fontFamily: fonts.regular, fontSize: 12, lineHeight: 18, color: muted }} onPress={rollCredits} suppressHighlighting>
+              {f(d.site.footer.copyright, { year: new Date().getFullYear() })}
+            </Txt>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
+            <Txt style={{ fontFamily: fonts.semibold, fontSize: 12, letterSpacing: 1.4, color: '#FFFFFF' }}>alfk.org</Txt>
+            <HiDevCredit />
+          </View>
         </Container>
+      </View>
+
+      {/* Closing wordmark, cut by the bottom of the page like the delassus footer */}
+      <View pointerEvents="none" style={{ height: giant * 0.62, overflow: 'hidden', alignItems: 'center' }}>
+        <Txt numberOfLines={1} style={{ fontFamily: fonts.bold, fontSize: giant, lineHeight: giant * 1.1, letterSpacing: giant * 0.18, color: 'rgba(231, 236, 242,0.06)', marginRight: -giant * 0.18 }}>
+          ALFK
+        </Txt>
       </View>
     </View>
   );

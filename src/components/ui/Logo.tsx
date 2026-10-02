@@ -6,37 +6,43 @@ import { useI18n } from '@/i18n';
 import { fonts } from '@/theme/tokens';
 import { Txt } from './Txt';
 
-/** Transparent silver logo: the emblem alone (small sizes) and the full logo with « ALFK ». */
-const emblem = require('@/assets/images/logo-emblem-clear.png');
-const full = require('@/assets/images/logo-alfk-clear.png');
-const FULL_RATIO = 330 / 442;
+/**
+ * ALFK Alumni logo (Eiffel Tower and Kuwait Towers in a gold ring, French ribbon).
+ * Light surfaces use the original colours; on navy/dark surfaces (`onDark`) the emblem sits on a
+ * white seal and the lettering turns white, so the navy tower and letters never disappear.
+ */
+const emblem = require('@/assets/images/logo-emblem.png');
+const badge = require('@/assets/images/logo-emblem-badge.png');
+const lockup = require('@/assets/images/logo-lockup.png');
+const lockupLight = require('@/assets/images/logo-lockup-light.png');
+const LOCKUP_RATIO = 630 / 240;
+const LOCKUP_LIGHT_RATIO = 625 / 240;
 
-/** The silver emblem (Eiffel Tower and Kuwait Towers in a ring), no background. */
-export function LogoMark({ size = 40 }: { size?: number }) {
+/** The emblem alone (small sizes, app chrome when there is no room for the name). */
+export function LogoMark({ size = 40, onDark }: { size?: number; onDark?: boolean }) {
   const { lang } = useI18n();
   if (lang === 'pirate') return <PirateHat size={size} />;
-  return <Image source={emblem} style={{ width: size, height: size }} contentFit="contain" accessibilityLabel="Amicale LFK" />;
+  return <Image source={onDark ? badge : emblem} style={{ width: size, height: size }} contentFit="contain" accessibilityLabel="ALFK Alumni" />;
 }
 
-/** Emblem + name. `light` = on the navy sidebar. */
-export function LogoLockup({ compact, light }: { compact?: boolean; light?: boolean }) {
-  const { d } = useI18n();
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <LogoMark size={compact ? 34 : 40} />
-      <View>
-        <Txt style={{ fontFamily: fonts.serif, fontSize: compact ? 22 : 24, lineHeight: compact ? 26 : 28, ...(light ? { color: '#FFFFFF' } : null) }}>{d.app.name}</Txt>
-        {!compact && <Txt variant="caption" style={{ fontSize: 9, letterSpacing: 1.4, ...(light ? { color: '#E7ECF2' } : null) }}>ALFK · KOWEÏT</Txt>}
-      </View>
-    </View>
-  );
-}
-
-/** Full logo with « ALFK » and the Amicale's name; `size` is its height. */
-export function LogoFull({ size = 220 }: { size?: number }) {
+/** Emblem + « ALFK · ALUMNI · LYCÉE FRANÇAIS DE KOWEÏT » side by side; `height` sets its size. */
+export function Logo({ height = 40, onDark }: { height?: number; onDark?: boolean }) {
   const { lang } = useI18n();
-  if (lang === 'pirate') return <PirateHat size={size * 0.8} />;
-  return <Image source={full} style={{ width: size * FULL_RATIO, height: size }} contentFit="contain" accessibilityLabel="Amicale LFK" />;
+  if (lang === 'pirate') {
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <PirateHat size={height} />
+        <Txt style={{ fontFamily: fonts.serif, fontSize: height * 0.55, color: onDark ? '#FFFFFF' : undefined }}>ALFK</Txt>
+      </View>
+    );
+  }
+  const ratio = onDark ? LOCKUP_LIGHT_RATIO : LOCKUP_RATIO;
+  return <Image source={onDark ? lockupLight : lockup} style={{ width: height * ratio, height }} contentFit="contain" accessibilityLabel="ALFK Alumni — Lycée Français de Koweït" />;
+}
+
+/** Large emblem for hero spots (404, sign-in on phones). */
+export function LogoFull({ size = 220, onDark }: { size?: number; onDark?: boolean }) {
+  return <LogoMark size={size} onDark={onDark} />;
 }
 
 /** Easter egg: in Pirate, the logo becomes a tricorne with a skull and crossbones. */

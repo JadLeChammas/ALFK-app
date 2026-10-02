@@ -1,14 +1,21 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, usePathname } from 'expo-router';
-import { ScrollView } from 'react-native';
+import { useRef } from 'react';
+import { ScrollView, View } from 'react-native';
 
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
+import { useLayout } from '@/theme/layout';
+import { useTheme } from '@/theme/ThemeProvider';
 import { Chip, type IconName } from './ui/primitives';
 
 export function AdminNav() {
   const { d } = useI18n();
   const { db } = useStore();
   const pathname = usePathname();
+  const { isMobile } = useLayout();
+  const { colors } = useTheme();
+  const scroller = useRef<ScrollView>(null);
   const pending = db.users.filter((u) => !u.approved).length;
   const reports = db.conversations.filter((c) => c.report && !c.report.resolved).length;
   const unread = db.contacts.filter((c) => !c.read).length;
@@ -23,11 +30,41 @@ export function AdminNav() {
     { href: '/admin/histoire', label: d.site.nav.lfk, icon: 'book' },
     { href: '/admin/generique', label: d.credits.nav, icon: 'film' },
   ];
+  const active = tabs.find((t) => t.href === pathname);
+  const chip = (t: (typeof tabs)[number]) => (
+    <Chip label={t.label} icon={t.icon} count={t.count} active={t === active} onPress={() => router.replace(t.href as never)} />
+  );
+
+  // Wide screens: every tab visible, wrapping if needed.
+  if (!isMobile) {
+    return (
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        {tabs.map((t) => (
+          <View key={t.href}>{chip(t)}</View>
+        ))}
+      </View>
+    );
+  }
+  // Phones: one swipeable line that opens on the current tab, with a fade showing there is more.
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-      {tabs.map((t) => (
-        <Chip key={t.href} label={t.label} icon={t.icon} count={t.count} active={pathname === t.href} onPress={() => router.replace(t.href as never)} />
-      ))}
-    </ScrollView>
+    <View>
+      <ScrollView ref={scroller} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingRight: 40 }}>
+        {tabs.map((t) => (
+          <View
+            key={t.href}
+            onLayout={
+              t === active
+                ? (e) => {
+                    const x = e.nativeEvent.layout.x;
+                    scroller.current?.scrollTo({ x: Math.max(0, x - 24), animated: false });
+                  }
+                : undefined
+            }>
+            {chip(t)}
+          </View>
+        ))}
+      </ScrollView>
+      <LinearGradient colors={[`${colors.bg}00`, colors.bg]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} pointerEvents="none" style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 40 }} />
+    </View>
   );
 }

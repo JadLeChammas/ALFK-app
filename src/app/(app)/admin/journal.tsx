@@ -8,6 +8,7 @@ import { Txt } from '@/components/ui/Txt';
 import { fullName, useStore, useUserMap } from '@/data/store';
 import type { AdminLogAction } from '@/data/types';
 import { useI18n } from '@/i18n';
+import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const ICON: Record<AdminLogAction, [IconName, Tone]> = {
@@ -33,6 +34,7 @@ const ICON: Record<AdminLogAction, [IconName, Tone]> = {
 export default function AuditLog() {
   const { d, formatDate, formatTime } = useI18n();
   const { colors } = useTheme();
+  const { isMobile } = useLayout();
   const { db } = useStore();
   const users = useUserMap();
   const logs = [...db.logs].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -52,14 +54,18 @@ export default function AuditLog() {
               <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: t.bg, alignItems: 'center', justifyContent: 'center' }}>
                 <Feather name={icon} size={16} color={t.fg} />
               </View>
-              <Avatar uri={actor?.avatar} name={fullName(actor) || '?'} size={28} />
-              <Txt style={{ flex: 1 }}>
-                <Txt variant="bodyStrong">{fullName(actor) || '—'}</Txt>
-                <Txt color="textMuted"> {d.admin.actions[l.action]} </Txt>
-                <Txt variant="bodyStrong">{l.target}</Txt>
-                {l.meta?.role && <Txt color="textMuted"> → {d.roles[l.meta.role]}</Txt>}
-              </Txt>
-              <Txt variant="small" color="textSubtle">{formatDate(l.createdAt, { year: false })} · {formatTime(l.createdAt)}</Txt>
+              {!isMobile && <Avatar uri={actor?.avatar} name={fullName(actor) || '?'} size={28} />}
+              {/* Phones: the date goes under the sentence so the text keeps the full width. */}
+              <View style={{ flex: 1, gap: 2 }}>
+                <Txt>
+                  <Txt variant="bodyStrong">{fullName(actor) || '—'}</Txt>
+                  <Txt color="textMuted"> {d.admin.actions[l.action]} </Txt>
+                  <Txt variant="bodyStrong">{l.target}</Txt>
+                  {l.meta?.role && <Txt color="textMuted"> → {d.roles[l.meta.role]}</Txt>}
+                </Txt>
+                {isMobile && <Txt variant="small" color="textSubtle">{formatDate(l.createdAt, { year: false })} · {formatTime(l.createdAt)}</Txt>}
+              </View>
+              {!isMobile && <Txt variant="small" color="textSubtle">{formatDate(l.createdAt, { year: false })} · {formatTime(l.createdAt)}</Txt>}
             </Row>
           );
         })}

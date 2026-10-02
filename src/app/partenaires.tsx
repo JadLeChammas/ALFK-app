@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { Seo } from '@/components/Seo';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Linking, View } from 'react-native';
@@ -12,12 +13,12 @@ import { Txt } from '@/components/ui/Txt';
 import { usePublicOverview } from '@/data/public';
 import { useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
+import { partnerLogo } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { fonts, radius } from '@/theme/tokens';
 
 const campus = require('@/assets/images/lfk-campus.png');
-const LOGOS: Record<string, number> = { lfk: require('@/assets/images/institution-lfk.png') };
 
 /**
  * Partners. Approved members get it inside their space (admins manage the list there);
@@ -43,6 +44,7 @@ function PublicPartners() {
 
   return (
     <SiteFrame overlay>
+      <Seo title={p.title} description={p.sub} />
       <EditorialImageHero tagline={p.eyebrow} title={p.title} description={p.sub} image={campus} />
 
       <Section style={{ paddingTop: 0 }}>
@@ -71,7 +73,7 @@ function PartnerList({ partners, empty }: { partners: Institution[]; empty: stri
   return (
     <View style={{ borderTopWidth: 1, borderTopColor: t.rule }}>
       {partners.map((x, i) => {
-        const logo = x.logo ? (LOGOS[x.logo] ?? { uri: x.logo }) : undefined;
+        const logo = partnerLogo(x);
         return (
           <Reveal key={x.id} index={i}>
             <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'center' : 'flex-start', gap: isDesktop ? 40 : 16, paddingVertical: isMobile ? 28 : 44, borderBottomWidth: 1, borderBottomColor: t.rule }}>

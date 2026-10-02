@@ -257,7 +257,7 @@ export const Input = forwardRef<TextInput, TextInputProps & { label?: string; ic
                 minHeight: rest.multiline ? 110 : undefined,
                 textAlignVertical: rest.multiline ? 'top' : 'center',
               },
-              Platform.OS === 'web' && ({ outlineStyle: 'none' } as object),
+              Platform.OS === 'web' && ({ outlineStyle: 'none', textOverflow: rest.multiline ? undefined : 'ellipsis' } as object),
               style,
             ]}
           />
@@ -274,7 +274,8 @@ export function SearchBar({ value, onChangeText, placeholder, style, autoFocus, 
   return (
     <View
       style={[
-        { flexDirection: 'row', alignItems: 'center', height: 42, borderRadius: radius.input, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, gap: 10 },
+        // minWidth 0 + overflow hidden: a long placeholder can never push the field past its space.
+        { flexDirection: 'row', alignItems: 'center', height: 42, minWidth: 0, overflow: 'hidden', borderRadius: radius.input, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, gap: 10 },
         style,
       ]}>
       <Feather name="search" size={17} color={colors.textSubtle} />
@@ -285,7 +286,7 @@ export function SearchBar({ value, onChangeText, placeholder, style, autoFocus, 
         placeholderTextColor={colors.textSubtle}
         autoFocus={autoFocus}
         onFocus={onFocus}
-        style={[{ flex: 1, color: colors.text, fontFamily: fonts.medium, fontSize: 14, height: '100%' }, Platform.OS === 'web' && ({ outlineStyle: 'none' } as object)]}
+        style={[{ flex: 1, minWidth: 0, color: colors.text, fontFamily: fonts.medium, fontSize: 14, height: '100%' }, Platform.OS === 'web' && ({ outlineStyle: 'none', textOverflow: 'ellipsis' } as object)]}
       />
       {value.length > 0 && (
         <Tap onPress={() => onChangeText('')} hitSlop={10}>

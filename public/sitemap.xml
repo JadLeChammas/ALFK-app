@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.alfk.org/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.alfk.org/association</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.alfk.org/histoire</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.alfk.org/bureau</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.alfk.org/partenaires</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.alfk.org/adherer</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.alfk.org/contact</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.alfk.org/inscription</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.alfk.org/connexion</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.alfk.org/mentions-legales</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://www.alfk.org/confidentialite</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://www.alfk.org/plan-du-site</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+</urlset>

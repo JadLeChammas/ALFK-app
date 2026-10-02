@@ -8,7 +8,7 @@ import { mapDots } from '@/data/worldDots';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
 import { useClock } from './useClock';
-import { useInView } from './useInView';
+import { useOnScreen } from './useOnScreen';
 
 /**
  * React Native port of 21st.dev "World Map" (Aceternity): dotted continents, curved lines that
@@ -44,8 +44,9 @@ export function WorldMap({ arcs = [], lineColor, fadeInto, dotColor }: { arcs?: 
   const { colors, scheme } = useTheme();
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const [w, setW] = useState(0);
-  const [ref, inView] = useInView();
-  const t = useClock({ running: inView, still: 60 });
+  // Arcs draw in when the map comes on screen; the clock stops while it is scrolled away.
+  const [ref, onScreen] = useOnScreen();
+  const t = useClock({ running: onScreen, still: 60 });
   const line = lineColor ?? colors.primary;
   const fade = fadeInto ?? colors.surface;
 
