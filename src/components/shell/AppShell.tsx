@@ -12,12 +12,20 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
 import { useRetroTaps } from '@/lib/retro';
+import { INSTAGRAM_URL, InstagramGlyph, instagramLinkProps } from '../site/Instagram';
 import { Logo, LogoMark } from '../ui/Logo';
 import { Avatar, CountBadge, IconButton, Tap, type IconName } from '../ui/primitives';
 import { Txt } from '../ui/Txt';
 import { GlobalSearch } from './GlobalSearch';
 
-type NavItem = { href: string; icon: IconName; label: string; short?: string; badge?: number; match?: string[] };
+/** `external`: opens outside the app (new tab on the web) and shows the Instagram glyph. */
+type NavItem = { href: string; icon: IconName; label: string; short?: string; badge?: number; match?: string[]; external?: 'instagram' };
+
+/** Press props for an item: in-app navigation, or a real link to the outside (new tab on the web). */
+const pressFor = (item: NavItem, go: () => void) =>
+  item.external ? instagramLinkProps() : { onPress: go };
+const ItemIcon = ({ item, size, color }: { item: NavItem; size: number; color: string }) =>
+  item.external === 'instagram' ? <InstagramGlyph size={size - 1} color={color} /> : <Feather name={item.icon} size={size} color={color} />;
 
 function isActive(pathname: string, item: NavItem) {
   if (item.href === '/') return pathname === '/';
@@ -43,7 +51,10 @@ function useNav() {
   const events: NavItem[] = can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'star', label: d.nav.events }] : [];
   const publications: NavItem = { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort, badge: toReview };
   const messages: NavItem = { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread };
-  const community: NavItem[] = [{ href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp }];
+  const community: NavItem[] = [
+    { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
+    { href: INSTAGRAM_URL, icon: 'instagram', label: 'Instagram', external: 'instagram' },
+  ];
   // The Amicale's own pages (also public), opened inside the member space.
   const amicale: NavItem[] = [
     { href: '/association', icon: 'heart', label: d.site.nav.association },
@@ -153,7 +164,7 @@ function Sidebar({ compact }: { compact: boolean }) {
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
         ))}
       </View>
-      <View style={{ marginTop: dense ? 8 : 12, gap: 2 }}>
+      <View style={{ marginTop: dense ? 6 : 12, gap: 2 }}>
         {section(d.nav.community)}
         {[...community, ...amicale].map((item) => (
           <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
@@ -161,13 +172,13 @@ function Sidebar({ compact }: { compact: boolean }) {
       </View>
 
       {me.role === 'admin' && (
-        <View style={{ marginTop: dense ? 8 : 12, gap: 2 }}>
+        <View style={{ marginTop: dense ? 6 : 12, gap: 2 }}>
           {section(d.nav.admin)}
           <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} dense={dense} />
         </View>
       )}
       {me.role !== 'admin' && can(me, 'viewStats') && (
-        <View style={{ marginTop: dense ? 8 : 12, gap: 2 }}>
+        <View style={{ marginTop: dense ? 6 : 12, gap: 2 }}>
           {section(d.nav.leadership)}
           <SideLink item={{ href: '/statistiques', icon: 'bar-chart-2', label: d.nav.stats }} active={isActive(pathname, { href: '/statistiques', icon: 'bar-chart-2', label: '' })} compact={compact} dense={dense} />
         </View>
@@ -204,22 +215,23 @@ function SideLink({ item, active, compact, dense }: { item: NavItem; active: boo
   const { colors } = useTheme();
   return (
     <Tap
-      onPress={() => router.push(item.href as never)}
+      {...pressFor(item, () => router.push(item.href as never))}
+      role={item.external ? 'link' : undefined}
       accessibilityLabel={item.label}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        height: dense ? 32 : 35,
+        height: dense ? 30 : 35,
         paddingHorizontal: compact ? 0 : 12,
         justifyContent: compact ? 'center' : 'flex-start',
         borderRadius: radius.input,
         backgroundColor: active ? RAIL.activeBg : 'transparent',
       }}
       hoverStyle={!active && { backgroundColor: RAIL.hover }}>
-      {active && <View style={{ position: 'absolute', left: compact ? 4 : 0, top: dense ? 8 : 9, bottom: dense ? 8 : 9, width: 3, borderRadius: 2, backgroundColor: brand.red }} />}
+      {active && <View style={{ position: 'absolute', left: compact ? 4 : 0, top: dense ? 7 : 9, bottom: dense ? 7 : 9, width: 3, borderRadius: 2, backgroundColor: brand.red }} />}
       <View>
-        <Feather name={item.icon} size={18} color={active ? '#fff' : RAIL.text} />
+        <ItemIcon item={item} size={18} color={active ? '#fff' : RAIL.text} />
         {compact && !!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -8, right: -10, borderColor: colors.rail }} />}
       </View>
       {!compact && (
@@ -313,12 +325,12 @@ function BottomNav() {
                 return (
                   <Tap
                     key={item.href}
-                    onPress={() => {
+                    {...pressFor(item, () => {
                       setOpen(false);
                       router.navigate(item.href as never);
-                    }}
+                    })}
                     style={{ flexBasis: '30%', flexGrow: 1, alignItems: 'center', gap: 8, paddingVertical: 16, borderRadius: 18, backgroundColor: active ? colors.primarySoft : colors.surfaceAlt }}>
-                    <Feather name={item.icon} size={22} color={active ? colors.primary : colors.text} />
+                    <ItemIcon item={item} size={22} color={active ? colors.primary : colors.text} />
                     <Txt variant="smallStrong" numberOfLines={1} style={{ color: active ? colors.primary : colors.text }}>{item.label}</Txt>
                   </Tap>
                 );

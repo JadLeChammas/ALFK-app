@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL, InstagramGlyph, instagramLinkProps } from '@/components/site/Instagram';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
@@ -35,11 +36,12 @@ export default function Home() {
   const pending = db.users.filter((u) => !u.approved).length;
   const markers = useDestinationMarkers();
 
-  const actions: { icon: IconName; label: string; href: string; badge?: number }[] = [
+  const actions: { icon: IconName; label: string; href: string; badge?: number; external?: boolean }[] = [
     ...(can(me, 'viewEvents') ? [{ icon: 'calendar' as const, label: d.home.seeEvents, href: '/evenements' }] : []),
     { icon: 'users', label: d.nav.directory, href: '/annuaire' },
     { icon: 'book-open', label: d.nav.publications, href: '/publications' },
     { icon: 'message-circle', label: d.nav.messages, href: '/messages', badge: unread },
+    { icon: 'instagram', label: INSTAGRAM_HANDLE, href: INSTAGRAM_URL, external: true },
     me.role === 'honneur'
       ? { icon: 'bar-chart-2', label: d.nav.stats, href: '/statistiques' }
       : { icon: 'award', label: d.home.myPromo, href: me.promo ? `/annuaire/promo/${me.promo}` : '/profil/modifier' },
@@ -84,10 +86,10 @@ export default function Home() {
           {actions.map((a) => (
             <Tap
               key={a.label}
-              onPress={() => router.push(a.href as never)}
+              {...(a.external ? instagramLinkProps() : { onPress: () => router.push(a.href as never) })}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 10, height: 42, paddingHorizontal: 14, borderRadius: radius.input, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
               hoverStyle={{ borderColor: colors.borderStrong, backgroundColor: colors.surfaceAlt }}>
-              <Feather name={a.icon} size={16} color={colors.secondary} />
+              {a.external ? <InstagramGlyph size={15} color={colors.secondary} /> : <Feather name={a.icon} size={16} color={colors.secondary} />}
               <Txt variant="smallStrong">{a.label}</Txt>
               {!!a.badge && <CountBadge n={a.badge} style={{ borderColor: 'transparent' }} />}
             </Tap>

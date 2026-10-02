@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { INSTAGRAM_HANDLE, InstagramButton, InstagramGlyph, instagramLinkProps } from '@/components/site/Instagram';
 import { router } from 'expo-router';
 import { Linking, View } from 'react-native';
 
@@ -9,6 +10,7 @@ import { Txt } from '@/components/ui/Txt';
 import { useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
+import { radius } from '@/theme/tokens';
 
 const WHATSAPP = '#25D366';
 export const isWhatsappLink = (url: string) => /^https:\/\/(chat\.whatsapp\.com|wa\.me|whatsapp\.com)\//i.test(url.trim());
@@ -56,6 +58,29 @@ export default function Whatsapp() {
             <Badge label={d.whatsapp.noCommunity} tone="neutral" icon="clock" />
           )}
           {admin && <Button label={d.whatsapp.editCommunity} icon="edit-2" variant="secondary" size="sm" onPress={editCommunity} />}
+        </Row>
+      </Card>
+
+      {/* The Amicale's Instagram: news, photos of events. */}
+      <Card style={{ gap: 16 }}>
+        <Row gap={14} style={{ alignItems: 'center' }}>
+          <InstagramButton size={52} tone="light" />
+          <View style={{ flex: 1, gap: 4 }}>
+            <Txt variant="h2">Instagram</Txt>
+            <Txt color="textMuted">{d.site.footer.followUs} · {INSTAGRAM_HANDLE}</Txt>
+          </View>
+        </Row>
+        <Row gap={10} wrap>
+          <Tap
+            {...instagramLinkProps()}
+            role="link"
+            accessibilityLabel={`Instagram ${INSTAGRAM_HANDLE}`}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 8, height: 44, paddingHorizontal: 16, borderRadius: radius.input, backgroundColor: colors.ink }}
+            hoverStyle={{ opacity: 0.9 }}>
+            <InstagramGlyph size={16} color={colors.onInk} />
+            <Txt variant="smallStrong" style={{ color: colors.onInk }}>{INSTAGRAM_HANDLE}</Txt>
+            <Feather name="arrow-up-right" size={15} color={colors.onInk} />
+          </Tap>
         </Row>
       </Card>
 
