@@ -5,6 +5,7 @@ import { Switch, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
 import { NationalityPicker } from '@/components/NationalityPicker';
+import { OtherSchoolsEditor } from '@/components/OtherSchools';
 import { CityPicker } from '@/components/CityPicker';
 import { UniversityPicker } from '@/components/UniversityPicker';
 import { ProofPicker } from '@/components/ProofPicker';
@@ -24,7 +25,6 @@ import type { Gender, OtherSchool, Role, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { AvatarCropper } from '@/components/AvatarCropper';
-import { OtherSchoolsEditor } from '@/components/OtherSchools';
 
 export default function SignUp() {
   const { d, lang } = useI18n();
@@ -45,6 +45,7 @@ export default function SignUp() {
   };
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((f) => ({ ...f, [k]: v }));
     setError(null);
@@ -194,21 +195,24 @@ export default function SignUp() {
           ) : form.situation === 'working' ? (
             <>
               <Input label={d.situation.employer} icon="briefcase" value={form.employer} onChangeText={set('employer')} />
-              <Input label={`${d.situation.jobTitle} (${d.common.optional})`} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} />
-              <UniversityPicker label={d.situation.graduatedFrom} optional value={form.school} onChange={set('school')} country={form.country} city={form.city} />
+              <Input label={d.situation.jobTitle} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} />
+              <UniversityPicker label={d.situation.graduatedFrom} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
             </>
           ) : (
             <UniversityPicker label={d.auth.school} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
           )}
           {form.role === 'alumni' && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}
           <NationalityPicker value={nationalities} onChange={setNationalities} />
-          {step === 2 && error === 'missing' && <Txt variant="smallStrong" color="danger">{d.auth.errors.missing}</Txt>}
+          {step === 2 && error === 'missing' && (
+            <Txt variant="smallStrong" color="danger">{missingFields.length ? `${d.auth.errors.missing} — ${missingFields.join(', ')}` : d.auth.errors.missing}</Txt>
+          )}
           {form.role === 'alumni' && (
             <Select
-              label={`${d.orientation.field} (${d.common.optional})`}
+              label={d.orientation.field}
               value={form.fieldOfStudy}
               onChange={set('fieldOfStudy')}
-              options={[{ value: '', label: '—' }, ...FIELDS.map((k) => ({ value: k, label: d.fields[k] }))]}
+              options={FIELDS.map((k) => ({ value: k, label: d.fields[k] }))}
+              placeholder={d.orientation.field}
             />
           )}
           {form.role === 'alumni' && (
@@ -229,8 +233,22 @@ export default function SignUp() {
               size="lg"
               style={{ flex: 1 }}
               onPress={() => {
-                // Someone working says where.
-                if (form.role === 'alumni' && form.situation === 'working' && !form.employer.trim()) return setError('missing');
+                // Every field of this step is required, except other universities (exchange…), the photo and the bio.
+                const alumni = form.role === 'alumni';
+                const working = alumni && form.situation === 'working';
+                const year = parseInt(form.promo, 10);
+                const lacking = [
+                  !(year >= 1960 && year <= new Date().getFullYear() + 6) && d.auth.promo,
+                  !form.country && d.auth.country,
+                  !form.city.trim() && d.auth.city,
+                  alumni && !form.school.trim() && (working ? d.situation.graduatedFrom : d.auth.school),
+                  working && !form.employer.trim() && d.situation.employer,
+                  working && !form.jobTitle.trim() && d.situation.jobTitle,
+                  alumni && !form.fieldOfStudy && d.orientation.field,
+                  nationalities.length === 0 && d.nat.label,
+                ].filter((x): x is string => !!x);
+                setMissingFields(lacking);
+                if (lacking.length) return setError('missing');
                 setStep(3);
               }}
             />
