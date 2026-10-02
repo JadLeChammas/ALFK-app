@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
-import { supabase } from '@/lib/supabase';
-import { useStore } from './store';
+import { usePublicSetting } from './publicSettings';
 
 /**
  * The end credits (easter egg on the ©), edited by admins in the dashboard. Saved as JSON in
@@ -46,24 +45,9 @@ export function parseCredits(raw?: string | null): CreditsConfig | null {
 
 /** The saved credits (members get them with the settings; visitors fetch the one public row). */
 export function useCreditsConfig(enabled = true) {
-  const { db, me } = useStore();
-  const raw = db.settings.credits;
-  const [publicRaw, setPublicRaw] = useState<string | null>(null);
-  useEffect(() => {
-    if (!enabled || raw || me || !supabase) return;
-    let alive = true;
-    supabase
-      .from('app_settings')
-      .select('value')
-      .eq('key', 'credits')
-      .maybeSingle()
-      .then(({ data }) => alive && setPublicRaw(data?.value ?? null));
-    return () => {
-      alive = false;
-    };
-  }, [enabled, raw, me]);
+  const raw = usePublicSetting('credits', enabled);
   return useMemo(() => {
-    const saved = parseCredits(raw ?? publicRaw);
+    const saved = parseCredits(raw);
     return { config: saved ?? DEFAULT_CREDITS, custom: !!saved };
-  }, [raw, publicRaw]);
+  }, [raw]);
 }

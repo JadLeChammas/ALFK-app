@@ -20,6 +20,7 @@ export function AdminNav() {
     { href: '/admin/contact', label: d.nav.contact, icon: 'inbox', count: unread || undefined },
     { href: '/admin/journal', label: d.nav.logs, icon: 'list' },
     { href: '/admin/guides', label: d.guide.adminNav, icon: 'map' },
+    { href: '/admin/histoire', label: d.site.nav.lfk, icon: 'book' },
     { href: '/admin/generique', label: d.credits.nav, icon: 'film' },
   ];
   return (

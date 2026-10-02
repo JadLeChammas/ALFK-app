@@ -30,6 +30,7 @@ export function useSiteLinks() {
   return [
     { href: me ? '/' : '/bienvenue', label: d.nav.home, icon: 'home' as IconName },
     { href: '/association', label: d.site.nav.association, icon: 'heart' as IconName },
+    { href: '/histoire', label: d.site.nav.lfk, icon: 'book' as IconName },
     { href: '/bureau', label: d.site.nav.bureau, icon: 'users' as IconName },
     { href: '/partenaires', label: d.site.nav.partners, icon: 'briefcase' as IconName },
     { href: '/adherer', label: d.site.nav.join, icon: 'user-plus' as IconName },

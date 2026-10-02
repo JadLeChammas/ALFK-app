@@ -77,6 +77,7 @@ function RootNavigator() {
         </Stack.Protected>
         {/* Public pages, open with or without an account. */}
         <Stack.Screen name="association" />
+        <Stack.Screen name="histoire" />
         <Stack.Screen name="bureau" />
         <Stack.Screen name="partenaires" />
         <Stack.Screen name="adherer" />

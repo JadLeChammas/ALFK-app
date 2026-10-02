@@ -46,6 +46,7 @@ function useNav() {
   // The Amicale's own pages (also public), opened inside the member space.
   const amicale: NavItem[] = [
     { href: '/association', icon: 'heart', label: d.site.nav.association },
+    { href: '/histoire', icon: 'book', label: d.site.nav.lfk },
     { href: '/bureau', icon: 'users', label: d.site.nav.bureau },
     { href: '/partenaires', icon: 'award', label: d.nav.honorary },
   ];

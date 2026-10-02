@@ -856,6 +856,12 @@ function useStoreValue() {
       commit((d) => ({ ...d, settings: { ...d.settings, whatsappCommunity: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'whatsappCommunity', value: value ?? null }));
     },
+    /** Admins: save the « Le LFK » page (history and fun facts). */
+    saveLfkStory(story: object | null) {
+      const value = story ? JSON.stringify(story) : undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, lfkStory: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'lfkStory', value: value ?? null }));
+    },
     /** Admins: save the end credits (null = back to the default ones). */
     saveCredits(config: object | null) {
       const value = config ? JSON.stringify(config) : undefined;

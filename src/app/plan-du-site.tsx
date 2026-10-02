@@ -16,6 +16,7 @@ export default function Sitemap() {
       items: [
         ...(!me ? ([['compass', d.nav.home, '/bienvenue']] as [IconName, string, string][]) : []),
         ['heart', d.site.nav.association, '/association'],
+        ['book', d.site.nav.lfk, '/histoire'],
         ['users', d.site.nav.bureau, '/bureau'],
         ['briefcase', d.site.nav.partners, '/partenaires'],
         ['user-plus', d.site.nav.join, '/adherer'],
