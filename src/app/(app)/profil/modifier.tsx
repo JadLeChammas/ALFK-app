@@ -20,6 +20,7 @@ import type { Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
+import { NationalityPicker } from '@/components/NationalityPicker';
 
 export default function EditProfile() {
   const { d, country } = useI18n();
@@ -44,6 +45,7 @@ export default function EditProfile() {
     jobTitle: me.jobTitle ?? '',
   });
   const [mentor, setMentor] = useState(!!me.mentor);
+  const [nationalities, setNationalities] = useState<string[]>(me.nationalities ?? []);
   // Former students share their studies with the lycée students (Orientation space).
   const graduate = me.role === 'alumni' || me.role === 'admin';
   // Universities and companies other members already entered (to pick the same spelling).
@@ -81,6 +83,7 @@ export default function EditProfile() {
       situation: graduate ? situation : undefined,
       employer: working ? form.employer.trim() || undefined : undefined,
       jobTitle: working ? form.jobTitle.trim() || undefined : undefined,
+      nationalities: nationalities.length ? nationalities : undefined,
     });
     if (!r.ok) {
       if (r.error === 'birth_date' || r.error === 'phone') setFieldError(r.error);
@@ -88,7 +91,8 @@ export default function EditProfile() {
       return;
     }
     toast(d.common.saved);
-    router.back();
+    if (router.canGoBack()) router.back();
+    else router.replace('/profil');
   };
 
   const [uploading, setUploading] = useState(false);
@@ -184,6 +188,7 @@ export default function EditProfile() {
                 <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))} />
               </View>
             </FieldRow>
+            <NationalityPicker value={nationalities} onChange={setNationalities} />
             {graduate && (
               <>
                 <Select

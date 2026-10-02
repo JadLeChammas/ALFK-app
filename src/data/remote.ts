@@ -59,6 +59,7 @@ export const toUser = (r: Row): User => ({
   lastActiveAt: r.last_active_at,
   privacy: { showEmail: r.show_email, showPhone: r.show_phone, showBirthday: r.show_birthday },
   cv: opt(r.cv),
+  nationalities: Array.isArray(r.nationalities) && r.nationalities.length ? r.nationalities : undefined,
 });
 
 const PROFILE_COLUMNS: Record<string, string> = {
@@ -81,6 +82,7 @@ const PROFILE_COLUMNS: Record<string, string> = {
   fonction: 'fonction',
   bureauCode: 'bureau_code',
   fieldOfStudy: 'field_of_study',
+  nationalities: 'nationalities',
   mentor: 'mentor',
 };
 

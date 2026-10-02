@@ -152,6 +152,13 @@ export function createSeed(now = new Date()): Db {
       createdAt: ago(Math.floor(r() * 700) + 5),
       lastActiveAt: ago(r() * 20),
       privacy,
+      // Demo nationalities: mostly French, Lebanese or Kuwaiti, about one in four with two.
+      nationalities: (() => {
+        const pool = ['FR', 'FR', 'FR', 'LB', 'LB', 'KW', 'EG', 'BE', 'CA', 'MA', 'JO', 'SY', 'US', 'CH', 'IT'];
+        const a = pool[Math.floor(r() * pool.length)];
+        const b = pool[Math.floor(r() * pool.length)];
+        return r() < 0.25 && b !== a ? [a, b] : [a];
+      })(),
       ...u,
     };
     users.push(user);
@@ -163,7 +170,7 @@ export function createSeed(now = new Date()): Db {
     firstName: 'Jad', lastName: 'El Chammas', gender: 'M', role: 'admin', fonction: 'Président', promo: 2020, school: 'INSA Lyon',
     city: 'Paris', country: 'FR', phone: '+33 612345678', birthDate: '2002-03-12', avatar: portrait('M', 32),
     email: DEMO_ACCOUNTS.admin, createdAt: ago(720), lastActiveAt: ago(0),
-    bio: "Ingénieur en informatique, j'anime la plateforme de l'Amicale.",
+    bio: "Ingénieur en informatique, j'anime la plateforme de l'Amicale.", nationalities: ['FR', 'LB'],
   });
   const sarah = add({ firstName: 'Sarah', lastName: 'Martin', gender: 'F', role: 'alumni', promo: 2020, school: 'Sciences Po', city: 'Paris', country: 'FR', birthDate: birthdayIn(2, 2002), avatar: portrait('F', 44), email: DEMO_ACCOUNTS.member, lastActiveAt: ago(0.1),
     cv: {

@@ -20,6 +20,7 @@ export function useCommunity() {
       countries: o.countries,
       promos: o.promos,
       universities: o.universities,
+      nationalities: o.nationalities ?? 0,
       destinations,
       schools: o.schools.map((name) => ({ name, country: undefined as string | undefined })),
     };

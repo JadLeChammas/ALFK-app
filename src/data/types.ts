@@ -52,6 +52,8 @@ export type User = {
   createdAt: string;
   lastActiveAt: string;
   privacy: Privacy;
+  /** Nationalities (ISO codes, several allowed — see data/nationalities.ts). */
+  nationalities?: string[];
   /** LinkedIn-style CV, visible to members (see components/cv). */
   cv?: Cv;
 };

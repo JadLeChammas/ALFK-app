@@ -16,6 +16,7 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { birthdayToday } from '@/lib/eggs';
 import { Balloons } from '@/components/EasterEggs';
+import { nationalityName } from '@/data/nationalities';
 
 export default function MemberProfile() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -96,6 +97,14 @@ export default function MemberProfile() {
             {(me.role === 'admin' || isMe) && user.role === 'admin' && user.bureauCode && <ListRow icon="shield" title={user.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             {user.situation === 'working' && (user.employer || user.jobTitle) && <ListRow icon="briefcase" title={[user.jobTitle, user.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
             <ListRow icon="book" title={user.school ?? '—'} subtitle={user.situation === 'working' ? d.situation.graduatedFrom : user.situation === 'student' ? d.situation.studiesAt : d.member.school} />
+{!!user.nationalities?.length && (
+              <ListRow
+                icon="flag"
+                title={user.nationalities.map((c) => nationalityName(c, lang)).join(', ')}
+                subtitle={d.nat.label}
+                right={<Row gap={4}>{user.nationalities.map((c) => <Flag key={c} code={c} size={14} />)}</Row>}
+              />
+            )}
             <ListRow icon="map-pin" title={[user.city, countryName(user.country, lang)].filter(Boolean).join(', ')} subtitle={d.member.location} right={country && <Flag code={country.code} size={18} />} />
             {user.promo && <ListRow icon="award" title={String(user.promo)} subtitle={d.profile.promoLabel} />}
             {user.birthDate && user.privacy.showBirthday && <ListRow icon="gift" title={formatDate(user.birthDate + 'T12:00:00', { year: false })} subtitle={d.member.birthday} />}

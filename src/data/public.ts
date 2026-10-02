@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { supabase } from '@/lib/supabase';
+import { countNationalities } from './nationalities';
 import { groupByPlace, parseAliases } from './places';
 import { useStore } from './store';
 import type { Db, Institution } from './types';
@@ -16,6 +17,8 @@ export type PublicOverview = {
   countries: number;
   promos: number;
   universities: number;
+  /** Different nationalities among approved members. */
+  nationalities: number;
   /** Countries by number of former students, most first. */
   destinations: { code: string; n: number }[];
   /** Institutions where former students study, most represented first. */
@@ -24,7 +27,7 @@ export type PublicOverview = {
   institutions: Institution[];
 };
 
-const EMPTY: PublicOverview = { alumni: 0, countries: 0, promos: 0, universities: 0, destinations: [], schools: [], bureau: [], institutions: [] };
+const EMPTY: PublicOverview = { alumni: 0, countries: 0, promos: 0, universities: 0, nationalities: 0, destinations: [], schools: [], bureau: [], institutions: [] };
 
 /** Bureau order: the president first, then the other admins, then honorary members. */
 const rank = (p: PublicPerson) => (p.role === 'admin' ? (/pr[ée]sident/i.test(p.fonction ?? '') ? 0 : 1) : 2);
@@ -48,6 +51,7 @@ function fromDb(db: Db): PublicOverview {
     countries: countries.length,
     promos: new Set(grads.map((u) => u.promo).filter(Boolean)).size,
     universities: schools.length,
+    nationalities: countNationalities(db.users.filter((u) => u.approved)).length,
     destinations: countries.map(([code, n]) => ({ code, n })),
     schools: schools.map(([s]) => s).slice(0, 30),
     bureau,

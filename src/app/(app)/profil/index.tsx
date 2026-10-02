@@ -18,6 +18,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 import { birthdayToday } from '@/lib/eggs';
 import { Balloons } from '@/components/EasterEggs';
+import { nationalityName } from '@/data/nationalities';
 
 export default function MyProfile() {
   const { d, f, lang } = useI18n();
@@ -92,6 +93,14 @@ export default function MyProfile() {
             {me.role === 'admin' && me.bureauCode && <ListRow icon="shield" title={me.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             {me.situation === 'working' && (me.employer || me.jobTitle) && <ListRow icon="briefcase" title={[me.jobTitle, me.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
             <ListRow icon="book" title={me.school ?? '—'} subtitle={me.situation === 'working' ? d.situation.graduatedFrom : me.situation === 'student' ? d.situation.studiesAt : d.member.school} />
+{!!me.nationalities?.length && (
+              <ListRow
+                icon="flag"
+                title={me.nationalities.map((c) => nationalityName(c, lang)).join(', ')}
+                subtitle={d.nat.label}
+                right={<Row gap={4}>{me.nationalities.map((c) => <Flag key={c} code={c} size={14} />)}</Row>}
+              />
+            )}
             <ListRow icon="map-pin" title={me.city ?? '—'} subtitle={d.auth.city} />
             <ListRow icon="flag" title={country ? countryName(me.country, lang) : '—'} subtitle={d.auth.country} right={country && <Flag code={country.code} size={18} />} />
             {me.fonction ? <ListRow icon="briefcase" title={me.fonction} subtitle={d.member.fonction} /> : <ListRow icon="award" title={me.promo ? String(me.promo) : '—'} subtitle={d.profile.promoLabel} />}

@@ -14,10 +14,11 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
+import { countNationalities, nationalityName } from '@/data/nationalities';
 
 /** Read-only network analytics — shared by the admin dashboard and the school leadership's stats page. */
 export function CommunityStats() {
-  const { d, f, country, formatNumber } = useI18n();
+  const { d, f, country, formatNumber, lang } = useI18n();
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const members = useApprovedMembers();
@@ -33,6 +34,14 @@ export function CommunityStats() {
   const byCountry = countries.slice(0, 6).map(([c, v]) => ({ label: country(c), leading: <Flag code={c} size={12} />, value: v }));
   const others = countries.slice(6).reduce((a, [, v]) => a + v, 0);
   if (others) byCountry.push({ label: d.common.other, leading: <Feather name="globe" size={13} color={colors.textSubtle} />, value: others });
+
+  // Nationalities: a member with two counts for both.
+  const nats = countNationalities(members);
+  const byNationality = nats.slice(0, 7).map(([c, v]) => ({ label: nationalityName(c, lang), leading: <Flag code={c} size={12} />, value: v }));
+  const otherNats = nats.slice(7).reduce((a, [, v]) => a + v, 0);
+  if (otherNats) byNationality.push({ label: d.common.other, leading: <Feather name="flag" size={13} color={colors.textSubtle} />, value: otherNats });
+  const multi = members.filter((u) => (u.nationalities?.length ?? 0) > 1).length;
+  const filled = members.filter((u) => u.nationalities?.length).length;
 
   const promoMap = new Map<number, number>();
   members.forEach((u) => u.promo && promoMap.set(u.promo, (promoMap.get(u.promo) ?? 0) + 1));
@@ -91,6 +100,26 @@ export function CommunityStats() {
         <Card style={{ height: '100%' }}>
           <SectionHeader title={d.admin.newPerMonth} icon="bar-chart-2" />
           <BarChart data={perMonth} height={170} />
+        </Card>
+      </Grid>
+      <Grid min={isMobile ? 280 : 340} gap={16}>
+        <Card style={{ height: '100%', gap: 14 }}>
+          <SectionHeader title={d.nat.statsTitle} icon="flag" />
+          <Row gap={24} wrap>
+            <View>
+              <Txt style={{ fontFamily: fonts.display, fontSize: 52, lineHeight: 54, color: colors.text }}>{nats.length}</Txt>
+              <Txt variant="small" color="textMuted">{d.nat.different}</Txt>
+            </View>
+            <View>
+              <Txt style={{ fontFamily: fonts.display, fontSize: 52, lineHeight: 54, color: colors.text }}>{multi}</Txt>
+              <Txt variant="small" color="textMuted">{d.nat.multi}</Txt>
+            </View>
+          </Row>
+          <Txt variant="small" color="textSubtle">{f(d.nat.filled, { n: filled, total: members.length })}</Txt>
+        </Card>
+        <Card style={{ height: '100%' }}>
+          <SectionHeader title={d.nat.byNationality} icon="flag" />
+          {byNationality.length ? <HBarList data={byNationality} /> : <Txt color="textMuted">{d.nat.noneYet}</Txt>}
         </Card>
       </Grid>
     </View>

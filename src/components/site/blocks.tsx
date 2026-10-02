@@ -357,12 +357,13 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
     { v: c.countries, l: d.site.home.statCountries },
     { v: c.promos, l: d.site.home.statPromos },
     { v: c.universities, l: d.site.home.statUniversities },
+    { v: c.nationalities, l: d.site.home.statNationalities },
   ];
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 16 }}>
       {list.map((it, i) => (
         <View key={it.l} style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {i > 0 && !(isMobile && i === 2) && <View style={{ width: 1, height: 36, backgroundColor: light ? 'rgba(200,211,229,0.25)' : t.rule, marginHorizontal: isMobile || dense ? 14 : 24 }} />}
+          {i > 0 && !(isMobile && i % 2 === 0) && <View style={{ width: 1, height: 36, backgroundColor: light ? 'rgba(200,211,229,0.25)' : t.rule, marginHorizontal: isMobile || dense ? 14 : 24 }} />}
           <View style={{ minWidth: isMobile ? 110 : undefined }}>
             <TextRoll style={{ fontFamily: fonts.display, fontSize: isMobile ? 40 : dense ? 44 : 52, lineHeight: isMobile ? 44 : dense ? 48 : 56, color: fg }} delay={0.1 + i * 0.15}>
               {String(it.v)}
