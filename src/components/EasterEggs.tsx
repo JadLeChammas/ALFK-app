@@ -182,7 +182,7 @@ function Credits() {
     </View>
   );
   const heading = (t: string, key?: string) => (
-    <Txt key={key} style={{ color: '#FF5A5C', fontFamily: fonts.semibold, fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', marginTop: 40, marginBottom: 18, textAlign: 'center' }}>{t}</Txt>
+    <Txt key={key} style={{ color: '#E05A5D', fontFamily: fonts.semibold, fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', marginTop: 40, marginBottom: 18, textAlign: 'center' }}>{t}</Txt>
   );
 
   return (
@@ -214,7 +214,7 @@ function Credits() {
 
 // ——— Birthday ———
 
-const BALLOON_COLORS = ['#AE0000', '#6680AE', '#E8B820', '#2E9E6A', '#C2185B', '#00206A', '#FF8A3D'];
+const BALLOON_COLORS = ['#C53B3E', '#D7B46A', '#E8B820', '#2E9E6A', '#C2185B', '#0E2A47', '#FF8A3D'];
 
 /** Balloons floating up over a profile on its owner's birthday. */
 export function Balloons() {
@@ -294,7 +294,7 @@ export function CreatorCard({ onOpen }: { onOpen: (href: string) => void }) {
         <View style={{ flex: 1, gap: 4 }}>
           <Txt style={{ color: '#E8B820', fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 2, textTransform: 'uppercase' }}>{d.eggs.legendTitle}</Txt>
           <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 24, lineHeight: 28 }}>{CREATOR}</Txt>
-          <Txt style={{ color: '#C8D3E5', fontSize: 13 }}>{d.eggs.legendText}</Txt>
+          <Txt style={{ color: '#E7ECF2', fontSize: 13 }}>{d.eggs.legendText}</Txt>
           <View style={{ flexDirection: 'row', marginTop: 2 }}>
             <Badge label={d.eggs.legendBadge} tone="warning" icon="award" />
           </View>

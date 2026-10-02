@@ -26,7 +26,7 @@ export function LogoLockup({ compact, light }: { compact?: boolean; light?: bool
       <LogoMark size={compact ? 34 : 40} />
       <View>
         <Txt style={{ fontFamily: fonts.serif, fontSize: compact ? 22 : 24, lineHeight: compact ? 26 : 28, ...(light ? { color: '#FFFFFF' } : null) }}>{d.app.name}</Txt>
-        {!compact && <Txt variant="caption" style={{ fontSize: 9, letterSpacing: 1.4, ...(light ? { color: '#C8D3E5' } : null) }}>ALFK · KOWEÏT</Txt>}
+        {!compact && <Txt variant="caption" style={{ fontSize: 9, letterSpacing: 1.4, ...(light ? { color: '#E7ECF2' } : null) }}>ALFK · KOWEÏT</Txt>}
       </View>
     </View>
   );

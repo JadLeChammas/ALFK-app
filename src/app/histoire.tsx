@@ -60,7 +60,7 @@ function Soon({ text, admin }: { text: string; admin: boolean }) {
   );
 }
 
-const FACT_COLORS = ['#AE0000', '#00206A', '#6680AE', '#C8961E'];
+const FACT_COLORS = ['#C53B3E', '#0E2A47', '#D7B46A', '#C8961E'];
 
 function FactsGrid({ facts }: { facts: FunFact[] }) {
   const { isMobile } = useLayout();

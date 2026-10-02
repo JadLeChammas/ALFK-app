@@ -188,8 +188,8 @@ function ThemePreview({ mode }: { mode: ThemePreference }) {
             <View style={{ width: 18, backgroundColor: brand.navy, alignItems: 'center', paddingTop: 8, gap: 5 }}>
               <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: '#000' }} />
               <View style={{ width: 9, height: 3, borderRadius: 2, backgroundColor: brand.red }} />
-              <View style={{ width: 9, height: 3, borderRadius: 2, backgroundColor: 'rgba(200,211,229,0.5)' }} />
-              <View style={{ width: 9, height: 3, borderRadius: 2, backgroundColor: 'rgba(200,211,229,0.5)' }} />
+              <View style={{ width: 9, height: 3, borderRadius: 2, backgroundColor: 'rgba(231, 236, 242,0.5)' }} />
+              <View style={{ width: 9, height: 3, borderRadius: 2, backgroundColor: 'rgba(231, 236, 242,0.5)' }} />
             </View>
           )}
           <View style={{ flex: 1, gap: 5, padding: 7 }}>

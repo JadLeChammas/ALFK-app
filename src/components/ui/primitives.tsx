@@ -505,7 +505,7 @@ export function MetaLine({ icon, text, color = 'textMuted' }: { icon: IconName; 
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#00206A',
+    shadowColor: '#0E2A47',
     shadowOpacity: 0.05,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },

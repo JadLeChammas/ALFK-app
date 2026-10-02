@@ -195,8 +195,8 @@ export function Globe({
   }
 
   const dotFill = onDark ? brand.sky : brand.blue;
-  const red = onDark ? '#FF5A5C' : brand.red;
-  const labelFill = onDark ? 'rgba(200,211,229,0.75)' : 'rgba(0,32,106,0.7)';
+  const red = onDark ? '#E05A5D' : brand.red;
+  const labelFill = onDark ? 'rgba(231, 236, 242,0.75)' : 'rgba(14, 42, 71,0.7)';
   const lk = Math.min(1.4, k);
 
   const arcEls: React.ReactNode[] = [];
@@ -277,7 +277,7 @@ export function Globe({
       onResponderTerminate={onRelease}>
       {size > 0 && (
         <Svg width={size} height={size}>
-          <Circle cx={c} cy={c} r={rim} fill="none" stroke={onDark ? 'rgba(200,211,229,0.14)' : 'rgba(0,32,106,0.1)'} strokeWidth={1} />
+          <Circle cx={c} cy={c} r={rim} fill="none" stroke={onDark ? 'rgba(231, 236, 242,0.14)' : 'rgba(14, 42, 71,0.1)'} strokeWidth={1} />
           <Path d={bands[2]} fill={dotFill} opacity={0.3} />
           <Path d={bands[1]} fill={dotFill} opacity={0.55} />
           <Path d={bands[0]} fill={dotFill} opacity={onDark ? 0.9 : 0.85} />

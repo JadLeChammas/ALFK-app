@@ -54,7 +54,7 @@ export default function PromoPage() {
       {/* Header banner */}
       <View style={{ minHeight: isMobile ? 220 : 260, borderRadius: radius.hero, overflow: 'hidden', backgroundColor: colors.ink }}>
         {info?.groupPhoto && <Image source={{ uri: info.groupPhoto }} style={{ position: 'absolute', width: '100%', height: '100%' }} contentFit="cover" />}
-        <LinearGradient colors={['rgba(0,32,106,0.05)', 'rgba(0,18,60,0.9)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <LinearGradient colors={['rgba(14, 42, 71,0.05)', 'rgba(0,18,60,0.9)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <View style={{ flex: 1, justifyContent: 'flex-end', padding: isMobile ? 20 : 32, gap: 14 }}>
           {me.promo === year && <Badge label={d.promo.yourPromo} tone="primary" icon="star" />}
           <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: isMobile ? 40 : 60, lineHeight: isMobile ? 44 : 64, letterSpacing: -0.5 }}>{f(d.promo.title, { year })}</Txt>

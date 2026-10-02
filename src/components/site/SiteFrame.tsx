@@ -47,15 +47,16 @@ export type TonePalette = { bg: string; fg: string; muted: string; rule: string;
 export function tonePalette(tone: Tone, dark: boolean): TonePalette {
   switch (tone) {
     case 'navy':
-      return { bg: brand.navy, fg: '#FFFFFF', muted: 'rgba(200,211,229,0.85)', rule: 'rgba(200,211,229,0.2)', accent: '#FF6B6E', card: 'rgba(200,211,229,0.08)', cardFg: '#FFFFFF', cardMuted: 'rgba(200,211,229,0.85)' };
+      return { bg: brand.navy, fg: '#FFFFFF', muted: 'rgba(231, 236, 242,0.85)', rule: 'rgba(231, 236, 242,0.2)', accent: '#E05A5D', card: 'rgba(231, 236, 242,0.08)', cardFg: '#FFFFFF', cardMuted: 'rgba(231, 236, 242,0.85)' };
     case 'red':
       return { bg: brand.red, fg: '#FFFFFF', muted: 'rgba(255,255,255,0.82)', rule: 'rgba(255,255,255,0.28)', accent: brand.sky, card: 'rgba(0,0,0,0.12)', cardFg: '#FFFFFF', cardMuted: 'rgba(255,255,255,0.82)' };
     case 'blue':
-      return { bg: brand.blue, fg: '#FFFFFF', muted: 'rgba(255,255,255,0.88)', rule: 'rgba(255,255,255,0.3)', accent: brand.navy, card: brand.navy, cardFg: '#FFFFFF', cardMuted: brand.sky };
+      // Soft Gold band: navy text reads better than white on gold.
+      return { bg: brand.blue, fg: brand.navy, muted: 'rgba(14, 42, 71, 0.78)', rule: 'rgba(14, 42, 71, 0.2)', accent: brand.red, card: brand.navy, cardFg: '#FFFFFF', cardMuted: brand.sky };
     default:
       return dark
-        ? { bg: '#07112B', fg: '#FFFFFF', muted: 'rgba(200,211,229,0.8)', rule: 'rgba(200,211,229,0.16)', accent: '#FF6B6E', card: brand.navy, cardFg: '#FFFFFF', cardMuted: brand.sky }
-        : { bg: brand.sky, fg: brand.navy, muted: 'rgba(0,32,106,0.74)', rule: 'rgba(0,32,106,0.16)', accent: brand.red, card: brand.navy, cardFg: '#FFFFFF', cardMuted: brand.sky };
+        ? { bg: '#081523', fg: '#FFFFFF', muted: 'rgba(231, 236, 242,0.8)', rule: 'rgba(231, 236, 242,0.16)', accent: '#E05A5D', card: brand.navy, cardFg: '#FFFFFF', cardMuted: brand.sky }
+        : { bg: brand.sky, fg: brand.navy, muted: 'rgba(14, 42, 71,0.74)', rule: 'rgba(14, 42, 71,0.16)', accent: brand.red, card: brand.navy, cardFg: '#FFFFFF', cardMuted: brand.sky };
   }
 }
 
@@ -212,7 +213,7 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
   };
   // Transparent over the hero, navy once the page moves (or right away when the menu is open).
   const bar = useAnimatedStyle(() => ({
-    backgroundColor: !overlay || open ? brand.navy : interpolateColor(scrollY.value, [0, 90], ['rgba(0,32,106,0)', 'rgba(0,32,106,1)']),
+    backgroundColor: !overlay || open ? brand.navy : interpolateColor(scrollY.value, [0, 90], ['rgba(14, 42, 71,0)', 'rgba(14, 42, 71,1)']),
   }));
   const line = useAnimatedStyle(() => ({ width: `${progress.value * 100}%` }));
 
@@ -259,7 +260,7 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
         <Animated.View entering={FadeIn.duration(180)}>
           <Container style={{ paddingBottom: 16 }}>
             {links.map((l) => (
-              <Tap key={l.href} onPress={() => go(l.href)} style={{ height: 52, justifyContent: 'center', borderTopWidth: 1, borderTopColor: 'rgba(200,211,229,0.15)' }}>
+              <Tap key={l.href} onPress={() => go(l.href)} style={{ height: 52, justifyContent: 'center', borderTopWidth: 1, borderTopColor: 'rgba(231, 236, 242,0.15)' }}>
                 <Txt style={{ fontFamily: fonts.serif, fontSize: 26, color: pathname === l.href ? '#FF8A8C' : '#fff' }}>{l.label}</Txt>
               </Tap>
             ))}
@@ -290,7 +291,7 @@ function SiteFooter() {
   ];
   const upper = { fontFamily: fonts.medium, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase' as const, lineHeight: 20 };
   const wordSize = Math.max(48, Math.min(208, width * 0.13));
-  const rule = 'rgba(200,211,229,0.15)';
+  const rule = 'rgba(231, 236, 242,0.15)';
 
   return (
     <View style={{ backgroundColor: brand.navy, overflow: 'hidden' }}>
@@ -314,7 +315,7 @@ function SiteFooter() {
           <Link href="/contact">
             <Txt style={[upper, { color: '#FF8A8C' }]}>{d.site.footer.contact} &rarr;</Txt>
           </Link>
-          <Txt style={[upper, { color: 'rgba(200,211,229,0.6)' }]} onPress={rollCredits} suppressHighlighting>{f(d.site.footer.copyright, { year: new Date().getFullYear() })}</Txt>
+          <Txt style={[upper, { color: 'rgba(231, 236, 242,0.6)' }]} onPress={rollCredits} suppressHighlighting>{f(d.site.footer.copyright, { year: new Date().getFullYear() })}</Txt>
         </View>
       </Container>
       <Txt

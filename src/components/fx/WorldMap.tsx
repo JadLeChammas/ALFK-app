@@ -76,7 +76,7 @@ export function WorldMap({ arcs = [], lineColor, fadeInto, dotColor }: { arcs?: 
               <Stop offset="100%" stopColor={line} stopOpacity={0} />
             </SvgGradient>
           </Defs>
-          <Path d={dotsPath} fill={dotColor ?? (scheme === 'dark' ? '#FFFFFF' : '#00206A')} opacity={0.26} />
+          <Path d={dotsPath} fill={dotColor ?? (scheme === 'dark' ? '#FFFFFF' : '#0E2A47')} opacity={0.26} />
           {arcs.map((arc, i) => {
             const end = project(arc.to[0], arc.to[1]);
             const ctrl = { x: (start.x + end.x) / 2, y: Math.min(start.y, end.y) - 50 };

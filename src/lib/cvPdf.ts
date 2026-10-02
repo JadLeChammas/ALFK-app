@@ -74,32 +74,32 @@ export function cvHtml(doc: CvDoc) {
   * { box-sizing: border-box; }
   body { margin: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #14213d; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .page { width: 210mm; min-height: 297mm; display: flex; flex-direction: column; }
-  header { background: #00206A; color: #fff; padding: 14mm 14mm 10mm; display: flex; gap: 8mm; align-items: center; border-bottom: 3mm solid #AE0000; }
+  header { background: #0E2A47; color: #fff; padding: 14mm 14mm 10mm; display: flex; gap: 8mm; align-items: center; border-bottom: 3mm solid #C53B3E; }
   header img { width: 28mm; height: 28mm; border-radius: 50%; object-fit: cover; border: 1mm solid #fff; }
   header h1 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-weight: normal; font-size: 26pt; }
-  header .hl { margin-top: 2mm; font-size: 12pt; color: #C8D3E5; }
+  header .hl { margin-top: 2mm; font-size: 12pt; color: #E7ECF2; }
   header .contact { margin-top: 3mm; font-size: 9pt; color: #E4EAF4; }
   .body { display: flex; flex: 1; }
   aside { width: 62mm; background: #E4EAF4; padding: 8mm 7mm; }
   main { flex: 1; padding: 8mm 12mm; }
-  h2 { font-size: 10pt; letter-spacing: .12em; text-transform: uppercase; color: #AE0000; border-bottom: .3mm solid #C8D3E5; padding-bottom: 1.5mm; margin: 6mm 0 3mm; }
+  h2 { font-size: 10pt; letter-spacing: .12em; text-transform: uppercase; color: #C53B3E; border-bottom: .3mm solid #E7ECF2; padding-bottom: 1.5mm; margin: 6mm 0 3mm; }
   h2:first-child { margin-top: 0; }
-  h3 { font-size: 9pt; letter-spacing: .12em; text-transform: uppercase; color: #00206A; margin: 5mm 0 2.5mm; }
+  h3 { font-size: 9pt; letter-spacing: .12em; text-transform: uppercase; color: #0E2A47; margin: 5mm 0 2.5mm; }
   h3:first-child { margin-top: 0; }
   .entry { margin-bottom: 4mm; page-break-inside: avoid; }
   .row { display: flex; justify-content: space-between; gap: 4mm; }
   .t { font-weight: bold; }
-  .when { color: #6680AE; font-size: 9pt; white-space: nowrap; }
-  .org { color: #00206A; font-size: 10pt; }
+  .when { color: #D7B46A; font-size: 9pt; white-space: nowrap; }
+  .org { color: #0E2A47; font-size: 10pt; }
   .desc { margin-top: 1mm; font-size: 9.5pt; color: #33415c; line-height: 1.4; }
-  .url { font-size: 8.5pt; color: #6680AE; }
+  .url { font-size: 8.5pt; color: #D7B46A; }
   .lang { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2mm; font-size: 9.5pt; }
-  .lang small { display: block; color: #6680AE; font-size: 8pt; }
-  .dot { display: inline-block; width: 2.2mm; height: 2.2mm; border-radius: 50%; background: #C8D3E5; margin-left: .8mm; }
-  .dot.on { background: #00206A; }
+  .lang small { display: block; color: #D7B46A; font-size: 8pt; }
+  .dot { display: inline-block; width: 2.2mm; height: 2.2mm; border-radius: 50%; background: #E7ECF2; margin-left: .8mm; }
+  .dot.on { background: #0E2A47; }
   .tags span { display: inline-block; background: #fff; border-radius: 3mm; padding: .8mm 2.4mm; margin: 0 1mm 1.4mm 0; font-size: 8.5pt; }
-  .links { margin-top: 5mm; font-size: 8.5pt; color: #00206A; word-break: break-all; }
-  footer { text-align: center; font-size: 7.5pt; color: #6680AE; padding: 3mm; }
+  .links { margin-top: 5mm; font-size: 8.5pt; color: #0E2A47; word-break: break-all; }
+  footer { text-align: center; font-size: 7.5pt; color: #D7B46A; padding: 3mm; }
 </style></head><body><div class="page">
 <header>
   ${doc.avatar?.startsWith('http') ? `<img src="${esc(doc.avatar)}"/>` : ''}

@@ -79,7 +79,7 @@ function ImageHeroInner({ tagline, title, description, image, primary, secondary
           <Image source={src(image)} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={300} />
         </SettleZoom>
         {/* keeps the transparent header legible over the photo */}
-        <LinearGradient colors={['rgba(0,32,106,0.7)', 'rgba(0,32,106,0)']} locations={[0, 0.45]} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <LinearGradient colors={['rgba(14, 42, 71,0.7)', 'rgba(14, 42, 71,0)']} locations={[0, 0.45]} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <LinearGradient colors={[`${t.bg}00`, t.bg]} locations={[0.62, 1]} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
       </View>
       <Container style={{ flexDirection: isDesktop ? 'row' : 'column', gap: isDesktop ? 0 : 24, paddingTop: isMobile ? 16 : 40, paddingBottom: isMobile ? 56 : 104 }}>
@@ -363,7 +363,7 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 16 }}>
       {list.map((it, i) => (
         <View key={it.l} style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {i > 0 && !(isMobile && i % 2 === 0) && <View style={{ width: 1, height: 36, backgroundColor: light ? 'rgba(200,211,229,0.25)' : t.rule, marginHorizontal: isMobile || dense ? 14 : 24 }} />}
+          {i > 0 && !(isMobile && i % 2 === 0) && <View style={{ width: 1, height: 36, backgroundColor: light ? 'rgba(231, 236, 242,0.25)' : t.rule, marginHorizontal: isMobile || dense ? 14 : 24 }} />}
           <View style={{ minWidth: isMobile ? 110 : undefined }}>
             <TextRoll style={{ fontFamily: fonts.display, fontSize: isMobile ? 40 : dense ? 44 : 52, lineHeight: isMobile ? 44 : dense ? 48 : 56, color: fg }} delay={0.1 + i * 0.15}>
               {String(it.v)}
@@ -407,7 +407,7 @@ export function GlobeCard({ title, accent, lead, markers, stats, children, compa
   }
   return (
     <ToneProvider tone="navy">
-      <View style={{ borderRadius: radius.hero, overflow: 'hidden', backgroundColor: brand.navy, borderWidth: 1, borderColor: 'rgba(200,211,229,0.12)' }}>
+      <View style={{ borderRadius: radius.hero, overflow: 'hidden', backgroundColor: brand.navy, borderWidth: 1, borderColor: 'rgba(231, 236, 242,0.12)' }}>
         {glow}
         {inner}
       </View>

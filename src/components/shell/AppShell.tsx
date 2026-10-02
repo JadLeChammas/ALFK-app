@@ -94,7 +94,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 }
 
 /** Navy brand rail: sky labels, white + red indicator for the active section. */
-const RAIL = { text: brand.sky, active: '#FFFFFF', activeBg: 'rgba(102,128,174,0.28)', hover: 'rgba(200,211,229,0.08)', rule: 'rgba(200,211,229,0.14)' };
+const RAIL = { text: brand.sky, active: '#FFFFFF', activeBg: 'rgba(215, 180, 106,0.28)', hover: 'rgba(231, 236, 242,0.08)', rule: 'rgba(231, 236, 242,0.14)' };
 
 function Sidebar({ compact }: { compact: boolean }) {
   const logoTap = useRetroTaps(() => router.push('/'));
@@ -110,7 +110,7 @@ function Sidebar({ compact }: { compact: boolean }) {
     { href: '/parametres', icon: 'settings', label: d.nav.settings },
     { href: '/notifications', icon: 'bell', label: d.nav.notifications, badge: notif },
   ];
-  const section = (label: string) => !compact && <Txt style={{ fontFamily: fonts.medium, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: 'rgba(200,211,229,0.55)', paddingHorizontal: 12, marginBottom: 6 }}>{label}</Txt>;
+  const section = (label: string) => !compact && <Txt style={{ fontFamily: fonts.medium, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: 'rgba(231, 236, 242,0.55)', paddingHorizontal: 12, marginBottom: 6 }}>{label}</Txt>;
 
   return (
     <View
