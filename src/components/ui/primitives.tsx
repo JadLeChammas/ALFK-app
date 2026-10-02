@@ -29,6 +29,13 @@ export const transition = (props = 'all', ms = 180): ViewStyle =>
 type PressState = { pressed: boolean; hovered?: boolean };
 
 /** Pressable with subtle hover/press feedback. */
+/**
+ * iPhone/iPad browsers (Safari and Chrome alike) zoom into any text field whose text is under 16 px
+ * and stay zoomed afterwards — the page then slides around. On touch screens fields use 16 px.
+ */
+export const fieldFontSize = (size: number) =>
+  Platform.OS === 'web' && typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches ? Math.max(16, size) : size;
+
 export function Tap({
   style,
   hoverStyle,
@@ -252,7 +259,7 @@ export const Input = forwardRef<TextInput, TextInputProps & { label?: string; ic
                 minWidth: 0,
                 color: editable ? colors.text : colors.textMuted,
                 fontFamily: fonts.medium,
-                fontSize: 15,
+                fontSize: fieldFontSize(15),
                 paddingVertical: 12,
                 minHeight: rest.multiline ? 110 : undefined,
                 textAlignVertical: rest.multiline ? 'top' : 'center',
@@ -286,7 +293,7 @@ export function SearchBar({ value, onChangeText, placeholder, style, autoFocus, 
         placeholderTextColor={colors.textSubtle}
         autoFocus={autoFocus}
         onFocus={onFocus}
-        style={[{ flex: 1, minWidth: 0, color: colors.text, fontFamily: fonts.medium, fontSize: 14, height: '100%' }, Platform.OS === 'web' && ({ outlineStyle: 'none', textOverflow: 'ellipsis' } as object)]}
+        style={[{ flex: 1, minWidth: 0, color: colors.text, fontFamily: fonts.medium, fontSize: fieldFontSize(14), height: '100%' }, Platform.OS === 'web' && ({ outlineStyle: 'none', textOverflow: 'ellipsis' } as object)]}
       />
       {value.length > 0 && (
         <Tap onPress={() => onChangeText('')} hitSlop={10}>

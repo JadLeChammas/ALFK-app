@@ -77,6 +77,19 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
 
+  // Signed in, the web app fits the screen like an app: no pinch or double-tap zoom, and a zoom left
+  // over from the sign-in page snaps back. The public site keeps normal zoom (restored on sign-out).
+  useEffect(() => {
+    if (Platform.OS !== 'web' || typeof document === 'undefined') return;
+    const meta = document.querySelector('meta[name="viewport"]');
+    if (!meta) return;
+    const before = meta.getAttribute('content');
+    meta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover');
+    return () => {
+      if (before) meta.setAttribute('content', before);
+    };
+  }, []);
+
   // ⌘K / Ctrl+K opens global search on web.
   useEffect(() => {
     if (Platform.OS !== 'web') return;

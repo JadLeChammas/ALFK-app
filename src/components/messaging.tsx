@@ -11,7 +11,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
 import { norm } from './shell/GlobalSearch';
 import { useDialogs } from './ui/Dialogs';
-import { Avatar, Button, CountBadge, EmptyState, IconButton, Row, SearchBar, Tap } from './ui/primitives';
+import { Avatar, Button, CountBadge, EmptyState, fieldFontSize, IconButton, Row, SearchBar, Tap } from './ui/primitives';
 import { useGutter } from './ui/Screen';
 import { Txt } from './ui/Txt';
 
@@ -230,7 +230,7 @@ function Thread({ id }: { id: string }) {
               }
             }}
             style={[
-              { flex: 1, minHeight: 44, maxHeight: 120, borderRadius: 22, backgroundColor: colors.surfaceAlt, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12, color: colors.text, fontFamily: fonts.medium, fontSize: 15 },
+              { flex: 1, minHeight: 44, maxHeight: 120, borderRadius: 22, backgroundColor: colors.surfaceAlt, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12, color: colors.text, fontFamily: fonts.medium, fontSize: fieldFontSize(15) },
               Platform.OS === 'web' && ({ outlineStyle: 'none' } as object),
             ]}
           />

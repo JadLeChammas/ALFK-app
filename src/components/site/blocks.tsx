@@ -546,10 +546,12 @@ export function RuleColumns({ items }: { items: { t: string; d: string; label?: 
   const t = useTone();
   const { isMobile, width } = useLayout();
   const perRow = isMobile ? 1 : width < 1100 && items.length > 3 ? 2 : items.length;
+  // Phones: one full-width column, no gutter trick (a -20 px margin stuck out of the 16 px page margin).
+  const pad = isMobile ? 0 : 20;
   return (
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -20, rowGap: isMobile ? 28 : 40 }}>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -pad, rowGap: isMobile ? 28 : 40 }}>
       {items.map((it, i) => (
-        <Reveal key={it.t} index={i} style={{ width: `${100 / perRow}%`, paddingHorizontal: 20 }}>
+        <Reveal key={it.t} index={i} style={{ width: `${100 / perRow}%`, paddingHorizontal: pad }}>
           <DrawnRule color={i === 0 ? t.accent : t.rule} thick={i === 0} delay={i * 140} />
           <View style={{ paddingTop: 20, gap: 8 }}>
             {it.label && <Txt style={{ fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: i === 0 ? t.accent : t.muted }}>{it.label}</Txt>}

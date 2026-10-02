@@ -45,6 +45,10 @@
       html,
       body {
         height: 100%;
+        /* phones: no rubber-band bounce or sideways drag of the whole page, no text inflation */
+        overscroll-behavior: none;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
       }
       /* These styles disable body scrolling if you are using <ScrollView> */
       body {
@@ -56,6 +60,8 @@
         display: flex;
         height: 100%;
         flex: 1;
+        /* taps react at once and a double tap never zooms the page */
+        touch-action: manipulation;
       }
     </style>
   </head>
