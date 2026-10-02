@@ -12,7 +12,7 @@ import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES } from '@/data/countries';
+import { sortedCountries } from '@/data/countries';
 import { formatPhone, isValidPhoneNumber, parseFrDate, requiresContact } from '@/data/members';
 import { fullName, useMe, useStore, type AuthError } from '@/data/store';
 import type { Gender, Role, User } from '@/data/types';
@@ -193,7 +193,7 @@ export default function ManageMembers() {
 }
 
 function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () => void }) {
-  const { d, country } = useI18n();
+  const { d, lang } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
   const { toast } = useDialogs();
@@ -251,7 +251,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
               <DateField label={d.profile.birthDate} value={form.birth} onChange={set('birth')} required={requiresContact(form.role)} error={error === 'birth_date' ? d.auth.errors.birth_date : undefined} />
               <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
             </FieldRow>
-            <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))} />
+            <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
             <View style={{ gap: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
               <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }]} />

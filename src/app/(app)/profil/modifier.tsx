@@ -12,7 +12,7 @@ import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES } from '@/data/countries';
+import { sortedCountries } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
@@ -27,7 +27,7 @@ import type { PickedImage } from '@/data/remote';
 import { OtherSchoolsEditor } from '@/components/OtherSchools';
 
 export default function EditProfile() {
-  const { d, country } = useI18n();
+  const { d, lang } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
   const { toast } = useDialogs();
@@ -203,7 +203,7 @@ export default function EditProfile() {
                 <CityPicker label={d.auth.city} value={form.city} onChange={set('city')} country={form.country} />
               </View>
               <View style={{ flex: 1 }}>
-                <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))} />
+                <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
               </View>
             </FieldRow>
             {me.role !== 'eleve' && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}

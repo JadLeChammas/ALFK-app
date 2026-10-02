@@ -11,7 +11,7 @@ import { Badge, Button, Card, Chip, EmptyState, Input, Row, SectionHeader } from
 import { Select } from '@/components/ui/Select';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES } from '@/data/countries';
+import { sortedCountries } from '@/data/countries';
 import { useGuides, type CountryGuide } from '@/data/guide';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -152,10 +152,10 @@ function GuideSettings({
 }
 
 function AddCountrySheet({ taken, initial, templates, onClose, onAdd }: { taken: string[]; initial?: string; templates: CountryGuide[]; onClose: () => void; onAdd: (country: string, copyFrom?: string) => void }) {
-  const { d, country } = useI18n();
+  const { d, lang } = useI18n();
   const g = d.guide;
   const titleOf = useGuideTitle();
-  const options = COUNTRIES.filter((c) => !taken.includes(c.code)).map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }));
+  const options = sortedCountries(lang).filter((c) => !taken.includes(c.code)).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }));
   const [cc, setCc] = useState<string | undefined>(initial && !taken.includes(initial) ? initial : undefined);
   const [copyFrom, setCopyFrom] = useState<string | undefined>(undefined);
   return (

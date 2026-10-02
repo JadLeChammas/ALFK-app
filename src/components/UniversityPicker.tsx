@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Modal, Pressable, ScrollView, View } from 'react-native';
 
-import { COUNTRIES } from '@/data/countries';
+import { sortedCountries } from '@/data/countries';
 import { resolvePlace, usePlaceAliases } from '@/data/places';
 import { matchesUniversity, matchRank, sameCity, useUniversities, type University } from '@/data/universities';
 import { useI18n } from '@/i18n';
@@ -42,7 +42,7 @@ export function UniversityPicker({ label, value, onChange, country, city, option
 }
 
 function PickerSheet({ value, country: initialCountry, city, onClose, onPick }: { value: string; country?: string; city?: string; onClose: () => void; onPick: (v: string, country: string) => void }) {
-  const { d, f, country: countryName } = useI18n();
+  const { d, f, lang, country: countryName } = useI18n();
   const { colors } = useTheme();
   const aliases = usePlaceAliases();
   const [country, setCountry] = useState(initialCountry ?? 'FR');
@@ -99,7 +99,7 @@ function PickerSheet({ value, country: initialCountry, city, onClose, onPick }: 
                     setQ('');
                   }}
                   searchable
-                  options={COUNTRIES.map((c) => ({ value: c.code, label: countryName(c.code), leading: <Flag code={c.code} /> }))}
+                  options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))}
                 />
               </View>
               <IconButton icon="x" size={36} onPress={onClose} label={d.common.close} />

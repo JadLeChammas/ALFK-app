@@ -13,7 +13,7 @@ import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
-import { COUNTRIES } from '@/data/countries';
+import { sortedCountries } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
@@ -27,7 +27,7 @@ import { AvatarCropper } from '@/components/AvatarCropper';
 import { OtherSchoolsEditor } from '@/components/OtherSchools';
 
 export default function SignUp() {
-  const { d, country } = useI18n();
+  const { d, lang } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -185,7 +185,7 @@ export default function SignUp() {
             value={form.country}
             onChange={(c) => setForm((f) => ({ ...f, country: c }))}
             searchable
-            options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))}
+            options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))}
           />
           <CityPicker label={d.auth.city} value={form.city} onChange={set('city')} country={form.country} />
           {form.role === 'eleve' ? (
