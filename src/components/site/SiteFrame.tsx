@@ -19,7 +19,7 @@ import { brand, fonts } from '@/theme/tokens';
 import { useRetroTaps } from '@/lib/retro';
 import { rollCredits } from '@/components/EasterEggs';
 import { HiDevCredit } from './HiDevCredit';
-import { InstagramLink } from './Instagram';
+import { INSTAGRAM_HANDLE, InstagramButton, InstagramLink, instagramLinkProps } from './Instagram';
 import { PublicSettingsButton } from './PublicSettings';
 import { Reveal } from './Reveal';
 
@@ -314,8 +314,13 @@ function SiteFooter() {
           <View style={{ flex: isDesktop ? 5 : undefined, gap: isMobile ? 16 : 20, maxWidth: isMobile ? undefined : 440 }}>
             <Logo height={isMobile ? 60 : 76} onDark />
             <Txt style={{ fontFamily: fonts.regular, fontSize: isMobile ? 14 : 15, lineHeight: isMobile ? 21 : 24, color: muted }}>{d.site.footer.tagline}</Txt>
-            <View style={{ flexDirection: 'row' }}>
-              <InstagramLink variant="pill" />
+            {/* Social: round Instagram button (hover fill, 21st.dev « Social Media ») and its handle. */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <InstagramButton />
+              <Tap {...instagramLinkProps()} role="link" accessibilityLabel={`Instagram ${INSTAGRAM_HANDLE}`} hoverStyle={{ opacity: 0.8 }}>
+                <Txt style={{ fontFamily: fonts.medium, fontSize: 12, color: muted }}>{d.site.footer.followUs}</Txt>
+                <Txt style={{ fontFamily: fonts.semibold, fontSize: 15, color: '#FFFFFF' }}>{INSTAGRAM_HANDLE}</Txt>
+              </Tap>
             </View>
             <View style={isMobile ? { gap: 10, marginTop: 4 } : { flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
               <Button full={isMobile} label={d.site.footer.band} variant="white" iconRight="arrow-right" onPress={() => router.push('/adherer')} />

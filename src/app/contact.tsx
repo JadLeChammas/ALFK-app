@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 
-import { INSTAGRAM_HANDLE, InstagramMark, instagramLinkProps } from '@/components/site/Instagram';
+import { INSTAGRAM_HANDLE, InstagramGlyph, instagramLinkProps } from '@/components/site/Instagram';
 import { Container, SiteFrame } from '@/components/site/SiteFrame';
 import { LogoMark } from '@/components/ui/Logo';
 import { Button, Card, Chip, FieldRow, Input, Tap, type IconName } from '@/components/ui/primitives';
@@ -113,7 +113,9 @@ export default function Contact() {
                   accessibilityLabel={`Instagram ${INSTAGRAM_HANDLE}`}
                   style={{ flexDirection: 'row', alignItems: 'center', gap: 14, paddingVertical: 12, borderTopWidth: 1, borderTopColor: 'rgba(231, 236, 242,0.12)' }}
                   hoverStyle={{ opacity: 0.85 }}>
-                  <InstagramMark size={40} />
+                  <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(215, 180, 106,0.16)', alignItems: 'center', justifyContent: 'center' }}>
+                    <InstagramGlyph size={17} color={brand.blue} />
+                  </View>
                   <View style={{ flex: 1, gap: 1 }}>
                     <Txt style={{ fontFamily: fonts.semibold, fontSize: 15, color: '#FFFFFF' }}>Instagram</Txt>
                     <Txt numberOfLines={2} style={{ fontFamily: fonts.regular, fontSize: 13, color: 'rgba(231, 236, 242,0.65)' }}>{d.site.footer.followUs} · {INSTAGRAM_HANDLE}</Txt>
