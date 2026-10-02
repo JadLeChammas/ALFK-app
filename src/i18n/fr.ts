@@ -301,7 +301,7 @@ const fr = {
     },
     footer: {
       tagline: 'Un réseau, une mémoire, une communauté internationale.', contact: 'Nous contacter', createAccount: 'Créer un compte',
-      copyright: '© {year} Amicale LFK — Association des anciens élèves du Lycée Français de Koweït.', band: 'Rejoindre l\'Amicale', poweredBy: 'Propulsé par',
+      copyright: '© {year} Amicale LFK — Association des anciens élèves du Lycée Français de Koweït.', band: 'Rejoindre l\'Amicale', poweredBy: 'Propulsé par', followUs: 'Suivez-nous sur Instagram',
     },
   },
   situation: {

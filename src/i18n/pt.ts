@@ -303,7 +303,7 @@ const pt: Dict = {
     },
     footer: {
       tagline: 'Uma rede, uma memória, uma comunidade internacional.', contact: 'Contacte-nos', createAccount: 'Criar uma conta',
-      copyright: '© {year} Amicale LFK — Associação dos antigos alunos do Lycée Français de Koweït.', band: 'Aderir à Amicale', poweredBy: 'Desenvolvido por',
+      copyright: '© {year} Amicale LFK — Associação dos antigos alunos do Lycée Français de Koweït.', band: 'Aderir à Amicale', poweredBy: 'Desenvolvido por', followUs: 'Siga-nos no Instagram',
     },
   },
   situation: {

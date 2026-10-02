@@ -24,6 +24,7 @@ import { Txt } from '@/components/ui/Txt';
 import { useLayout } from '@/theme/layout';
 import { fonts, radius } from '@/theme/tokens';
 import { BigCta } from './BigCta';
+import { InstagramLink } from './Instagram';
 import { Container, HEADER_H } from './SiteFrame';
 
 export type PillarSlide = {
@@ -179,6 +180,7 @@ export function PillarSlider({ slides }: { slides: PillarSlide[] }) {
             <Animated.View key={`c${i}`} entering={FadeInDown.delay(480).duration(500)} style={{ marginTop: 6 }}>
               <BigCta label={s.cta} onPress={s.onPress} bg={s.ctaBg} fg={s.ctaFg} shadow={s.shadow} />
             </Animated.View>
+            <InstagramLink color={s.fg} muted={s.muted} />
             {/* Phones: content is anchored to the top, so the label and title stay put from slide to slide. */}
             {!isDesktop && photos}
           </Container>

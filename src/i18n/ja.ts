@@ -303,7 +303,7 @@ const ja: Dict = {
     },
     footer: {
       tagline: 'ひとつのネットワーク、ひとつの記憶、ひとつの国際コミュニティ。', contact: 'お問い合わせ', createAccount: 'アカウントを作成',
-      copyright: '© {year} Amicale LFK — クウェート・フランス人学校 同窓会。', band: 'Amicale に参加する', poweredBy: '制作',
+      copyright: '© {year} Amicale LFK — クウェート・フランス人学校 同窓会。', band: 'Amicale に参加する', poweredBy: '制作', followUs: 'Instagramでフォロー',
     },
   },
   situation: {

@@ -303,7 +303,7 @@ const zh: Dict = {
     },
     footer: {
       tagline: '一个网络，一份记忆，一个国际社区。', contact: '联系我们', createAccount: '创建账户',
-      copyright: '© {year} Amicale LFK — 科威特法国高中校友会。', band: '加入校友会', poweredBy: '技术支持',
+      copyright: '© {year} Amicale LFK — 科威特法国高中校友会。', band: '加入校友会', poweredBy: '技术支持', followUs: '在 Instagram 关注我们',
     },
   },
   situation: {

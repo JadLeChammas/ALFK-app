@@ -304,7 +304,7 @@ const pirate: Dict = {
     },
     footer: {
       tagline: 'One fleet, one logbook, one crew across the seas.', contact: 'Hail us', createAccount: 'Sign the Articles',
-      copyright: '© {year} Amicale LFK — Crew o’ the old hands o’ the Lycée Français de Koweït.', band: 'Join the crew', poweredBy: 'Rigged by',
+      copyright: '© {year} Amicale LFK — Crew o’ the old hands o’ the Lycée Français de Koweït.', band: 'Join the crew', poweredBy: 'Rigged by', followUs: 'Follow our log on Instagram',
     },
   },
   situation: {

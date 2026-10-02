@@ -303,7 +303,7 @@ const ar: Dict = {
     },
     footer: {
       tagline: 'شبكة واحدة، ذاكرة واحدة، مجتمع دولي واحد.', contact: 'تواصل معنا', createAccount: 'إنشاء حساب',
-      copyright: '© {year} Amicale LFK — جمعية خريجي الثانوية الفرنسية في الكويت.', band: 'انضم إلى الرابطة', poweredBy: 'بدعم من',
+      copyright: '© {year} Amicale LFK — جمعية خريجي الثانوية الفرنسية في الكويت.', band: 'انضم إلى الرابطة', poweredBy: 'بدعم من', followUs: 'تابعونا على إنستغرام',
     },
   },
   situation: {

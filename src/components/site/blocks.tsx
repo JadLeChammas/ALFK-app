@@ -490,10 +490,12 @@ function RibbonInner({ caption, schools }: { caption: string; schools: { name: s
 /** A university's logo, found automatically (data/uniLogos.ts); nothing is shown until one is found. */
 function UniLogo({ name }: { name: string }) {
   const url = useUniLogo(name);
-  if (!url) return null;
+  // If the image itself fails to load, show nothing rather than an empty tile.
+  const [failed, setFailed] = useState<string | null>(null);
+  if (!url || failed === url) return null;
   return (
     <View style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-      <Image source={{ uri: url }} style={{ width: 26, height: 26 }} contentFit="contain" transition={200} accessibilityIgnoresInvertColors />
+      <Image source={{ uri: url }} style={{ width: 26, height: 26 }} contentFit="contain" transition={200} onError={() => setFailed(url)} accessibilityIgnoresInvertColors />
     </View>
   );
 }

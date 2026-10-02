@@ -19,6 +19,7 @@ import { brand, fonts } from '@/theme/tokens';
 import { useRetroTaps } from '@/lib/retro';
 import { rollCredits } from '@/components/EasterEggs';
 import { HiDevCredit } from './HiDevCredit';
+import { InstagramLink } from './Instagram';
 import { PublicSettingsButton } from './PublicSettings';
 import { Reveal } from './Reveal';
 
@@ -264,6 +265,7 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
                 <Txt style={{ fontFamily: fonts.serif, fontSize: 26, color: pathname === l.href ? '#FF8A8C' : '#fff' }}>{l.label}</Txt>
               </Tap>
             ))}
+            <InstagramLink variant="row" muted="rgba(231, 236, 242,0.65)" />
             {!me && <Button label={d.site.nav.signIn} variant="onDark" full onPress={() => go('/connexion')} style={{ marginTop: 12 }} />}
           </Container>
         </Animated.View>
@@ -312,6 +314,9 @@ function SiteFooter() {
           <View style={{ flex: isDesktop ? 5 : undefined, gap: isMobile ? 16 : 20, maxWidth: isMobile ? undefined : 440 }}>
             <Logo height={isMobile ? 60 : 76} onDark />
             <Txt style={{ fontFamily: fonts.regular, fontSize: isMobile ? 14 : 15, lineHeight: isMobile ? 21 : 24, color: muted }}>{d.site.footer.tagline}</Txt>
+            <View style={{ flexDirection: 'row' }}>
+              <InstagramLink variant="pill" />
+            </View>
             <View style={isMobile ? { gap: 10, marginTop: 4 } : { flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
               <Button full={isMobile} label={d.site.footer.band} variant="white" iconRight="arrow-right" onPress={() => router.push('/adherer')} />
               <Button full={isMobile} label={d.site.footer.contact} variant="onDark" icon="mail" onPress={() => router.push('/contact')} />
