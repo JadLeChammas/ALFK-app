@@ -17,6 +17,12 @@ const ja: Dict = {
   demo: {
     tryTitle: 'アカウントなしでアプリを体験', trySub: 'デモを試す：架空のメンバー・イベント・メッセージで、すべての役割（管理者・卒業生・在校生・学校管理職）を体験できます。',
     tryButton: 'デモを見る', badge: 'デモモード — 架空のデータ', exit: 'デモを終了',
+    adminTitle: '公開デモ',
+    adminSub: 'トップページとログインページで訪問者に「デモを見る」ボタンを表示します。',
+    shown: '訪問者に表示中',
+    hidden: '訪問者には非表示',
+    shownToast: 'デモをトップページに表示しました',
+    hiddenToast: 'デモを非表示にしました',
   },
   time: { justNow: 'たった今', minutesAgo: '{n}分前' },
   errors: { saveFailed: '変更を保存できませんでした：{msg}' },

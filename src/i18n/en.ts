@@ -17,6 +17,12 @@ const en: Dict = {
   demo: {
     tryTitle: 'Explore the app without an account', trySub: 'Try the demo: fictional members, events and messages, with every role (Admin, Alumni, Student, Leadership).',
     tryButton: 'View the demo', badge: 'Demo mode — fictional data', exit: 'Exit demo',
+    adminTitle: 'Public demo',
+    adminSub: 'Show the « See the demo » button to visitors, on the home and sign-in pages.',
+    shown: 'Visible to visitors',
+    hidden: 'Hidden from visitors',
+    shownToast: 'The demo is visible on the home page',
+    hiddenToast: 'The demo is hidden',
   },
   time: { justNow: 'just now', minutesAgo: '{n} min ago' },
   errors: { saveFailed: 'Your change could not be saved: {msg}' },

@@ -8,11 +8,13 @@ import { Button, Divider, Input, Row, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@/data/seed';
 import { useStore, type AuthError } from '@/data/store';
+import { useDemoVisible } from '@/data/demoSetting';
 import { enterDemo, isDemoForced } from '@/lib/supabase';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function SignIn() {
+  const demoVisible = useDemoVisible();
   const { d } = useI18n();
   const { colors } = useTheme();
   const { actions, isRemote } = useStore();
@@ -43,7 +45,7 @@ export default function SignIn() {
       subtitle={d.auth.welcomeSub}
       footer={
         isRemote ? (
-          Platform.OS === 'web' && (
+          Platform.OS === 'web' && demoVisible && (
             <View style={{ gap: 10, padding: 16, borderRadius: 18, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.borderStrong }}>
               <Row gap={8}>
                 <Feather name="play-circle" size={15} color={colors.primary} />

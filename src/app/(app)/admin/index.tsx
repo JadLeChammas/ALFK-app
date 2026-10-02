@@ -1,8 +1,9 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { View } from 'react-native';
+import { Switch, View } from 'react-native';
 
 import { AdminNav } from '@/components/AdminNav';
+import { useDialogs } from '@/components/ui/Dialogs';
 import { CommunityStats } from '@/components/CommunityStats';
 import { Card, Row, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
@@ -14,10 +15,13 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
 
 export default function AdminDashboard() {
+  const { toast } = useDialogs();
   const { d, f, formatDate } = useI18n();
   const { colors } = useTheme();
   const { isMobile } = useLayout();
-  const { db } = useStore();
+  const { db, actions } = useStore();
+  // The « Voir la démo » invitation for visitors (on unless an admin switched it off).
+  const showDemo = db.settings.showDemo !== 'off';
 
   const now = new Date();
   const nextEvent = [...db.events].filter((e) => new Date(e.date) >= now).sort((x, y) => (x.date > y.date ? 1 : -1))[0];
@@ -64,6 +68,26 @@ export default function AdminDashboard() {
           );
         })}
       </Grid>
+
+      {/* Visitors: show or hide the « Voir la démo » invitation (home and sign-in pages). */}
+      <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+        <View style={{ width: 44, height: 44, borderRadius: radius.card, backgroundColor: showDemo ? colors.secondarySoft : colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' }}>
+          <Feather name={showDemo ? 'eye' : 'eye-off'} size={19} color={showDemo ? colors.secondaryStrong : colors.textSubtle} />
+        </View>
+        <View style={{ flex: 1, gap: 2 }}>
+          <Txt variant="bodyStrong">{d.demo.adminTitle}</Txt>
+          <Txt variant="small" color="textMuted">{d.demo.adminSub}</Txt>
+          <Txt variant="small" style={{ color: showDemo ? colors.success : colors.textSubtle, fontFamily: fonts.semibold }}>{showDemo ? d.demo.shown : d.demo.hidden}</Txt>
+        </View>
+        <Switch
+          value={showDemo}
+          onValueChange={(on) => {
+            actions.setShowDemo(on);
+            toast(on ? d.demo.shownToast : d.demo.hiddenToast);
+          }}
+          accessibilityLabel={d.demo.adminTitle}
+        />
+      </Card>
 
       <View style={{ gap: 16 }}>
         <Txt variant="h2">{d.admin.stats}</Txt>

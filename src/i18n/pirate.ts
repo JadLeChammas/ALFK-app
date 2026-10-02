@@ -18,6 +18,12 @@ const pirate: Dict = {
   demo: {
     tryTitle: 'Board the ship without papers', trySub: 'Try the demo: make-believe crew, shore leaves an’ bottles, with every rank (Captain, Old Hand, Cabin Boy, Admiralty).',
     tryButton: 'Climb aboard the demo', badge: 'Demo mode — tall tales only', exit: 'Abandon the demo',
+    adminTitle: 'Public demo',
+    adminSub: 'Show th\' « See th\' demo » button to landlubbers, on th\' home an\' sign-in pages.',
+    shown: 'Visible to landlubbers',
+    hidden: 'Hidden from landlubbers',
+    shownToast: 'Th\' demo be visible on th\' home page',
+    hiddenToast: 'Th\' demo be hidden',
   },
   time: { justNow: 'this very moment', minutesAgo: '{n} min ago' },
   errors: { saveFailed: 'Blimey, yer change be lost at sea: {msg}' },

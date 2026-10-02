@@ -856,6 +856,12 @@ function useStoreValue() {
       commit((d) => ({ ...d, settings: { ...d.settings, whatsappCommunity: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'whatsappCommunity', value: value ?? null }));
     },
+    /** Admins: show or hide the « Voir la démo » invitation to visitors. */
+    setShowDemo(on: boolean) {
+      const value = on ? 'on' : 'off';
+      commit((d) => ({ ...d, settings: { ...d.settings, showDemo: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'showDemo', value }));
+    },
     /** Admins: save the « Le LFK » page (history and fun facts). */
     saveLfkStory(story: object | null) {
       const value = story ? JSON.stringify(story) : undefined;

@@ -15,6 +15,12 @@ const fr = {
   demo: {
     tryTitle: 'Découvrir l’app sans compte', trySub: 'Explorez la démo : membres, événements et messages fictifs, avec tous les rôles (Admin, Alumni, Élève, Direction).',
     tryButton: 'Voir la démo', badge: 'Mode démo — données fictives', exit: 'Quitter la démo',
+    adminTitle: 'Démo publique',
+    adminSub: 'Afficher le bouton « Voir la démo » aux visiteurs, sur l’accueil et la page de connexion.',
+    shown: 'Visible par les visiteurs',
+    hidden: 'Masquée pour les visiteurs',
+    shownToast: 'La démo est visible sur l’accueil',
+    hiddenToast: 'La démo est masquée',
   },
   time: { justNow: 'à l’instant', minutesAgo: 'il y a {n} min' },
   errors: { saveFailed: 'La modification n’a pas pu être enregistrée : {msg}' },

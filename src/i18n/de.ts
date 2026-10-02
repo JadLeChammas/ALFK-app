@@ -17,6 +17,12 @@ const de: Dict = {
   demo: {
     tryTitle: 'Die App ohne Konto entdecken', trySub: 'Testen Sie die Demo: fiktive Mitglieder, Veranstaltungen und Nachrichten, mit allen Rollen (Admin, Alumni, Schüler, Schulleitung).',
     tryButton: 'Demo ansehen', badge: 'Demo-Modus — fiktive Daten', exit: 'Demo beenden',
+    adminTitle: 'Öffentliche Demo',
+    adminSub: 'Den Button « Demo ansehen » für Besucher auf der Startseite und der Anmeldeseite anzeigen.',
+    shown: 'Für Besucher sichtbar',
+    hidden: 'Für Besucher ausgeblendet',
+    shownToast: 'Die Demo ist auf der Startseite sichtbar',
+    hiddenToast: 'Die Demo ist ausgeblendet',
   },
   time: { justNow: 'gerade eben', minutesAgo: 'vor {n} Min.' },
   errors: { saveFailed: 'Die Änderung konnte nicht gespeichert werden: {msg}' },

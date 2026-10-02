@@ -15,6 +15,7 @@ import { usePublicOverview } from '@/data/public';
 import { IMAGES } from '@/data/seed';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
+import { useDemoVisible } from '@/data/demoSetting';
 import { enterDemo } from '@/lib/supabase';
 import { useLayout } from '@/theme/layout';
 import { brand, fonts, radius } from '@/theme/tokens';
@@ -144,7 +145,8 @@ function DemoInvite() {
   const t = useTone();
   const { d } = useI18n();
   const { isRemote } = useStore();
-  if (!isRemote || Platform.OS !== 'web') return null;
+  const visible = useDemoVisible();
+  if (!isRemote || Platform.OS !== 'web' || !visible) return null;
   return (
     <Container style={{ paddingBottom: 48 }}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 12, padding: 18, borderRadius: radius.card, borderWidth: 1, borderStyle: 'dashed', borderColor: t.rule }}>

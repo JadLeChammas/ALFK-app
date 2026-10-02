@@ -17,6 +17,12 @@ const zh: Dict = {
   demo: {
     tryTitle: '无需账号即可体验', trySub: '试用演示：虚构的成员、活动和消息，涵盖所有角色（管理员、校友、在校生、学校领导）。',
     tryButton: '查看演示', badge: '演示模式 — 虚构数据', exit: '退出演示',
+    adminTitle: '公开演示',
+    adminSub: '在首页和登录页向访客显示 « 查看演示 » 按钮。',
+    shown: '访客可见',
+    hidden: '对访客隐藏',
+    shownToast: '演示已在首页显示',
+    hiddenToast: '演示已隐藏',
   },
   time: { justNow: '刚刚', minutesAgo: '{n} 分钟前' },
   errors: { saveFailed: '无法保存修改：{msg}' },
