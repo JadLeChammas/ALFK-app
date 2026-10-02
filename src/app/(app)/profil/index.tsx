@@ -19,6 +19,7 @@ import { radius } from '@/theme/tokens';
 import { birthdayToday } from '@/lib/eggs';
 import { Balloons } from '@/components/EasterEggs';
 import { nationalityName } from '@/data/nationalities';
+import { OtherSchoolsRows } from '@/components/OtherSchools';
 
 export default function MyProfile() {
   const { d, f, lang } = useI18n();
@@ -93,6 +94,7 @@ export default function MyProfile() {
             {me.role === 'admin' && me.bureauCode && <ListRow icon="shield" title={me.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             {me.situation === 'working' && (me.employer || me.jobTitle) && <ListRow icon="briefcase" title={[me.jobTitle, me.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
             <ListRow icon="book" title={me.school ?? '—'} subtitle={me.situation === 'working' ? d.situation.graduatedFrom : me.situation === 'student' ? d.situation.studiesAt : d.member.school} />
+            {!!me.otherSchools?.length && <OtherSchoolsRows schools={me.otherSchools} />}
 {!!me.nationalities?.length && (
               <ListRow
                 icon="flag"

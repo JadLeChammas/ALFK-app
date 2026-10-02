@@ -17,6 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { birthdayToday } from '@/lib/eggs';
 import { Balloons } from '@/components/EasterEggs';
 import { nationalityName } from '@/data/nationalities';
+import { OtherSchoolsRows } from '@/components/OtherSchools';
 
 export default function MemberProfile() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -97,6 +98,7 @@ export default function MemberProfile() {
             {(me.role === 'admin' || isMe) && user.role === 'admin' && user.bureauCode && <ListRow icon="shield" title={user.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             {user.situation === 'working' && (user.employer || user.jobTitle) && <ListRow icon="briefcase" title={[user.jobTitle, user.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
             <ListRow icon="book" title={user.school ?? '—'} subtitle={user.situation === 'working' ? d.situation.graduatedFrom : user.situation === 'student' ? d.situation.studiesAt : d.member.school} />
+            {!!user.otherSchools?.length && <OtherSchoolsRows schools={user.otherSchools} />}
 {!!user.nationalities?.length && (
               <ListRow
                 icon="flag"

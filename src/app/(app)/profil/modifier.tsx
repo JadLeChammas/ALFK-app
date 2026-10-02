@@ -16,12 +16,15 @@ import { COUNTRIES } from '@/data/countries';
 import { FIELDS } from '@/data/fields';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
-import type { Situation } from '@/data/types';
+import type { OtherSchool, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 import { NationalityPicker } from '@/components/NationalityPicker';
 import { CityPicker } from '@/components/CityPicker';
+import { AvatarCropper } from '@/components/AvatarCropper';
+import type { PickedImage } from '@/data/remote';
+import { OtherSchoolsEditor } from '@/components/OtherSchools';
 
 export default function EditProfile() {
   const { d, country } = useI18n();
@@ -47,6 +50,7 @@ export default function EditProfile() {
   });
   const [mentor, setMentor] = useState(!!me.mentor);
   const [nationalities, setNationalities] = useState<string[]>(me.nationalities ?? []);
+  const [otherSchools, setOtherSchools] = useState<OtherSchool[]>(me.otherSchools ?? []);
   // Former students share their studies with the lycée students (Orientation space).
   const graduate = me.role === 'alumni' || me.role === 'admin';
   // Universities and companies other members already entered (to pick the same spelling).
@@ -85,6 +89,7 @@ export default function EditProfile() {
       employer: working ? form.employer.trim() || undefined : undefined,
       jobTitle: working ? form.jobTitle.trim() || undefined : undefined,
       nationalities: nationalities.length ? nationalities : undefined,
+      otherSchools: me.role !== 'eleve' && otherSchools.length ? otherSchools : undefined,
     });
     if (!r.ok) {
       if (r.error === 'birth_date' || r.error === 'phone') setFieldError(r.error);
@@ -97,9 +102,14 @@ export default function EditProfile() {
   };
 
   const [uploading, setUploading] = useState(false);
+  // A picked photo is adjusted (placed and zoomed) before being saved.
+  const [cropping, setCropping] = useState<PickedImage | null>(null);
   const changePhoto = async () => {
     const [img] = await pickImages(false);
-    if (!img) return;
+    if (img) setCropping(img);
+  };
+  const savePhoto = async (img: PickedImage) => {
+    setCropping(null);
     setUploading(true);
     try {
       const url = await actions.uploadImage(img, 'avatars');
@@ -123,6 +133,7 @@ export default function EditProfile() {
   return (
     <Screen maxWidth={1040}>
       <BackLink label={d.nav.profile} href="/profil" />
+      {cropping && <AvatarCropper image={cropping} onCancel={() => setCropping(null)} onDone={savePhoto} />}
       <PageHeader title={d.profile.edit} right={<Button label={d.common.save} icon="check" onPress={save} />} />
       <Columns
         asideWidth={320}
@@ -191,6 +202,7 @@ export default function EditProfile() {
                 <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))} />
               </View>
             </FieldRow>
+            {me.role !== 'eleve' && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}
             <NationalityPicker value={nationalities} onChange={setNationalities} />
             {graduate && (
               <>
@@ -231,6 +243,7 @@ export default function EditProfile() {
                 </View>
               </Tap>
               <Button label={d.profile.changePhoto} variant="secondary" size="sm" icon="image" onPress={changePhoto} loading={uploading} />
+              {!!form.avatar && <Button label={d.crop.adjust} variant="ghost" size="sm" icon="crop" onPress={() => setCropping({ uri: form.avatar as string })} />}
             </Card>
             <Card style={{ gap: 14 }}>
               <Txt variant="h3">{d.settings.changePassword}</Txt>

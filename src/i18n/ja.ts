@@ -565,6 +565,22 @@ const ja: Dict = {
     none: '都市が見つかりません',
     notListed: '自分の都市がリストにない',
   },
+  crop: {
+    title: '写真を調整',
+    zoomIn: '拡大',
+    zoomOut: '縮小',
+    hint: '写真をドラッグして円の中に配置します。',
+    failed: 'この写真は調整できません。別の写真をお試しください。',
+    use: 'この写真を使う',
+    adjust: '写真を調整',
+  },
+  schools: {
+    title: 'その他の大学',
+    add: '別の大学を追加',
+    exchange: '交換留学',
+    other: 'その他の大学',
+    hint: '交換留学やダブルディグリーなど。交換留学なら「交換留学」にチェック。',
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

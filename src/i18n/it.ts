@@ -565,6 +565,22 @@ const it: Dict = {
     none: 'Nessuna città trovata',
     notListed: 'La mia città non è nella lista',
   },
+  crop: {
+    title: 'Regola la foto',
+    zoomIn: 'Ingrandisci',
+    zoomOut: 'Riduci',
+    hint: 'Trascina la foto per posizionarla nel cerchio.',
+    failed: 'Impossibile regolare questa foto. Provane un’altra.',
+    use: 'Usa questa foto',
+    adjust: 'Regola la foto',
+  },
+  schools: {
+    title: 'Altre università',
+    add: 'Aggiungi un’altra università',
+    exchange: 'Scambio',
+    other: 'Altra università',
+    hint: 'Un semestre di scambio, un doppio titolo… Spunta « Scambio » se lo era.',
+  },
   uni: {
     pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',
     elsewhere: 'Altrove — {country}', none: 'Nessun istituto trovato', notListed: 'Il mio istituto non è nell’elenco',

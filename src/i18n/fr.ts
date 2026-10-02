@@ -563,6 +563,22 @@ const fr = {
     none: 'Aucune ville trouvée',
     notListed: 'Ma ville n’est pas dans la liste',
   },
+  crop: {
+    title: 'Ajuster la photo',
+    zoomIn: 'Zoomer',
+    zoomOut: 'Dézoomer',
+    hint: 'Glissez la photo pour la placer dans le cercle.',
+    failed: 'Impossible d’ajuster cette photo. Essayez-en une autre.',
+    use: 'Utiliser cette photo',
+    adjust: 'Ajuster la photo',
+  },
+  schools: {
+    title: 'Autres universités',
+    add: 'Ajouter une autre université',
+    exchange: 'Échange',
+    other: 'Autre université',
+    hint: 'Un semestre d’échange, un double diplôme… Cochez « Échange » si c’en était un.',
+  },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',
     elsewhere: 'Ailleurs — {country}', none: 'Aucun établissement trouvé', notListed: 'Mon établissement n’est pas dans la liste',

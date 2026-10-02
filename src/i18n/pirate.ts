@@ -566,6 +566,22 @@ const pirate: Dict = {
     none: 'No port found',
     notListed: 'Me port be not in th\' list',
   },
+  crop: {
+    title: 'Adjust th\' portrait',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    hint: 'Drag th\' portrait to place it in th\' circle.',
+    failed: 'This portrait can\'t be adjusted. Try another.',
+    use: 'Use this portrait',
+    adjust: 'Adjust th\' portrait',
+  },
+  schools: {
+    title: 'Other schools',
+    add: 'Add another school',
+    exchange: 'Exchange',
+    other: 'Other school',
+    hint: 'A semester on foreign shores, a double degree… Tick « Exchange » if it were one.',
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

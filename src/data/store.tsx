@@ -41,6 +41,7 @@ import type {
   LfkEvent,
   Situation,
   Privacy,
+  OtherSchool,
   Publication,
   Question,
   QuestionTopic,
@@ -104,9 +105,10 @@ export type SignUpInput = {
   nationalities?: string[];
   bio?: string;
   mentor?: boolean;
+  otherSchools?: OtherSchool[];
 };
 
-export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities'>>;
+export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools'>>;
 
 const demoId = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 const makeId = (p: string) => (isRemote ? newId() : demoId(p));
@@ -331,6 +333,7 @@ function useStoreValue() {
               nationalities: input.nationalities ?? [],
               bio: input.bio ?? '',
               mentor: input.mentor ? 'true' : '',
+              other_schools: input.otherSchools ?? [],
             },
           },
         });

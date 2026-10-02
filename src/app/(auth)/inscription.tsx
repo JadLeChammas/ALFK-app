@@ -20,9 +20,11 @@ import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import type { PickedDoc, PickedImage } from '@/data/remote';
 import { pickImages } from '@/lib/media';
 import { useStore, type AuthError } from '@/data/store';
-import type { Gender, Role, Situation } from '@/data/types';
+import type { Gender, OtherSchool, Role, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
+import { AvatarCropper } from '@/components/AvatarCropper';
+import { OtherSchoolsEditor } from '@/components/OtherSchools';
 
 export default function SignUp() {
   const { d, country } = useI18n();
@@ -32,12 +34,14 @@ export default function SignUp() {
   const [proof, setProof] = useState<PickedDoc | null>(null);
   // Same questions as the profile: nationalities, photo, a few words, and (alumni) answering students.
   const [nationalities, setNationalities] = useState<string[]>([]);
+  const [otherSchools, setOtherSchools] = useState<OtherSchool[]>([]);
   const [photo, setPhoto] = useState<PickedImage | null>(null);
   const [bio, setBio] = useState('');
   const [mentor, setMentor] = useState(false);
+  const [cropping, setCropping] = useState<PickedImage | null>(null);
   const choosePhoto = async () => {
     const [img] = await pickImages(false);
-    if (img) setPhoto(img);
+    if (img) setCropping(img);
   };
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
@@ -79,6 +83,7 @@ export default function SignUp() {
       nationalities: nationalities.length ? nationalities : undefined,
       bio: bio.trim() || undefined,
       mentor: alumni ? mentor : undefined,
+      otherSchools: alumni && otherSchools.length ? otherSchools : undefined,
     }, proof, photo);
     setBusy(false);
     if (!r.ok) {
@@ -195,6 +200,7 @@ export default function SignUp() {
           ) : (
             <UniversityPicker label={d.auth.school} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
           )}
+          {form.role === 'alumni' && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}
           <NationalityPicker value={nationalities} onChange={setNationalities} />
           {step === 2 && error === 'missing' && <Txt variant="smallStrong" color="danger">{d.auth.errors.missing}</Txt>}
           {form.role === 'alumni' && (
@@ -244,6 +250,7 @@ export default function SignUp() {
               <Button label={photo ? d.profile.changePhoto : d.auth.addPhoto} icon="image" size="sm" variant="secondary" onPress={choosePhoto} style={{ alignSelf: 'flex-start' }} />
             </View>
           </Row>
+          {cropping && <AvatarCropper image={cropping} onCancel={() => setCropping(null)} onDone={(img) => { setPhoto(img); setCropping(null); }} />}
           <Input label={`${d.profile.bio} (${d.common.optional})`} value={bio} onChangeText={setBio} multiline maxLength={600} />
           <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} />
           <Row gap={8} style={{ alignItems: 'flex-start' }}>

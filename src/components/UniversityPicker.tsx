@@ -20,7 +20,7 @@ const MAX_ROWS = 80;
  * rest of the country, filtered from the first letter (name or acronym). A school missing from the
  * list can still be typed in by hand.
  */
-export function UniversityPicker({ label, value, onChange, country, city, optional }: { label: string; value: string; onChange: (v: string) => void; country?: string; city?: string; optional?: boolean }) {
+export function UniversityPicker({ label, value, onChange, country, city, optional, icon = 'book' }: { label: string; value: string; onChange: (v: string, country?: string) => void; country?: string; city?: string; optional?: boolean; icon?: 'book' | 'plus' }) {
   const { d } = useI18n();
   const { colors } = useTheme();
   const [open, setOpen] = useState(false);
@@ -32,16 +32,16 @@ export function UniversityPicker({ label, value, onChange, country, city, option
         accessibilityRole="button"
         style={{ flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 48, paddingHorizontal: 14, borderRadius: radius.input, backgroundColor: colors.surfaceAlt, borderWidth: 1, borderColor: colors.border }}
         hoverStyle={{ borderColor: colors.borderStrong }}>
-        <Feather name="book" size={16} color={colors.textSubtle} />
+        <Feather name={icon} size={16} color={colors.textSubtle} />
         <Txt numberOfLines={1} style={{ flex: 1, color: value ? colors.text : colors.textSubtle }}>{value || d.uni.pick}</Txt>
         <Feather name="chevron-down" size={16} color={colors.textSubtle} />
       </Tap>
-      {open && <PickerSheet value={value} country={country} city={city} onClose={() => setOpen(false)} onPick={(v) => { onChange(v); setOpen(false); }} />}
+      {open && <PickerSheet value={value} country={country} city={city} onClose={() => setOpen(false)} onPick={(v, cc) => { onChange(v, cc); setOpen(false); }} />}
     </View>
   );
 }
 
-function PickerSheet({ value, country: initialCountry, city, onClose, onPick }: { value: string; country?: string; city?: string; onClose: () => void; onPick: (v: string) => void }) {
+function PickerSheet({ value, country: initialCountry, city, onClose, onPick }: { value: string; country?: string; city?: string; onClose: () => void; onPick: (v: string, country: string) => void }) {
   const { d, f, country: countryName } = useI18n();
   const { colors } = useTheme();
   const aliases = usePlaceAliases();
@@ -72,7 +72,7 @@ function PickerSheet({ value, country: initialCountry, city, onClose, onPick }: 
     return (
       <Tap
         key={`${u.name}|${u.city}`}
-        onPress={() => onPick(u.name)}
+        onPress={() => onPick(u.name, country)}
         style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10, paddingHorizontal: 12, borderRadius: radius.input, backgroundColor: active ? colors.secondarySoft : 'transparent' }}
         hoverStyle={{ backgroundColor: colors.surfaceAlt }}>
         <View style={{ flex: 1 }}>
@@ -110,7 +110,7 @@ function PickerSheet({ value, country: initialCountry, city, onClose, onPick }: 
           {manual ? (
             <View style={{ padding: 16, gap: 12 }}>
               <Input label={d.uni.typeIt} icon="book" value={typed} onChangeText={setTyped} autoFocus />
-              <Button label={d.common.confirm} icon="check" disabled={!typed.trim()} onPress={() => onPick(typed.trim())} />
+              <Button label={d.common.confirm} icon="check" disabled={!typed.trim()} onPress={() => onPick(typed.trim(), country)} />
               <Button label={d.uni.backToList} variant="ghost" icon="list" onPress={() => setManual(false)} />
             </View>
           ) : (

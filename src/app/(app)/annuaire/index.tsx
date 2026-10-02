@@ -48,7 +48,7 @@ export default function Directory() {
       if (school !== 'all' && resolvePlace(u.school, aliases) !== school) return false;
       if (situation !== 'all' && u.situation !== situation) return false;
       if (!n) return true;
-      const hay = norm(`${fullName(u)} ${u.promo ?? ''} ${u.country ? countrySearchText(u.country) : ''} ${u.school ?? ''} ${u.employer ?? ''} ${u.jobTitle ?? ''} ${u.city ?? ''}`);
+      const hay = norm(`${fullName(u)} ${u.promo ?? ''} ${u.country ? countrySearchText(u.country) : ''} ${u.school ?? ''} ${(u.otherSchools ?? []).map((s) => s.name).join(' ')} ${u.employer ?? ''} ${u.jobTitle ?? ''} ${u.city ?? ''}`);
       return n.split(/\s+/).every((t) => hay.includes(t));
     });
   }, [members, q, promo, country, school, situation, aliases]);

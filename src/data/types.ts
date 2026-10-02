@@ -52,6 +52,8 @@ export type User = {
   createdAt: string;
   lastActiveAt: string;
   privacy: Privacy;
+  /** Other universities (an exchange semester, a second degree…), besides `school`. */
+  otherSchools?: OtherSchool[];
   /** Nationalities (ISO codes, several allowed — see data/nationalities.ts). */
   nationalities?: string[];
   /** LinkedIn-style CV, visible to members (see components/cv). */
@@ -158,6 +160,8 @@ export type AppNotification = {
 };
 
 /** One line of a CV section. Dates are 'YYYY-MM'; no end = still going. */
+export type OtherSchool = { name: string; country?: string; exchange?: boolean };
+
 export type CvEntry = { id: string; title: string; org?: string; place?: string; start?: string; end?: string; description?: string; url?: string };
 /** 1 notions · 2 intermediate · 3 fluent · 4 bilingual · 5 native. */
 export type CvLanguage = { name: string; level: 1 | 2 | 3 | 4 | 5 };

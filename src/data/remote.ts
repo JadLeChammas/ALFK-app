@@ -59,6 +59,7 @@ export const toUser = (r: Row): User => ({
   lastActiveAt: r.last_active_at,
   privacy: { showEmail: r.show_email, showPhone: r.show_phone, showBirthday: r.show_birthday },
   cv: opt(r.cv),
+  otherSchools: Array.isArray(r.other_schools) && r.other_schools.length ? r.other_schools : undefined,
   nationalities: Array.isArray(r.nationalities) && r.nationalities.length ? r.nationalities : undefined,
 });
 
@@ -83,6 +84,7 @@ const PROFILE_COLUMNS: Record<string, string> = {
   bureauCode: 'bureau_code',
   fieldOfStudy: 'field_of_study',
   nationalities: 'nationalities',
+  otherSchools: 'other_schools',
   mentor: 'mentor',
 };
 

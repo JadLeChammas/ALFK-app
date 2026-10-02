@@ -565,6 +565,22 @@ const zh: Dict = {
     none: '未找到城市',
     notListed: '我的城市不在列表中',
   },
+  crop: {
+    title: '调整照片',
+    zoomIn: '放大',
+    zoomOut: '缩小',
+    hint: '拖动照片，将其放入圆圈中。',
+    failed: '无法调整这张照片，请换一张。',
+    use: '使用这张照片',
+    adjust: '调整照片',
+  },
+  schools: {
+    title: '其他大学',
+    add: '添加其他大学',
+    exchange: '交换',
+    other: '其他大学',
+    hint: '交换学期、双学位等。如果是交换，请勾选 « 交换 »。',
+  },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',
     elsewhere: '其他地方 — {country}', none: '未找到院校', notListed: '我的学校不在列表中',
