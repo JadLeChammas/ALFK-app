@@ -15,6 +15,7 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
 import { countNationalities, nationalityName } from '@/data/nationalities';
+import { studyEntries } from '@/data/members';
 
 /** Read-only network analytics — shared by the admin dashboard and the school leadership's stats page. */
 export function CommunityStats() {
@@ -48,7 +49,7 @@ export function CommunityStats() {
   const byPromo = [...promoMap.entries()].sort((a, b) => b[0] - a[0]).slice(0, 8).map(([y, v]) => ({ label: f(d.common.promo, { year: y }), value: v }));
 
   // Where alumni went to study (same population as Repère).
-  const bySchool = groupByPlace(members.filter((u) => u.role === 'alumni' || u.role === 'admin'), (u) => u.school, aliases)
+  const bySchool = groupByPlace(studyEntries(members.filter((u) => u.role === 'alumni' || u.role === 'admin')), (u) => u.school, aliases)
     .slice(0, 8)
     .map((g) => ({ label: g.label, value: g.items.length, leading: g.items[0].country ? <Flag code={g.items[0].country} size={12} /> : undefined }));
 

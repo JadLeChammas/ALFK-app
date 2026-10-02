@@ -262,7 +262,7 @@ const es: Dict = {
       cta1: 'Unirse a la Amicale', cta2: 'Crear mi cuenta', cta3: 'Preparar mis estudios',
       cta4: 'Descubrir la Amicale', studyAt: 'Nuestros antiguos alumnos estudian hoy en', networkTitle: 'De Kuwait',
       networkItalic: 'al mundo entero.', networkSub: 'Cada arco parte del liceo y lleva adonde nuestros antiguos alumnos estudian hoy.', statAlumni: 'Antiguos alumnos',
-      statCountries: 'Países de residencia', statPromos: 'Promos LFK', statUniversities: 'Universidades', statNationalities: 'Nacionalidades',
+      statCountries: 'Países de acogida', statPromos: 'Promos LFK', statUniversities: 'Universidades', statNationalities: 'Nacionalidades',
       topDestinations: 'Destinos principales', quoteTitle: 'Unas palabras del presidente', quote: 'Nuestra plataforma por fin reúne a toda la comunidad del LFK en un solo lugar, en el móvil y en el ordenador: reencuéntrense, ayúdense y den vida a la Amicale.',
       stepsTitle: 'Unirse a la Amicale', stepsItalic: 'en tres pasos.', step: 'Paso',
       step1Title: 'Cree su cuenta', step1Sub: 'Sus datos y un justificante de escolaridad en el LFK: boletín, certificado, constancia o una simple foto.', step2Title: 'Validación por la junta',

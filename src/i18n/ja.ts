@@ -262,7 +262,7 @@ const ja: Dict = {
       cta1: 'Amicale に参加する', cta2: 'アカウントを作成', cta3: '進路を考える',
       cta4: 'Amicale を知る', studyAt: '卒業生の現在の進学先', networkTitle: 'クウェートから',
       networkItalic: '世界中へ。', networkSub: 'それぞれの弧は学校から、卒業生が今学んでいる場所へとつながっています。', statAlumni: '卒業生',
-      statCountries: '居住国', statPromos: 'Promo LFK', statUniversities: '大学', statNationalities: '国籍',
+      statCountries: '受け入れ国', statPromos: 'Promo LFK', statUniversities: '大学', statNationalities: '国籍',
       topDestinations: '主な進学先', quoteTitle: '会長からのメッセージ', quote: '私たちのプラットフォームは、LFK のコミュニティ全体をスマートフォンでもパソコンでもひとつの場所に集めます。再会し、助け合い、Amicale を盛り上げましょう。',
       stepsTitle: 'Amicale への参加は', stepsItalic: '3 ステップ。', step: 'ステップ',
       step1Title: 'アカウントを作成', step1Sub: 'あなたの情報と LFK の在籍証明書類（成績表、在学証明書、証明書、または写真）。', step2Title: '役員会による確認',

@@ -19,6 +19,7 @@ import type { ContinentKey, User } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
+import { studyEntries, type StudyEntry } from '@/data/members';
 
 export default function Repere() {
   const params = useLocalSearchParams<{ country?: string }>();
@@ -31,9 +32,12 @@ export default function Repere() {
   // Work: where those already working are, by company.
   const [mode, setMode] = useState<'studies' | 'work'>('studies');
   const place = (u: User) => (mode === 'work' ? u.employer : u.school);
-  const alumni = members.filter(
-    (u) => (u.role === 'alumni' || u.role === 'admin') && u.country && (mode === 'work' ? u.situation === 'working' && u.employer : u.school && u.situation !== 'working')
-  );
+  const graduates = members.filter((u) => u.role === 'alumni' || u.role === 'admin');
+  // Exchange semesters and other universities count too, each in its own country.
+  const alumni: StudyEntry<User>[] =
+    mode === 'work'
+      ? graduates.filter((u) => u.country && u.situation === 'working' && u.employer)
+      : studyEntries(graduates).filter((e) => e.country && (e.extra || e.situation !== 'working'));
 
   const initialCountry = countryByCode(params.country);
   const [continent, setContinent] = useState<ContinentKey>(initialCountry?.continent ?? 'europe');
@@ -94,7 +98,7 @@ export default function Repere() {
               </View>
               <Row gap={0}>
                 {list.slice(0, 3).map((u, j) => (
-                  <View key={u.id} style={{ marginLeft: j ? -8 : 0 }}>
+                  <View key={`${u.id}-${j}`} style={{ marginLeft: j ? -8 : 0 }}>
                     <Avatar uri={u.avatar} name={fullName(u)} size={26} ring />
                   </View>
                 ))}
@@ -109,13 +113,14 @@ export default function Repere() {
                 {me.role === 'admin' && (
                   <Button label={d.repere.merge} icon="git-merge" size="sm" variant="secondary" onPress={() => setMerging({ key: school, label })} />
                 )}
-                {list.map((u) => (
-                  <Tap key={u.id} onPress={() => router.push(`/membre/${u.id}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                {list.map((u: StudyEntry<User>) => (
+                  <Tap key={`${u.id}-${u.school}`} onPress={() => router.push(`/membre/${u.id}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                     <Avatar uri={u.avatar} name={fullName(u)} size={30} />
                     <View style={{ flex: 1 }}>
                       <Txt variant="smallStrong">{fullName(u)}</Txt>
                       {mode === 'work' && u.jobTitle && <Txt variant="small" color="textSubtle">{u.jobTitle}</Txt>}
                     </View>
+                    {u.exchange && <Badge label={d.schools.exchange} tone="secondary" icon="repeat" />}
                     {u.promo && <Badge label={String(u.promo)} />}
                   </Tap>
                 ))}

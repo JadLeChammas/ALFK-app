@@ -5,6 +5,7 @@ import { countNationalities } from './nationalities';
 import { groupByPlace, parseAliases } from './places';
 import { useStore } from './store';
 import type { Db, Institution } from './types';
+import { studyEntries } from './members';
 
 /**
  * What visitors without an account may see: totals only (never member profiles), the Bureau
@@ -41,7 +42,8 @@ function fromDb(db: Db): PublicOverview {
   };
   const countries = count(grads.map((u) => u.country));
   // The same university written differently counts once (data/places.ts).
-  const schools = groupByPlace(grads, (u) => u.school, parseAliases(db.settings.placeAliases)).map((g) => [g.label, g.items.length] as const);
+  // Exchange and other universities count too.
+  const schools = groupByPlace(studyEntries(grads), (u) => u.school, parseAliases(db.settings.placeAliases)).map((g) => [g.label, g.items.length] as const);
   const bureau = db.users
     .filter((u) => u.approved && (u.role === 'admin' || u.role === 'honneur'))
     .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }))

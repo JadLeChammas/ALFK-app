@@ -135,3 +135,19 @@ export function occupation(u: Pick<User, 'fonction' | 'situation' | 'employer' |
   if (u.situation === 'working' && (u.employer || u.jobTitle)) return [u.jobTitle, u.employer].filter(Boolean).join(' · ');
   return u.school;
 }
+
+/**
+ * Where people studied, one entry per university: the main one, plus the other ones (exchange,
+ * second degree), each in its own country. Used by Repère and the statistics.
+ */
+export type StudyEntry<U> = U & { exchange?: boolean; extra?: boolean };
+export function studyEntries<U extends Pick<User, 'school' | 'country' | 'otherSchools'>>(users: U[]): StudyEntry<U>[] {
+  const out: StudyEntry<U>[] = [];
+  for (const u of users) {
+    if (u.school) out.push(u);
+    for (const s of u.otherSchools ?? []) {
+      if (s.name) out.push({ ...u, school: s.name, country: s.country ?? u.country, exchange: !!s.exchange, extra: true });
+    }
+  }
+  return out;
+}
