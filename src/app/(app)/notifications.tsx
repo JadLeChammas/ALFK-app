@@ -39,7 +39,10 @@ export default function Notifications() {
           return (
             <Tap
               key={n.id}
-              onPress={() => n.href && router.push(n.href as never)}
+              onPress={() => {
+                actions.markNotificationRead(n.id);
+                if (n.href) router.push(n.href as never);
+              }}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 18, borderBottomWidth: i === list.length - 1 ? 0 : 1, borderBottomColor: colors.border, backgroundColor: n.read ? 'transparent' : colors.primarySoft + '55' }}
               hoverStyle={{ backgroundColor: colors.surfaceAlt }}>
               <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: t.bg, alignItems: 'center', justifyContent: 'center' }}>

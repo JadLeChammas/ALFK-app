@@ -9,7 +9,8 @@ import { norm } from '../shell/GlobalSearch';
 import { SearchBar, Tap } from './primitives';
 import { Txt } from './Txt';
 
-export type Option<T extends string | number> = { value: T; label: string; leading?: ReactNode };
+/** `short`: what the closed field shows once picked (e.g. « +965 » for « Koweït (+965) »). */
+export type Option<T extends string | number> = { value: T; label: string; leading?: ReactNode; short?: string };
 
 export function Select<T extends string | number>({
   label,
@@ -54,7 +55,7 @@ export function Select<T extends string | number>({
         hoverStyle={{ borderColor: colors.borderStrong }}>
         {selected?.leading}
         <Txt variant={compact ? 'smallStrong' : 'body'} color={selected ? 'text' : 'textSubtle'} numberOfLines={1} style={{ flex: compact ? undefined : 1 }}>
-          {selected?.label ?? placeholder ?? '—'}
+          {selected?.short ?? selected?.label ?? placeholder ?? '—'}
         </Txt>
         <Feather name="chevron-down" size={compact ? 14 : 16} color={colors.textSubtle} />
       </Tap>

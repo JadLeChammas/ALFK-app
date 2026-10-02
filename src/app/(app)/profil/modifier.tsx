@@ -21,6 +21,7 @@ import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 import { NationalityPicker } from '@/components/NationalityPicker';
+import { CityPicker } from '@/components/CityPicker';
 
 export default function EditProfile() {
   const { d, country } = useI18n();
@@ -183,7 +184,9 @@ export default function EditProfile() {
               <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
             </FieldRow>
             <FieldRow style={{ alignItems: 'flex-start' }}>
-              <Input label={d.auth.city} icon="map-pin" value={form.city} onChangeText={set('city')} containerStyle={{ flex: 1 }} />
+              <View style={{ flex: 1 }}>
+                <CityPicker label={d.auth.city} value={form.city} onChange={set('city')} country={form.country} />
+              </View>
               <View style={{ flex: 1 }}>
                 <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))} />
               </View>

@@ -2,7 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 /**
  * Server-side account actions that need Supabase's secret key (never shipped to the browser):
- *   create-user · reset-password · delete-user   → admins only
+ *   create-user · delete-user                    → admins only
+ *   (no password reset: members use « Mot de passe oublié », which e-mails them a link)
  *   delete-self                                   → any signed-in member, for their own account
  *
  * Vercel env: EXPO_PUBLIC_SUPABASE_URL (shared with the app) and SUPABASE_SECRET_KEY
@@ -112,15 +113,6 @@ export async function POST(request: Request) {
         return json(taken ? 409 : 500, { error: taken ? 'email_taken' : error?.message ?? 'failed' });
       }
       await log('create_user', `${firstName} ${lastName}`);
-      return json(200, { ok: true });
-    }
-
-    case 'reset-password': {
-      if (!body.userId || !body.password) return json(400, { error: 'missing' });
-      if (body.password.length < 8) return json(400, { error: 'weak_password' });
-      const { error } = await admin.auth.admin.updateUserById(body.userId, { password: body.password });
-      if (error) return json(500, { error: error.message });
-      await log('reset_password', body.name ?? body.userId);
       return json(200, { ok: true });
     }
 

@@ -5,9 +5,8 @@ import { Switch, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
 import { NationalityPicker } from '@/components/NationalityPicker';
-import { PlaceSuggestions } from '@/components/PlaceSuggestions';
+import { CityPicker } from '@/components/CityPicker';
 import { UniversityPicker } from '@/components/UniversityPicker';
-import { useUniversities } from '@/data/universities';
 import { ProofPicker } from '@/components/ProofPicker';
 import { Avatar, FieldRow, Button, Chip, Input, Row, Segmented, Tap } from '@/components/ui/primitives';
 import { DateField, PhoneField } from '@/components/ui/fields';
@@ -41,8 +40,6 @@ export default function SignUp() {
     if (img) setPhoto(img);
   };
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
-  // Cities with universities in the chosen country, offered while typing the city.
-  const { cities } = useUniversities(form.country);
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -185,8 +182,7 @@ export default function SignUp() {
             searchable
             options={COUNTRIES.map((c) => ({ value: c.code, label: country(c.code), leading: <Flag code={c.code} /> }))}
           />
-          <Input label={d.auth.city} icon="map-pin" value={form.city} onChangeText={set('city')} />
-          {form.role !== 'eleve' && <PlaceSuggestions value={form.city} options={cities} onPick={set('city')} />}
+          <CityPicker label={d.auth.city} value={form.city} onChange={set('city')} country={form.country} />
           {form.role === 'eleve' ? (
             // Students are at the LFK: the school is set for them and cannot be changed.
             <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} />

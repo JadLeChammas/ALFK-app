@@ -509,6 +509,12 @@ function useStoreValue() {
     },
     markConversationRead(conversationId: string) {
       if (!meId) return;
+      // The « new message » notifications of this conversation are read too.
+      const href = `/messages/${conversationId}`;
+      if (dbRef.current?.notifications.some((n) => n.userId === meId && !n.read && n.href === href)) {
+        commit((d) => ({ ...d, notifications: d.notifications.map((n) => (n.userId === meId && n.href === href ? { ...n, read: true } : n)) }));
+        if (supabase) send(supabase.from('notifications').update({ read: true }).eq('user_id', meId).eq('href', href).eq('read', false));
+      }
       const conv = dbRef.current?.conversations.find((c) => c.id === conversationId);
       const last = dbRef.current?.messages.filter((m) => m.conversationId === conversationId).at(-1);
       if (!conv || !last || (conv.lastRead[meId] ?? '') >= last.createdAt) return;
@@ -813,18 +819,6 @@ function useStoreValue() {
       const { data } = await supabase.from('profiles').select('*').eq('id', id).single();
       if (data) commit((d) => ({ ...d, users: d.users.map((u) => (u.id === id ? toUser(data) : u)) }));
     },
-    async adminResetPassword(id: string, password: string): Promise<Result> {
-      if (password.length < 8) return { ok: false, error: 'weak_password' };
-      const name = fullName(dbRef.current?.users.find((x) => x.id === id));
-      if (supabase) {
-        const r = await callAdminApi('reset-password', { userId: id, password, name });
-        if (!r.ok) return { ok: false, error: authError(r.error, r.error) };
-        commit((d) => ({ ...d, logs: [{ id: newId(), actorId: meId!, action: 'reset_password', target: name, createdAt: nowIso() }, ...d.logs] }));
-        return { ok: true };
-      }
-      commit((d) => log({ ...d, users: d.users.map((x) => (x.id === id ? { ...x, password } : x)) }, 'reset_password', name));
-      return { ok: true };
-    },
     openReportedConversation(id: string) {
       commit((d) => {
         const c = d.conversations.find((x) => x.id === id);
@@ -860,6 +854,12 @@ function useStoreValue() {
     },
 
     // ——— Notifications ———
+    /** One notification, when it is opened. */
+    markNotificationRead(id: string) {
+      if (!meId || !dbRef.current?.notifications.some((n) => n.id === id && !n.read)) return;
+      commit((d) => ({ ...d, notifications: d.notifications.map((n) => (n.id === id ? { ...n, read: true } : n)) }));
+      if (supabase) send(supabase.from('notifications').update({ read: true }).eq('id', id));
+    },
     markNotificationsRead() {
       if (!meId) return;
       commit((d) => ({ ...d, notifications: d.notifications.map((n) => (n.userId === meId ? { ...n, read: true } : n)) }));

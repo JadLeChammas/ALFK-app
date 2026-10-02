@@ -45,14 +45,8 @@ export default function ManageMembers() {
     [db.users, q, role]
   );
 
-  const resetPassword = async (u: User) => {
-    const pw = await prompt({ title: d.admin.resetPassword, message: fullName(u), placeholder: d.auth.passwordHint, secure: true });
-    if (!pw) return;
-    const r = await actions.adminResetPassword(u.id, pw);
-    toast(r.ok ? d.admin.passwordReset : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
-  };
   /**
-   * Text windows (fonction, Bureau code, password…) open above the page, not above the member card:
+   * Text windows (fonction, Bureau code…) open above the page, not above the member card:
    * hide the card while one is open, then bring it back.
    */
   const fromCard = async (run: (u: User) => Promise<unknown>) => {
@@ -117,7 +111,6 @@ export default function ManageMembers() {
             )}
             <Row gap={6} style={{ width: isMobile ? undefined : 130, justifyContent: 'flex-end' }}>
               <IconButton icon="sliders" size={34} onPress={() => setEditing(u)} label={d.admin.changeRole} />
-              {!isMobile && <IconButton icon="key" size={34} onPress={() => resetPassword(u)} label={d.admin.resetPassword} />}
               {!isMobile && u.id !== me.id && <IconButton icon="trash-2" size={34} onPress={() => remove(u)} color={colors.danger} label={d.admin.deleteUser} />}
             </Row>
           </Row>
@@ -187,7 +180,6 @@ export default function ManageMembers() {
                     }
                   />
                 )}
-                <Button label={d.admin.resetPassword} icon="key" variant="secondary" full onPress={() => fromCard(resetPassword)} />
                 {editing.id !== me.id && <Button label={d.admin.deleteUser} icon="trash-2" variant="danger" full onPress={() => fromCard(remove)} />}
               </>
             )}
