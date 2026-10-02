@@ -574,6 +574,7 @@ const pirate: Dict = {
     failed: 'This portrait can\'t be adjusted. Try another.',
     use: 'Use this portrait',
     adjust: 'Adjust th\' portrait',
+    saved: 'Portrait updated, matey',
   },
   schools: {
     title: 'Other schools',

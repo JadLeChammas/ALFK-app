@@ -573,6 +573,7 @@ const de: Dict = {
     failed: 'Dieses Foto kann nicht angepasst werden. Versuche ein anderes.',
     use: 'Dieses Foto verwenden',
     adjust: 'Foto anpassen',
+    saved: 'Profilfoto aktualisiert',
   },
   schools: {
     title: 'Weitere Hochschulen',

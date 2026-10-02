@@ -573,6 +573,7 @@ const zh: Dict = {
     failed: '无法调整这张照片，请换一张。',
     use: '使用这张照片',
     adjust: '调整照片',
+    saved: '头像已更新',
   },
   schools: {
     title: '其他大学',

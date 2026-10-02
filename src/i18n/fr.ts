@@ -571,6 +571,7 @@ const fr = {
     failed: 'Impossible d’ajuster cette photo. Essayez-en une autre.',
     use: 'Utiliser cette photo',
     adjust: 'Ajuster la photo',
+    saved: 'Photo de profil mise à jour',
   },
   schools: {
     title: 'Autres universités',

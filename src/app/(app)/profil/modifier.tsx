@@ -114,12 +114,16 @@ export default function EditProfile() {
     try {
       const url = await actions.uploadImage(img, 'avatars');
       setForm((f) => ({ ...f, avatar: url }));
-    } catch {
-      toast(d.auth.errors.unknown, 'danger');
+      // Saved on the profile right away: no need to press « Enregistrer » for the photo.
+      const r = actions.updateProfile({ avatar: url });
+      toast(r.ok ? d.crop.saved : d.auth.errors.unknown, r.ok ? 'success' : 'danger');
+    } catch (e) {
+      toast(`${d.auth.errors.unknown} (${(e as Error)?.message ?? e})`, 'danger');
     } finally {
       setUploading(false);
     }
   };
+
 
   const changePassword = async () => {
     if (pw.next !== pw.confirm) return setPwError(d.auth.errors.mismatch);

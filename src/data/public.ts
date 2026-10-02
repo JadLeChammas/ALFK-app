@@ -40,7 +40,9 @@ function fromDb(db: Db): PublicOverview {
     for (const v of values) if (v !== undefined && v !== '') m.set(String(v), (m.get(String(v)) ?? 0) + 1);
     return [...m].sort((a, b) => b[1] - a[1]);
   };
-  const countries = count(grads.map((u) => u.country));
+  // Host countries: where each former student lives, plus the countries of their other universities
+  // (exchange semester…), each country once per person.
+  const countries = count(grads.flatMap((u) => [...new Set([u.country, ...(u.otherSchools ?? []).map((x) => x.country)].filter(Boolean))]));
   // The same university written differently counts once (data/places.ts).
   // Exchange and other universities count too.
   const schools = groupByPlace(studyEntries(grads), (u) => u.school, parseAliases(db.settings.placeAliases)).map((g) => [g.label, g.items.length] as const);

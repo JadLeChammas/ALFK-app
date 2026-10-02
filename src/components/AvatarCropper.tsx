@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { useEffect, useRef, useState } from 'react';
 import { Image as RNImage, Modal, Platform, Pressable, View } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 
 import type { PickedImage } from '@/data/remote';
 import { useI18n } from '@/i18n';
@@ -26,11 +27,11 @@ export function AvatarCropper({ image, onCancel, onDone }: { image: PickedImage;
   const [zoom, setZoom] = useState(1);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [busy, setBusy] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
   const drag = useRef({ x: 0, y: 0, px: 0, py: 0 });
 
   useEffect(() => {
-    RNImage.getSize(image.uri, (w, h) => setSize({ w, h }), () => setFailed(true));
+    RNImage.getSize(image.uri, (w, h) => setSize({ w, h }), (e) => setFailed(String(e?.message ?? e)));
   }, [image.uri]);
 
   // The image always covers the circle: smallest side = the box at zoom 1.
@@ -67,14 +68,50 @@ export function AvatarCropper({ image, onCancel, onDone }: { image: PickedImage;
       const ref = await ctx.renderAsync();
       const out = await ref.saveAsync({ format: SaveFormat.JPEG, compress: 0.85, base64: true });
       onDone({ uri: out.uri, base64: out.base64 ?? null, mimeType: 'image/jpeg' });
-    } catch {
-      setFailed(true);
+    } catch (e) {
+      setFailed(String((e as Error)?.message ?? e));
     } finally {
       setBusy(false);
     }
   };
 
-  const wheel = Platform.OS === 'web' ? ({ onWheel: (e: { deltaY: number; preventDefault?: () => void }) => setZoomTo(zoom - e.deltaY / 600) } as object) : {};
+  // Web: the browser's own pointer events (mouse, finger, pen), followed on the whole window while dragging.
+  const webHandlers =
+    Platform.OS === 'web'
+      ? ({
+          onWheel: (e: { deltaY: number }) => setZoomTo(zoom - e.deltaY / 600),
+          onPointerDown: (e: { clientX: number; clientY: number; preventDefault: () => void }) => {
+            e.preventDefault();
+            const start = { x: pos.x, y: pos.y, px: e.clientX, py: e.clientY };
+            const move = (ev: PointerEvent) => setPos(clamp({ x: start.x + ev.clientX - start.px, y: start.y + ev.clientY - start.py }));
+            const up = () => {
+              window.removeEventListener('pointermove', move);
+              window.removeEventListener('pointerup', up);
+              window.removeEventListener('pointercancel', up);
+            };
+            window.addEventListener('pointermove', move);
+            window.addEventListener('pointerup', up);
+            window.addEventListener('pointercancel', up);
+          },
+          style: { width: BOX, height: BOX, overflow: 'hidden', borderRadius: 16, backgroundColor: '#000', cursor: 'grab', touchAction: 'none', userSelect: 'none' },
+        } as object)
+      : {};
+  // Phones: React Native's responder system.
+  const nativeHandlers =
+    Platform.OS === 'web'
+      ? {}
+      : {
+          onStartShouldSetResponder: () => true,
+          onMoveShouldSetResponder: () => true,
+          onResponderTerminationRequest: () => false,
+          onResponderGrant: (e: { nativeEvent: { pageX: number; pageY: number } }) => {
+            drag.current = { x: pos.x, y: pos.y, px: e.nativeEvent.pageX, py: e.nativeEvent.pageY };
+          },
+          onResponderMove: (e: { nativeEvent: { pageX: number; pageY: number } }) => {
+            const g = drag.current;
+            setPos(clamp({ x: g.x + e.nativeEvent.pageX - g.px, y: g.y + e.nativeEvent.pageY - g.py }));
+          },
+        };
 
   return (
     <Modal visible transparent animationType="fade" onRequestClose={onCancel}>
@@ -85,29 +122,18 @@ export function AvatarCropper({ image, onCancel, onDone }: { image: PickedImage;
             <IconButton icon="x" size={36} onPress={onCancel} label={d.common.close} />
           </Row>
 
-          <View
-            style={{ width: BOX, height: BOX, overflow: 'hidden', borderRadius: 16, backgroundColor: '#000' }}
-            onStartShouldSetResponder={() => true}
-            onMoveShouldSetResponder={() => true}
-            onResponderTerminationRequest={() => false}
-            onResponderGrant={(e) => {
-              drag.current = { x: pos.x, y: pos.y, px: e.nativeEvent.pageX, py: e.nativeEvent.pageY };
-            }}
-            onResponderMove={(e) => {
-              const g = drag.current;
-              setPos(clamp({ x: g.x + e.nativeEvent.pageX - g.px, y: g.y + e.nativeEvent.pageY - g.py }));
-            }}
-            {...wheel}>
+          <View style={{ width: BOX, height: BOX, overflow: 'hidden', borderRadius: 16, backgroundColor: '#000' }} {...nativeHandlers} {...webHandlers}>
             {size && (
-              <Image
-                source={{ uri: image.uri }}
-                style={{ position: 'absolute', width: dispW, height: dispH, left: BOX / 2 + pos.x - dispW / 2, top: BOX / 2 + pos.y - dispH / 2 }}
-                contentFit="fill"
-              />
+              // The photo never takes the pointer: on the web the browser would start dragging the <img> instead.
+              <View pointerEvents="none" style={{ position: 'absolute', width: dispW, height: dispH, left: BOX / 2 + pos.x - dispW / 2, top: BOX / 2 + pos.y - dispH / 2 }}>
+                <Image source={{ uri: image.uri }} style={{ width: '100%', height: '100%' }} contentFit="fill" draggable={false} />
+              </View>
             )}
             {/* Everything outside the circle is dimmed: that part is not kept. */}
-            <View pointerEvents="none" style={{ position: 'absolute', left: -BOX / 2, top: -BOX / 2, width: BOX * 2, height: BOX * 2, borderRadius: BOX, borderWidth: BOX / 2, borderColor: 'rgba(0,0,0,0.55)' }} />
-            <View pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, width: BOX, height: BOX, borderRadius: BOX / 2, borderWidth: 2, borderColor: 'rgba(255,255,255,0.85)' }} />
+            <Svg pointerEvents="none" width={BOX} height={BOX} style={{ position: 'absolute', left: 0, top: 0 }}>
+              <Path d={`M0 0H${BOX}V${BOX}H0Z M${BOX / 2} 1 A${BOX / 2 - 1} ${BOX / 2 - 1} 0 1 0 ${BOX / 2 + 0.01} 1Z`} fill="rgba(0,0,0,0.55)" fillRule="evenodd" />
+              <Path d={`M${BOX / 2} 1 A${BOX / 2 - 1} ${BOX / 2 - 1} 0 1 0 ${BOX / 2 + 0.01} 1Z`} fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={2} />
+            </Svg>
           </View>
 
           <Row gap={12}>
@@ -121,7 +147,7 @@ export function AvatarCropper({ image, onCancel, onDone }: { image: PickedImage;
             <Feather name="move" size={13} color={colors.textSubtle} />
             <Txt variant="small" color="textSubtle">{d.crop.hint}</Txt>
           </Row>
-          {failed && <Txt variant="small" color="danger">{d.crop.failed}</Txt>}
+          {!!failed && <Txt variant="small" color="danger" align="center">{`${d.crop.failed} (${failed})`}</Txt>}
 
           <Row gap={10} style={{ alignSelf: 'stretch' }}>
             <Button label={d.common.cancel} variant="secondary" onPress={onCancel} style={{ flex: 1 }} />

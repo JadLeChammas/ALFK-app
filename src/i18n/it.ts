@@ -573,6 +573,7 @@ const it: Dict = {
     failed: 'Impossibile regolare questa foto. Provane un’altra.',
     use: 'Usa questa foto',
     adjust: 'Regola la foto',
+    saved: 'Foto del profilo aggiornata',
   },
   schools: {
     title: 'Altre università',
