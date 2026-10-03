@@ -12,14 +12,15 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { fonts } from '@/theme/tokens';
 
-/** « Le bureau » — the association's administrators and honorary members (Team Showcase). Public page. */
+/** « Le bureau » — the association's administrators (Team Showcase). Public page. */
 export default function Board() {
   const { d } = useI18n();
   const { isDesktop } = useLayout();
   const { bureau } = usePublicOverview();
   const b = d.site.bureau;
-  // Names, role titles and photos only (see public_overview); the president comes first.
-  const team: TeamMember[] = bureau.map((p) => ({ id: p.name, name: p.name, role: p.fonction || (p.role === 'admin' ? b.member : d.roles.honneur), image: p.avatar }));
+  // The Bureau only (no honorary members): names, role titles and photos (see public_overview),
+  // in Bureau-code order — the president first.
+  const team: TeamMember[] = bureau.filter((p) => p.role === 'admin').map((p) => ({ id: p.name, name: p.name, role: p.fonction || b.member, image: p.avatar }));
 
   return (
     <SiteFrame overlay>
@@ -28,7 +29,7 @@ export default function Board() {
 
       <Section style={{ paddingTop: 0 }}>
         <Reveal style={{ marginBottom: 40 }}>
-          <SerifHeading title={`${b.board} · ${b.honorary}`} />
+          <SerifHeading title={b.board} />
         </Reveal>
         {team.length ? <TeamShowcase members={team} /> : <Empty text={b.empty} />}
       </Section>
