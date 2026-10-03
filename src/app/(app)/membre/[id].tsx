@@ -4,7 +4,8 @@ import { View } from 'react-native';
 
 import { RoleBadge, useStartConversation } from '@/components/cards';
 import { Flag } from '@/components/ui/Flag';
-import { Avatar, Badge, Button, Card, EmptyState, ListRow, Row } from '@/components/ui/primitives';
+import { UniLogo } from '@/components/UniLogo';
+import { Avatar, Badge, Button, Card, EmptyState, IconTile, ListRow, Row } from '@/components/ui/primitives';
 import { BackLink, Columns, Screen } from '@/components/ui/Screen';
 import { CvFileCard, CvView } from '@/components/cv/CvView';
 import { Txt } from '@/components/ui/Txt';
@@ -98,12 +99,16 @@ export default function MemberProfile() {
             {(me.role === 'admin' || isMe) && user.role !== 'honneur' && user.alumniNumber && <ListRow icon="hash" title={user.alumniNumber} subtitle={d.member.alumniNumber} />}
             {(me.role === 'admin' || isMe) && user.role === 'admin' && user.bureauCode && <ListRow icon="shield" title={user.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             {user.situation === 'working' && (user.employer || user.jobTitle) && <ListRow icon="briefcase" title={[user.jobTitle, user.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
-            <ListRow
-              icon="book"
-              title={user.school ?? '—'}
-              subtitle={user.situation === 'working' ? d.situation.graduatedFrom : user.situation === 'student' ? d.situation.studiesAt : d.member.school}
-              right={!!user.school && !!(user.schoolCountry ?? user.country) && <Flag code={(user.schoolCountry ?? user.country)!} size={16} />}
-            />
+            {user.role === 'honneur' && (user.fonction || user.employer) && <ListRow icon="briefcase" title={[user.fonction, user.employer].filter(Boolean).join(' · ')} subtitle={d.honoraryAdmin.organisation} />}
+            {(user.role !== 'honneur' || !!user.school) && (
+              <ListRow
+                icon="book"
+                leading={user.school ? <UniLogo name={user.school} fallback={<IconTile icon="book" />} /> : undefined}
+                title={user.school ?? '—'}
+                subtitle={user.situation === 'working' ? d.situation.graduatedFrom : user.situation === 'student' ? d.situation.studiesAt : d.member.school}
+                right={!!user.school && !!(user.schoolCountry ?? user.country) && <Flag code={(user.schoolCountry ?? user.country)!} size={16} />}
+              />
+            )}
             {userFields(user).length > 0 && <ListRow icon="compass" title={userFields(user).map((x) => fieldLabel(x, d.fields)).join(', ')} subtitle={d.majors.rowLabel} />}
             {!!user.otherSchools?.length && <OtherSchoolsRows schools={user.otherSchools} />}
 {!!user.nationalities?.length && (

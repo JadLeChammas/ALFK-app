@@ -23,6 +23,7 @@ export function AdminNav() {
     { href: '/admin', label: d.nav.dashboard, icon: 'bar-chart-2' },
     { href: '/admin/approbations', label: d.nav.approvals, icon: 'user-check', count: pending || undefined },
     { href: '/admin/membres', label: d.nav.members, icon: 'users' },
+    { href: '/admin/honneur', label: d.honoraryAdmin.nav, icon: 'award' },
     { href: '/admin/contenus', label: d.nav.content, icon: 'layers', count: reports || undefined },
     { href: '/admin/contact', label: d.nav.contact, icon: 'inbox', count: unread || undefined },
     { href: '/admin/journal', label: d.nav.logs, icon: 'list' },

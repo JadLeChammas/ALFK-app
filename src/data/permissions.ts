@@ -33,8 +33,8 @@ export const canMessage = (a: Pick<User, 'role'> | null | undefined, b: Pick<Use
   return !(pair.has('honneur') && pair.has('eleve'));
 };
 
-/** Roles a visitor can pick when signing up (an admin approves every account). */
-export const SELF_SIGNUP_ROLES: Role[] = ['alumni', 'eleve', 'honneur'];
+/** Roles a visitor can pick when signing up; honorary members' accounts are created by an admin. */
+export const SELF_SIGNUP_ROLES: Role[] = ['alumni', 'eleve'];
 
 /** The honorary members' circle (their page and group discussion): honorary members and admins. */
 export const inCircle = (user: Pick<User, 'role'> | null | undefined) => !!user && (user.role === 'honneur' || user.role === 'admin');

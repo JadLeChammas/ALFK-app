@@ -17,7 +17,7 @@ import { TextRoll } from '@/components/fx/TextRoll';
 import { Flag } from '@/components/ui/Flag';
 import { Button, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
-import { useUniLogo } from '@/data/uniLogos';
+import { UniLogo } from '@/components/UniLogo';
 import { useCommunity, usePublishedQuotes } from '@/data/community';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -483,19 +483,6 @@ function RibbonInner({ caption, schools }: { caption: string; schools: { name: s
           </View>
         ))}
       </Marquee>
-    </View>
-  );
-}
-
-/** A university's logo, found automatically (data/uniLogos.ts); nothing is shown until one is found. */
-function UniLogo({ name }: { name: string }) {
-  const url = useUniLogo(name);
-  // If the image itself fails to load, show nothing rather than an empty tile.
-  const [failed, setFailed] = useState<string | null>(null);
-  if (!url || failed === url) return null;
-  return (
-    <View style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-      <Image source={{ uri: url }} style={{ width: 26, height: 26 }} contentFit="contain" transition={200} onError={() => setFailed(url)} accessibilityIgnoresInvertColors />
     </View>
   );
 }

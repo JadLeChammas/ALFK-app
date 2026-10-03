@@ -1,5 +1,5 @@
 -- 021 — Plusieurs domaines d'études, pays de l'université principale, noms de famille en majuscules,
--- inscription des membres d'honneur (sans justificatif de scolarité) et leur discussion de groupe.
+-- et la discussion de groupe des membres d'honneur (leurs comptes sont créés par un admin).
 -- Nécessite les migrations 016 et 019.
 
 alter table public.profiles add column if not exists fields_of_study text[];
@@ -34,7 +34,7 @@ declare
 begin
   final_role := case
     when by_admin and wanted in ('alumni', 'eleve', 'honneur', 'admin') then wanted
-    when wanted in ('alumni', 'eleve', 'honneur') then wanted
+    when wanted in ('alumni', 'eleve') then wanted
     else 'alumni'
   end;
   if sit not in ('student', 'working') or final_role not in ('alumni', 'admin') then
@@ -57,7 +57,7 @@ begin
     nullif(m ->> 'country', ''),
     nullif(m ->> 'phone', ''),
     public.try_date(nullif(m ->> 'birth_date', '')),
-    case when by_admin then nullif(a ->> 'fonction', '') when final_role = 'honneur' then nullif(m ->> 'fonction', '') end,
+    case when by_admin then nullif(a ->> 'fonction', '') end,
     case when by_admin then nullif(a ->> 'bureau_code', '') end,
     by_admin,
     nullif(m ->> 'field_of_study', ''),
@@ -77,17 +77,6 @@ begin
     case when final_role in ('alumni', 'admin') then nullif(m ->> 'school_country', '') end
   )
   on conflict (id) do nothing;
-  return new;
-end $$;
-
--- Les membres d'honneur n'ont pas de justificatif de scolarité : un admin les approuve sans.
-create or replace function public.require_proof_for_approval() returns trigger
-language plpgsql security definer set search_path = public as $$
-begin
-  if new.approved and not coalesce(old.approved, false)
-     and new.proof_path is null and not new.created_by_admin and new.role <> 'honneur' then
-    raise exception 'Justificatif de scolarité manquant : approbation impossible';
-  end if;
   return new;
 end $$;
 

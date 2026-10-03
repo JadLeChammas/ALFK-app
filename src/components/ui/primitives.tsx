@@ -439,16 +439,23 @@ export function SectionHeader({ title, icon, action, onAction, count, style }: {
   );
 }
 
-export function ListRow({ icon, title, subtitle, right, onPress, danger, tone = 'secondary', last }: { icon?: IconName; title: string; subtitle?: string; right?: ReactNode; onPress?: () => void; danger?: boolean; tone?: Tone; last?: boolean }) {
+/** The small coloured square holding a list row's icon. */
+export function IconTile({ icon, tone = 'secondary' }: { icon: IconName; tone?: Tone }) {
   const { colors } = useTheme();
-  const t = toneColors(colors, danger ? 'danger' : tone);
+  const t = toneColors(colors, tone);
+  return (
+    <View style={{ width: 34, height: 34, borderRadius: radius.input, backgroundColor: t.bg, alignItems: 'center', justifyContent: 'center' }}>
+      <Feather name={icon} size={17} color={t.fg} />
+    </View>
+  );
+}
+
+/** `leading` replaces the icon tile (a university's logo, for instance). */
+export function ListRow({ icon, leading, title, subtitle, right, onPress, danger, tone = 'secondary', last }: { icon?: IconName; leading?: ReactNode; title: string; subtitle?: string; right?: ReactNode; onPress?: () => void; danger?: boolean; tone?: Tone; last?: boolean }) {
+  const { colors } = useTheme();
   const content = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14, paddingVertical: 14, borderBottomWidth: last ? 0 : 1, borderBottomColor: colors.border }}>
-      {icon && (
-        <View style={{ width: 34, height: 34, borderRadius: radius.input, backgroundColor: t.bg, alignItems: 'center', justifyContent: 'center' }}>
-          <Feather name={icon} size={17} color={t.fg} />
-        </View>
-      )}
+      {leading ?? (icon && <IconTile icon={icon} tone={danger ? 'danger' : tone} />)}
       <View style={{ flex: 1, gap: 2 }}>
         <Txt variant="bodyStrong" style={danger && { color: colors.danger }}>{title}</Txt>
         {subtitle && <Txt variant="small" color="textMuted">{subtitle}</Txt>}

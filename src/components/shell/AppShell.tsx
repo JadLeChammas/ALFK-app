@@ -51,10 +51,11 @@ function useNav() {
   const events: NavItem[] = can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'star', label: d.nav.events }] : [];
   const publications: NavItem = { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort, badge: toReview };
   const messages: NavItem = { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread };
+  // Honorary members' circle: in « Communauté » for honorary members, under « Administration » for admins.
+  const circle: NavItem[] = inCircle(me) ? [{ href: '/cercle', icon: 'award', label: d.circle.nav }] : [];
   const community: NavItem[] = [
     { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
-    // Honorary members' circle: honorary members and admins only.
-    ...(inCircle(me) ? [{ href: '/cercle', icon: 'award' as const, label: d.circle.nav }] : []),
+    ...(me.role === 'admin' ? [] : circle),
     { href: INSTAGRAM_URL, icon: 'instagram', label: 'Instagram', external: 'instagram' },
   ];
   // The Amicale's own pages (also public), opened inside the member space.
@@ -68,8 +69,9 @@ function useNav() {
     main: [home, directory, repere, orientation, guide, questions, calendar, ...events, publications, messages],
     community,
     amicale,
+    adminCircle: me.role === 'admin' ? circle : [],
     bar: [home, directory, repere, publications, messages],
-    more: [...events, orientation, guide, questions, calendar, ...community, ...amicale],
+    more: [...events, orientation, guide, questions, calendar, ...community, ...amicale, ...(me.role === 'admin' ? circle : [])],
   };
 }
 
@@ -130,7 +132,7 @@ function Sidebar({ compact }: { compact: boolean }) {
   const me = useMe();
   const { db } = useStore();
   const pathname = usePathname();
-  const { main, community, amicale } = useNav();
+  const { main, community, amicale, adminCircle } = useNav();
   const notif = useUnreadNotifications();
   const pending = db.users.filter((u) => !u.approved).length;
   // Laptop-height windows: slightly tighter rows so the whole menu fits without scrolling;
@@ -190,6 +192,9 @@ function Sidebar({ compact }: { compact: boolean }) {
         <View style={{ marginTop: dense ? 6 : 12, gap: 2 }}>
           {section(d.nav.admin)}
           <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} dense={dense} />
+          {adminCircle.map((item) => (
+            <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
+          ))}
         </View>
       )}
       {me.role !== 'admin' && can(me, 'viewStats') && (

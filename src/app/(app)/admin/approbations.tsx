@@ -68,8 +68,6 @@ export default function Approvals() {
                     </>
                   ) : u.createdByAdmin ? (
                     <Badge label={d.proof.adminCreated} tone="info" icon="shield" />
-                  ) : u.role === 'honneur' ? (
-                    <Badge label={d.honorarySignup.badge} tone="warning" icon="award" />
                   ) : (
                     <Badge label={d.proof.none} tone="danger" icon="alert-triangle" />
                   )}
@@ -80,7 +78,7 @@ export default function Approvals() {
                     label={d.admin.approve}
                     icon="check"
                     style={{ flex: 1 }}
-                    disabled={!u.proof && !u.createdByAdmin && u.role !== 'honneur'}
+                    disabled={!u.proof && !u.createdByAdmin}
                     onPress={() => {
                       const r = actions.approveUser(u.id);
                       toast(r.ok ? `${fullName(u)} ✓` : d.admin.proofRequired, r.ok ? 'success' : 'danger');

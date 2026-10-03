@@ -5,8 +5,9 @@ import type { OtherSchool } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Flag } from './ui/Flag';
-import { Badge, IconButton, ListRow, Row, Tap } from './ui/primitives';
+import { Badge, IconButton, IconTile, ListRow, Row, Tap } from './ui/primitives';
 import { Txt } from './ui/Txt';
+import { UniLogo } from './UniLogo';
 import { UniversityPicker } from './UniversityPicker';
 
 const MAX = 5;
@@ -64,10 +65,15 @@ export function OtherSchoolsRows({ schools }: { schools: OtherSchool[] }) {
       {schools.map((s, i) => (
         <ListRow
           key={`${s.name}-${i}`}
-          icon="book-open"
+          leading={<UniLogo name={s.name} fallback={<IconTile icon="book-open" />} />}
           title={s.name}
           subtitle={[s.exchange ? d.schools.exchange : d.schools.other, s.country && country(s.country)].filter(Boolean).join(' · ')}
-          right={s.exchange ? <Badge label={d.schools.exchange} tone="secondary" icon="repeat" /> : s.country ? <Flag code={s.country} size={16} /> : undefined}
+          right={
+            <Row gap={8}>
+              {s.exchange && <Badge label={d.schools.exchange} tone="secondary" icon="repeat" />}
+              {!!s.country && <Flag code={s.country} size={16} />}
+            </Row>
+          }
         />
       ))}
     </>

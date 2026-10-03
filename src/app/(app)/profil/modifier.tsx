@@ -56,6 +56,8 @@ export default function EditProfile() {
   const [schoolCountry, setSchoolCountry] = useState<string | undefined>(me.schoolCountry);
   // Former students share their studies with the lycée students (Orientation space).
   const graduate = me.role === 'alumni' || me.role === 'admin';
+  // Honorary members (account created by an admin) give their organisation instead of studies.
+  const honorary = me.role === 'honneur';
   // Universities and companies other members already entered (to pick the same spelling).
   const members = useApprovedMembers();
   const knownEmployers = members.map((u) => u.employer).filter((x): x is string => !!x);
@@ -91,7 +93,7 @@ export default function EditProfile() {
       schoolCountry: form.school ? schoolCountry ?? form.country : undefined,
       mentor: graduate ? mentor : undefined,
       situation: graduate ? situation : undefined,
-      employer: working ? form.employer.trim() || undefined : undefined,
+      employer: working || honorary ? form.employer.trim() || undefined : undefined,
       jobTitle: working ? form.jobTitle.trim() || undefined : undefined,
       nationalities: nationalities.length ? nationalities : undefined,
       otherSchools: me.role !== 'eleve' && otherSchools.length ? otherSchools : undefined,
@@ -199,16 +201,19 @@ export default function EditProfile() {
                 <Input label={`${d.situation.jobTitle} (${d.common.optional})`} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} containerStyle={{ flex: 1 }} />
               </FieldRow>
             )}
-            <FieldRow>
-              {me.role === 'eleve' ? (
-                <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} containerStyle={{ flex: 2 }} />
-              ) : (
-                <View style={{ flex: 2 }}>
-                  <UniversityPicker label={working ? d.situation.graduatedFrom : d.auth.school} optional={working} value={form.school} onChange={(v, cc) => { set('school')(v); setSchoolCountry(cc); }} country={form.country} city={form.city} />
-                </View>
-              )}
-              <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
-            </FieldRow>
+            {honorary && <Input label={d.honoraryAdmin.organisation} icon="briefcase" value={form.employer} onChangeText={set('employer')} placeholder={d.honoraryAdmin.organisationPlaceholder} />}
+            {!honorary && (
+              <FieldRow>
+                {me.role === 'eleve' ? (
+                  <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} containerStyle={{ flex: 2 }} />
+                ) : (
+                  <View style={{ flex: 2 }}>
+                    <UniversityPicker label={working ? d.situation.graduatedFrom : d.auth.school} optional={working} value={form.school} onChange={(v, cc) => { set('school')(v); setSchoolCountry(cc); }} country={form.country} city={form.city} />
+                  </View>
+                )}
+                <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
+              </FieldRow>
+            )}
             <FieldRow style={{ alignItems: 'flex-start' }}>
               <View style={{ flex: 1 }}>
                 <CityPicker label={d.auth.city} value={form.city} onChange={set('city')} country={form.country} />
@@ -217,7 +222,7 @@ export default function EditProfile() {
                 <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
               </View>
             </FieldRow>
-            {me.role !== 'eleve' && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}
+            {me.role !== 'eleve' && !honorary && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}
             <NationalityPicker value={nationalities} onChange={setNationalities} />
             {graduate && (
               <>

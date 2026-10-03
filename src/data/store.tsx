@@ -317,9 +317,8 @@ function useStoreValue() {
       return { ok: true };
     },
     async signUp(input: SignUpInput, proof: PickedDoc | null, photo?: PickedImage | null): Promise<Result> {
-      if (input.role === 'honneur') input = { ...input, promo: undefined, school: undefined, situation: undefined, fieldOfStudy: undefined, fields: undefined, otherSchools: undefined, mentor: undefined };
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
-      if (!proof && input.role !== 'honneur') return { ok: false, error: 'proof' };
+      if (!proof) return { ok: false, error: 'proof' };
       if (!SELF_SIGNUP_ROLES.includes(input.role)) return { ok: false, error: 'unknown' };
       const contact = contactError(input.role, input.birthDate, input.phone);
       if (contact) return { ok: false, error: contact };
@@ -351,7 +350,6 @@ function useStoreValue() {
               other_schools: input.otherSchools ?? [],
               fields_of_study: input.fields ?? [],
               school_country: input.schoolCountry ?? '',
-              fonction: input.role === 'honneur' ? input.fonction ?? '' : '',
             },
           },
         });
@@ -748,7 +746,7 @@ function useStoreValue() {
       const target = dbRef.current?.users.find((x) => x.id === id);
       if (!target) return { ok: false, error: 'unknown' };
       // Honorary members have no proof of schooling.
-      if (!target.proof && !target.createdByAdmin && target.role !== 'honneur') return { ok: false, error: 'proof' };
+      if (!target.proof && !target.createdByAdmin) return { ok: false, error: 'proof' };
       actions.approveUserNow(id);
       return { ok: true };
     },

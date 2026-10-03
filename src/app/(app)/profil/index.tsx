@@ -4,7 +4,8 @@ import { View } from 'react-native';
 
 import { RoleBadge } from '@/components/cards';
 import { Flag } from '@/components/ui/Flag';
-import { Avatar, Badge, Button, Card, ListRow, Row, type IconName } from '@/components/ui/primitives';
+import { UniLogo } from '@/components/UniLogo';
+import { Avatar, Badge, Button, Card, IconTile, ListRow, Row, type IconName } from '@/components/ui/primitives';
 import { Columns, Screen } from '@/components/ui/Screen';
 import { CvFileCard, CvView } from '@/components/cv/CvView';
 import { Txt } from '@/components/ui/Txt';
@@ -94,15 +95,19 @@ export default function MyProfile() {
             )}
             {me.role === 'admin' && me.bureauCode && <ListRow icon="shield" title={me.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             {me.situation === 'working' && (me.employer || me.jobTitle) && <ListRow icon="briefcase" title={[me.jobTitle, me.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
-            <ListRow
-              icon="book"
-              title={me.school ?? '—'}
-              subtitle={me.situation === 'working' ? d.situation.graduatedFrom : me.situation === 'student' ? d.situation.studiesAt : d.member.school}
-              right={!!me.school && !!(me.schoolCountry ?? me.country) && <Flag code={(me.schoolCountry ?? me.country)!} size={16} />}
-            />
+            {me.role === 'honneur' && (me.fonction || me.employer) && <ListRow icon="briefcase" title={[me.fonction, me.employer].filter(Boolean).join(' · ')} subtitle={d.honoraryAdmin.organisation} />}
+            {(me.role !== 'honneur' || !!me.school) && (
+              <ListRow
+                icon="book"
+                leading={me.school ? <UniLogo name={me.school} fallback={<IconTile icon="book" />} /> : undefined}
+                title={me.school ?? '—'}
+                subtitle={me.situation === 'working' ? d.situation.graduatedFrom : me.situation === 'student' ? d.situation.studiesAt : d.member.school}
+                right={!!me.school && !!(me.schoolCountry ?? me.country) && <Flag code={(me.schoolCountry ?? me.country)!} size={16} />}
+              />
+            )}
             {userFields(me).length > 0 && <ListRow icon="compass" title={userFields(me).map((x) => fieldLabel(x, d.fields)).join(', ')} subtitle={d.majors.rowLabel} />}
             {!!me.otherSchools?.length && <OtherSchoolsRows schools={me.otherSchools} />}
-{!!me.nationalities?.length && (
+            {!!me.nationalities?.length && (
               <ListRow
                 icon="flag"
                 title={me.nationalities.map((c) => nationalityName(c, lang)).join(', ')}
