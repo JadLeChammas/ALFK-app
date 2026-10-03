@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { router, usePathname } from 'expo-router';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -125,6 +125,9 @@ export function AppShell({ children }: { children: ReactNode }) {
 /** Navy brand rail: sky labels, white + red indicator for the active section. */
 const RAIL = { text: brand.sky, active: '#FFFFFF', activeBg: 'rgba(215, 180, 106,0.28)', hover: 'rgba(231, 236, 242,0.08)', rule: 'rgba(231, 236, 242,0.14)' };
 
+/** Where the side menu was scrolled: each page mounts its own menu, which starts where the last one was. */
+let sidebarScrollY = 0;
+
 function Sidebar({ compact }: { compact: boolean }) {
   const logoTap = useRetroTaps(() => router.push('/'));
   const { colors, scheme } = useTheme();
@@ -140,6 +143,15 @@ function Sidebar({ compact }: { compact: boolean }) {
   const { height } = useWindowDimensions();
   const dense = height < 1000;
   const [scroll, setScroll] = useState({ y: 0, h: 0, content: 0 });
+  const scroller = useRef<ScrollView>(null);
+  const restored = useRef(false);
+  // A new menu goes back to where the last one was (tried until the content is tall enough).
+  useEffect(() => {
+    const y = sidebarScrollY;
+    const timers = [0, 60, 200].map((ms) => setTimeout(() => y > 0 && scroller.current?.scrollTo({ y, animated: false }), ms));
+    const done = setTimeout(() => (restored.current = true), 260);
+    return () => [...timers, done].forEach(clearTimeout);
+  }, []);
   const more = scroll.content - (scroll.y + scroll.h) > 4;
   const bottom: NavItem[] = [
     { href: '/parametres', icon: 'settings', label: d.nav.settings },
@@ -163,6 +175,7 @@ function Sidebar({ compact }: { compact: boolean }) {
       </Tap>
       <View style={{ flex: 1 }}>
       <ScrollView
+        ref={scroller}
         style={{ flex: 1, marginHorizontal: -4 }}
         contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: 8 }}
         showsVerticalScrollIndicator={false}
@@ -171,9 +184,12 @@ function Sidebar({ compact }: { compact: boolean }) {
           const h = e.nativeEvent.layout.height;
           setScroll((x) => ({ ...x, h }));
         }}
-        onContentSizeChange={(_, content) => setScroll((x) => ({ ...x, content }))}
+        onContentSizeChange={(_, content) => {
+          setScroll((x) => ({ ...x, content }));
+        }}
         onScroll={(e) => {
           const y = e.nativeEvent.contentOffset.y;
+          if (restored.current) sidebarScrollY = y;
           setScroll((x) => ({ ...x, y }));
         }}>
       <View style={{ gap: 2 }}>
