@@ -51,7 +51,7 @@ function fromDb(db: Db): PublicOverview {
   const schools = groupByPlace(studyEntries(grads, aliases), (u) => u.school, aliases).map((g) => [g.label, g.items.length] as const);
   const bureau = db.users
     .filter((u) => u.approved && (u.role === 'admin' || u.role === 'honneur'))
-    .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }))
+    .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName.toLocaleUpperCase('fr')}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }))
     .sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name));
   return {
     alumni: grads.length,

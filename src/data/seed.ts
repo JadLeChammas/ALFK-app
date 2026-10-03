@@ -428,6 +428,9 @@ export function createSeed(now = new Date()): Db {
 
   return {
     nextAlumniNumber: nextNumber, users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications,
-    institutions, keyDates, questions, answers, settings: { whatsappCommunity: 'https://chat.whatsapp.com/lfk-communaute' },
+    institutions, keyDates, questions, answers, circleMessages: [
+      { id: 'cm1', authorId: proviseur.id, text: 'Bienvenue dans le cercle des membres d’honneur ! Cet espace nous permet d’échanger entre nous et avec le bureau de l’Amicale.', createdAt: ago(6) },
+      { id: 'cm2', authorId: jad.id, text: 'Merci Monsieur le Proviseur. N’hésitez pas à nous proposer des idées d’événements avec le lycée.', createdAt: ago(5.5) },
+    ], settings: { whatsappCommunity: 'https://chat.whatsapp.com/lfk-communaute' },
   };
 }

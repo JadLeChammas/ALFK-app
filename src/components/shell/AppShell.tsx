@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { can } from '@/data/permissions';
+import { can, inCircle } from '@/data/permissions';
 import { fullName, useInbox, useMe, useStore, useUnreadNotifications } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -53,6 +53,8 @@ function useNav() {
   const messages: NavItem = { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread };
   const community: NavItem[] = [
     { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
+    // Honorary members' circle: honorary members and admins only.
+    ...(inCircle(me) ? [{ href: '/cercle', icon: 'award' as const, label: d.circle.nav }] : []),
     { href: INSTAGRAM_URL, icon: 'instagram', label: 'Instagram', external: 'instagram' },
   ];
   // The Amicale's own pages (also public), opened inside the member space.

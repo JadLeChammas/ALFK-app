@@ -29,6 +29,7 @@ export function PartnersManager() {
   const people = useApprovedMembers().filter((u) => u.role === 'honneur');
   const institutions = sortPartners(db.institutions);
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<Institution | null>(null);
 
   return (
     <Screen maxWidth={1040}>
@@ -44,10 +45,13 @@ export function PartnersManager() {
           <EmptyState icon="home" title={d.common.noResults} />
         ) : (
           <Grid min={300} gap={16}>
-            {institutions.map((inst) => (
+            {institutions.map((inst, i) => (
               <InstitutionCard
                 key={inst.id}
                 inst={inst}
+                onEdit={admin ? () => setEditing(inst) : undefined}
+                onUp={admin && i > 0 ? () => actions.moveInstitution(inst.id, -1) : undefined}
+                onDown={admin && i < institutions.length - 1 ? () => actions.moveInstitution(inst.id, 1) : undefined}
                 onDelete={
                   admin
                     ? async () => {
@@ -88,11 +92,12 @@ export function PartnersManager() {
       </View>
 
       <InstitutionForm visible={adding} onClose={() => setAdding(false)} />
+      {editing && <InstitutionForm visible editing={editing} onClose={() => setEditing(null)} />}
     </Screen>
   );
 }
 
-function InstitutionCard({ inst, onDelete }: { inst: Institution; onDelete?: () => void }) {
+function InstitutionCard({ inst, onDelete, onEdit, onUp, onDown }: { inst: Institution; onDelete?: () => void; onEdit?: () => void; onUp?: () => void; onDown?: () => void }) {
   const { d } = useI18n();
   const { colors } = useTheme();
   const logo = partnerLogo(inst);
@@ -105,35 +110,44 @@ function InstitutionCard({ inst, onDelete }: { inst: Institution; onDelete?: () 
         <Txt variant="h3" style={{ flex: 1 }}>{inst.name}</Txt>
         {onDelete && <IconButton icon="trash-2" size={34} onPress={onDelete} label={d.common.delete} />}
       </Row>
+      {onEdit && (
+        <Row gap={6} wrap>
+          <Button label={d.common.edit} icon="edit-2" size="sm" variant="secondary" onPress={onEdit} />
+          {onUp && <IconButton icon="arrow-up" size={32} onPress={onUp} label={d.guide.up} />}
+          {onDown && <IconButton icon="arrow-down" size={32} onPress={onDown} label={d.guide.down} />}
+        </Row>
+      )}
       <Txt color="textMuted" style={{ flex: 1 }}>{inst.description}</Txt>
       {inst.website && <Button label={d.honorary.website} icon="external-link" size="sm" variant="secondary" style={{ alignSelf: 'flex-start' }} onPress={() => Linking.openURL(inst.website!)} />}
     </Card>
   );
 }
 
-function InstitutionForm({ visible, onClose }: { visible: boolean; onClose: () => void }) {
+function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onClose: () => void; editing?: Institution }) {
   const { d } = useI18n();
   const { actions } = useStore();
   const { toast } = useDialogs();
   const blank = { name: '', description: '', website: '', logo: '' };
-  const [form, setForm] = useState(blank);
+  const [form, setForm] = useState(editing ? { name: editing.name, description: editing.description, website: editing.website ?? '', logo: editing.logo ?? '' } : blank);
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const website = form.website.trim();
   const validSite = !website || /^https?:\/\/\S+$/i.test(website);
   return (
-    <Sheet visible={visible} title={d.honorary.add} onClose={onClose}>
+    <Sheet visible={visible} title={editing ? d.honorary.edit : d.honorary.add} onClose={onClose}>
       <Txt variant="small" color="textMuted">{d.honorary.permissionNote}</Txt>
       <Input label={d.honorary.name} value={form.name} onChangeText={set('name')} />
       <Input label={d.honorary.description} value={form.description} onChangeText={set('description')} multiline />
       <Input label={d.honorary.websiteField} icon="link" value={form.website} onChangeText={set('website')} autoCapitalize="none" placeholder="https://" error={validSite ? undefined : d.honorary.invalidUrl} />
       <Input label={d.honorary.logoField} icon="image" value={form.logo} onChangeText={set('logo')} autoCapitalize="none" placeholder="https://" />
       <Button
-        label={d.common.add}
+        label={editing ? d.common.save : d.common.add}
         full
         size="lg"
         disabled={!form.name.trim() || !form.description.trim() || !validSite}
         onPress={() => {
-          actions.addInstitution({ name: form.name.trim(), description: form.description.trim(), website: website || undefined, logo: form.logo.trim() || undefined });
+          const values = { name: form.name.trim(), description: form.description.trim(), website: website || undefined, logo: form.logo.trim() || undefined };
+          if (editing) actions.updateInstitution(editing.id, values);
+          else actions.addInstitution(values);
           toast(d.common.saved);
           setForm(blank);
           onClose();

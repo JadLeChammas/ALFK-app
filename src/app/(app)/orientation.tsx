@@ -9,7 +9,7 @@ import { Flag } from '@/components/ui/Flag';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Select } from '@/components/ui/Select';
 import { Txt } from '@/components/ui/Txt';
-import { FIELDS, isField, type FieldKey } from '@/data/fields';
+import { fieldKey, fieldLabel, FIELDS, userFields, type FieldKey } from '@/data/fields';
 import { groupByPlace, resolvePlace, usePlaceAliases } from '@/data/places';
 import { canMessage } from '@/data/permissions';
 import { fullName, useApprovedMembers, useMe } from '@/data/store';
@@ -36,14 +36,14 @@ export default function Orientation() {
 
   const counts = useMemo(() => {
     const m = new Map<string, number>();
-    for (const u of graduates) if (isField(u.fieldOfStudy)) m.set(u.fieldOfStudy, (m.get(u.fieldOfStudy) ?? 0) + 1);
+    for (const u of graduates) for (const k of new Set(userFields(u).map(fieldKey))) m.set(k, (m.get(k) ?? 0) + 1);
     return m;
   }, [graduates]);
   const countries = [...new Set(graduates.map((u) => u.country).filter(Boolean) as string[])].sort((a, b) => countryOf(a).localeCompare(countryOf(b)));
 
   const n = norm(q.trim());
   const list = graduates
-    .filter((u) => field === 'all' || u.fieldOfStudy === field)
+    .filter((u) => field === 'all' || userFields(u).some((f) => fieldKey(f) === field))
     .filter((u) => country === 'all' || u.country === country)
     .filter((u) => !mentorsOnly || u.mentor)
     .filter((u) => !schoolKey || resolvePlace(u.school, aliases) === schoolKey)
@@ -57,7 +57,7 @@ export default function Orientation() {
     <Screen>
       <PageHeader title={d.orientation.title} subtitle={d.orientation.subtitle} />
 
-      {(me.role === 'alumni' || me.role === 'admin') && !me.fieldOfStudy && (
+      {(me.role === 'alumni' || me.role === 'admin') && userFields(me).length === 0 && (
         <Row gap={12} wrap style={{ padding: 16, borderRadius: 18, backgroundColor: colors.primarySoft }}>
           <Feather name="compass" size={18} color={colors.primary} />
           <Txt variant="smallStrong" style={{ flex: 1, minWidth: 200 }}>{d.orientation.becomeMentor}</Txt>
@@ -130,7 +130,7 @@ function GraduateCard({ user }: { user: User }) {
         </View>
       </Tap>
       <Row gap={6} wrap>
-        {isField(user.fieldOfStudy) && <Badge label={d.fields[user.fieldOfStudy]} tone="primary" />}
+        {userFields(user).map((f) => <Badge key={f} label={fieldLabel(f, d.fields)} tone="primary" />)}
         {user.mentor && <Badge label={d.orientation.mentor} tone="success" icon="compass" />}
       </Row>
       <View style={{ gap: 6 }}>

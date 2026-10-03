@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Switch, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { FieldsPicker } from '@/components/FieldsPicker';
 import { NationalityPicker } from '@/components/NationalityPicker';
 import { OtherSchoolsEditor } from '@/components/OtherSchools';
 import { CityPicker } from '@/components/CityPicker';
@@ -15,7 +16,6 @@ import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
-import { FIELDS } from '@/data/fields';
 import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import type { PickedDoc, PickedImage } from '@/data/remote';
@@ -34,6 +34,8 @@ export default function SignUp() {
   const [proof, setProof] = useState<PickedDoc | null>(null);
   // Same questions as the profile: nationalities, photo, a few words, and (alumni) answering students.
   const [nationalities, setNationalities] = useState<string[]>([]);
+  const [fields, setFields] = useState<string[]>([]);
+  const [schoolCountry, setSchoolCountry] = useState<string | undefined>(undefined);
   const [otherSchools, setOtherSchools] = useState<OtherSchool[]>([]);
   const [photo, setPhoto] = useState<PickedImage | null>(null);
   const [bio, setBio] = useState('');
@@ -43,7 +45,7 @@ export default function SignUp() {
     const [img] = await pickImages(false);
     if (img) setCropping(img);
   };
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '', fonction: '' });
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const set = (k: keyof typeof form) => (v: string) => {
@@ -54,8 +56,9 @@ export default function SignUp() {
   const next = () => {
     if (!form.firstName || !form.lastName || !form.email || !form.password) return setError('missing');
     if (form.password.length < 8) return setError('weak_password');
-    if (!parseFrDate(form.birth)) return setError('birth_date');
-    if (!isValidPhoneNumber(form.phoneNumber)) return setError('phone');
+    const honorary = form.role === 'honneur';
+    if (!(honorary && !form.birth) && !parseFrDate(form.birth)) return setError('birth_date');
+    if (!(honorary && !form.phoneNumber.trim()) && !isValidPhoneNumber(form.phoneNumber)) return setError('phone');
     setStep(2);
   };
 
@@ -63,24 +66,28 @@ export default function SignUp() {
   const [confirmEmail, setConfirmEmail] = useState(false);
 
   const submit = async () => {
-    // The proof of schooling is mandatory: no account without it.
-    if (!proof) return setError('proof');
+    const honorary = form.role === 'honneur';
+    // The proof of schooling is mandatory, except for honorary members (an admin checks them).
+    if (!proof && !honorary) return setError('proof');
     const promo = parseInt(form.promo, 10);
     setBusy(true);
-    const { birth, dial, phoneNumber, fieldOfStudy, situation, employer, jobTitle, ...rest } = form;
+    const { birth, dial, phoneNumber, fieldOfStudy, situation, employer, jobTitle, fonction, ...rest } = form;
     const alumni = form.role === 'alumni';
     const working = alumni && situation === 'working';
     const r = await actions.signUp({
       ...rest,
-      fieldOfStudy: alumni && fieldOfStudy ? fieldOfStudy : undefined,
+      fieldOfStudy: alumni && fields.length ? fields[0] : undefined,
+      fields: alumni && fields.length ? fields : undefined,
+      schoolCountry: form.role === 'alumni' && form.school ? schoolCountry ?? form.country : undefined,
       situation: alumni ? situation : undefined,
-      employer: working ? employer.trim() || undefined : undefined,
+      employer: working || honorary ? employer.trim() || undefined : undefined,
+      fonction: honorary ? fonction.trim() || undefined : undefined,
       jobTitle: working ? jobTitle.trim() || undefined : undefined,
-      promo: Number.isFinite(promo) ? promo : undefined,
-      school: form.role === 'eleve' ? LFK_SCHOOL : form.school || undefined,
+      promo: !honorary && Number.isFinite(promo) ? promo : undefined,
+      school: form.role === 'eleve' ? LFK_SCHOOL : honorary ? undefined : form.school || undefined,
       city: form.city || undefined,
       birthDate: parseFrDate(birth) ?? undefined,
-      phone: formatPhone(dial, phoneNumber),
+      phone: phoneNumber.trim() ? formatPhone(dial, phoneNumber) : undefined,
       nationalities: nationalities.length ? nationalities : undefined,
       bio: bio.trim() || undefined,
       mentor: alumni ? mentor : undefined,
@@ -131,7 +138,7 @@ export default function SignUp() {
         <View style={{ gap: 16 }}>
           <FieldRow>
             <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} containerStyle={{ flex: 1 }} autoComplete="given-name" />
-            <Input label={d.auth.lastName} value={form.lastName} onChangeText={set('lastName')} containerStyle={{ flex: 1 }} autoComplete="family-name" />
+            <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} autoCapitalize="characters" containerStyle={{ flex: 1 }} autoComplete="family-name" />
           </FieldRow>
           <Input label={d.auth.email} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" autoComplete="email" />
           <Input label={d.auth.password} icon="lock" value={form.password} onChangeText={set('password')} secureTextEntry hint={d.auth.passwordHint} autoComplete="new-password" />
@@ -166,7 +173,15 @@ export default function SignUp() {
         </View>
       ) : step === 2 ? (
         <View style={{ gap: 16 }}>
-          <Input label={d.auth.promo} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} placeholder="2020" />
+          {form.role === 'honneur' ? (
+            <>
+              <Txt variant="small" color="textMuted">{d.honorarySignup.intro}</Txt>
+              <Input label={d.honorarySignup.fonction} icon="award" value={form.fonction} onChangeText={set('fonction')} placeholder={d.honorarySignup.fonctionPlaceholder} />
+              <Input label={d.honorarySignup.organisation} icon="briefcase" value={form.employer} onChangeText={set('employer')} placeholder={d.honorarySignup.organisationPlaceholder} />
+            </>
+          ) : (
+            <Input label={d.auth.promo} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} placeholder="2020" />
+          )}
           {form.role === 'alumni' && (
             <View style={{ gap: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.situation.label}</Txt>
@@ -189,17 +204,17 @@ export default function SignUp() {
             options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))}
           />
           <CityPicker label={d.auth.city} value={form.city} onChange={set('city')} country={form.country} />
-          {form.role === 'eleve' ? (
+          {form.role === 'honneur' ? null : form.role === 'eleve' ? (
             // Students are at the LFK: the school is set for them and cannot be changed.
             <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} />
           ) : form.situation === 'working' ? (
             <>
               <Input label={d.situation.employer} icon="briefcase" value={form.employer} onChangeText={set('employer')} />
               <Input label={d.situation.jobTitle} icon="award" value={form.jobTitle} onChangeText={set('jobTitle')} />
-              <UniversityPicker label={d.situation.graduatedFrom} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
+              <UniversityPicker label={d.situation.graduatedFrom} value={form.school} onChange={(v, cc) => { set('school')(v); setSchoolCountry(cc); }} country={form.country} city={form.city} />
             </>
           ) : (
-            <UniversityPicker label={d.auth.school} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
+            <UniversityPicker label={d.auth.school} value={form.school} onChange={(v, cc) => { set('school')(v); setSchoolCountry(cc); }} country={form.country} city={form.city} />
           )}
           {form.role === 'alumni' && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}
           <NationalityPicker value={nationalities} onChange={setNationalities} />
@@ -207,13 +222,7 @@ export default function SignUp() {
             <Txt variant="smallStrong" color="danger">{missingFields.length ? `${d.auth.errors.missing} — ${missingFields.join(', ')}` : d.auth.errors.missing}</Txt>
           )}
           {form.role === 'alumni' && (
-            <Select
-              label={d.orientation.field}
-              value={form.fieldOfStudy}
-              onChange={set('fieldOfStudy')}
-              options={FIELDS.map((k) => ({ value: k, label: d.fields[k] }))}
-              placeholder={d.orientation.field}
-            />
+            <FieldsPicker value={fields} onChange={(v) => { setFields(v); setError(null); }} />
           )}
           {form.role === 'alumni' && (
             <Row gap={12} style={{ padding: 14, borderRadius: 14, backgroundColor: colors.surfaceAlt }}>
@@ -235,16 +244,19 @@ export default function SignUp() {
               onPress={() => {
                 // Every field of this step is required, except other universities (exchange…), the photo and the bio.
                 const alumni = form.role === 'alumni';
+                const honorary = form.role === 'honneur';
                 const working = alumni && form.situation === 'working';
                 const year = parseInt(form.promo, 10);
                 const lacking = [
-                  !(year >= 1960 && year <= new Date().getFullYear() + 6) && d.auth.promo,
+                  honorary && !form.fonction.trim() && d.honorarySignup.fonction,
+                  honorary && !form.employer.trim() && d.honorarySignup.organisation,
+                  !honorary && !(year >= 1960 && year <= new Date().getFullYear() + 6) && d.auth.promo,
                   !form.country && d.auth.country,
                   !form.city.trim() && d.auth.city,
                   alumni && !form.school.trim() && (working ? d.situation.graduatedFrom : d.auth.school),
                   working && !form.employer.trim() && d.situation.employer,
                   working && !form.jobTitle.trim() && d.situation.jobTitle,
-                  alumni && !form.fieldOfStudy && d.orientation.field,
+                  alumni && fields.length === 0 && d.orientation.field,
                   nationalities.length === 0 && d.nat.label,
                 ].filter((x): x is string => !!x);
                 setMissingFields(lacking);
@@ -270,15 +282,24 @@ export default function SignUp() {
           </Row>
           {cropping && <AvatarCropper image={cropping} onCancel={() => setCropping(null)} onDone={(img) => { setPhoto(img); setCropping(null); }} />}
           <Input label={`${d.profile.bio} (${d.common.optional})`} value={bio} onChangeText={setBio} multiline maxLength={600} />
-          <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} />
-          <Row gap={8} style={{ alignItems: 'flex-start' }}>
-            <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />
-            <Txt variant="small" color="textSubtle" style={{ flex: 1 }}>{d.proof.privacy}</Txt>
-          </Row>
+          {form.role === 'honneur' ? (
+            <Row gap={10} style={{ padding: 14, borderRadius: 14, backgroundColor: colors.surfaceAlt, alignItems: 'flex-start' }}>
+              <Feather name="shield" size={16} color={colors.secondaryStrong} style={{ marginTop: 2 }} />
+              <Txt variant="small" style={{ flex: 1 }}>{d.honorarySignup.noProof}</Txt>
+            </Row>
+          ) : (
+            <>
+              <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} />
+              <Row gap={8} style={{ alignItems: 'flex-start' }}>
+                <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />
+                <Txt variant="small" color="textSubtle" style={{ flex: 1 }}>{d.proof.privacy}</Txt>
+              </Row>
+            </>
+          )}
           {error && error !== 'proof' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
           <Row gap={10}>
             <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(2)} />
-            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} disabled={!proof} />
+            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} disabled={!proof && form.role !== 'honneur'} />
           </Row>
         </View>
       )}

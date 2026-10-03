@@ -40,6 +40,10 @@ export type User = {
   proof?: { path: string; name: string; mimeType?: string; uploadedAt: string };
   /** Accounts created by an admin need no proof. */
   createdByAdmin?: boolean;
+  /** Fields of study (several; « other:… » = typed by the member), see data/fields.ts. */
+  fields?: string[];
+  /** Country of the main university (its flag on the profile). */
+  schoolCountry?: string;
   /** Field of study, for the Orientation space (see data/fields.ts). */
   fieldOfStudy?: string;
   /** Accepts being contacted by current students about their studies (Orientation). */
@@ -192,6 +196,9 @@ export type Question = { id: string; text: string; topic: QuestionTopic; status:
 /** Answers are signed by the alumni who write them. */
 export type Answer = { id: string; questionId: string; authorId?: string; text: string; createdAt: string };
 
+/** A message in the honorary members' group discussion. */
+export type CircleMessage = { id: string; authorId?: string; text: string; createdAt: string };
+
 export type Db = {
   /** Demo only: next Alumni number to hand out (numbers are never reused). */
   nextAlumniNumber?: number;
@@ -209,6 +216,7 @@ export type Db = {
   keyDates: KeyDate[];
   questions: Question[];
   answers: Answer[];
+  circleMessages: CircleMessage[];
   settings: AppSettings;
 };
 

@@ -18,6 +18,7 @@ import {
   toConversation,
   toUser,
   toMessage,
+  toCircleMessage,
   toNotification,
   institutionRow,
   keyDateRow,
@@ -60,7 +61,7 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v10';
+const STORAGE_KEY = 'lfk.demo.db.v11';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -106,14 +107,18 @@ export type SignUpInput = {
   bio?: string;
   mentor?: boolean;
   otherSchools?: OtherSchool[];
+  fields?: string[];
+  schoolCountry?: string;
 };
 
-export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools'>>;
+export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools' | 'fields' | 'schoolCountry'>>;
 
 const demoId = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 const makeId = (p: string) => (isRemote ? newId() : demoId(p));
 const nowIso = () => new Date().toISOString();
-export const fullName = (u?: Pick<User, 'firstName' | 'lastName'>) => (u ? `${u.firstName} ${u.lastName}` : '');
+/** Last names are always shown in capitals (« Jad EL CHAMMAS »). */
+export const upperName = (s: string) => s.toLocaleUpperCase('fr');
+export const fullName = (u?: Pick<User, 'firstName' | 'lastName'>) => (u ? `${u.firstName} ${upperName(u.lastName)}` : '');
 
 function authError(message?: string, code?: string): AuthError {
   const m = `${code ?? ''} ${message ?? ''}`.toLowerCase();
@@ -250,6 +255,15 @@ function useStoreValue() {
         const c = toConversation(p.new);
         commit((d) => ({ ...d, conversations: d.conversations.some((x) => x.id === c.id) ? d.conversations.map((x) => (x.id === c.id ? c : x)) : [...d.conversations, c] }));
       })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'circle_messages' }, (p) => {
+        if (p.eventType === 'DELETE') {
+          const id = (p.old as { id?: string }).id;
+          commit((d) => ({ ...d, circleMessages: d.circleMessages.filter((x) => x.id !== id) }));
+          return;
+        }
+        const m = toCircleMessage(p.new);
+        commit((d) => (d.circleMessages.some((x) => x.id === m.id) ? d : { ...d, circleMessages: [...d.circleMessages, m] }));
+      })
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${meId}` }, (p) => {
         const n = toNotification(p.new);
         commit((d) => (d.notifications.some((x) => x.id === n.id) ? d : { ...d, notifications: [n, ...d.notifications] }));
@@ -303,8 +317,9 @@ function useStoreValue() {
       return { ok: true };
     },
     async signUp(input: SignUpInput, proof: PickedDoc | null, photo?: PickedImage | null): Promise<Result> {
+      if (input.role === 'honneur') input = { ...input, promo: undefined, school: undefined, situation: undefined, fieldOfStudy: undefined, fields: undefined, otherSchools: undefined, mentor: undefined };
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
-      if (!proof) return { ok: false, error: 'proof' };
+      if (!proof && input.role !== 'honneur') return { ok: false, error: 'proof' };
       if (!SELF_SIGNUP_ROLES.includes(input.role)) return { ok: false, error: 'unknown' };
       const contact = contactError(input.role, input.birthDate, input.phone);
       if (contact) return { ok: false, error: contact };
@@ -334,6 +349,9 @@ function useStoreValue() {
               bio: input.bio ?? '',
               mentor: input.mentor ? 'true' : '',
               other_schools: input.otherSchools ?? [],
+              fields_of_study: input.fields ?? [],
+              school_country: input.schoolCountry ?? '',
+              fonction: input.role === 'honneur' ? input.fonction ?? '' : '',
             },
           },
         });
@@ -342,7 +360,7 @@ function useStoreValue() {
         // the proof is then sent from the "pending" screen after the first sign-in.
         if (!data.session || !data.user) return { ok: true, confirmEmail: true };
         try {
-          await saveProof(data.user.id, proof);
+          if (proof) await saveProof(data.user.id, proof);
         } catch {
           // The account exists; the pending screen offers to send the proof again.
         }
@@ -360,7 +378,7 @@ function useStoreValue() {
       const draft: User = {
         ...input,
         bureauCode: undefined,
-        proof: { path: proof.uri, name: proof.name, mimeType: proof.mimeType ?? undefined, uploadedAt: nowIso() },
+        proof: proof ? { path: proof.uri, name: proof.name, mimeType: proof.mimeType ?? undefined, uploadedAt: nowIso() } : undefined,
         avatar: photo?.uri,
         email: input.email.trim(),
         id: demoId('u'),
@@ -456,6 +474,11 @@ function useStoreValue() {
       commit((d) => removeUser(d, meId));
       saveSession(null);
       return { ok: true };
+    },
+    /** Shows a new profile photo at once on this device, while it is being uploaded. */
+    previewAvatar(uri: string) {
+      if (!meId) return;
+      commit((d) => ({ ...d, users: d.users.map((u) => (u.id === meId ? { ...u, avatar: uri } : u)) }));
     },
     /** Uploads a CV as a PDF and returns the path to store in `cv.file` (the demo keeps the local URI). */
     async uploadCvFile(doc: PickedDoc): Promise<string> {
@@ -617,6 +640,19 @@ function useStoreValue() {
       if (supabase) send(supabase.from('publications').delete().eq('id', id));
     },
 
+    // ——— Honorary members' circle ———
+    postCircleMessage(text: string) {
+      const body = text.trim();
+      if (!meId || !body) return;
+      const m = { id: makeId('cm'), authorId: meId, text: body, createdAt: nowIso() };
+      commit((d) => ({ ...d, circleMessages: [...d.circleMessages, m] }));
+      if (supabase) send(supabase.from('circle_messages').insert({ id: m.id, author_id: meId, text: body }));
+    },
+    deleteCircleMessage(id: string) {
+      commit((d) => ({ ...d, circleMessages: d.circleMessages.filter((x) => x.id !== id) }));
+      if (supabase) send(supabase.from('circle_messages').delete().eq('id', id));
+    },
+
     // ——— Anonymous questions ———
     /** Students: ask a question. It stays hidden until an admin publishes it; the name is never shown. */
     askQuestion(text: string, topic: QuestionTopic) {
@@ -711,7 +747,8 @@ function useStoreValue() {
     approveUser(id: string): Result {
       const target = dbRef.current?.users.find((x) => x.id === id);
       if (!target) return { ok: false, error: 'unknown' };
-      if (!target.proof && !target.createdByAdmin) return { ok: false, error: 'proof' };
+      // Honorary members have no proof of schooling.
+      if (!target.proof && !target.createdByAdmin && target.role !== 'honneur') return { ok: false, error: 'proof' };
       actions.approveUserNow(id);
       return { ok: true };
     },
@@ -741,9 +778,13 @@ function useStoreValue() {
     async removeAccount(id: string, action: 'refuse' | 'delete_user'): Promise<Result> {
       const name = fullName(dbRef.current?.users.find((x) => x.id === id));
       if (supabase) {
-        const r = await callAdminApi('delete-user', { userId: id, logAction: action, name });
-        if (!r.ok) return { ok: false, error: 'unknown' };
+        // Gone from the screen at once; the server then deletes the account and its proof.
         commit((d) => ({ ...removeUser(d, id), logs: [{ id: newId(), actorId: meId!, action, target: name, createdAt: nowIso() }, ...d.logs] }));
+        const r = await callAdminApi('delete-user', { userId: id, logAction: action, name });
+        if (!r.ok) {
+          reload();
+          return { ok: false, error: 'unknown' };
+        }
         return { ok: true };
       }
       commit((d) => log(removeUser(d, id), action, name));
@@ -916,6 +957,24 @@ function useStoreValue() {
       const row: Institution = { ...inst, id: makeId('inst'), order: (dbRef.current?.institutions.length ?? 0) + 1 };
       commit((d) => ({ ...d, institutions: [...d.institutions, row] }));
       if (supabase) send(supabase.from('institutions').insert(institutionRow(row)));
+    },
+    /** Admins: change a partner (name, description, website, logo). */
+    updateInstitution(id: string, patch: Partial<Omit<Institution, 'id' | 'order'>>) {
+      commit((d) => ({ ...d, institutions: d.institutions.map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
+      const row = dbRef.current?.institutions.find((i) => i.id === id);
+      if (supabase && row) send(supabase.from('institutions').update(institutionRow({ ...row, ...patch })).eq('id', id));
+    },
+    /** Admins: move a partner one place up (-1) or down (+1); the order is saved for everyone. */
+    moveInstitution(id: string, delta: -1 | 1) {
+      const list = [...(dbRef.current?.institutions ?? [])].sort((a, b) => a.order - b.order);
+      const i = list.findIndex((x) => x.id === id);
+      const j = i + delta;
+      if (i < 0 || j < 0 || j >= list.length) return;
+      [list[i], list[j]] = [list[j], list[i]];
+      // Orders become 1, 2, 3… in the new sequence.
+      const renumbered = list.map((x, k) => ({ ...x, order: k + 1 }));
+      commit((d) => ({ ...d, institutions: renumbered }));
+      if (supabase) for (const x of renumbered) send(supabase.from('institutions').update({ sort_order: x.order }).eq('id', x.id));
     },
     deleteInstitution(id: string) {
       commit((d) => ({ ...d, institutions: d.institutions.filter((i) => i.id !== id) }));

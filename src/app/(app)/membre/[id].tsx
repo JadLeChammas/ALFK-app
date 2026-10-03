@@ -18,6 +18,7 @@ import { birthdayToday } from '@/lib/eggs';
 import { Balloons } from '@/components/EasterEggs';
 import { nationalityName } from '@/data/nationalities';
 import { OtherSchoolsRows } from '@/components/OtherSchools';
+import { fieldLabel, userFields } from '@/data/fields';
 
 export default function MemberProfile() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -97,7 +98,13 @@ export default function MemberProfile() {
             {(me.role === 'admin' || isMe) && user.role !== 'honneur' && user.alumniNumber && <ListRow icon="hash" title={user.alumniNumber} subtitle={d.member.alumniNumber} />}
             {(me.role === 'admin' || isMe) && user.role === 'admin' && user.bureauCode && <ListRow icon="shield" title={user.bureauCode} subtitle={d.member.bureauCode} tone="ink" />}
             {user.situation === 'working' && (user.employer || user.jobTitle) && <ListRow icon="briefcase" title={[user.jobTitle, user.employer].filter(Boolean).join(' · ')} subtitle={d.situation.worksAt} />}
-            <ListRow icon="book" title={user.school ?? '—'} subtitle={user.situation === 'working' ? d.situation.graduatedFrom : user.situation === 'student' ? d.situation.studiesAt : d.member.school} />
+            <ListRow
+              icon="book"
+              title={user.school ?? '—'}
+              subtitle={user.situation === 'working' ? d.situation.graduatedFrom : user.situation === 'student' ? d.situation.studiesAt : d.member.school}
+              right={!!user.school && !!(user.schoolCountry ?? user.country) && <Flag code={(user.schoolCountry ?? user.country)!} size={16} />}
+            />
+            {userFields(user).length > 0 && <ListRow icon="compass" title={userFields(user).map((x) => fieldLabel(x, d.fields)).join(', ')} subtitle={d.majors.rowLabel} />}
             {!!user.otherSchools?.length && <OtherSchoolsRows schools={user.otherSchools} />}
 {!!user.nationalities?.length && (
               <ListRow

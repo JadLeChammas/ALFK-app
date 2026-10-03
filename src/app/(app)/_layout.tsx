@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 
 import { AppShell } from '@/components/shell/AppShell';
-import { can } from '@/data/permissions';
+import { can, inCircle } from '@/data/permissions';
 import { useMe } from '@/data/store';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -19,6 +19,9 @@ export default function MemberLayout() {
         <Stack.Protected guard={can(me, 'viewEvents')}>
           <Stack.Screen name="evenements/index" />
           <Stack.Screen name="evenements/[id]" />
+        </Stack.Protected>
+        <Stack.Protected guard={inCircle(me)}>
+          <Stack.Screen name="cercle" />
         </Stack.Protected>
         <Stack.Protected guard={can(me, 'viewStats')}>
           <Stack.Screen name="statistiques" />

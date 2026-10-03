@@ -46,13 +46,15 @@ export default function Repere() {
   const [openSchool, setOpenSchool] = useState<string | null>(null);
   const [view, setView] = useState<'globe' | 'map'>('globe');
 
+  /** Different people in a list (someone with an exchange in the same country counts once). */
+  const people = (list?: User[]) => new Set((list ?? []).map((u) => u.id)).size;
   const perCountry = new Map<string, User[]>();
   for (const u of alumni) perCountry.set(u.country!, [...(perCountry.get(u.country!) ?? []), u]);
 
   const continentCounts = Object.fromEntries(
-    CONTINENTS.map((c) => [c, COUNTRIES.filter((x) => x.continent === c).reduce((a, x) => a + (perCountry.get(x.code)?.length ?? 0), 0)])
+    CONTINENTS.map((c) => [c, people(COUNTRIES.filter((x) => x.continent === c).flatMap((x) => perCountry.get(x.code) ?? []))])
   ) as Record<ContinentKey, number>;
-  const countries = COUNTRIES.filter((c) => c.continent === continent && perCountry.has(c.code)).sort((a, b) => perCountry.get(b.code)!.length - perCountry.get(a.code)!.length);
+  const countries = COUNTRIES.filter((c) => c.continent === continent && perCountry.has(c.code)).sort((a, b) => people(perCountry.get(b.code)) - people(perCountry.get(a.code)));
   const activeCountry = country && countries.some((c) => c.code === country) ? country : countries[0]?.code ?? null;
   // Same place written differently (« ISEP », « Isep », full name…) = one entry (see data/places.ts).
   const universities = groupByPlace(perCountry.get(activeCountry ?? '') ?? [], place, aliases);
@@ -64,7 +66,7 @@ export default function Repere() {
     setOpenSchool(null);
   };
   const ac = countryByCode(activeCountry ?? undefined);
-  const markers = COUNTRIES.filter((c) => perCountry.has(c.code) && c.code !== 'KW').map((c) => ({ key: c.code, ll: c.ll, weight: perCountry.get(c.code)!.length, active: c.code === activeCountry, label: countryOf(c.code) }));
+  const markers = COUNTRIES.filter((c) => perCountry.has(c.code) && c.code !== 'KW').map((c) => ({ key: c.code, ll: c.ll, weight: people(perCountry.get(c.code)), active: c.code === activeCountry, label: countryOf(c.code) }));
 
   const continentList = (
     <View style={{ gap: 6 }}>
@@ -76,7 +78,7 @@ export default function Repere() {
   const countryList = countries.length ? (
     <View style={{ gap: 6 }}>
       {countries.map((c) => (
-        <PickRow key={c.code} active={c.code === activeCountry} leading={<Flag code={c.code} />} label={countryOf(c.code)} count={perCountry.get(c.code)!.length} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
+        <PickRow key={c.code} active={c.code === activeCountry} leading={<Flag code={c.code} />} label={countryOf(c.code)} count={people(perCountry.get(c.code))} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
       ))}
     </View>
   ) : (
@@ -94,7 +96,7 @@ export default function Repere() {
               </View>
               <View style={{ flex: 1 }}>
                 <Txt variant="bodyStrong" numberOfLines={1}>{label}</Txt>
-                <Txt variant="small" color="textMuted">{f(d.common.alumniCount, { n: list.length })}</Txt>
+                <Txt variant="small" color="textMuted">{f(d.common.alumniCount, { n: people(list) })}</Txt>
               </View>
               <Row gap={0}>
                 {list.slice(0, 3).map((u, j) => (
@@ -159,7 +161,7 @@ export default function Repere() {
           <Row gap={8} style={{ flexShrink: 1 }}>
             {ac ? <Flag code={ac.code} /> : <Feather name="map" size={16} color={colors.secondaryStrong} />}
             <Txt variant="h3" numberOfLines={1} style={{ flexShrink: 1 }}>{view === 'globe' && ac ? countryOf(ac.code) : d.continents[continent]}</Txt>
-            <Txt color="textSubtle">· {f(d.common.alumniCount, { n: view === 'globe' && ac ? perCountry.get(ac.code)?.length ?? 0 : continentCounts[continent] })}</Txt>
+            <Txt color="textSubtle">· {f(d.common.alumniCount, { n: view === 'globe' && ac ? people(perCountry.get(ac.code)) : continentCounts[continent] })}</Txt>
           </Row>
           <Segmented
             value={view}
@@ -206,7 +208,7 @@ export default function Repere() {
             <Txt variant="caption">2 · {d.repere.country}</Txt>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
               {countries.map((c) => (
-                <Chip key={c.code} leading={<Flag code={c.code} size={12} />} label={countryOf(c.code)} count={perCountry.get(c.code)!.length} active={c.code === activeCountry} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
+                <Chip key={c.code} leading={<Flag code={c.code} size={12} />} label={countryOf(c.code)} count={people(perCountry.get(c.code))} active={c.code === activeCountry} onPress={() => { setCountry(c.code); setOpenSchool(null); }} />
               ))}
             </ScrollView>
           </View>

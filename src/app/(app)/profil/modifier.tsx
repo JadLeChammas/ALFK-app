@@ -13,7 +13,8 @@ import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
-import { FIELDS } from '@/data/fields';
+import { userFields } from '@/data/fields';
+import { FieldsPicker } from '@/components/FieldsPicker';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { OtherSchool, Situation } from '@/data/types';
@@ -34,7 +35,7 @@ export default function EditProfile() {
   const me = useMe();
   const [form, setForm] = useState({
     firstName: me.firstName,
-    lastName: me.lastName,
+    lastName: me.lastName.toLocaleUpperCase('fr'),
     dial: parsePhone(me.phone).dial,
     phoneNumber: parsePhone(me.phone).number,
     birth: isoToFrDate(me.birthDate),
@@ -51,6 +52,8 @@ export default function EditProfile() {
   const [mentor, setMentor] = useState(!!me.mentor);
   const [nationalities, setNationalities] = useState<string[]>(me.nationalities ?? []);
   const [otherSchools, setOtherSchools] = useState<OtherSchool[]>(me.otherSchools ?? []);
+  const [fields, setFields] = useState<string[]>(userFields(me));
+  const [schoolCountry, setSchoolCountry] = useState<string | undefined>(me.schoolCountry);
   // Former students share their studies with the lycée students (Orientation space).
   const graduate = me.role === 'alumni' || me.role === 'admin';
   // Universities and companies other members already entered (to pick the same spelling).
@@ -83,7 +86,9 @@ export default function EditProfile() {
       school: form.school || undefined,
       city: form.city || undefined,
       bio: form.bio || undefined,
-      fieldOfStudy: graduate ? form.fieldOfStudy || undefined : undefined,
+      fieldOfStudy: graduate ? fields[0] : undefined,
+      fields: graduate && fields.length ? fields : undefined,
+      schoolCountry: form.school ? schoolCountry ?? form.country : undefined,
       mentor: graduate ? mentor : undefined,
       situation: graduate ? situation : undefined,
       employer: working ? form.employer.trim() || undefined : undefined,
@@ -110,6 +115,10 @@ export default function EditProfile() {
   };
   const savePhoto = async (img: PickedImage) => {
     setCropping(null);
+    // The new photo shows at once everywhere on this device; the upload follows.
+    const previous = form.avatar;
+    setForm((f) => ({ ...f, avatar: img.uri }));
+    actions.previewAvatar(img.uri);
     setUploading(true);
     try {
       const url = await actions.uploadImage(img, 'avatars');
@@ -118,6 +127,8 @@ export default function EditProfile() {
       const r = actions.updateProfile({ avatar: url });
       toast(r.ok ? d.crop.saved : d.auth.errors.unknown, r.ok ? 'success' : 'danger');
     } catch (e) {
+      setForm((f) => ({ ...f, avatar: previous }));
+      if (previous) actions.previewAvatar(previous);
       toast(`${d.auth.errors.unknown} (${(e as Error)?.message ?? e})`, 'danger');
     } finally {
       setUploading(false);
@@ -146,7 +157,7 @@ export default function EditProfile() {
             <Txt variant="h3">{d.profile.info}</Txt>
             <FieldRow>
               <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} containerStyle={{ flex: 1 }} />
-              <Input label={d.auth.lastName} value={form.lastName} onChangeText={set('lastName')} containerStyle={{ flex: 1 }} />
+              <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
             </FieldRow>
             <FieldRow>
               <PhoneField
@@ -193,7 +204,7 @@ export default function EditProfile() {
                 <Input label={d.auth.school} icon="lock" value={LFK_SCHOOL} editable={false} hint={d.auth.schoolAuto} containerStyle={{ flex: 2 }} />
               ) : (
                 <View style={{ flex: 2 }}>
-                  <UniversityPicker label={working ? d.situation.graduatedFrom : d.auth.school} optional={working} value={form.school} onChange={set('school')} country={form.country} city={form.city} />
+                  <UniversityPicker label={working ? d.situation.graduatedFrom : d.auth.school} optional={working} value={form.school} onChange={(v, cc) => { set('school')(v); setSchoolCountry(cc); }} country={form.country} city={form.city} />
                 </View>
               )}
               <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
@@ -210,12 +221,7 @@ export default function EditProfile() {
             <NationalityPicker value={nationalities} onChange={setNationalities} />
             {graduate && (
               <>
-                <Select
-                  label={d.orientation.field}
-                  value={form.fieldOfStudy}
-                  onChange={set('fieldOfStudy')}
-                  options={[{ value: '', label: '—' }, ...FIELDS.map((k) => ({ value: k, label: d.fields[k] }))]}
-                />
+                <FieldsPicker value={fields} onChange={setFields} />
                 <Row gap={12} style={{ padding: 14, borderRadius: 14, backgroundColor: colors.surfaceAlt }}>
                   <Feather name="compass" size={18} color={colors.primary} />
                   <View style={{ flex: 1 }}>

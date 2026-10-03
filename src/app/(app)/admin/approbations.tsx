@@ -43,6 +43,7 @@ export default function Approvals() {
                 <View style={{ gap: 8 }}>
                   <MetaLine icon="mail" text={u.email} />
                   {u.promo && <MetaLine icon="award" text={f(d.common.promo, { year: u.promo })} />}
+                  {u.role === 'honneur' && (u.fonction || u.employer) && <MetaLine icon="briefcase" text={[u.fonction, u.employer].filter(Boolean).join(' · ')} />}
                   {u.situation === 'working' && u.employer && <MetaLine icon="briefcase" text={[u.jobTitle, u.employer].filter(Boolean).join(' · ')} />}
                   {u.school && <MetaLine icon="book" text={u.school} />}
                   {c && <MetaLine icon="map-pin" text={[u.city, country(c.code)].filter(Boolean).join(', ')} />}
@@ -67,6 +68,8 @@ export default function Approvals() {
                     </>
                   ) : u.createdByAdmin ? (
                     <Badge label={d.proof.adminCreated} tone="info" icon="shield" />
+                  ) : u.role === 'honneur' ? (
+                    <Badge label={d.honorarySignup.badge} tone="warning" icon="award" />
                   ) : (
                     <Badge label={d.proof.none} tone="danger" icon="alert-triangle" />
                   )}
@@ -77,7 +80,7 @@ export default function Approvals() {
                     label={d.admin.approve}
                     icon="check"
                     style={{ flex: 1 }}
-                    disabled={!u.proof && !u.createdByAdmin}
+                    disabled={!u.proof && !u.createdByAdmin && u.role !== 'honneur'}
                     onPress={() => {
                       const r = actions.approveUser(u.id);
                       toast(r.ok ? `${fullName(u)} ✓` : d.admin.proofRequired, r.ok ? 'success' : 'danger');

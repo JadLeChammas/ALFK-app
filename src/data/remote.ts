@@ -12,6 +12,7 @@ import type {
   KeyDate,
   Question,
   Answer,
+  CircleMessage,
   LfkEvent,
   Message,
   Promo,
@@ -26,7 +27,7 @@ const opt = <T,>(v: T | null | undefined) => (v === null || v === undefined ? un
 
 export const newId = () => Crypto.randomUUID();
 
-export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], settings: {} };
+export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], settings: {} };
 
 export const toUser = (r: Row): User => ({
   id: r.id,
@@ -48,6 +49,8 @@ export const toUser = (r: Row): User => ({
   proof: r.proof_path ? { path: r.proof_path, name: r.proof_name ?? '', mimeType: opt(r.proof_mime), uploadedAt: r.proof_uploaded_at ?? r.created_at } : undefined,
   createdByAdmin: !!r.created_by_admin,
   fieldOfStudy: opt(r.field_of_study),
+  fields: Array.isArray(r.fields_of_study) && r.fields_of_study.length ? r.fields_of_study : undefined,
+  schoolCountry: opt(r.school_country),
   mentor: r.mentor ?? undefined,
   city: opt(r.city),
   country: opt(r.country),
@@ -83,6 +86,8 @@ const PROFILE_COLUMNS: Record<string, string> = {
   fonction: 'fonction',
   bureauCode: 'bureau_code',
   fieldOfStudy: 'field_of_study',
+  fields: 'fields_of_study',
+  schoolCountry: 'school_country',
   nationalities: 'nationalities',
   otherSchools: 'other_schools',
   mentor: 'mentor',
@@ -109,6 +114,7 @@ const toPhoto = (r: Row): EventPhoto => ({ id: r.id, eventId: r.event_id, uri: r
 const toPublication = (r: Row): Publication => ({ id: r.id, title: r.title, category: r.category, date: r.date, cover: r.cover, excerpt: r.excerpt, body: r.body, authorId: r.author_id ?? '', status: r.status ?? 'published' });
 const toInstitution = (r: Row): Institution => ({ id: r.id, name: r.name, description: r.description ?? '', logo: opt(r.logo), website: opt(r.website), order: r.sort_order ?? 0 });
 const toQuestion = (r: Row): Question => ({ id: r.id, text: r.text, topic: r.topic, status: r.status, createdAt: r.created_at, publishedAt: opt(r.published_at) });
+export const toCircleMessage = (r: Row): CircleMessage => ({ id: r.id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
 const toAnswer = (r: Row): Answer => ({ id: r.id, questionId: r.question_id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
 const toKeyDate = (r: Row): KeyDate => ({ id: r.id, title: r.title, month: r.month, day: r.day, year: opt(r.year), category: r.category, endMonth: opt(r.end_month), endDay: opt(r.end_day), url: opt(r.url) });
 export const toConversation = (r: Row): Conversation => ({ id: r.id, members: [r.members[0], r.members[1]], lastRead: r.last_read ?? {}, report: opt(r.report) });
@@ -129,7 +135,7 @@ export async function loadDb(): Promise<Db> {
   };
   // Tables added by migration 003: an empty list until it has been run, instead of breaking the app.
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
-  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers] = await Promise.all([
+  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle] = await Promise.all([
     all('profiles'),
     all('promos'),
     all('events', 'date'),
@@ -146,6 +152,7 @@ export async function loadDb(): Promise<Db> {
     optional('questions'),
     optional('question_authors'),
     optional('answers'),
+    optional('circle_messages'),
   ]);
   // Only the user's own questions (or all of them for admins) come back with an author.
   const askedBy = new Map(questionAuthors.map((r: Row) => [r.question_id, r.user_id]));
@@ -164,6 +171,7 @@ export async function loadDb(): Promise<Db> {
     keyDates: keyDates.map(toKeyDate),
     questions: questions.map((r: Row) => ({ ...toQuestion(r), authorId: askedBy.get(r.id) })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     answers: answers.map(toAnswer).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
+    circleMessages: circle.map(toCircleMessage).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
     settings: Object.fromEntries(settings.map((s: Row) => [s.key, s.value])),
   };
 }

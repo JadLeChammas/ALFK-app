@@ -53,7 +53,13 @@ export default function Pending() {
           );
         })}
       </View>
-      {hasProof ? (
+      {me?.role === 'honneur' ? (
+        // Honorary members have no proof of schooling: an admin checks their request.
+        <Row gap={10} style={{ padding: 14, borderRadius: 16, backgroundColor: colors.surfaceAlt }}>
+          <Feather name="shield" size={18} color={colors.secondaryStrong} />
+          <Txt variant="smallStrong" style={{ flex: 1 }}>{d.honorarySignup.noProof}</Txt>
+        </Row>
+      ) : hasProof ? (
         <Row gap={10} style={{ padding: 14, borderRadius: 16, backgroundColor: colors.successSoft }}>
           <Feather name="file-text" size={18} color={colors.success} />
           <Txt variant="smallStrong" style={{ flex: 1 }} numberOfLines={1}>{me?.proof?.name ?? d.proof.adminCreated}</Txt>
