@@ -229,6 +229,38 @@ export async function uploadProof(userId: string, doc: PickedDoc): Promise<strin
   return path;
 }
 
+/**
+ * The proof and the photo chosen in the sign-up form. Sent through one-time upload links from the
+ * server (api/admin.ts, signup-upload / signup-finish): right after signing up there is often no
+ * session yet, and a pending member cannot write to the photo bucket. Throws when it fails.
+ */
+export async function uploadSignupFiles(userId: string, email: string, proof: PickedDoc | null, photo?: PickedImage | null) {
+  const sb = supabase!;
+  const post = async (payload: Record<string, unknown>) => {
+    const res = await fetch(`${apiBase}/api/admin`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, email, ...payload }) });
+    const json = (await res.json().catch(() => ({}))) as { error?: string; proof?: { path: string; token: string }; photo?: { path: string; token: string } };
+    if (!res.ok) throw new Error(json.error ?? `http_${res.status}`);
+    return json;
+  };
+  const proofExt = proof ? (proof.name.split('.').pop() || 'jpg') : undefined;
+  const photoType = photo?.mimeType ?? 'image/jpeg';
+  const photoExt = photo ? photoType.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg' : undefined;
+  const links = await post({ action: 'signup-upload', proofExt, photoExt });
+  const done: Record<string, unknown> = {};
+  if (proof && links.proof) {
+    const body = proof.file ?? (proof.base64 ? base64ToBytes(proof.base64) : await (await fetch(proof.uri)).arrayBuffer());
+    const { error } = await sb.storage.from('proofs').uploadToSignedUrl(links.proof.path, links.proof.token, body, { contentType: proof.mimeType ?? undefined });
+    if (error) throw error;
+    done.proof = { path: links.proof.path, name: proof.name, mime: proof.mimeType ?? undefined };
+  }
+  if (photo && links.photo) {
+    const body = photo.base64 ? base64ToBytes(photo.base64) : await (await fetch(photo.uri)).blob();
+    const { error } = await sb.storage.from('media').uploadToSignedUrl(links.photo.path, links.photo.token, body, { contentType: photoType });
+    if (!error) done.photo = { path: links.photo.path };
+  }
+  if (done.proof || done.photo) await post({ action: 'signup-finish', ...done });
+}
+
 /** A link valid 10 minutes, for an admin reviewing a sign-up. */
 export async function proofUrl(path: string): Promise<string | null> {
   const { data } = await supabase!.storage.from('proofs').createSignedUrl(path, 600);

@@ -25,6 +25,7 @@ import {
   proofUrl,
   uploadImage,
   uploadProof,
+  uploadSignupFiles,
   uploadCvFile,
   cvFileUrl,
   type PickedDoc,
@@ -355,22 +356,17 @@ function useStoreValue() {
           },
         });
         if (e) return { ok: false, error: authError(e.message, e.code) };
-        // Supabase answers without a session when e-mail confirmation is enabled (or the address is already used);
-        // the proof is then sent from the "pending" screen after the first sign-in.
-        if (!data.session || !data.user) return { ok: true, confirmEmail: true };
-        try {
-          if (proof) await saveProof(data.user.id, proof);
-        } catch {
-          // The account exists; the pending screen offers to send the proof again.
-        }
-        if (photo) {
+        // The proof and the photo go up now, with or without a session (e-mail to confirm). When the
+        // address was already used, Supabase answers with a placeholder account and nothing is sent.
+        if (data.user?.identities?.length) {
           try {
-            const avatar = await uploadImage(data.user.id, photo, 'avatars');
-            await supabase.from('profiles').update({ avatar }).eq('id', data.user.id);
+            await uploadSignupFiles(data.user.id, input.email, proof, photo);
           } catch {
-            // The photo can be added later from the profile.
+            // The account exists; the pending screen offers to send the proof again.
           }
+          if (data.session) await reload();
         }
+        if (!data.session || !data.user) return { ok: true, confirmEmail: true };
         return { ok: true };
       }
       if (findByEmail(input.email)) return { ok: false, error: 'email_taken' };
