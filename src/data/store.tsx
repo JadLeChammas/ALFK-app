@@ -76,7 +76,8 @@ export type AuthError =
   | 'code_taken'
   | 'proof'
   | 'unknown';
-export type Result = { ok: true; confirmEmail?: boolean } | { ok: false; error: AuthError };
+/** `detail`: the server's own message, shown to admins when the error has no translation. */
+export type Result = { ok: true; confirmEmail?: boolean } | { ok: false; error: AuthError; detail?: string };
 
 export type SignUpInput = {
   firstName: string;
@@ -781,7 +782,7 @@ function useStoreValue() {
         const r = await callAdminApi('delete-user', { userId: id, logAction: action, name });
         if (!r.ok) {
           reload();
-          return { ok: false, error: 'unknown' };
+          return { ok: false, error: 'unknown', detail: r.error };
         }
         return { ok: true };
       }
@@ -800,7 +801,7 @@ function useStoreValue() {
       if (input.role === 'eleve') input = { ...input, school: LFK_SCHOOL };
       if (supabase) {
         const r = await callAdminApi('create-user', { ...input, email: input.email.trim() });
-        if (!r.ok) return { ok: false, error: authError(r.error, r.error) };
+        if (!r.ok) return { ok: false, error: authError(r.error, r.error), detail: r.error };
         await reload();
         return { ok: true };
       }

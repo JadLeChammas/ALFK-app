@@ -59,7 +59,7 @@ export default function ManageMembers() {
   const remove = async (u: User) => {
     if (await confirm({ title: d.admin.deleteUser, message: f(d.admin.deleteUserConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.common.delete, typeToConfirm: fullName(u) })) {
       const r = await actions.deleteUser(u.id);
-      if (!r.ok) toast(d.auth.errors.unknown, 'danger');
+      if (!r.ok) toast(r.detail ? `${d.auth.errors.unknown} (${r.detail})` : d.auth.errors.unknown, 'danger');
       setEditing(null);
       return r.ok;
     }
@@ -200,6 +200,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
   const blank = { firstName: '', lastName: '', email: '', password: '', dial: '+965', phoneNumber: '', birth: '', bureauCode: '', promo: '', fonction: '', gender: 'F' as Gender, role: 'alumni' as Role, country: 'FR' };
   const [form, setForm] = useState(blank);
   const [error, setError] = useState<AuthError | null>(null);
+  const [detail, setDetail] = useState<string | null>(null);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((x) => ({ ...x, [k]: v }));
     setError(null);
@@ -223,7 +224,10 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
       bureauCode: form.role === 'admin' && bureauCode.trim() ? bureauCode.trim() : undefined,
     });
     setBusy(false);
-    if (!r.ok) return setError(r.error);
+    if (!r.ok) {
+      setDetail(r.detail ?? null);
+      return setError(r.error);
+    }
     toast(d.admin.userCreated);
     setForm(blank);
     onClose();
@@ -264,7 +268,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
             </View>
             {form.role === 'honneur' && <Input label={d.admin.fonctionField} icon="briefcase" value={form.fonction} onChangeText={set('fonction')} />}
             {form.role === 'admin' && <Input label={d.admin.bureauCodeField} icon="shield" value={form.bureauCode} onChangeText={(v) => set('bureauCode')(v.replace(/\D/g, '').slice(0, 4))} keyboardType="number-pad" maxLength={4} />}
-            {error && error !== 'phone' && error !== 'birth_date' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
+            {error && error !== 'phone' && error !== 'birth_date' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}{error === 'unknown' && detail ? ` (${detail})` : ''}</Txt>}
             <Button label={d.common.create} icon="user-plus" full size="lg" onPress={submit} loading={busy} disabled={!form.firstName || !form.lastName || !form.email || !form.password} />
           </ScrollView>
         </Pressable>

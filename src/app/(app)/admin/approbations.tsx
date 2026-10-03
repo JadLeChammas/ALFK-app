@@ -91,7 +91,7 @@ export default function Approvals() {
                     onPress={async () => {
                       if (await confirm({ title: d.admin.refuse, message: f(d.admin.refuseConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.admin.refuse })) {
                         const r = await actions.refuseUser(u.id);
-                        if (!r.ok) toast(d.auth.errors.unknown, 'danger');
+                        if (!r.ok) toast(r.detail ? `${d.auth.errors.unknown} (${r.detail})` : d.auth.errors.unknown, 'danger');
                       }
                     }}
                   />

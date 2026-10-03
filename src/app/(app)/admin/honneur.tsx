@@ -24,6 +24,7 @@ export default function HonoraryAccounts() {
   const blank = { firstName: '', lastName: '', email: '', password: '', fonction: '', gender: 'N' as Gender };
   const [form, setForm] = useState(blank);
   const [error, setError] = useState<AuthError | null>(null);
+  const [detail, setDetail] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const set = (k: keyof typeof form) => (v: string) => {
     setForm((x) => ({ ...x, [k]: v }));
@@ -43,7 +44,10 @@ export default function HonoraryAccounts() {
       fonction: form.fonction.trim() || undefined,
     });
     setBusy(false);
-    if (!r.ok) return setError(r.error);
+    if (!r.ok) {
+      setDetail(r.detail ?? null);
+      return setError(r.error);
+    }
     toast(h.created, 'success');
     setForm(blank);
   };
@@ -70,7 +74,7 @@ export default function HonoraryAccounts() {
               <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
               <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }, { value: 'N', label: d.gender.N }]} />
             </View>
-            {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
+            {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}{error === 'unknown' && detail ? ` (${detail})` : ''}</Txt>}
             <Button label={h.create} icon="user-plus" full size="lg" onPress={submit} loading={busy} disabled={!form.firstName.trim() || !form.lastName.trim() || !form.email.trim() || !form.password} />
           </Card>
         }
