@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { router, usePathname } from 'expo-router';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -145,12 +145,15 @@ function Sidebar({ compact }: { compact: boolean }) {
   const [scroll, setScroll] = useState({ y: 0, h: 0, content: 0 });
   const scroller = useRef<ScrollView>(null);
   const restored = useRef(false);
-  // A new menu goes back to where the last one was (tried until the content is tall enough).
-  useEffect(() => {
+  // A new menu starts where the last one was, set before it is painted so it does not jump.
+  useLayoutEffect(() => {
     const y = sidebarScrollY;
-    const timers = [0, 60, 200].map((ms) => setTimeout(() => y > 0 && scroller.current?.scrollTo({ y, animated: false }), ms));
-    const done = setTimeout(() => (restored.current = true), 260);
-    return () => [...timers, done].forEach(clearTimeout);
+    const node = Platform.OS === 'web' ? (scroller.current?.getScrollableNode?.() as HTMLElement | undefined) : undefined;
+    if (y > 0) {
+      if (node) node.scrollTop = y;
+      else scroller.current?.scrollTo({ y, animated: false });
+    }
+    restored.current = true;
   }, []);
   const more = scroll.content - (scroll.y + scroll.h) > 4;
   const bottom: NavItem[] = [
