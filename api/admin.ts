@@ -149,6 +149,13 @@ export async function POST(request: Request) {
         const { data: clash } = await admin.from('profiles').select('id').eq('bureau_code', code).maybeSingle();
         if (clash) return json(409, { error: 'code_taken' });
       }
+      // Supabase adds app_metadata only after creating the user, too late for the profile trigger:
+      // the role is left here for it (migration 024), and removed by the trigger once read.
+      const pendingEmail = email.trim().toLowerCase();
+      const { error: pendingError } = await admin
+        .from('admin_pending_accounts')
+        .upsert({ email: pendingEmail, role, fonction: role === 'honneur' ? fonction ?? null : null, bureau_code: code || null, created_at: new Date().toISOString() });
+      if (pendingError) return json(500, { error: pendingError.message });
       const { data, error } = await admin.auth.admin.createUser({
         email,
         password,
@@ -169,6 +176,7 @@ export async function POST(request: Request) {
         app_metadata: { created_by_admin: true, role, fonction: role === 'honneur' ? fonction ?? '' : '', bureau_code: code },
       });
       if (error || !data.user) {
+        await admin.from('admin_pending_accounts').delete().eq('email', pendingEmail);
         const taken = /already|exists|registered/i.test(error?.message ?? '');
         return json(taken ? 409 : 500, { error: taken ? 'email_taken' : error?.message ?? 'failed' });
       }
