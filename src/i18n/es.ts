@@ -323,7 +323,7 @@ const es: Dict = {
     },
     bureau: {
       president: 'Presidente',
-      title: 'La junta', sub: 'Los voluntarios que dan vida a la Amicale y los miembros de honor que la acompañan.', board: 'Junta y administradores',
+      title: 'La junta', sub: 'Los voluntarios que dan vida a la Amicale.', board: 'Junta y administradores',
       honorary: 'Miembros de honor', member: 'Miembro de la junta', volunteerTitle: '¿Quiere',
       volunteerItalic: 'implicarse?', volunteerSub: 'La junta acoge regularmente a nuevos voluntarios. Escríbanos para presentar su candidatura.', empty: 'La composición de la junta se publicará pronto.',
     },

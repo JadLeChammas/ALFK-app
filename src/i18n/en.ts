@@ -323,7 +323,7 @@ const en: Dict = {
     },
     bureau: {
       president: 'President',
-      title: 'The Board', sub: 'The volunteers who run the Amicale, and the honorary members who support it.', board: 'Board & administrators',
+      title: 'The Board', sub: 'The volunteers who run the Amicale.', board: 'Board & administrators',
       honorary: 'Honorary members', member: 'Board member', volunteerTitle: 'Want to',
       volunteerItalic: 'get involved?', volunteerSub: 'The Board regularly welcomes new volunteers. Write to us to apply.', empty: 'The Board members will be announced soon.',
     },

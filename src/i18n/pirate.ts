@@ -324,7 +324,7 @@ const pirate: Dict = {
     },
     bureau: {
       president: 'Captain',
-      title: 'The Officers', sub: 'The volunteers who keep the Amicale afloat, an’ the honorary buccaneers who sail alongside.', board: 'Officers & captains',
+      title: 'The Officers', sub: 'The volunteers who keep the Amicale afloat.', board: 'Officers & captains',
       honorary: 'Honorary buccaneers', member: 'Officer', volunteerTitle: 'Fancy',
       volunteerItalic: 'joinin’ the officers?', volunteerSub: 'The officers often welcome new volunteers. Send us a bottle to apply.', empty: 'The officers will be announced soon.',
     },
