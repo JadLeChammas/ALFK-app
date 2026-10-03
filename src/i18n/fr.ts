@@ -34,7 +34,7 @@ const fr = {
   },
   auth: {
     step3: 'Justificatif',
-    signIn: 'Se connecter', signUp: 'Créer un compte', email: 'E-mail', password: 'Mot de passe', forgot: 'Mot de passe oublié ?', emailPlaceholder: 'prenom.nom@email.com',
+    signIn: 'Se connecter', signUp: 'Créer un compte', email: 'E-mail', password: 'Mot de passe', forgot: 'Mot de passe oublié ?', remember: 'Se souvenir de moi', emailPlaceholder: 'prenom.nom@email.com',
     noAccount: 'Pas encore membre ?', haveAccount: 'Déjà membre ?', welcome: 'Bon retour parmi nous',
     welcomeSub: "Connectez-vous pour retrouver la communauté de l'Amicale.",
     privateNote: 'Plateforme privée : chaque compte est validé par un administrateur.',

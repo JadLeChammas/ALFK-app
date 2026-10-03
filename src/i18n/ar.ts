@@ -36,7 +36,7 @@ const ar: Dict = {
   },
   auth: {
     step3: 'إثبات',
-    signIn: 'تسجيل الدخول', signUp: 'إنشاء حساب', email: 'البريد الإلكتروني', password: 'كلمة المرور', forgot: 'نسيت كلمة المرور؟', emailPlaceholder: 'name@email.com',
+    signIn: 'تسجيل الدخول', signUp: 'إنشاء حساب', email: 'البريد الإلكتروني', password: 'كلمة المرور', forgot: 'نسيت كلمة المرور؟', remember: 'تذكرني', emailPlaceholder: 'name@email.com',
     noAccount: 'لست عضوًا بعد؟', haveAccount: 'لديك حساب بالفعل؟', welcome: 'مرحبًا بعودتك',
     welcomeSub: 'سجّل الدخول لتلتقي مجددًا بمجتمع الرابطة.',
     privateNote: 'منصة خاصة: يراجع مسؤول كل حساب قبل تفعيله.',

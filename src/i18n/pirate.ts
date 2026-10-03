@@ -37,7 +37,7 @@ const pirate: Dict = {
   },
   auth: {
     step3: 'Proof',
-    signIn: 'Come aboard', signUp: 'Sign the Articles', email: 'Email', password: 'Secret word', forgot: 'Lost yer secret word?', emailPlaceholder: 'first.last@email.com',
+    signIn: 'Come aboard', signUp: 'Sign the Articles', email: 'Email', password: 'Secret word', forgot: 'Lost yer secret word?', remember: 'Remember me, matey', emailPlaceholder: 'first.last@email.com',
     noAccount: 'Not yet one o’ the crew?', haveAccount: 'Already crew?', welcome: 'Ahoy, welcome back',
     welcomeSub: 'Come aboard to rejoin the Amicale crew.',
     privateNote: 'Private waters: every sailor be checked by a captain.',

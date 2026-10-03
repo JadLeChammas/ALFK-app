@@ -36,7 +36,7 @@ const ja: Dict = {
   },
   auth: {
     step3: '証明書類',
-    signIn: 'ログイン', signUp: 'アカウントを作成', email: 'メールアドレス', password: 'パスワード', forgot: 'パスワードをお忘れですか？', emailPlaceholder: 'name@email.com',
+    signIn: 'ログイン', signUp: 'アカウントを作成', email: 'メールアドレス', password: 'パスワード', forgot: 'パスワードをお忘れですか？', remember: 'ログイン状態を保持', emailPlaceholder: 'name@email.com',
     noAccount: 'まだ会員ではありませんか？', haveAccount: 'すでに会員ですか？', welcome: 'おかえりなさい',
     welcomeSub: 'ログインして同窓会のコミュニティに戻りましょう。',
     privateNote: 'プライベートなプラットフォーム：すべてのアカウントは管理者が確認します。',

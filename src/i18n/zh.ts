@@ -36,7 +36,7 @@ const zh: Dict = {
   },
   auth: {
     step3: '证明',
-    signIn: '登录', signUp: '创建账号', email: '电子邮箱', password: '密码', forgot: '忘记密码？', emailPlaceholder: 'name@email.com',
+    signIn: '登录', signUp: '创建账号', email: '电子邮箱', password: '密码', forgot: '忘记密码？', remember: '记住我', emailPlaceholder: 'name@email.com',
     noAccount: '还不是会员？', haveAccount: '已经是会员？', welcome: '欢迎回来',
     welcomeSub: '登录以重新联系校友会社区。',
     privateNote: '私人平台：每个账号都由管理员审核。',

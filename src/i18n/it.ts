@@ -36,7 +36,7 @@ const it: Dict = {
   },
   auth: {
     step3: 'Documento',
-    signIn: 'Accedi', signUp: 'Crea un account', email: 'E-mail', password: 'Password', forgot: 'Password dimenticata?', emailPlaceholder: 'nome.cognome@email.com',
+    signIn: 'Accedi', signUp: 'Crea un account', email: 'E-mail', password: 'Password', forgot: 'Password dimenticata?', remember: 'Ricordami', emailPlaceholder: 'nome.cognome@email.com',
     noAccount: 'Non sei ancora membro?', haveAccount: 'Sei già membro?', welcome: 'Bentornato',
     welcomeSub: "Accedi per ritrovare la comunità dell'Amicale.",
     privateNote: 'Piattaforma privata: ogni account è verificato da un amministratore.',

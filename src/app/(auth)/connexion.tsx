@@ -9,7 +9,7 @@ import { Txt } from '@/components/ui/Txt';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@/data/seed';
 import { useStore, type AuthError } from '@/data/store';
 import { useDemoVisible } from '@/data/demoSetting';
-import { enterDemo, isDemoForced } from '@/lib/supabase';
+import { enterDemo, getRemember, isDemoForced, setRemember } from '@/lib/supabase';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -21,11 +21,13 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
+  const [remember, setRememberState] = useState(getRemember);
   const [error, setError] = useState<AuthError | null>(null);
   const [busy, setBusy] = useState(false);
 
   const submit = async (e = email, p = password) => {
     setBusy(true);
+    setRemember(remember);
     const r = await actions.signIn(e, p);
     setBusy(false);
     if (!r.ok) setError(r.error);
@@ -78,7 +80,7 @@ export default function SignIn() {
           value={password}
           onChangeText={(v) => { setPassword(v); setError(null); }}
           secureTextEntry={!show}
-          autoComplete="password"
+          autoComplete="current-password"
           onSubmitEditing={() => submit()}
           right={
             <Tap onPress={() => setShow((s) => !s)} hitSlop={8}>
@@ -86,9 +88,19 @@ export default function SignIn() {
             </Tap>
           }
         />
-        <Link href="/mot-de-passe-oublie" style={{ alignSelf: 'flex-end' }}>
-          <Txt variant="smallStrong" color="primary">{d.auth.forgot}</Txt>
-        </Link>
+        <Row style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+          <Tap onPress={() => setRememberState((v) => !v)} accessibilityRole="checkbox" accessibilityState={{ checked: remember }}>
+            <Row gap={8}>
+              <View style={{ width: 20, height: 20, borderRadius: 6, borderWidth: 1.5, borderColor: remember ? colors.primary : colors.borderStrong, backgroundColor: remember ? colors.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                {remember && <Feather name="check" size={13} color="#fff" />}
+              </View>
+              <Txt variant="small">{d.auth.remember}</Txt>
+            </Row>
+          </Tap>
+          <Link href="/mot-de-passe-oublie">
+            <Txt variant="smallStrong" color="primary">{d.auth.forgot}</Txt>
+          </Link>
+        </Row>
         {error && (
           <Row gap={8} style={{ backgroundColor: colors.dangerSoft, padding: 12, borderRadius: 12 }}>
             <Feather name="alert-circle" size={16} color={colors.danger} />

@@ -36,7 +36,7 @@ const es: Dict = {
   },
   auth: {
     step3: 'Justificante',
-    signIn: 'Iniciar sesión', signUp: 'Crear una cuenta', email: 'Correo electrónico', password: 'Contraseña', forgot: '¿Olvidaste tu contraseña?', emailPlaceholder: 'nombre.apellido@email.com',
+    signIn: 'Iniciar sesión', signUp: 'Crear una cuenta', email: 'Correo electrónico', password: 'Contraseña', forgot: '¿Olvidaste tu contraseña?', remember: 'Recordarme', emailPlaceholder: 'nombre.apellido@email.com',
     noAccount: '¿Aún no eres miembro?', haveAccount: '¿Ya eres miembro?', welcome: 'Bienvenido de nuevo',
     welcomeSub: 'Inicia sesión para reencontrarte con la comunidad de la Amicale.',
     privateNote: 'Plataforma privada: cada cuenta es validada por un administrador.',

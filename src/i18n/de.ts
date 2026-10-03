@@ -36,7 +36,7 @@ const de: Dict = {
   },
   auth: {
     step3: 'Nachweis',
-    signIn: 'Anmelden', signUp: 'Konto erstellen', email: 'E-Mail', password: 'Passwort', forgot: 'Passwort vergessen?', emailPlaceholder: 'vorname.nachname@email.com',
+    signIn: 'Anmelden', signUp: 'Konto erstellen', email: 'E-Mail', password: 'Passwort', forgot: 'Passwort vergessen?', remember: 'Angemeldet bleiben', emailPlaceholder: 'vorname.nachname@email.com',
     noAccount: 'Noch kein Mitglied?', haveAccount: 'Schon Mitglied?', welcome: 'Willkommen zurück',
     welcomeSub: 'Melden Sie sich an, um die Gemeinschaft der Amicale wiederzufinden.',
     privateNote: 'Private Plattform: Jedes Konto wird von einem Administrator geprüft.',

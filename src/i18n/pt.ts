@@ -36,7 +36,7 @@ const pt: Dict = {
   },
   auth: {
     step3: 'Comprovativo',
-    signIn: 'Iniciar sessão', signUp: 'Criar uma conta', email: 'E-mail', password: 'Palavra-passe', forgot: 'Esqueceu a palavra-passe?', emailPlaceholder: 'nome.apelido@email.com',
+    signIn: 'Iniciar sessão', signUp: 'Criar uma conta', email: 'E-mail', password: 'Palavra-passe', forgot: 'Esqueceu a palavra-passe?', remember: 'Lembrar-me', emailPlaceholder: 'nome.apelido@email.com',
     noAccount: 'Ainda não é membro?', haveAccount: 'Já é membro?', welcome: 'Bem-vindo de volta',
     welcomeSub: 'Inicie sessão para reencontrar a comunidade da Amicale.',
     privateNote: 'Plataforma privada: cada conta é validada por um administrador.',
