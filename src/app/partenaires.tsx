@@ -2,11 +2,10 @@ import { Feather } from '@expo/vector-icons';
 import { Seo } from '@/components/Seo';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { Linking, View } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
 
 import { PartnersManager } from '@/components/PartnersManager';
 import { AppShell } from '@/components/shell/AppShell';
-import { EditorialImageHero } from '@/components/site/blocks';
 import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
@@ -17,8 +16,6 @@ import { partnerLogo } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { fonts, radius } from '@/theme/tokens';
-
-const campus = require('@/assets/images/lfk-campus.png');
 
 /**
  * Partners. Approved members get it inside their space (admins manage the list there);
@@ -43,9 +40,15 @@ function PublicPartners() {
   const p = d.site.partners;
 
   return (
-    <SiteFrame overlay>
+    <SiteFrame>
       <Seo title={p.title} description={p.sub} />
-      <EditorialImageHero tagline={p.eyebrow} title={p.title} description={p.sub} image={campus} />
+      <Section>
+        <Reveal style={{ gap: 14, marginBottom: 36 }}>
+          <Eyebrow text={p.eyebrow} />
+          <SerifHeading title={p.title} lead={p.sub} size="lg" />
+        </Reveal>
+        <LogoWall partners={institutions} />
+      </Section>
 
       <Section style={{ paddingTop: 0 }}>
         <PartnerList partners={institutions} empty={p.empty} />
@@ -62,6 +65,45 @@ function PublicPartners() {
         </View>
       </Section>
     </SiteFrame>
+  );
+}
+
+function Eyebrow({ text }: { text: string }) {
+  const t = useTone();
+  return (
+    <View style={{ gap: 10 }}>
+      <View style={{ width: 32, height: 3, backgroundColor: t.accent }} />
+      <Txt style={{ fontFamily: fonts.medium, fontSize: 12, letterSpacing: 2, textTransform: 'uppercase', color: t.fg }}>{text}</Txt>
+    </View>
+  );
+}
+
+/** Every partner's logo, in the list's order: a partner added by an admin shows up here by itself. */
+function LogoWall({ partners }: { partners: Institution[] }) {
+  const t = useTone();
+  const { isMobile } = useLayout();
+  if (!partners.length) return null;
+  const size = isMobile ? 96 : 128;
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: isMobile ? 12 : 18 }}>
+      {partners.map((x, i) => {
+        const logo = partnerLogo(x);
+        const tile = (
+          <View style={{ width: size, height: size, borderRadius: radius.hero, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', padding: 14, borderWidth: 1, borderColor: t.rule }}>
+            {logo ? (
+              <Image source={logo} style={{ width: '100%', height: '100%' }} contentFit="contain" accessibilityLabel={x.name} />
+            ) : (
+              <Txt numberOfLines={3} style={{ fontFamily: fonts.semibold, fontSize: 13, textAlign: 'center', color: '#1c2b3a' }}>{x.name}</Txt>
+            )}
+          </View>
+        );
+        return (
+          <Reveal key={x.id} index={i}>
+            {x.website ? <Pressable onPress={() => Linking.openURL(x.website!)} accessibilityRole="link" accessibilityLabel={x.name}>{tile}</Pressable> : tile}
+          </Reveal>
+        );
+      })}
+    </View>
   );
 }
 

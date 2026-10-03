@@ -6,6 +6,7 @@ import { isRemote, supabase } from '@/lib/supabase';
 import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL } from './members';
 import { can, canMessage, SELF_SIGNUP_ROLES } from './permissions';
 import { parseAliases } from './places';
+import { isHiDev, sortPartners } from './partners';
 import {
   callAdminApi,
   EMPTY_DB,
@@ -961,13 +962,15 @@ function useStoreValue() {
     },
     /** Admins: move a partner one place up (-1) or down (+1); the order is saved for everyone. */
     moveInstitution(id: string, delta: -1 | 1) {
-      const list = [...(dbRef.current?.institutions ?? [])].sort((a, b) => a.order - b.order);
-      const i = list.findIndex((x) => x.id === id);
+      // Moved within the order shown on the page (Hi Dev always last, so it is left out of the swap).
+      const list = sortPartners(dbRef.current?.institutions ?? []);
+      const movable = list.filter((x) => !isHiDev(x));
+      const i = movable.findIndex((x) => x.id === id);
       const j = i + delta;
-      if (i < 0 || j < 0 || j >= list.length) return;
-      [list[i], list[j]] = [list[j], list[i]];
+      if (i < 0 || j < 0 || j >= movable.length) return;
+      [movable[i], movable[j]] = [movable[j], movable[i]];
       // Orders become 1, 2, 3… in the new sequence.
-      const renumbered = list.map((x, k) => ({ ...x, order: k + 1 }));
+      const renumbered = [...movable, ...list.filter(isHiDev)].map((x, k) => ({ ...x, order: k + 1 }));
       commit((d) => ({ ...d, institutions: renumbered }));
       if (supabase) for (const x of renumbered) send(supabase.from('institutions').update({ sort_order: x.order }).eq('id', x.id));
     },

@@ -12,7 +12,7 @@ import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
-import { partnerLogo, sortPartners } from '@/data/partners';
+import { isHiDev, partnerLogo, sortPartners } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -28,6 +28,8 @@ export function PartnersManager() {
   const admin = me.role === 'admin';
   const people = useApprovedMembers().filter((u) => u.role === 'honneur');
   const institutions = sortPartners(db.institutions);
+  // Hi Dev always closes the list: the others move among themselves.
+  const movableCount = institutions.filter((x) => !isHiDev(x)).length;
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<Institution | null>(null);
 
@@ -50,8 +52,8 @@ export function PartnersManager() {
                 key={inst.id}
                 inst={inst}
                 onEdit={admin ? () => setEditing(inst) : undefined}
-                onUp={admin && i > 0 ? () => actions.moveInstitution(inst.id, -1) : undefined}
-                onDown={admin && i < institutions.length - 1 ? () => actions.moveInstitution(inst.id, 1) : undefined}
+                onUp={admin && !isHiDev(inst) && i > 0 ? () => actions.moveInstitution(inst.id, -1) : undefined}
+                onDown={admin && !isHiDev(inst) && i < movableCount - 1 ? () => actions.moveInstitution(inst.id, 1) : undefined}
                 onDelete={
                   admin
                     ? async () => {
