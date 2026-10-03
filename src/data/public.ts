@@ -32,8 +32,12 @@ export type PublicOverview = {
 
 const EMPTY: PublicOverview = { alumni: 0, countries: 0, promos: 0, universities: 0, nationalities: 0, destinations: [], schools: [], bureau: [], institutions: [] };
 
-/** Bureau order: the president first, then the other admins, then honorary members. */
-const rank = (p: PublicPerson) => (p.role === 'admin' ? (/pr[ée]sident/i.test(p.fonction ?? '') ? 0 : 1) : 2);
+/**
+ * Bureau order: the administrators by Bureau code (1001 the president, 1002, 1003…), then honorary
+ * members. The site gets them already in that order (public_overview, migration 025) without the
+ * codes; the sort below is stable and only keeps admins before honorary members.
+ */
+const rank = (p: PublicPerson) => (p.role === 'admin' ? 0 : 1);
 
 function fromDb(db: Db): PublicOverview {
   const grads = db.users.filter((u) => u.approved && (u.role === 'alumni' || u.role === 'admin'));
@@ -51,8 +55,8 @@ function fromDb(db: Db): PublicOverview {
   const schools = groupByPlace(studyEntries(grads, aliases), (u) => u.school, aliases).map((g) => [g.label, g.items.length] as const);
   const bureau = db.users
     .filter((u) => u.approved && (u.role === 'admin' || u.role === 'honneur'))
-    .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName.toLocaleUpperCase('fr')}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }))
-    .sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name));
+    .sort((a, b) => (a.role === b.role ? 0 : a.role === 'admin' ? -1 : 1) || (a.bureauCode ?? '9999').localeCompare(b.bureauCode ?? '9999') || a.lastName.localeCompare(b.lastName))
+    .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName.toLocaleUpperCase('fr')}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }));
   return {
     alumni: grads.length,
     countries: countries.length,

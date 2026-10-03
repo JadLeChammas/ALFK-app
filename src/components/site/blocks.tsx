@@ -213,10 +213,18 @@ export function TeamShowcase({ members }: { members: TeamMember[] }) {
   const t = useTone();
   const { isMobile, isDesktop } = useLayout();
   const [active, setActive] = useState<string | null>(null);
-  const cols = [0, 1, 2].map((c) => members.filter((_, i) => i % 3 === c));
-  const sizes = isMobile
-    ? [{ w: 104, h: 114, mt: 0 }, { w: 112, h: 122, mt: 44 }, { w: 106, h: 116, mt: 20 }]
-    : [{ w: 155, h: 165, mt: 0 }, { w: 172, h: 182, mt: 68 }, { w: 162, h: 172, mt: 32 }];
+  // Five people (the Bureau): the first (the president) in a tall photo in the middle, the next four
+  // around it — 2 top left, 3 top right, 4 bottom left, 5 bottom right. Otherwise three staggered columns.
+  const five = members.length === 5;
+  const cols = five ? [[members[1], members[3]], [members[0]], [members[2], members[4]]] : [0, 1, 2].map((c) => members.filter((_, i) => i % 3 === c));
+  const sizes = five
+    ? isMobile
+      ? [{ w: 100, h: 112, mt: 20 }, { w: 116, h: 260, mt: 0 }, { w: 100, h: 112, mt: 20 }]
+      : [{ w: 152, h: 168, mt: 30 }, { w: 178, h: 396, mt: 0 }, { w: 152, h: 168, mt: 30 }]
+    : isMobile
+      ? [{ w: 104, h: 114, mt: 0 }, { w: 112, h: 122, mt: 44 }, { w: 106, h: 116, mt: 20 }]
+      : [{ w: 155, h: 165, mt: 0 }, { w: 172, h: 182, mt: 68 }, { w: 162, h: 172, mt: 32 }];
+  const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
   const hoverProps = (id: string) => ({ onHoverIn: () => setActive(id), onHoverOut: () => setActive(null) });
 
   return (
@@ -228,7 +236,9 @@ export function TeamShowcase({ members }: { members: TeamMember[] }) {
               const on = active === m.id;
               const dim = active !== null && !on;
               return (
-                <Pressable key={m.id} {...hoverProps(m.id)} onPress={() => (m.onPress ? m.onPress() : setActive(on ? null : m.id))} style={{ width: sizes[ci].w, height: sizes[ci].h, borderRadius: radius.card, overflow: 'hidden', opacity: dim ? 0.6 : 1, backgroundColor: t.rule }}>
+                <Pressable key={m.id} {...hoverProps(m.id)} onPress={() => (m.onPress ? m.onPress() : setActive(on ? null : m.id))} style={{ width: sizes[ci].w, height: sizes[ci].h, borderRadius: radius.card, overflow: 'hidden', opacity: dim ? 0.6 : 1, backgroundColor: t.rule, alignItems: 'center', justifyContent: 'center' }}>
+                  {/* No photo yet: the person's initials rather than an empty tile. */}
+                  {!m.image && <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 30 : 44, color: t.muted }}>{initials(m.name)}</Txt>}
                   {m.image && <Image source={{ uri: m.image }} style={[{ width: '100%', height: '100%' }, webFilter(on ? 'grayscale(0) brightness(1)' : 'grayscale(1) brightness(0.77)')]} contentFit="cover" />}
                 </Pressable>
               );
