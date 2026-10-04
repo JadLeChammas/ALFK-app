@@ -114,7 +114,7 @@ const pirate: Dict = {
     categories: { soiree: 'Grog party', sport: 'Sport', culture: 'Culture', networking: 'Parley' },
   },
   publications: {
-    edit: 'Edit', editPending: 'Changes sent: a captain will check th’ notice afore it shows again.',
+    author: 'Signed in th’ name of', edit: 'Edit', editPending: 'Changes sent: a captain will check th’ notice afore it shows again.',
     title: 'Ship’s Log', subtitle: 'News, tales an’ proclamations from the Amicale.', read: 'Read',
     categories: { actualite: 'News', article: 'Tales', annonce: 'Proclamations' }, create: 'New log entry',
     excerptField: 'Excerpt', bodyField: 'The tale', by: 'Penned by {name}', readMore: 'Read on', notFound: 'Log entry not found', more: 'More from the log',

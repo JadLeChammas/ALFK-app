@@ -113,7 +113,7 @@ const ar: Dict = {
     categories: { soiree: 'سهرة', sport: 'رياضة', culture: 'ثقافة', networking: 'تواصل مهني' },
   },
   publications: {
-    edit: 'تعديل', editPending: 'أُرسلت التعديلات: سيراجع مشرف الإعلان قبل ظهوره مجددًا.',
+    author: 'نُشر باسم', edit: 'تعديل', editPending: 'أُرسلت التعديلات: سيراجع مشرف الإعلان قبل ظهوره مجددًا.',
     title: 'المنشورات', subtitle: 'أخبار ومقالات وبيانات الرابطة.', read: 'قراءة',
     categories: { actualite: 'أخبار', article: 'مقالات', annonce: 'إعلانات' }, create: 'منشور جديد',
     excerptField: 'مقتطف', bodyField: 'النص', by: 'بقلم {name}', readMore: 'اقرأ المزيد', notFound: 'المنشور غير موجود', more: 'اقرأ أيضًا',

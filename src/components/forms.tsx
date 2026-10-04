@@ -4,13 +4,14 @@ import { Modal, Pressable, ScrollView, View } from 'react-native';
 
 import type { EventCategory, Publication, PublicationCategory } from '@/data/types';
 import { can } from '@/data/permissions';
-import { useStore } from '@/data/store';
+import { fullName, useStore } from '@/data/store';
 import { IMAGES } from '@/data/seed';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 import { useDialogs } from './ui/Dialogs';
 import { FieldRow, Button, Chip, IconButton, Input, Row } from './ui/primitives';
+import { Select } from './ui/Select';
 import { Txt } from './ui/Txt';
 
 export function Sheet({ visible, title, onClose, children }: { visible: boolean; title: string; onClose: () => void; children: React.ReactNode }) {
@@ -83,7 +84,7 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
 /** Writes a publication, or edits one (`editing`). */
 export function PublicationFormModal({ visible, onClose, editing }: { visible: boolean; onClose: () => void; editing?: Publication }) {
   const { d } = useI18n();
-  const { actions, me } = useStore();
+  const { actions, me, db } = useStore();
   const { colors } = useTheme();
   const { toast } = useDialogs();
   // Members only propose announcements; the admins check them before they appear.
@@ -91,6 +92,13 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
   const blank = { title: '', excerpt: '', body: '', cover: IMAGES.campus, category: (direct ? 'actualite' : 'annonce') as PublicationCategory };
   const [form, setForm] = useState(editing ? { title: editing.title, excerpt: editing.excerpt, body: editing.body, cover: editing.cover, category: editing.category } : blank);
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
+  // Admins choose whose name the publication carries (the president, the proviseur…).
+  const admin = me?.role === 'admin';
+  const [authorId, setAuthorId] = useState(editing?.authorId ?? me?.id ?? '');
+  const authors = db.users
+    .filter((u) => u.approved && (u.role === 'admin' || u.role === 'honneur' || u.id === authorId))
+    .sort((a, b) => fullName(a).localeCompare(fullName(b)))
+    .map((u) => ({ value: u.id, label: [fullName(u), u.fonction].filter(Boolean).join(' · ') }));
 
   return (
     <Sheet visible={visible} title={editing ? d.publications.edit : direct ? d.publications.create : d.pubReview.propose} onClose={onClose}>
@@ -101,6 +109,7 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
         </Row>
       )}
       <Input label={d.events.titleField} value={form.title} onChangeText={set('title')} />
+      {admin && <Select label={d.publications.author} value={authorId} onChange={setAuthorId} searchable options={authors} />}
       {direct && (
         <Row gap={8} wrap>
           {(Object.keys(d.publications.categories) as PublicationCategory[]).map((c) => (
@@ -119,12 +128,12 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
         onPress={() => {
           const data = { ...form, excerpt: form.excerpt || form.body.slice(0, 140) };
           if (editing) {
-            const r = actions.updatePublication(editing.id, data);
+            const r = actions.updatePublication(editing.id, { ...data, authorId: admin ? authorId : undefined });
             toast(r.pending ? d.publications.editPending : d.common.saved);
             onClose();
             return;
           }
-          const r = actions.createPublication(data);
+          const r = actions.createPublication(data, admin ? authorId : undefined);
           toast(r.pending ? d.pubReview.submitted : d.common.saved);
           setForm(blank);
           onClose();

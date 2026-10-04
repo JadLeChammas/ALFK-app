@@ -611,10 +611,22 @@ function useStoreValue() {
      * Admins and school leadership publish directly; every other member's announcement waits for an admin.
      * Returns the new id and whether it is pending.
      */
-    createPublication(p: Omit<Publication, 'id' | 'authorId' | 'date' | 'status'>) {
+    createPublication(p: Omit<Publication, 'id' | 'authorId' | 'date' | 'status'>, authorId?: string) {
       const direct = can(me, 'publish');
-      const pub: Publication = { ...p, id: makeId('pub'), authorId: meId!, date: nowIso(), status: direct ? 'published' : 'pending' };
-      if (supabase) send(supabase.from('publications').insert(publicationRow(pub)));
+      // Admins may publish in someone else's name (« publié par le président »).
+      const author = me?.role === 'admin' && authorId ? authorId : meId!;
+      const pub: Publication = { ...p, id: makeId('pub'), authorId: author, date: nowIso(), status: direct ? 'published' : 'pending' };
+      const sb = supabase;
+      if (sb) {
+        // The database only accepts one's own name on creation; an admin then sets the author.
+        const row = publicationRow({ ...pub, authorId: meId! });
+        if (author === meId) send(sb.from('publications').insert(row));
+        else
+          Promise.resolve(sb.from('publications').insert(row)).then(({ error: e }) => {
+            if (e) return setError(e.message);
+            send(sb.from('publications').update({ author_id: author }).eq('id', pub.id));
+          });
+      }
       commit((d) => {
         const next = { ...d, publications: [pub, ...d.publications] };
         if (direct) return log(next, 'create_publication', p.title);
@@ -647,13 +659,15 @@ function useStoreValue() {
      * Admins and the author edit a publication. A member who cannot publish directly sends it back to
      * the admins (pending again); returns whether it is pending.
      */
-    updatePublication(id: string, patch: Pick<Publication, 'title' | 'excerpt' | 'body' | 'cover' | 'category'>) {
+    updatePublication(id: string, patch: Pick<Publication, 'title' | 'excerpt' | 'body' | 'cover' | 'category'> & { authorId?: string }) {
       const p = dbRef.current?.publications.find((x) => x.id === id);
       if (!p) return { pending: false };
       const reviewAgain = !can(me, 'publish') && me?.role !== 'admin';
       const status = reviewAgain ? 'pending' : p.status;
-      commit((d) => ({ ...d, publications: d.publications.map((x) => (x.id === id ? { ...x, ...patch, status } : x)) }));
-      if (supabase) send(supabase.from('publications').update({ title: patch.title, excerpt: patch.excerpt, body: patch.body, cover: patch.cover, category: patch.category, status }).eq('id', id));
+      // Only admins change who the publication is signed by.
+      const authorId = me?.role === 'admin' && patch.authorId ? patch.authorId : p.authorId;
+      commit((d) => ({ ...d, publications: d.publications.map((x) => (x.id === id ? { ...x, ...patch, authorId, status } : x)) }));
+      if (supabase) send(supabase.from('publications').update({ title: patch.title, excerpt: patch.excerpt, body: patch.body, cover: patch.cover, category: patch.category, status, author_id: authorId }).eq('id', id));
       return { pending: status === 'pending' };
     },
     deletePublication(id: string) {

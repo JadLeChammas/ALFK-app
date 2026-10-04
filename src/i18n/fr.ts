@@ -111,7 +111,7 @@ const fr = {
     categories: { soiree: 'Soirée', sport: 'Sport', culture: 'Culture', networking: 'Networking' },
   },
   publications: {
-    edit: 'Modifier', editPending: 'Modifications envoyées : un admin va vérifier l’annonce avant qu’elle réapparaisse.',
+    author: 'Publié au nom de', edit: 'Modifier', editPending: 'Modifications envoyées : un admin va vérifier l’annonce avant qu’elle réapparaisse.',
     title: 'Publications', subtitle: "Actualités, articles et communiqués de l'Amicale.", read: 'Lire',
     categories: { actualite: 'Actualités', article: 'Articles', annonce: 'Annonces' }, create: 'Nouvelle publication',
     excerptField: 'Extrait', bodyField: 'Texte', by: 'Par {name}', readMore: 'Lire la suite', notFound: 'Publication introuvable', more: 'À lire aussi',

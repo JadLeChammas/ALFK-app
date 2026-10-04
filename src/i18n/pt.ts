@@ -113,7 +113,7 @@ const pt: Dict = {
     categories: { soiree: 'Festa', sport: 'Desporto', culture: 'Cultura', networking: 'Networking' },
   },
   publications: {
-    edit: 'Editar', editPending: 'Alterações enviadas: um admin vai revisar o anúncio antes que ele volte a aparecer.',
+    author: 'Publicado em nome de', edit: 'Editar', editPending: 'Alterações enviadas: um admin vai revisar o anúncio antes que ele volte a aparecer.',
     title: 'Publicações', subtitle: 'Notícias, artigos e comunicados da Amicale.', read: 'Ler',
     categories: { actualite: 'Notícias', article: 'Artigos', annonce: 'Anúncios' }, create: 'Nova publicação',
     excerptField: 'Excerto', bodyField: 'Texto', by: 'Por {name}', readMore: 'Ler mais', notFound: 'Publicação não encontrada', more: 'Para ler também',

@@ -113,7 +113,7 @@ const de: Dict = {
     categories: { soiree: 'Party', sport: 'Sport', culture: 'Kultur', networking: 'Networking' },
   },
   publications: {
-    edit: 'Bearbeiten', editPending: 'Änderungen gesendet: Ein Admin prüft die Ankündigung, bevor sie wieder erscheint.',
+    author: 'Veröffentlicht im Namen von', edit: 'Bearbeiten', editPending: 'Änderungen gesendet: Ein Admin prüft die Ankündigung, bevor sie wieder erscheint.',
     title: 'Beiträge', subtitle: 'Neuigkeiten, Artikel und Mitteilungen der Amicale.', read: 'Lesen',
     categories: { actualite: 'Neuigkeiten', article: 'Artikel', annonce: 'Ankündigungen' }, create: 'Neuer Beitrag',
     excerptField: 'Auszug', bodyField: 'Text', by: 'Von {name}', readMore: 'Weiterlesen', notFound: 'Beitrag nicht gefunden', more: 'Ebenfalls lesenswert',
