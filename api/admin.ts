@@ -4,8 +4,7 @@ import { sendEvent } from './_email';
 
 /**
  * Server-side account actions that need Supabase's secret key (never shipped to the browser):
- *   create-user · delete-user                    → admins only
- *   (no password reset: members use « Mot de passe oublié », which e-mails them a link)
+ *   create-user · delete-user · set-password     → admins only (set-password: another member's password)
  *   delete-self                                   → any signed-in member, for their own account
  *   signup-upload · signup-finish                 → a brand-new account, without a session (see below)
  *
@@ -187,6 +186,17 @@ export async function POST(request: Request) {
       await log('create_user', `${firstName} ${lastName}`);
       // « Votre compte a été créé » (Admin → Emails); the account works even if the email fails.
       await sendEvent(admin, 'accountCreated', [{ id: data.user.id, email, first_name: firstName, last_name: lastName, locale: 'fr', role }]).catch(() => {});
+      return json(200, { ok: true });
+    }
+
+    case 'set-password': {
+      // An admin gives another member a new password (members can also use « Mot de passe oublié »).
+      if (!body.userId || !body.password) return json(400, { error: 'missing' });
+      if (body.userId === callerId) return json(400, { error: 'use_own_settings' });
+      if (body.password.length < 8) return json(400, { error: 'weak_password' });
+      const { error } = await admin.auth.admin.updateUserById(body.userId, { password: body.password });
+      if (error) return json(500, { error: error.message });
+      await log('reset_password', body.name ?? body.userId);
       return json(200, { ok: true });
     }
 

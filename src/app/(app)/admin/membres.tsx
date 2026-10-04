@@ -194,6 +194,22 @@ export default function ManageMembers() {
                     }
                   />
                 )}
+                {editing.id !== me.id && (
+                  <Button
+                    label={d.admin.setPassword}
+                    icon="key"
+                    variant="secondary"
+                    full
+                    onPress={() =>
+                      fromCard(async (u) => {
+                        const v = await prompt({ title: d.admin.setPassword, message: d.admin.setPasswordHint, placeholder: d.auth.newPassword, secure: true });
+                        if (v === null) return;
+                        const r = await actions.setUserPassword(u.id, v);
+                        toast(r.ok ? d.settings.passwordChanged : r.error === 'unknown' && r.detail ? `${d.auth.errors.unknown} (${r.detail})` : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
+                      })
+                    }
+                  />
+                )}
                 {editing.id !== me.id && <Button label={d.admin.deleteUser} icon="trash-2" variant="danger" full onPress={() => fromCard(remove)} />}
               </>
             )}

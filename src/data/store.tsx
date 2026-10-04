@@ -836,6 +836,17 @@ function useStoreValue() {
       commit((d) => log(removeUser(d, id), action, name));
       return { ok: true };
     },
+    /** Admins: give another member a new password (server: api/admin.ts). Demo: changed locally. */
+    async setUserPassword(id: string, password: string): Promise<Result> {
+      if (password.length < 8) return { ok: false, error: 'weak_password' };
+      const target = dbRef.current?.users.find((x) => x.id === id);
+      if (supabase) {
+        const r = await callAdminApi('set-password', { userId: id, password, name: fullName(target) });
+        return r.ok ? { ok: true } : { ok: false, error: authError(r.error, r.error), detail: r.error };
+      }
+      commit((d) => log({ ...d, users: d.users.map((x) => (x.id === id ? { ...x, password } : x)) }, 'reset_password', fullName(target)));
+      return { ok: true };
+    },
     async createUser(input: SignUpInput): Promise<Result> {
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
       const contact = contactError(input.role, input.birthDate, input.phone);
