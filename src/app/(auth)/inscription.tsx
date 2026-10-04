@@ -1,9 +1,10 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Switch, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { CredentialForm, offerToSavePassword, type CredentialFormHandle } from '@/components/ui/CredentialForm';
 import { FieldsPicker } from '@/components/FieldsPicker';
 import { NationalityPicker } from '@/components/NationalityPicker';
 import { OtherSchoolsEditor } from '@/components/OtherSchools';
@@ -32,6 +33,8 @@ export default function SignUp() {
   const { colors } = useTheme();
   const { actions } = useStore();
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  /** Step 1 (name, e-mail, new password) is a real form on the web, for password managers. */
+  const identityForm = useRef<CredentialFormHandle>(null);
   const [proof, setProof] = useState<PickedDoc | null>(null);
   // Same questions as the profile: nationalities, photo, a few words, and (alumni) answering students.
   const [nationalities, setNationalities] = useState<string[]>([]);
@@ -102,6 +105,8 @@ export default function SignUp() {
       locale: lang === 'fr' ? 'fr' : 'en',
     }, proof, photo);
     setBusy(false);
+    // The account exists: the browser may offer to save the e-mail and password (Chrome, Edge…).
+    if (r.ok) void offerToSavePassword(form.email.trim(), form.password, `${form.firstName} ${form.lastName}`.trim());
     if (!r.ok) {
       setError(r.error);
       if (r.error !== 'weak_password' && r.error !== 'unknown' && r.error !== 'proof') setStep(1);
@@ -145,13 +150,14 @@ export default function SignUp() {
       <Txt variant="small" color="textSubtle">{d.auth.requiredLegend}</Txt>
 
       {step === 1 ? (
+        <CredentialForm ref={identityForm} onSubmit={next}>
         <View style={{ gap: 16 }}>
           <FieldRow>
             <Input label={req(d.auth.firstName)} value={form.firstName} onChangeText={set('firstName')} maxLength={80} containerStyle={{ flex: 1 }} autoComplete="given-name" />
             <Input label={req(d.auth.lastName)} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} autoComplete="family-name" />
           </FieldRow>
-          <Input label={req(d.auth.email)} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" autoComplete="email" />
-          <Input label={req(d.auth.password)} icon="lock" value={form.password} onChangeText={set('password')} secureTextEntry hint={d.auth.passwordHint} autoComplete="new-password" />
+          <Input label={req(d.auth.email)} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" autoCorrect={false} keyboardType="email-address" autoComplete="username" textContentType="username" nativeID="email" />
+          <Input label={req(d.auth.password)} icon="lock" value={form.password} onChangeText={set('password')} secureTextEntry hint={d.auth.passwordHint} autoComplete="new-password" textContentType="newPassword" nativeID="new-password" />
           <DateField label={d.auth.birthDate} value={form.birth} onChange={set('birth')} required error={error === 'birth_date' ? d.auth.errors.birth_date : undefined} />
           <PhoneField
             label={d.auth.phone}
@@ -179,8 +185,9 @@ export default function SignUp() {
             </Row>
           </View>
           {error && error !== 'birth_date' && error !== 'phone' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
-          <Button label={d.auth.continue} iconRight="arrow-right" full size="lg" onPress={next} />
+          <Button label={d.auth.continue} iconRight="arrow-right" full size="lg" onPress={() => identityForm.current?.submit()} />
         </View>
+        </CredentialForm>
       ) : step === 2 ? (
         <View style={{ gap: 16 }}>
           <Input label={req(d.auth.promo)} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} placeholder="2020" />

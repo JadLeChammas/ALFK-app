@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Platform, View, type TextInput } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { CredentialForm, offerToSavePassword, type CredentialFormHandle } from '@/components/ui/CredentialForm';
 import { Button, Divider, Input, Row, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@/data/seed';
@@ -20,19 +21,27 @@ export default function SignIn() {
   const { actions, isRemote } = useStore();
   const [email, setEmail] = useState(getRememberedEmail);
   const passwordRef = useRef<TextInput>(null);
+  const formRef = useRef<CredentialFormHandle>(null);
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
   const [remember, setRememberState] = useState(getRemember);
   const [error, setError] = useState<AuthError | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const submit = async (e = email, p = password) => {
+  /** `fromForm`: typed in the form (not a demo button) — then the browser is asked to save the login. */
+  const submit = async (e = email, p = password, fromForm = false) => {
     setBusy(true);
     setRemember(remember);
     const r = await actions.signIn(e, p);
     setBusy(false);
-    if (!r.ok) setError(r.error);
-    else setRememberedEmail(remember ? e.trim() : null);
+    if (!r.ok) return setError(r.error);
+    setRememberedEmail(remember ? e.trim() : null);
+    if (fromForm) void offerToSavePassword(e.trim(), p);
+  };
+  // The form was sent (button, « Enter », or the browser's own autofill submit).
+  const onFormSubmit = () => {
+    if (busy || !email.trim() || !password) return;
+    void submit(email, password, true);
   };
 
   const demos: [string, string][] = [
@@ -74,8 +83,9 @@ export default function SignIn() {
         </View>
         )
       }>
+      <CredentialForm ref={formRef} onSubmit={onFormSubmit}>
       <View style={{ gap: 16 }}>
-        {/* « username » + « current-password »: the pair password managers (Chrome, Safari, iCloud Keychain) save and fill in. */}
+        {/* « username » + « current-password » in a real form: password managers (iCloud Keychain, Chrome, 1Password…) offer to save and fill them in. */}
         <Input
           label={d.auth.email}
           icon="mail"
@@ -102,7 +112,7 @@ export default function SignIn() {
           textContentType="password"
           nativeID="password"
           returnKeyType="go"
-          onSubmitEditing={() => submit()}
+          onSubmitEditing={() => formRef.current?.submit()}
           right={
             <Tap onPress={() => setShow((s) => !s)} hitSlop={8}>
               <Feather name={show ? 'eye-off' : 'eye'} size={17} color={colors.textSubtle} />
@@ -128,7 +138,7 @@ export default function SignIn() {
             <Txt variant="smallStrong" color="danger" style={{ flex: 1 }}>{d.auth.errors[error]}</Txt>
           </Row>
         )}
-        <Button label={d.auth.signIn} onPress={() => submit()} full size="lg" disabled={!email || !password} loading={busy} />
+        <Button label={d.auth.signIn} onPress={() => formRef.current?.submit()} full size="lg" disabled={!email || !password} loading={busy} />
         <Row gap={12}>
           <Divider style={{ flex: 1 }} />
           <Txt variant="small" color="textSubtle">{d.auth.noAccount}</Txt>
@@ -136,6 +146,7 @@ export default function SignIn() {
         </Row>
         <Button label={d.auth.signUp} variant="secondary" full size="lg" onPress={() => router.push('/inscription')} />
       </View>
+      </CredentialForm>
     </AuthFrame>
   );
 }

@@ -58,19 +58,91 @@ function BandBg({ children, style }: { children: ReactNode; style?: StyleProp<Vi
 
 /* ───────────────────────── Editorial Image Hero (hero-07) ───────────────────────── */
 
+type HeroProps = {
+  tagline: string;
+  title: string;
+  description?: string;
+  image: Img;
+  primary?: Cta;
+  secondary?: Cta;
+  tone?: Tone;
+  /** Laptop: pieces floating over the photo (heroAccents.tsx), positioned around it. */
+  accent?: ReactNode;
+  /** Under the buttons, on every screen (e.g. a few figures). */
+  extra?: ReactNode;
+};
+
 /**
- * Port of 21st.dev "Editorial Image Hero" (felipemenezes098): full-width landscape photo fading
- * into the band colour, then a 12-column row — tagline left, serif headline + copy + CTAs right.
+ * Page hero of the public pages.
+ * Laptop: a navy split band — tagline, serif headline, copy and buttons on the left; the photo on the
+ * right, arriving behind a wipe, with the page's floating pieces around it.
+ * Phone and tablet: port of 21st.dev "Editorial Image Hero" (felipemenezes098) — full-width photo
+ * fading into the band colour, then the tagline, headline, copy and buttons.
  */
-export function EditorialImageHero(props: { tagline: string; title: string; description?: string; image: Img; primary?: Cta; secondary?: Cta; tone?: Tone }) {
+export function EditorialImageHero(props: HeroProps) {
+  const { isDesktop } = useLayout();
   return (
-    <Band tone={props.tone ?? 'page'}>
-      <ImageHeroInner {...props} />
+    <Band tone={isDesktop ? 'navy' : props.tone ?? 'page'}>
+      {isDesktop ? <SplitHeroInner {...props} /> : <ImageHeroInner {...props} />}
     </Band>
   );
 }
 
-function ImageHeroInner({ tagline, title, description, image, primary, secondary }: { tagline: string; title: string; description?: string; image: Img; primary?: Cta; secondary?: Cta }) {
+function SplitHeroInner({ tagline, title, description, image, primary, secondary, accent, extra }: HeroProps) {
+  const t = useTone();
+  return (
+    <Container style={{ flexDirection: 'row', alignItems: 'center', gap: 72, paddingTop: 148, paddingBottom: 112 }}>
+      <View style={{ flex: 1.05, minWidth: 0, gap: 26 }}>
+        <Reveal style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <View style={{ width: 28, height: 3, backgroundColor: t.accent }} />
+          <Txt style={{ fontFamily: fonts.semibold, fontSize: 12, lineHeight: 18, letterSpacing: 1.6, textTransform: 'uppercase', color: brand.blue }}>{tagline}</Txt>
+        </Reveal>
+        <SerifHeading title={title} size="lg" />
+        {description && (
+          <Reveal index={2}>
+            <Txt style={{ fontFamily: fonts.regular, fontSize: 17, lineHeight: 28, color: t.muted, maxWidth: 540 }}>{description}</Txt>
+          </Reveal>
+        )}
+        {(primary || secondary) && (
+          <Reveal index={3} style={{ flexDirection: 'row', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+            {primary && <Button label={primary.label} size="lg" variant="primary" onPress={primary.onPress} />}
+            {secondary && <LinkCta label={secondary.label} onPress={secondary.onPress} />}
+          </Reveal>
+        )}
+        {extra && <Reveal index={4}>{extra}</Reveal>}
+      </View>
+      <View style={{ flex: 1, maxWidth: 580 }}>
+        <View style={{ width: '100%', aspectRatio: 1.08, borderRadius: radius.hero, overflow: 'hidden' }}>
+          {/* after the page-opening panels have slid away */}
+          <ImageReveal source={image} style={{ width: '100%', height: '100%' }} cover={brand.red} delay={650} />
+        </View>
+        {accent}
+      </View>
+    </Container>
+  );
+}
+
+/** A few figures in a row, separated by hairlines (under the hero buttons). */
+export function HeroFigures({ items }: { items: { v: number; l: string }[] }) {
+  const t = useTone();
+  const { isMobile } = useLayout();
+  const shown = items.filter((it) => it.v > 0);
+  if (!shown.length) return null;
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'stretch', paddingTop: isMobile ? 4 : 8 }}>
+      {shown.map((it, i) => (
+        <View key={it.l} style={{ paddingLeft: i ? (isMobile ? 16 : 24) : 0, paddingRight: isMobile ? 16 : 24, borderLeftWidth: i ? 1 : 0, borderLeftColor: t.rule, gap: 2 }}>
+          <TextRoll style={{ fontFamily: fonts.display, fontSize: isMobile ? 28 : 34, lineHeight: isMobile ? 32 : 38, color: t.fg }} delay={0.4 + i * 0.15}>
+            {String(it.v)}
+          </TextRoll>
+          <Txt style={{ fontFamily: fonts.semibold, fontSize: 10.5, lineHeight: 14, letterSpacing: 1.3, textTransform: 'uppercase', color: t.muted }}>{it.l}</Txt>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function ImageHeroInner({ tagline, title, description, image, primary, secondary, extra }: HeroProps) {
   const t = useTone();
   const { isDesktop, isMobile } = useLayout();
   return (
@@ -101,6 +173,7 @@ function ImageHeroInner({ tagline, title, description, image, primary, secondary
               {secondary && <LinkCta label={secondary.label} onPress={secondary.onPress} />}
             </Reveal>
           )}
+          {extra && <Reveal index={4}>{extra}</Reveal>}
         </View>
       </Container>
     </View>

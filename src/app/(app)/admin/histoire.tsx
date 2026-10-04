@@ -61,7 +61,7 @@ export default function AdminLfkStory() {
 
       <Card style={{ gap: 12 }}>
         <SectionHeader title={h.introTitle} icon="align-left" />
-        <Input label={h.intro} value={draft.intro ?? ''} onChangeText={(v) => setDraft((s) => ({ ...s, intro: v }))} placeholder={h.sub} multiline maxLength={500} />
+        <Input label={h.intro} value={draft.intro ?? ''} onChangeText={(v) => setDraft((s) => ({ ...s, intro: v }))} placeholder={h.sub} hint={h.introHint} multiline maxLength={8000} style={{ minHeight: 220, textAlignVertical: 'top' }} />
       </Card>
 
       <Card style={{ gap: 12 }}>

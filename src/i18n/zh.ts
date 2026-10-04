@@ -339,7 +339,7 @@ const zh: Dict = {
     },
     join: {
       eyebrow: '入会', title: '校友会向', italic: '整个 LFK 社区开放。',
-      sub: '每个账户在进入社区前都由管理员审核。', createCta: '创建我的账户', whoTitle: '谁可以',
+      sub: '每个账户在进入社区前都由管理员审核。', createCta: '创建我的账户', helpTitle: '还有其他问题？', helpSub: '请联系理事会，我们会回复您。', whoTitle: '谁可以',
       whoItalic: '加入？', who1: '校友', who1Sub: 'LFK 的校友，无论现在身在何处。',
       who2: '在校生', who2Sub: '在校学生，与校友交流并规划升学。', who3: '荣誉会员',
       who3Sub: '学校领导，由理事会邀请。', faqTitle: '常见', faqItalic: '问题',
@@ -580,6 +580,9 @@ const zh: Dict = {
     eyebrow: '科威特法国高中',
     title: '我们的学校',
     sub: '学校的历史、重要日期和趣事。',
+    bacValue: '100%',
+    bacLabel: '法国高中会考通过率',
+    introHint: '单独一行的短句（无句号）会成为标题；第一行为主标题。',
     edit: '编辑页面',
     factsTitle: '你知道吗？',
     factsLead: 'LFK 的小故事和趣闻。',

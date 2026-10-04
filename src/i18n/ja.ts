@@ -339,7 +339,7 @@ const ja: Dict = {
     },
     join: {
       eyebrow: '入会', title: 'Amicale は', italic: 'LFK コミュニティ全体に開かれています。',
-      sub: 'すべてのアカウントは、コミュニティに参加する前に管理者が確認します。', createCta: 'アカウントを作成', whoTitle: '参加できるのは',
+      sub: 'すべてのアカウントは、コミュニティに参加する前に管理者が確認します。', createCta: 'アカウントを作成', helpTitle: 'ほかに質問がありますか？', helpSub: '役員会にご連絡ください。折り返しご返信します。', whoTitle: '参加できるのは',
       whoItalic: '誰？', who1: '卒業生', who1Sub: '今どこに住んでいても、LFK の卒業生。',
       who2: '在校生', who2Sub: '卒業生と交流し、進路を考えるための在校生。', who3: '名誉会員',
       who3Sub: '役員会の招待による学校の管理職。', faqTitle: 'よくある', faqItalic: '質問',
@@ -580,6 +580,9 @@ const ja: Dict = {
     eyebrow: 'クウェート・フランス人学校',
     title: '私たちの学校',
     sub: '学校の歴史、主な出来事、エピソード。',
+    bacValue: '100%',
+    bacLabel: 'バカロレア合格率',
+    introHint: '句点のない短い1行は見出しになります。最初の1行は大見出しになります。',
     edit: 'ページを編集',
     factsTitle: '知ってた？',
     factsLead: 'LFK の小さな物語とエピソード。',

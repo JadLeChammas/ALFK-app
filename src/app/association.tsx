@@ -2,11 +2,13 @@ import { router } from 'expo-router';
 
 import { Seo } from '@/components/Seo';
 import { ClosingCta, ContentGrid, EditorialImageHero, EditorialTestimonial, GlobeCard, RuleColumns, StatsRow, useDestinationMarkers, useQuoteCards } from '@/components/site/blocks';
+import { FigureCard, Float } from '@/components/site/heroAccents';
 import { Container, Reveal, Section, SerifHeading, SiteFrame } from '@/components/site/SiteFrame';
 import { useCommunity } from '@/data/community';
 import { IMAGES } from '@/data/seed';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
+import { useLayout } from '@/theme/layout';
 
 /** « L'Amicale » — mission, values and actions of the association. Public page. */
 /** LFK pupils forming the school's logo in the playground. */
@@ -16,6 +18,7 @@ export default function Association() {
   const { d, f } = useI18n();
   const { me } = useStore();
   const c = useCommunity();
+  const { isDesktop } = useLayout();
   const markers = useDestinationMarkers();
   const quotes = useQuoteCards();
   const a = d.site.association;
@@ -30,9 +33,21 @@ export default function Association() {
         image={STUDENTS_LOGO}
         primary={me ? undefined : { label: d.site.home.cta1, onPress: () => router.push('/inscription') }}
         secondary={{ label: d.site.nav.bureau, onPress: () => router.push('/bureau') }}
+        accent={
+          c.alumni > 0 ? (
+            <>
+              <Float style={{ left: -56, top: 48 }} delay={1300}>
+                <FigureCard value={c.alumni} label={d.site.home.statAlumni} icon="users" />
+              </Float>
+              <Float style={{ right: -36, bottom: 56 }} delay={1600} amplitude={7} duration={4200}>
+                <FigureCard value={c.countries} label={d.site.home.statCountries} icon="globe" />
+              </Float>
+            </>
+          ) : undefined
+        }
       />
 
-      <Section style={{ paddingTop: 0 }}>
+      <Section style={isDesktop ? undefined : { paddingTop: 0 }}>
         <Reveal>
           <SerifHeading title={a.valuesTitle} />
         </Reveal>

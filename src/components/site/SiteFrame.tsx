@@ -205,11 +205,14 @@ export function LinkCta({ label, onPress, light }: { label: string; onPress: () 
 function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<number>; progress: SharedValue<number>; overlay: boolean }) {
   const { d } = useI18n();
   const { me } = useStore();
-  const { isDesktop } = useLayout();
+  const { isDesktop, width } = useLayout();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
   const links = useSiteLinks();
   const [open, setOpen] = useState(false);
+  // The page links sit in the middle of the bar; below 1280 px they would run into the buttons on the
+  // right, so they centre in the space between the logo and the buttons instead.
+  const trueCentre = width >= 1280;
   const go = (href: string) => {
     setOpen(false);
     router.push(href as never);
@@ -227,8 +230,15 @@ function SiteHeader({ scrollY, progress, overlay }: { scrollY: SharedValue<numbe
         <Tap onPress={logoTap} accessibilityLabel={d.nav.home} style={{ flexDirection: 'row', alignItems: 'center', flex: isDesktop ? undefined : 1 }}>
           <Logo height={isDesktop ? 48 : 42} onDark />
         </Tap>
+        {isDesktop && trueCentre && <View style={{ flex: 1 }} />}
         {isDesktop && (
-          <View style={{ flex: 1, flexDirection: 'row', gap: 28 }}>
+          <View
+            pointerEvents="box-none"
+            style={
+              trueCentre
+                ? { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 28 }
+                : { flex: 1, flexDirection: 'row', justifyContent: 'center', gap: 28 }
+            }>
             {links.slice(1).map((l) => {
               const active = pathname === l.href;
               return (

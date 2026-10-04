@@ -339,7 +339,7 @@ const de: Dict = {
     },
     join: {
       eyebrow: 'Mitgliedschaft', title: 'Die Amicale steht offen', italic: 'der ganzen LFK-Gemeinschaft.',
-      sub: 'Jedes Konto wird von einem Administrator geprüft, bevor es Zugang erhält.', createCta: 'Konto erstellen', whoTitle: 'Wer kann',
+      sub: 'Jedes Konto wird von einem Administrator geprüft, bevor es Zugang erhält.', createCta: 'Konto erstellen', helpTitle: 'Noch eine Frage?', helpSub: 'Schreiben Sie dem Vorstand: Wir antworten Ihnen.', whoTitle: 'Wer kann',
       whoItalic: 'beitreten?', who1: 'Ehemalige', who1Sub: 'Die Ehemaligen des LFK, wo immer sie heute leben.',
       who2: 'Schüler', who2Sub: 'Die Schüler des Lycée, um sich mit Ehemaligen auszutauschen und ihr Studium vorzubereiten.', who3: 'Ehrenmitglieder',
       who3Sub: 'Die Schulleitung, auf Einladung des Vorstands.', faqTitle: 'Häufige', faqItalic: 'Fragen',
@@ -580,6 +580,9 @@ const de: Dict = {
     eyebrow: 'Lycée Français du Koweït',
     title: 'Unser Lycée',
     sub: 'Seine Geschichte, wichtige Daten und Anekdoten.',
+    bacValue: '100 %',
+    bacLabel: 'Erfolgsquote beim Bac',
+    introHint: 'Eine kurze Zeile für sich (ohne Punkt) wird zur Überschrift; die erste zum Haupttitel.',
     edit: 'Seite bearbeiten',
     factsTitle: 'Schon gewusst?',
     factsLead: 'Kleine Geschichten und Anekdoten aus dem LFK.',

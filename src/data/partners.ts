@@ -17,6 +17,9 @@ export function sortPartners<T extends Institution>(list: T[]): T[] {
   return [...list].sort((a, b) => Number(isHiDev(a)) - Number(isHiDev(b)) || a.order - b.order);
 }
 
+/** The Lycée Français du Koweït's own logo (partners, the « Le LFK » page). */
+export const LFK_LOGO = LOGOS.lfk;
+
 /** A bundled logo (`lfk`, `hidev`), an image URL, or nothing. */
 export function partnerLogo(i: PartnerLike) {
   const key = i.logo ?? (isHiDev(i) ? 'hidev' : undefined);

@@ -340,7 +340,7 @@ const pirate: Dict = {
     },
     join: {
       eyebrow: 'Signin’ on', title: 'The Amicale welcomes', italic: 'the whole LFK crew.',
-      sub: 'Every sailor be checked by a captain before comin’ aboard.', createCta: 'Sign the Articles', whoTitle: 'Who can',
+      sub: 'Every sailor be checked by a captain before comin’ aboard.', createCta: 'Sign the Articles', helpTitle: 'Another question, matey?', helpSub: 'Send word to the captain’s table: we’ll answer ye.', whoTitle: 'Who can',
       whoItalic: 'come aboard?', who1: 'Old hands', who1Sub: 'Former LFK sailors, wherever they drop anchor today.',
       who2: 'Cabin boys', who2Sub: 'Current students, to parley with the old hands an’ plot their studies.', who3: 'Honorary buccaneers',
       who3Sub: 'The Lycée admiralty, invited by the officers.', faqTitle: 'Questions', faqItalic: 'from the deck',
@@ -581,6 +581,9 @@ const pirate: Dict = {
     eyebrow: 'Lycée Français du Koweït',
     title: 'Our ol\' school',
     sub: 'Its history, its great dates an\' its tall tales.',
+    bacValue: '100%',
+    bacLabel: 'o\' the crew pass the bac',
+    introHint: 'A short line on its own (no full stop) becomes a heading; the first one, the main title.',
     edit: 'Edit th\' page',
     factsTitle: 'Did ye know?',
     factsLead: 'Little tales an\' yarns from th\' LFK.',

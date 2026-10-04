@@ -3,6 +3,7 @@ import { Seo } from '@/components/Seo';
 import { View } from 'react-native';
 
 import { EditorialImageHero, TeamShowcase, type TeamMember } from '@/components/site/blocks';
+import { FacesCard, Float } from '@/components/site/heroAccents';
 import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
@@ -21,7 +22,7 @@ import { fonts } from '@/theme/tokens';
  * Public page.
  */
 export default function Board() {
-  const { d } = useI18n();
+  const { d, f } = useI18n();
   const { isDesktop } = useLayout();
   const { bureau } = usePublicOverview();
   const { me } = useStore();
@@ -36,9 +37,22 @@ export default function Board() {
   return (
     <SiteFrame overlay>
       <Seo title={b.title} description={b.sub} />
-      <EditorialImageHero tagline={d.app.long} title={b.title} description={b.sub} image={IMAGES.meeting} />
+      <EditorialImageHero
+        tagline={d.app.long}
+        title={b.title}
+        description={b.sub}
+        image={IMAGES.meeting}
+        secondary={{ label: d.site.footer.contact, onPress: () => router.push('/contact') }}
+        accent={
+          team.length ? (
+            <Float style={{ left: -48, bottom: -36 }} delay={1300}>
+              <FacesCard people={team.map((m) => ({ name: m.name, avatar: m.image }))} caption={f(team.length > 1 ? d.common.members : d.common.member, { n: team.length })} />
+            </Float>
+          ) : undefined
+        }
+      />
 
-      <Section style={{ paddingTop: 0 }}>
+      <Section style={isDesktop ? undefined : { paddingTop: 0 }}>
         <Reveal style={{ marginBottom: 40 }}>
           <SerifHeading title={b.board} />
         </Reveal>

@@ -337,7 +337,7 @@ const fr = {
     },
     join: {
       eyebrow: 'Adhésion', title: 'L\'Amicale est ouverte', italic: 'à toute la communauté du LFK.',
-      sub: 'Chaque compte est vérifié par un administrateur avant d’accéder à la communauté.', createCta: 'Créer mon compte', whoTitle: 'Qui peut',
+      sub: 'Chaque compte est vérifié par un administrateur avant d’accéder à la communauté.', createCta: 'Créer mon compte', helpTitle: 'Une autre question ?', helpSub: 'Écrivez au bureau : nous vous répondrons.', whoTitle: 'Qui peut',
       whoItalic: 'rejoindre ?', who1: 'Anciens élèves', who1Sub: 'Les anciens élèves du LFK, où qu’ils vivent aujourd’hui.',
       who2: 'Élèves', who2Sub: 'Les élèves du lycée, pour échanger avec les anciens et préparer leur orientation.', who3: 'Membres d\'honneur',
       who3Sub: 'La direction du lycée, sur invitation du bureau.', faqTitle: 'Questions', faqItalic: 'fréquentes',
@@ -578,6 +578,9 @@ const fr = {
     eyebrow: 'Lycée Français du Koweït',
     title: 'Notre lycée',
     sub: 'Son histoire, ses dates clés et ses anecdotes.',
+    bacValue: '100 %',
+    bacLabel: 'de réussite au bac',
+    introHint: 'Une ligne courte seule (sans point final) devient un titre ; la première, le grand titre.',
     edit: 'Modifier la page',
     factsTitle: 'Le saviez-vous ?',
     factsLead: 'Les petites histoires et anecdotes du LFK.',
