@@ -40,7 +40,8 @@ export default function SignUp() {
   const [photo, setPhoto] = useState<PickedImage | null>(null);
   const [bio, setBio] = useState('');
   const [mentor, setMentor] = useState(false);
-  const [marketing, setMarketing] = useState(false);
+  // Ticked = the member does NOT want the news (they receive it otherwise; unsubscribe in each email and in Settings).
+  const [noNews, setNoNews] = useState(false);
   const [cropping, setCropping] = useState<PickedImage | null>(null);
   const choosePhoto = async () => {
     const [img] = await pickImages(false);
@@ -91,7 +92,7 @@ export default function SignUp() {
       bio: bio.trim() || undefined,
       mentor: alumni ? mentor : undefined,
       otherSchools: alumni && otherSchools.length ? otherSchools : undefined,
-      marketing,
+      marketing: !noNews,
       locale: lang === 'fr' ? 'fr' : 'en',
     }, proof, photo);
     setBusy(false);
@@ -284,10 +285,10 @@ export default function SignUp() {
             <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />
             <Txt variant="small" color="textSubtle" style={{ flex: 1 }}>{d.proof.privacy}</Txt>
           </Row>
-          <Tap onPress={() => setMarketing((v) => !v)} accessibilityRole="checkbox" accessibilityState={{ checked: marketing }}>
+          <Tap onPress={() => setNoNews((v) => !v)} accessibilityRole="checkbox" accessibilityState={{ checked: noNews }}>
             <Row gap={10} style={{ alignItems: 'flex-start' }}>
-              <View style={{ width: 20, height: 20, marginTop: 1, borderRadius: 6, borderWidth: 1.5, borderColor: marketing ? colors.primary : colors.borderStrong, backgroundColor: marketing ? colors.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-                {marketing && <Feather name="check" size={13} color="#fff" />}
+              <View style={{ width: 20, height: 20, marginTop: 1, borderRadius: 6, borderWidth: 1.5, borderColor: noNews ? colors.primary : colors.borderStrong, backgroundColor: noNews ? colors.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                {noNews && <Feather name="check" size={13} color="#fff" />}
               </View>
               <Txt variant="small" style={{ flex: 1 }}>{d.emails.optInSignup}</Txt>
             </Row>
