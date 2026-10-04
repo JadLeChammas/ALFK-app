@@ -1,8 +1,10 @@
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
 import { View } from 'react-native';
 
 import { PUB_TONE, PublicationCard } from '@/components/cards';
+import { PublicationFormModal } from '@/components/forms';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, EmptyState, Row } from '@/components/ui/primitives';
 import { BackLink, Grid, Screen } from '@/components/ui/Screen';
@@ -18,6 +20,7 @@ export default function Article() {
   const { isMobile } = useLayout();
   const { db, actions } = useStore();
   const { confirm } = useDialogs();
+  const [editing, setEditing] = useState(false);
   const users = useUserMap();
   const me = useMe();
   const found = db.publications.find((p) => p.id === id);
@@ -71,6 +74,8 @@ export default function Article() {
         </Row>
       )}
       {(me.role === 'admin' || pub.authorId === me.id) && (
+        <Row gap={10} wrap>
+        <Button label={d.publications.edit} icon="edit-2" variant="secondary" onPress={() => setEditing(true)} />
         <Button
           label={d.common.delete}
           icon="trash-2"
@@ -82,7 +87,9 @@ export default function Article() {
             }
           }}
         />
+        </Row>
       )}
+      {editing && <PublicationFormModal visible editing={pub} onClose={() => setEditing(false)} />}
       {more.length > 0 && (
         <View style={{ gap: 16 }}>
           <Txt variant="h2">{d.publications.more}</Txt>

@@ -113,6 +113,7 @@ const zh: Dict = {
     categories: { soiree: '晚会', sport: '体育', culture: '文化', networking: '交流' },
   },
   publications: {
+    edit: '编辑', editPending: '修改已提交：管理员审核后公告才会重新显示。',
     title: '发布', subtitle: '校友会的资讯、文章与公告。', read: '阅读',
     categories: { actualite: '资讯', article: '文章', annonce: '公告' }, create: '新发布',
     excerptField: '摘要', bodyField: '正文', by: '作者：{name}', readMore: '阅读全文', notFound: '未找到该发布', more: '推荐阅读',

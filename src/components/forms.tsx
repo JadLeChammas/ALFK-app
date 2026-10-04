@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 
-import type { EventCategory, PublicationCategory } from '@/data/types';
+import type { EventCategory, Publication, PublicationCategory } from '@/data/types';
 import { can } from '@/data/permissions';
 import { useStore } from '@/data/store';
 import { IMAGES } from '@/data/seed';
@@ -80,7 +80,8 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
   );
 }
 
-export function PublicationFormModal({ visible, onClose }: { visible: boolean; onClose: () => void }) {
+/** Writes a publication, or edits one (`editing`). */
+export function PublicationFormModal({ visible, onClose, editing }: { visible: boolean; onClose: () => void; editing?: Publication }) {
   const { d } = useI18n();
   const { actions, me } = useStore();
   const { colors } = useTheme();
@@ -88,11 +89,11 @@ export function PublicationFormModal({ visible, onClose }: { visible: boolean; o
   // Members only propose announcements; the admins check them before they appear.
   const direct = can(me, 'publish');
   const blank = { title: '', excerpt: '', body: '', cover: IMAGES.campus, category: (direct ? 'actualite' : 'annonce') as PublicationCategory };
-  const [form, setForm] = useState(blank);
+  const [form, setForm] = useState(editing ? { title: editing.title, excerpt: editing.excerpt, body: editing.body, cover: editing.cover, category: editing.category } : blank);
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   return (
-    <Sheet visible={visible} title={direct ? d.publications.create : d.pubReview.propose} onClose={onClose}>
+    <Sheet visible={visible} title={editing ? d.publications.edit : direct ? d.publications.create : d.pubReview.propose} onClose={onClose}>
       {!direct && (
         <Row gap={8} style={{ alignItems: 'flex-start' }}>
           <Feather name="shield" size={15} color={colors.warning} style={{ marginTop: 2 }} />
@@ -111,12 +112,19 @@ export function PublicationFormModal({ visible, onClose }: { visible: boolean; o
       <Input label={d.publications.excerptField} value={form.excerpt} onChangeText={set('excerpt')} />
       <Input label={d.publications.bodyField} value={form.body} onChangeText={set('body')} multiline />
       <Button
-        label={direct ? d.common.create : d.pubReview.submit}
+        label={editing ? d.common.save : direct ? d.common.create : d.pubReview.submit}
         full
         size="lg"
         disabled={!form.title || !form.body}
         onPress={() => {
-          const r = actions.createPublication({ ...form, excerpt: form.excerpt || form.body.slice(0, 140) });
+          const data = { ...form, excerpt: form.excerpt || form.body.slice(0, 140) };
+          if (editing) {
+            const r = actions.updatePublication(editing.id, data);
+            toast(r.pending ? d.publications.editPending : d.common.saved);
+            onClose();
+            return;
+          }
+          const r = actions.createPublication(data);
           toast(r.pending ? d.pubReview.submitted : d.common.saved);
           setForm(blank);
           onClose();

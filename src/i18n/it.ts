@@ -113,6 +113,7 @@ const it: Dict = {
     categories: { soiree: 'Serata', sport: 'Sport', culture: 'Cultura', networking: 'Networking' },
   },
   publications: {
+    edit: 'Modifica', editPending: 'Modifiche inviate: un admin verificherà l’annuncio prima che riappaia.',
     title: 'Pubblicazioni', subtitle: "Notizie, articoli e comunicati dell'Amicale.", read: 'Leggi',
     categories: { actualite: 'Notizie', article: 'Articoli', annonce: 'Annunci' }, create: 'Nuova pubblicazione',
     excerptField: 'Estratto', bodyField: 'Testo', by: 'Di {name}', readMore: 'Continua a leggere', notFound: 'Pubblicazione non trovata', more: 'Da leggere anche',

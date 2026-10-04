@@ -113,6 +113,7 @@ const en: Dict = {
     categories: { soiree: 'Party', sport: 'Sport', culture: 'Culture', networking: 'Networking' },
   },
   publications: {
+    edit: 'Edit', editPending: 'Changes sent: an admin will review the announcement before it shows again.',
     title: 'Publications', subtitle: 'News, articles and announcements from the Amicale.', read: 'Read',
     categories: { actualite: 'News', article: 'Articles', annonce: 'Announcements' }, create: 'New publication',
     excerptField: 'Excerpt', bodyField: 'Body', by: 'By {name}', readMore: 'Read more', notFound: 'Publication not found', more: 'Keep reading',

@@ -113,6 +113,7 @@ const ja: Dict = {
     categories: { soiree: 'パーティー', sport: 'スポーツ', culture: '文化', networking: '交流会' },
   },
   publications: {
+    edit: '編集', editPending: '変更を送信しました：再表示の前に管理者がお知らせを確認します。',
     title: 'お知らせ', subtitle: '同窓会のニュース、記事、お知らせ。', read: '読む',
     categories: { actualite: 'ニュース', article: '記事', annonce: 'お知らせ' }, create: '新しい投稿',
     excerptField: '抜粋', bodyField: '本文', by: '{name}', readMore: '続きを読む', notFound: '投稿が見つかりません', more: 'こちらもどうぞ',

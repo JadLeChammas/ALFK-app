@@ -643,6 +643,19 @@ function useStoreValue() {
       });
       if (supabase) send(supabase.from('publications').update({ status: decision, ...(decision === 'published' ? { date: nowIso() } : {}) }).eq('id', id));
     },
+    /**
+     * Admins and the author edit a publication. A member who cannot publish directly sends it back to
+     * the admins (pending again); returns whether it is pending.
+     */
+    updatePublication(id: string, patch: Pick<Publication, 'title' | 'excerpt' | 'body' | 'cover' | 'category'>) {
+      const p = dbRef.current?.publications.find((x) => x.id === id);
+      if (!p) return { pending: false };
+      const reviewAgain = !can(me, 'publish') && me?.role !== 'admin';
+      const status = reviewAgain ? 'pending' : p.status;
+      commit((d) => ({ ...d, publications: d.publications.map((x) => (x.id === id ? { ...x, ...patch, status } : x)) }));
+      if (supabase) send(supabase.from('publications').update({ title: patch.title, excerpt: patch.excerpt, body: patch.body, cover: patch.cover, category: patch.category, status }).eq('id', id));
+      return { pending: status === 'pending' };
+    },
     deletePublication(id: string) {
       commit((d) => {
         const p = d.publications.find((x) => x.id === id);
