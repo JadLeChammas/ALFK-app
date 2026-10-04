@@ -735,6 +735,7 @@ const ja: Dict = {
     photo: '写真を追加',
     changePhoto: '写真を変更',
     name: '名前',
+    description: '説明', descriptionPlaceholder: '例：経歴、思い出、LFK にもたらしたもの',
     from: '開始（年）',
     to: '終了（年）',
     toPlaceholder: '空欄 = 現職',

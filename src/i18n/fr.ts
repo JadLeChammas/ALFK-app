@@ -733,6 +733,7 @@ const fr = {
     photo: 'Ajouter une photo',
     changePhoto: 'Changer la photo',
     name: 'Nom',
+    description: 'Description', descriptionPlaceholder: 'Ex. : parcours, souvenirs, ce qu’il ou elle a apporté au LFK',
     from: 'Début (année)',
     to: 'Fin (année)',
     toPlaceholder: 'Vide = actuel',

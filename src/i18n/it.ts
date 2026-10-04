@@ -735,6 +735,7 @@ const it: Dict = {
     photo: 'Aggiungi una foto',
     changePhoto: 'Cambia la foto',
     name: 'Nome',
+    description: 'Descrizione', descriptionPlaceholder: 'Es.: percorso, ricordi, ciò che ha portato al LFK',
     from: 'Inizio (anno)',
     to: 'Fine (anno)',
     toPlaceholder: 'Vuoto = attuale',

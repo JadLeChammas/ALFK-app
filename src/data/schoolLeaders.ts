@@ -17,6 +17,8 @@ export type SchoolLeader = {
   from?: number;
   to?: number;
   photo?: string;
+  /** A few words under the name (optional): career, memories, what they brought to the LFK. */
+  description?: string;
 };
 
 /** The timelines, oldest first (people without dates at the start). */

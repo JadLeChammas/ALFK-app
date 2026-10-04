@@ -735,6 +735,7 @@ const zh: Dict = {
     photo: '添加照片',
     changePhoto: '更换照片',
     name: '姓名',
+    description: '简介', descriptionPlaceholder: '例如：经历、回忆、对 LFK 的贡献',
     from: '开始（年份）',
     to: '结束（年份）',
     toPlaceholder: '留空 = 现任',

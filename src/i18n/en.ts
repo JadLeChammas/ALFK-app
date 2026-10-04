@@ -735,6 +735,7 @@ const en: Dict = {
     photo: 'Add a photo',
     changePhoto: 'Change the photo',
     name: 'Name',
+    description: 'Description', descriptionPlaceholder: 'E.g. career, memories, what they brought to the LFK',
     from: 'Start (year)',
     to: 'End (year)',
     toPlaceholder: 'Empty = current',

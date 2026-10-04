@@ -736,6 +736,7 @@ const pirate: Dict = {
     photo: 'Add a portrait',
     changePhoto: 'Change th\' portrait',
     name: 'Name',
+    description: 'Description', descriptionPlaceholder: 'E.g. voyages, memories, what they brought to th’ LFK',
     from: 'Start (year)',
     to: 'End (year)',
     toPlaceholder: 'Empty = current',

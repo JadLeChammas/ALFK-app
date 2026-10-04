@@ -735,6 +735,7 @@ const ar: Dict = {
     photo: 'إضافة صورة',
     changePhoto: 'تغيير الصورة',
     name: 'الاسم',
+    description: 'الوصف', descriptionPlaceholder: 'مثال: المسيرة، ذكريات، ما قدّمه للثانوية',
     from: 'البداية (السنة)',
     to: 'النهاية (السنة)',
     toPlaceholder: 'فارغ = الحالي',

@@ -88,6 +88,7 @@ export function PartnersManager() {
                   <Txt variant="h3" align="center">{x.name}</Txt>
                   <Txt variant="small" color="textMuted" align="center">{d.leaders.kinds[x.kind]}</Txt>
                   {!!x.from && <Txt variant="small" color="textSubtle" align="center">{`${d.leaders.since} ${x.from}`}</Txt>}
+                  {!!x.description && <Txt variant="small" color="textMuted" align="center">{x.description}</Txt>}
                 </View>
               </Card>
             ))}
