@@ -326,7 +326,7 @@ const it: Dict = {
     },
     bureau: {
       president: 'Presidente',
-      title: 'Il direttivo', sub: 'I volontari che fanno vivere l’Amicale.', board: 'Direttivo e amministratori',
+      title: 'Il direttivo', sub: 'I volontari che fanno vivere l’Amicale.', board: 'Direttivo e amministratori', history: 'Storia della direzione',
       honorary: 'Membri onorari', member: 'Membro del direttivo', volunteerTitle: 'Vuoi',
       volunteerItalic: 'impegnarti?', volunteerSub: 'Il direttivo accoglie regolarmente nuovi volontari. Scrivici per candidarti.', empty: 'La composizione del direttivo sarà pubblicata presto.',
     },

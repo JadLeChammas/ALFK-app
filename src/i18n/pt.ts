@@ -326,7 +326,7 @@ const pt: Dict = {
     },
     bureau: {
       president: 'Presidente',
-      title: 'A direção', sub: 'Os voluntários que dão vida à Amicale.', board: 'Direção e administradores',
+      title: 'A direção', sub: 'Os voluntários que dão vida à Amicale.', board: 'Direção e administradores', history: 'Histórico da direção',
       honorary: 'Membros honorários', member: 'Membro da direção', volunteerTitle: 'Quer',
       volunteerItalic: 'participar?', volunteerSub: 'A direção acolhe regularmente novos voluntários. Escreva-nos para se candidatar.', empty: 'A composição da direção será publicada em breve.',
     },

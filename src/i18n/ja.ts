@@ -326,7 +326,7 @@ const ja: Dict = {
     },
     bureau: {
       president: '会長',
-      title: '役員会', sub: 'Amicale を支えるボランティア。', board: '役員・管理者',
+      title: '役員会', sub: 'Amicale を支えるボランティア。', board: '役員・管理者', history: '歴代の管理職',
       honorary: '名誉会員', member: '役員', volunteerTitle: '一緒に',
       volunteerItalic: '活動しませんか？', volunteerSub: '役員会は新しいボランティアを随時募集しています。ご応募はメッセージでどうぞ。', empty: '役員は近日発表します。',
     },

@@ -326,7 +326,7 @@ const de: Dict = {
     },
     bureau: {
       president: 'Präsident',
-      title: 'Der Vorstand', sub: 'Die Ehrenamtlichen, die die Amicale tragen.', board: 'Vorstand & Administratoren',
+      title: 'Der Vorstand', sub: 'Die Ehrenamtlichen, die die Amicale tragen.', board: 'Vorstand & Administratoren', history: 'Geschichte der Schulleitung',
       honorary: 'Ehrenmitglieder', member: 'Vorstandsmitglied', volunteerTitle: 'Lust,',
       volunteerItalic: 'sich zu engagieren?', volunteerSub: 'Der Vorstand sucht regelmäßig neue Ehrenamtliche. Schreiben Sie uns, um sich zu bewerben.', empty: 'Die Vorstandsmitglieder werden bald bekanntgegeben.',
     },

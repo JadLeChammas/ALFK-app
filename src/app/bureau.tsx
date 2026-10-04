@@ -45,11 +45,11 @@ export default function Board() {
         {team.length ? <TeamShowcase members={team} /> : <Empty text={b.empty} />}
       </Section>
 
-      {/* Honorary members: the heads of the LFK through the years (admins add them here). */}
+      {/* Leadership history: the heads of the LFK through the years (admins add them here). */}
       {(hasLeaders || admin) && (
         <Section style={{ paddingTop: 0 }}>
           <Reveal style={{ marginBottom: 32 }}>
-            <SerifHeading title={b.honorary} />
+            <SerifHeading title={b.history} />
           </Reveal>
           <View style={{ gap: 40 }}>
             <LeadersTimeline kind="proviseur" editable={admin} />
