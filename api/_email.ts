@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { emailHtml, emailText, fillVars, type EmailEvent, type EmailLocale, type EmailTemplates } from '../src/data/emailTemplates';
+import { emailHtml, emailPlainText as emailText_, emailText, fillVars, type EmailEvent, type EmailLocale, type EmailTemplates } from '../src/data/emailTemplates';
 
 /**
  * Sending emails through Brevo (server only — the « _ » prefix keeps this file from being a route).
@@ -106,6 +106,8 @@ export async function sendMessage(opts: {
         subject: fillVars(subject, common),
         // The unsubscribe link differs for each person: a Brevo parameter.
         htmlContent: emailHtml({ body: fillVars(body, { ...common, prenom: '{{ params.prenom }}', nom: '{{ params.nom }}' }), signature: opts.signature, logoUrl: LOGO, siteUrl: SITE, unsubscribeUrl: withLink ? '{{ params.unsub }}' : undefined, locale }),
+        // A plain-text version too: spam filters trust emails that have both.
+        textContent: emailText_({ body: fillVars(body, { ...common, prenom: '{{ params.prenom }}', nom: '{{ params.nom }}' }), signature: opts.signature, unsubscribe: withLink ? '{{ params.unsub }}' : undefined, locale }),
         attachment: opts.attachments?.length ? opts.attachments : undefined,
         messageVersions: chunk.map((r, k) => ({
           to: [{ email: r.email, name: [r.first_name, r.last_name].filter(Boolean).join(' ') || undefined }],

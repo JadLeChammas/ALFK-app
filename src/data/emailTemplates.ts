@@ -85,6 +85,14 @@ export function textToHtml(text: string) {
     .join('');
 }
 
+/** The plain-text version of an email (same message, signature and unsubscribe link). */
+export function emailPlainText({ body, signature, unsubscribe, locale }: { body: string; signature?: string; unsubscribe?: string; locale: EmailLocale }) {
+  const strip = (t: string) => t.trim().replace(/\*\*(.+?)\*\*/g, '$1');
+  const footer = 'Amicale des anciens élèves du Lycée Français du Koweït';
+  const unsub = unsubscribe ? `\n${locale === 'fr' ? 'Ne plus recevoir les actualités' : 'Unsubscribe'} : ${unsubscribe}` : '';
+  return `${strip(body)}${signature?.trim() ? `\n\n--\n${strip(signature)}` : ''}\n\n${footer}${unsub}`;
+}
+
 /**
  * The email around a message: the Amicale's logo, the message, the signature, and — for news sent to
  * members — the unsubscribe link. Simple tables and inline styles, for every mail client.
