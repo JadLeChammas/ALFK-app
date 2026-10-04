@@ -48,6 +48,8 @@ export const toUser = (r: Row): User => ({
   bureauCode: opt(r.bureau_code),
   proof: r.proof_path ? { path: r.proof_path, name: r.proof_name ?? '', mimeType: opt(r.proof_mime), uploadedAt: r.proof_uploaded_at ?? r.created_at } : undefined,
   createdByAdmin: !!r.created_by_admin,
+  grade: r.grade === '2nde' || r.grade === '1ere' || r.grade === 'Tle' ? r.grade : undefined,
+  needsCompletion: !!r.needs_completion,
   fieldOfStudy: opt(r.field_of_study),
   fields: Array.isArray(r.fields_of_study) && r.fields_of_study.length ? r.fields_of_study : undefined,
   schoolCountry: opt(r.school_country),
@@ -91,6 +93,8 @@ const PROFILE_COLUMNS: Record<string, string> = {
   nationalities: 'nationalities',
   otherSchools: 'other_schools',
   mentor: 'mentor',
+  grade: 'grade',
+  needsCompletion: 'needs_completion',
 };
 
 export function profilePatchToRow(patch: Partial<User>): Row {

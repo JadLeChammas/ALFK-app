@@ -175,7 +175,7 @@ const ja: Dict = {
     noContact: 'メッセージはありません', pendingSince: '{when}に登録',
     actions: {
       approve_publication: 'お知らせを公開しました', reject_publication: 'お知らせを却下しました', approve_question: '匿名質問を公開しました', reject_question: '匿名質問を却下しました',
-      approve: 'が承認しました：', refuse: 'が却下しました：', create_user: 'がアカウントを作成しました：', change_role: 'が役割を変更しました：',
+      approve: 'が承認しました：', refuse: 'が却下しました：', create_user: 'がアカウントを作成しました：', promote_students: '生徒を進級させた', change_role: 'が役割を変更しました：',
       reset_password: 'がパスワードをリセットしました：', delete_user: 'がアカウントを削除しました：', create_event: 'がイベントを作成しました：',
       delete_event: 'がイベントを削除しました：', delete_photo: 'が写真を削除しました：', create_publication: 'が投稿しました：',
       delete_publication: 'が投稿を削除しました：', open_reported_conversation: 'が報告された会話を開きました：', resolve_report: 'が報告に対応しました：',
@@ -659,6 +659,27 @@ const ja: Dict = {
     openCircle: '名誉サークル',
     organisation: '所属',
     organisationPlaceholder: '例：クウェート・フランス人学校、フランス大使館',
+  },
+  grade: {
+    label: '学年',
+    '2nde': 'Seconde（高1）',
+    '1ere': 'Première（高2）',
+    Tle: 'Terminale（高3）',
+    none: '学年未設定',
+  },
+  promote: {
+    title: '進級',
+    sub: '新学期：Terminale の生徒は卒業生になり（サイト利用前にアカウントを完成）、Première は Terminale へ、Seconde は Première へ進級します。',
+    button: '生徒を進級させる',
+    confirm: 'Terminale の {tle} 人を卒業生に、Première の {first} 人を Terminale に、Seconde の {second} 人を Première に進級させますか？元に戻せません。',
+    done: '完了：新しい卒業生 {n} 人。',
+    noGrade: '学年未設定の生徒 {n} 人は変わりません：メンバーで学年を設定してください。',
+  },
+  complete: {
+    title: '卒業生へようこそ！',
+    sub: 'リセを卒業しました：サイトを利用するには卒業生アカウントを完成させてください。',
+    save: 'サイトへ',
+    done: 'アカウント完成、ようこそ！',
   },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',

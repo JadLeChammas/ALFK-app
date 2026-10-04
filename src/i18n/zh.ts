@@ -175,7 +175,7 @@ const zh: Dict = {
     noContact: '暂无消息', pendingSince: '{when}注册',
     actions: {
       approve_publication: '发布了公告', reject_publication: '拒绝了公告', approve_question: '发布了一个匿名问题', reject_question: '拒绝了一个匿名问题',
-      approve: '审核通过了', refuse: '拒绝了', create_user: '创建了账号：', change_role: '更改了角色：',
+      approve: '审核通过了', refuse: '拒绝了', create_user: '创建了账号：', promote_students: '让学生升入下一年级', change_role: '更改了角色：',
       reset_password: '重置了密码：', delete_user: '删除了账号：', create_event: '创建了活动',
       delete_event: '删除了活动', delete_photo: '删除了照片：', create_publication: '发布了',
       delete_publication: '删除了发布', open_reported_conversation: '打开了被举报的对话', resolve_report: '处理了举报',
@@ -659,6 +659,27 @@ const zh: Dict = {
     openCircle: '荣誉圈',
     organisation: '机构',
     organisationPlaceholder: '例如：科威特法国高中、法国大使馆',
+  },
+  grade: {
+    label: '年级',
+    '2nde': '高一 (Seconde)',
+    '1ere': '高二 (Première)',
+    Tle: '高三 (Terminale)',
+    none: '未设置年级',
+  },
+  promote: {
+    title: '升入下一年级',
+    sub: '新学年：高三学生成为校友（需先完善账户才能访问网站），高二升高三，高一升高二。',
+    button: '让学生升级',
+    confirm: '将 {tle} 名高三学生转为校友，{first} 名高二升高三，{second} 名高一升高二？此操作无法撤销。',
+    done: '完成：新增 {n} 名校友。',
+    noGrade: '{n} 名未设置年级的学生不会变动：请在“成员”中设置年级。',
+  },
+  complete: {
+    title: '欢迎加入校友！',
+    sub: '你已从高中毕业：请完善校友账户后访问网站。',
+    save: '进入网站',
+    done: '账户已完善，欢迎！',
   },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',

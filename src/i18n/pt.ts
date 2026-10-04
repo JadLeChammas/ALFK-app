@@ -175,7 +175,7 @@ const pt: Dict = {
     noContact: 'Nenhuma mensagem', pendingSince: 'Inscrito {when}',
     actions: {
       approve_publication: 'publicou o anúncio', reject_publication: 'recusou o anúncio', approve_question: 'publicou uma pergunta anônima', reject_question: 'recusou uma pergunta anônima',
-      approve: 'aprovou', refuse: 'recusou', create_user: 'criou a conta de', change_role: 'alterou o papel de',
+      approve: 'aprovou', refuse: 'recusou', create_user: 'criou a conta de', promote_students: 'passou os alunos de ano', change_role: 'alterou o papel de',
       reset_password: 'repôs a palavra-passe de', delete_user: 'eliminou a conta de', create_event: 'criou o evento',
       delete_event: 'eliminou o evento', delete_photo: 'eliminou uma foto de', create_publication: 'publicou',
       delete_publication: 'eliminou a publicação', open_reported_conversation: 'abriu a conversa denunciada', resolve_report: 'tratou a denúncia',
@@ -659,6 +659,27 @@ const pt: Dict = {
     openCircle: 'Círculo de honra',
     organisation: 'Organização',
     organisationPlaceholder: 'Ex.: Lycée Français du Koweït, Embaixada da França',
+  },
+  grade: {
+    label: 'Turma',
+    '2nde': 'Seconde',
+    '1ere': 'Première',
+    Tle: 'Terminale',
+    none: 'Turma a indicar',
+  },
+  promote: {
+    title: 'Passagem de ano',
+    sub: 'Novo ano letivo: os de Terminale viram alumni (completam a conta antes de acessar o site), Première passa a Terminale e Seconde a Première.',
+    button: 'Passar os alunos',
+    confirm: 'Passar {tle} aluno(s) de Terminale para alumni, {first} de Première para Terminale e {second} de Seconde para Première? Não pode ser desfeito.',
+    done: 'Feito: {n} novos alumni.',
+    noGrade: '{n} aluno(s) sem turma não mudarão: indique a turma em Membros.',
+  },
+  complete: {
+    title: 'Bem-vindo aos alumni!',
+    sub: 'Você saiu do liceu: complete sua conta de alumni para acessar o site.',
+    save: 'Acessar o site',
+    done: 'Conta completa, bem-vindo!',
   },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',

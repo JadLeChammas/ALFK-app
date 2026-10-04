@@ -175,7 +175,7 @@ const it: Dict = {
     noContact: 'Nessun messaggio', pendingSince: 'Iscritto {when}',
     actions: {
       approve_publication: 'ha pubblicato l’annuncio', reject_publication: 'ha rifiutato l’annuncio', approve_question: 'ha pubblicato una domanda anonima', reject_question: 'ha rifiutato una domanda anonima',
-      approve: 'ha approvato', refuse: 'ha rifiutato', create_user: "ha creato l'account di", change_role: 'ha cambiato il ruolo di',
+      approve: 'ha approvato', refuse: 'ha rifiutato', create_user: "ha creato l'account di", promote_students: 'ha fatto passare gli studenti all’anno successivo', change_role: 'ha cambiato il ruolo di',
       reset_password: 'ha reimpostato la password di', delete_user: "ha eliminato l'account di", create_event: "ha creato l'evento",
       delete_event: "ha eliminato l'evento", delete_photo: 'ha eliminato una foto da', create_publication: 'ha pubblicato',
       delete_publication: 'ha eliminato la pubblicazione', open_reported_conversation: 'ha aperto la conversazione segnalata', resolve_report: 'ha gestito la segnalazione',
@@ -659,6 +659,27 @@ const it: Dict = {
     openCircle: 'Cerchio d’onore',
     organisation: 'Organizzazione',
     organisationPlaceholder: 'Es.: Lycée Français du Koweït, Ambasciata di Francia',
+  },
+  grade: {
+    label: 'Classe',
+    '2nde': 'Seconde',
+    '1ere': 'Première',
+    Tle: 'Terminale',
+    none: 'Classe da indicare',
+  },
+  promote: {
+    title: 'Passaggio all’anno successivo',
+    sub: 'Nuovo anno: i Terminale diventano alumni (completano l’account prima di accedere), Première passa in Terminale e Seconde in Première.',
+    button: 'Fai passare gli studenti',
+    confirm: 'Far passare {tle} studente/i di Terminale ad alumni, {first} da Première a Terminale e {second} da Seconde a Première? Non si può annullare.',
+    done: 'Fatto: {n} nuovi alumni.',
+    noGrade: '{n} studente/i senza classe resteranno fermi: indica la classe in Membri.',
+  },
+  complete: {
+    title: 'Benvenuto tra gli alumni!',
+    sub: 'Hai lasciato il liceo: completa il tuo account alumni per accedere al sito.',
+    save: 'Accedi al sito',
+    done: 'Account completato, benvenuto!',
   },
   uni: {
     pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',

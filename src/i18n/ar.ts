@@ -175,7 +175,7 @@ const ar: Dict = {
     noContact: 'لا توجد رسائل', pendingSince: 'مسجّل {when}',
     actions: {
       approve_publication: 'نشر الإعلان', reject_publication: 'رفض الإعلان', approve_question: 'نشر سؤالًا مجهولًا', reject_question: 'رفض سؤالًا مجهولًا',
-      approve: 'وافق على', refuse: 'رفض', create_user: 'أنشأ حساب', change_role: 'غيّر دور',
+      approve: 'وافق على', refuse: 'رفض', create_user: 'أنشأ حساب', promote_students: 'نقل الطلاب إلى السنة التالية', change_role: 'غيّر دور',
       reset_password: 'أعاد تعيين كلمة مرور', delete_user: 'حذف حساب', create_event: 'أنشأ الفعالية',
       delete_event: 'حذف الفعالية', delete_photo: 'حذف صورة من', create_publication: 'نشر',
       delete_publication: 'حذف المنشور', open_reported_conversation: 'فتح المحادثة المُبلّغ عنها', resolve_report: 'عالج البلاغ',
@@ -659,6 +659,27 @@ const ar: Dict = {
     openCircle: 'دائرة الشرف',
     organisation: 'المؤسسة',
     organisationPlaceholder: 'مثال: الثانوية الفرنسية في الكويت، السفارة الفرنسية',
+  },
+  grade: {
+    label: 'الصف',
+    '2nde': 'الثاني الثانوي (Seconde)',
+    '1ere': 'الأول قبل النهائي (Première)',
+    Tle: 'النهائي (Terminale)',
+    none: 'الصف غير محدد',
+  },
+  promote: {
+    title: 'الانتقال إلى السنة التالية',
+    sub: 'بداية العام: طلاب النهائي يصبحون خريجين (يكملون حسابهم قبل الدخول)، وPremière ينتقل إلى النهائي، وSeconde إلى Première.',
+    button: 'نقل الطلاب',
+    confirm: 'نقل {tle} طالب من النهائي إلى الخريجين، و{first} من Première إلى النهائي، و{second} من Seconde إلى Première؟ لا يمكن التراجع.',
+    done: 'تم: {n} خريجين جدد.',
+    noGrade: '{n} طالب بدون صف لن يتغيروا: حدد صفهم في الأعضاء.',
+  },
+  complete: {
+    title: 'مرحبًا بك بين الخريجين!',
+    sub: 'لقد أنهيت الثانوية: أكمل حسابك كخريج للدخول إلى الموقع.',
+    save: 'الدخول إلى الموقع',
+    done: 'اكتمل الحساب، مرحبًا!',
   },
   uni: {
     pick: 'اختر من القائمة', searchPlaceholder: 'اكتب الاسم أو الاختصار (مثل I أو ISEP أو Sorbonne)…', inCity: 'في {city}',

@@ -175,7 +175,7 @@ const en: Dict = {
     noContact: 'No messages', pendingSince: 'Signed up {when}',
     actions: {
       approve_publication: 'published the announcement', reject_publication: 'rejected the announcement', approve_question: 'published an anonymous question', reject_question: 'rejected an anonymous question',
-      approve: 'approved', refuse: 'refused', create_user: 'created the account of', change_role: 'changed the role of',
+      approve: 'approved', refuse: 'refused', create_user: 'created the account of', promote_students: 'moved the students up a year', change_role: 'changed the role of',
       reset_password: 'reset the password of', delete_user: 'deleted the account of', create_event: 'created the event',
       delete_event: 'deleted the event', delete_photo: 'deleted a photo from', create_publication: 'published',
       delete_publication: 'deleted the publication', open_reported_conversation: 'opened the reported conversation', resolve_report: 'handled the report',
@@ -659,6 +659,27 @@ const en: Dict = {
     openCircle: 'Honorary circle',
     organisation: 'Organisation',
     organisationPlaceholder: 'E.g. Lycée Français du Koweït, French Embassy',
+  },
+  grade: {
+    label: 'Class',
+    '2nde': 'Seconde (10th grade)',
+    '1ere': 'Première (11th grade)',
+    Tle: 'Terminale (12th grade)',
+    none: 'Class to set',
+  },
+  promote: {
+    title: 'Move up a year',
+    sub: 'New school year: Terminale students become alumni (they complete their account before using the site), Première moves to Terminale and Seconde to Première.',
+    button: 'Move students up',
+    confirm: 'Move {tle} Terminale student(s) to alumni, {first} from Première to Terminale and {second} from Seconde to Première? This cannot be undone.',
+    done: 'Done: {n} new alumni.',
+    noGrade: '{n} student(s) without a class will stay put: set their class in Members.',
+  },
+  complete: {
+    title: 'Welcome to the alumni!',
+    sub: 'You have left the lycée: complete your alumni account to use the site.',
+    save: 'Go to the site',
+    done: 'Account complete, welcome!',
   },
   uni: {
     pick: 'Pick from the list', searchPlaceholder: 'Type the name or acronym (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

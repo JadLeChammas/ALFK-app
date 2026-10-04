@@ -173,7 +173,7 @@ const fr = {
     noContact: 'Aucun message', pendingSince: 'Inscrit {when}',
     actions: {
       approve_publication: 'a publié l’annonce', reject_publication: 'a refusé l’annonce', approve_question: 'a publié une question anonyme', reject_question: 'a refusé une question anonyme',
-      approve: 'a approuvé', refuse: 'a refusé', create_user: 'a créé le compte de', change_role: 'a changé le rôle de',
+      approve: 'a approuvé', refuse: 'a refusé', create_user: 'a créé le compte de', promote_students: 'a fait passer les élèves à l’année supérieure', change_role: 'a changé le rôle de',
       reset_password: 'a réinitialisé le mot de passe de', delete_user: 'a supprimé le compte de', create_event: "a créé l'événement",
       delete_event: "a supprimé l'événement", delete_photo: 'a supprimé une photo de', create_publication: 'a publié',
       delete_publication: 'a supprimé la publication', open_reported_conversation: 'a ouvert la conversation signalée', resolve_report: 'a traité le signalement',
@@ -657,6 +657,27 @@ const fr = {
     openCircle: 'Cercle d’honneur',
     organisation: 'Organisation',
     organisationPlaceholder: 'Ex. : Lycée Français du Koweït, Ambassade de France',
+  },
+  grade: {
+    label: 'Classe',
+    '2nde': 'Seconde',
+    '1ere': 'Première',
+    Tle: 'Terminale',
+    none: 'Classe à indiquer',
+  },
+  promote: {
+    title: 'Passage à l’année supérieure',
+    sub: 'À la rentrée : les Terminales deviennent alumni (ils complètent leur compte avant d’accéder au site), les Premières passent en Terminale et les Secondes en Première.',
+    button: 'Faire passer les élèves',
+    confirm: 'Faire passer {tle} élève(s) de Terminale en alumni, {first} de Première en Terminale et {second} de Seconde en Première ? Cette action ne peut pas être annulée.',
+    done: 'Passage effectué : {n} nouveaux alumni.',
+    noGrade: '{n} élève(s) sans classe ne bougeront pas : indiquez leur classe dans Membres.',
+  },
+  complete: {
+    title: 'Bienvenue chez les alumni !',
+    sub: 'Vous avez quitté le lycée : complétez votre compte d’alumni pour accéder au site.',
+    save: 'Accéder au site',
+    done: 'Compte complété, bienvenue !',
   },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',

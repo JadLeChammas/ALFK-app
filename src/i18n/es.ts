@@ -175,7 +175,7 @@ const es: Dict = {
     noContact: 'No hay mensajes', pendingSince: 'Registrado {when}',
     actions: {
       approve_publication: 'publicó el anuncio', reject_publication: 'rechazó el anuncio', approve_question: 'publicó una pregunta anónima', reject_question: 'rechazó una pregunta anónima',
-      approve: 'aprobó a', refuse: 'rechazó a', create_user: 'creó la cuenta de', change_role: 'cambió el rol de',
+      approve: 'aprobó a', refuse: 'rechazó a', create_user: 'creó la cuenta de', promote_students: 'pasó a los alumnos al curso siguiente', change_role: 'cambió el rol de',
       reset_password: 'restableció la contraseña de', delete_user: 'eliminó la cuenta de', create_event: 'creó el evento',
       delete_event: 'eliminó el evento', delete_photo: 'eliminó una foto de', create_publication: 'publicó',
       delete_publication: 'eliminó la publicación', open_reported_conversation: 'abrió la conversación denunciada', resolve_report: 'trató la denuncia',
@@ -659,6 +659,27 @@ const es: Dict = {
     openCircle: 'Círculo de honor',
     organisation: 'Organización',
     organisationPlaceholder: 'Ej.: Lycée Français du Koweït, Embajada de Francia',
+  },
+  grade: {
+    label: 'Curso',
+    '2nde': 'Seconde',
+    '1ere': 'Première',
+    Tle: 'Terminale',
+    none: 'Curso por indicar',
+  },
+  promote: {
+    title: 'Paso al curso siguiente',
+    sub: 'Nuevo curso: los de Terminale pasan a alumni (completan su cuenta antes de acceder al sitio), Première pasa a Terminale y Seconde a Première.',
+    button: 'Pasar a los alumnos',
+    confirm: '¿Pasar {tle} alumno(s) de Terminale a alumni, {first} de Première a Terminale y {second} de Seconde a Première? No se puede deshacer.',
+    done: 'Hecho: {n} nuevos alumni.',
+    noGrade: '{n} alumno(s) sin curso no cambiarán: indica su curso en Miembros.',
+  },
+  complete: {
+    title: '¡Bienvenido a los alumni!',
+    sub: 'Has terminado el liceo: completa tu cuenta de alumni para acceder al sitio.',
+    save: 'Acceder al sitio',
+    done: '¡Cuenta completada, bienvenido!',
   },
   uni: {
     pick: 'Elegir en la lista', searchPlaceholder: 'Escriba el nombre o la sigla (p. ej. I, ISEP, Sorbonne)…', inCity: 'En {city}',

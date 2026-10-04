@@ -1,14 +1,16 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { Switch, View } from 'react-native';
 
 import { AdminNav } from '@/components/AdminNav';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { CommunityStats } from '@/components/CommunityStats';
-import { Card, Row, Tap, type IconName } from '@/components/ui/primitives';
+import { Button, Card, Row, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { useStore } from '@/data/store';
+import type { Grade } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -89,6 +91,8 @@ export default function AdminDashboard() {
         />
       </Card>
 
+      <PromoteStudentsCard />
+
       <View style={{ gap: 16 }}>
         <Txt variant="h2">{d.admin.stats}</Txt>
         <CommunityStats />
@@ -99,3 +103,54 @@ export default function AdminDashboard() {
     </Screen>
   );
 }
+
+/**
+ * New school year: Terminale → Alumni (they complete their account before using the site),
+ * Première → Terminale, Seconde → Première.
+ */
+function PromoteStudentsCard() {
+  const { d, f } = useI18n();
+  const p = d.promote;
+  const { colors } = useTheme();
+  const { db, actions } = useStore();
+  const { confirm, toast } = useDialogs();
+  const [busy, setBusy] = useState(false);
+  const students = db.users.filter((u) => u.approved && u.role === 'eleve');
+  const count = (g: Grade) => students.filter((u) => u.grade === g).length;
+  const noGrade = students.filter((u) => !u.grade).length;
+  const total = count('Tle') + count('1ere') + count('2nde');
+
+  const run = async () => {
+    const ok = await confirm({ title: p.title, message: f(p.confirm, { tle: count('Tle'), first: count('1ere'), second: count('2nde') }), confirmLabel: p.button });
+    if (!ok) return;
+    setBusy(true);
+    const r = await actions.promoteStudents();
+    setBusy(false);
+    toast(r.ok ? f(p.done, { n: r.alumni }) : d.auth.errors.unknown, r.ok ? 'success' : 'danger');
+  };
+
+  return (
+    <Card style={{ gap: 14 }}>
+      <Row gap={14} style={{ alignItems: 'flex-start' }}>
+        <View style={{ width: 44, height: 44, borderRadius: radius.card, backgroundColor: colors.secondarySoft, alignItems: 'center', justifyContent: 'center' }}>
+          <Feather name="trending-up" size={19} color={colors.secondaryStrong} />
+        </View>
+        <View style={{ flex: 1, gap: 2 }}>
+          <Txt variant="bodyStrong">{p.title}</Txt>
+          <Txt variant="small" color="textMuted">{p.sub}</Txt>
+        </View>
+      </Row>
+      <Row gap={8} wrap>
+        {(['2nde', '1ere', 'Tle'] as Grade[]).map((g) => (
+          <View key={g} style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: colors.surfaceAlt }}>
+            <Txt variant="small" color="textMuted">{d.grade[g]}</Txt>
+            <Txt variant="bodyStrong">{count(g)}</Txt>
+          </View>
+        ))}
+      </Row>
+      {noGrade > 0 && <Txt variant="small" color="warning">{f(p.noGrade, { n: noGrade })}</Txt>}
+      <Button label={p.button} icon="trending-up" onPress={run} loading={busy} disabled={total === 0} style={{ alignSelf: 'flex-start' }} />
+    </Card>
+  );
+}
+

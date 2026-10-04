@@ -39,6 +39,7 @@ import type {
   Conversation,
   Db,
   Gender,
+  Grade,
   Institution,
   KeyDate,
   LfkEvent,
@@ -63,7 +64,7 @@ import type {
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
 
-const STORAGE_KEY = 'lfk.demo.db.v11';
+const STORAGE_KEY = 'lfk.demo.db.v12';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -112,9 +113,11 @@ export type SignUpInput = {
   otherSchools?: OtherSchool[];
   fields?: string[];
   schoolCountry?: string;
+  /** Students: their class. */
+  grade?: Grade;
 };
 
-export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools' | 'fields' | 'schoolCountry'>>;
+export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools' | 'fields' | 'schoolCountry' | 'needsCompletion'>>;
 
 const demoId = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 const makeId = (p: string) => (isRemote ? newId() : demoId(p));
@@ -353,6 +356,7 @@ function useStoreValue() {
               other_schools: input.otherSchools ?? [],
               fields_of_study: input.fields ?? [],
               school_country: input.schoolCountry ?? '',
+              grade: input.role === 'eleve' ? input.grade ?? '' : '',
             },
           },
         });
@@ -815,6 +819,43 @@ function useStoreValue() {
       const [numbered, user] = withRules(dbRef.current!, draft);
       commit(() => log({ ...numbered, users: [...numbered.users, user] }, 'create_user', fullName(user)));
       return { ok: true };
+    },
+    /** Students: set the class (admins, e.g. for students who signed up before classes existed). */
+    setGrade(id: string, grade: Grade) {
+      commit((d) => ({ ...d, users: d.users.map((x) => (x.id === id ? { ...x, grade } : x)) }));
+      if (supabase) send(supabase.from('profiles').update({ grade }).eq('id', id));
+    },
+    /**
+     * New school year: Terminale → Alumni (they fill in their account before using the site),
+     * Première → Terminale, Seconde → Première. One database call, all or nothing.
+     */
+    async promoteStudents(): Promise<{ ok: boolean; alumni: number; terminale: number; premiere: number }> {
+      if (supabase) {
+        const { data, error: e } = await supabase.rpc('promote_students');
+        if (e) return { ok: false, alumni: 0, terminale: 0, premiere: 0 };
+        await reload();
+        const r = (data ?? {}) as { alumni?: number; terminale?: number; premiere?: number };
+        return { ok: true, alumni: r.alumni ?? 0, terminale: r.terminale ?? 0, premiere: r.premiere ?? 0 };
+      }
+      const counts = { alumni: 0, terminale: 0, premiere: 0 };
+      commit((d) => {
+        let next = d;
+        for (const u of d.users) {
+          if (u.role !== 'eleve' || !u.grade) continue;
+          if (u.grade === 'Tle') {
+            counts.alumni++;
+            const [numbered, updated] = withRules(next, { ...u, role: 'alumni', grade: undefined, school: undefined, schoolCountry: undefined, situation: undefined, needsCompletion: true });
+            next = { ...numbered, users: numbered.users.map((x) => (x.id === u.id ? updated : x)) };
+          } else {
+            const grade: Grade = u.grade === '1ere' ? 'Tle' : '1ere';
+            if (grade === 'Tle') counts.terminale++;
+            else counts.premiere++;
+            next = { ...next, users: next.users.map((x) => (x.id === u.id ? { ...x, grade } : x)) };
+          }
+        }
+        return log(next, 'promote_students', '', counts);
+      });
+      return { ok: true, ...counts };
     },
     setFonction(id: string, fonction: string) {
       const value = fonction.trim() || undefined;

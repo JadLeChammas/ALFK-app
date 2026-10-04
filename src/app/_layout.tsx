@@ -55,6 +55,8 @@ function RootNavigator() {
   const recovery = !!session?.recovery && !!me;
   const signedIn = !!me && !recovery;
   const approved = signedIn && me.approved;
+  // A former Terminale student made alumni by an admin fills in the account first (completer.tsx).
+  const completing = approved && !!me.needsCompletion;
 
   const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
   const navTheme = { ...base, colors: { ...base.colors, background: colors.bg, card: colors.surface, text: colors.text, border: colors.border, primary: colors.primary } };
@@ -72,7 +74,10 @@ function RootNavigator() {
         <Stack.Protected guard={signedIn && !approved}>
           <Stack.Screen name="en-attente" />
         </Stack.Protected>
-        <Stack.Protected guard={approved}>
+        <Stack.Protected guard={completing}>
+          <Stack.Screen name="completer" />
+        </Stack.Protected>
+        <Stack.Protected guard={approved && !completing}>
           <Stack.Screen name="(app)" />
         </Stack.Protected>
         {/* Public pages, open with or without an account. */}

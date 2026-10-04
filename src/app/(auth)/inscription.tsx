@@ -21,7 +21,7 @@ import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import type { PickedDoc, PickedImage } from '@/data/remote';
 import { pickImages } from '@/lib/media';
 import { useStore, type AuthError } from '@/data/store';
-import type { Gender, OtherSchool, Role, Situation } from '@/data/types';
+import { GRADES, type Gender, type Grade, type OtherSchool, type Role, type Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { AvatarCropper } from '@/components/AvatarCropper';
@@ -45,7 +45,7 @@ export default function SignUp() {
     const [img] = await pickImages(false);
     if (img) setCropping(img);
   };
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', gender: 'F' as Gender, role: 'alumni' as Role, promo: '', school: '', city: '', country: 'FR', birth: '', dial: '+965', phoneNumber: '', fieldOfStudy: '', situation: 'student' as Situation, employer: '', jobTitle: '', grade: '' as Grade | '' });
   const [error, setError] = useState<AuthError | 'missing' | null>(null);
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const set = (k: keyof typeof form) => (v: string) => {
@@ -69,7 +69,7 @@ export default function SignUp() {
     if (!proof) return setError('proof');
     const promo = parseInt(form.promo, 10);
     setBusy(true);
-    const { birth, dial, phoneNumber, fieldOfStudy, situation, employer, jobTitle, ...rest } = form;
+    const { birth, dial, phoneNumber, fieldOfStudy, situation, employer, jobTitle, grade, ...rest } = form;
     const alumni = form.role === 'alumni';
     const working = alumni && situation === 'working';
     const r = await actions.signUp({
@@ -82,6 +82,7 @@ export default function SignUp() {
       jobTitle: working ? jobTitle.trim() || undefined : undefined,
       promo: Number.isFinite(promo) ? promo : undefined,
       school: form.role === 'eleve' ? LFK_SCHOOL : form.school || undefined,
+      grade: form.role === 'eleve' && grade ? grade : undefined,
       city: form.city || undefined,
       birthDate: parseFrDate(birth) ?? undefined,
       phone: formatPhone(dial, phoneNumber),
@@ -171,6 +172,12 @@ export default function SignUp() {
       ) : step === 2 ? (
         <View style={{ gap: 16 }}>
           <Input label={d.auth.promo} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} placeholder="2020" />
+          {form.role === 'eleve' && (
+            <View style={{ gap: 8 }}>
+              <Txt variant="smallStrong" color="textMuted">{d.grade.label}</Txt>
+              <Segmented value={form.grade} onChange={(g) => { setForm((f) => ({ ...f, grade: g })); setError(null); }} options={GRADES.map((g) => ({ value: g, label: d.grade[g] }))} />
+            </View>
+          )}
           {form.role === 'alumni' && (
             <View style={{ gap: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.situation.label}</Txt>
@@ -236,6 +243,7 @@ export default function SignUp() {
                 const working = alumni && form.situation === 'working';
                 const year = parseInt(form.promo, 10);
                 const lacking = [
+                  form.role === 'eleve' && !form.grade && d.grade.label,
                   !(year >= 1960 && year <= new Date().getFullYear() + 6) && d.auth.promo,
                   !form.country && d.auth.country,
                   !form.city.trim() && d.auth.city,

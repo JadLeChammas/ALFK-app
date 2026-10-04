@@ -35,6 +35,7 @@ type Body = {
   fonction?: string;
   birthDate?: string;
   bureauCode?: string;
+  grade?: string;
   /** signup-upload: which files are coming (their extensions). */
   proofExt?: string;
   photoExt?: string;
@@ -136,7 +137,7 @@ export async function POST(request: Request) {
 
   switch (body.action) {
     case 'create-user': {
-      const { email, password, firstName, lastName, gender, promo, phone, country, city, school, fonction, birthDate, bureauCode } = body;
+      const { email, password, firstName, lastName, gender, promo, phone, country, city, school, fonction, birthDate, bureauCode, grade } = body;
       const role = body.role && ROLES.includes(body.role) ? body.role : 'alumni';
       if (!email || !password || !firstName || !lastName) return json(400, { error: 'missing' });
       if (password.length < 8) return json(400, { error: 'weak_password' });
@@ -170,6 +171,7 @@ export async function POST(request: Request) {
           school: school ?? '',
           phone: phone ?? '',
           birth_date: birthDate ?? '',
+          grade: role === 'eleve' ? grade ?? '' : '',
         },
         // Trusted fields: only this server can set app metadata. The trigger reads them to create an
         // approved account with its role, position and Bureau code; the Alumni number is assigned there.

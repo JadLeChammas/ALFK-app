@@ -15,7 +15,7 @@ import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
 import { formatPhone, isValidPhoneNumber, parseFrDate, requiresContact } from '@/data/members';
 import { fullName, useMe, useStore, type AuthError } from '@/data/store';
-import type { Gender, Role, User } from '@/data/types';
+import { GRADES, type Gender, type Grade, type Role, type User } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -104,6 +104,7 @@ export default function ManageMembers() {
                 <View style={{ flex: 1, gap: 4 }}>
                   <RoleBadge role={u.role} />
                   {u.role === 'admin' && u.bureauCode && <Txt variant="small" color="textSubtle">{d.member.bureauCode} {u.bureauCode}</Txt>}
+                  {u.role === 'eleve' && <Txt variant="small" color={u.grade ? 'textSubtle' : 'warning'}>{u.grade ? d.grade[u.grade] : d.grade.none}</Txt>}
                 </View>
                 <Txt variant="small" color="textMuted" style={{ width: 90 }}>{u.role !== 'honneur' && u.alumniNumber ? u.alumniNumber : '—'}</Txt>
                 <Txt variant="small" color="textMuted" style={{ width: 90 }}>{u.promo ?? '—'}</Txt>
@@ -147,6 +148,19 @@ export default function ManageMembers() {
                     ))}
                   </Row>
                 </View>
+                {db.users.find((u) => u.id === editing.id)?.role === 'eleve' && (
+                  <View style={{ gap: 8 }}>
+                    <Txt variant="smallStrong" color="textMuted">{d.grade.label}</Txt>
+                    <Segmented
+                      value={db.users.find((u) => u.id === editing.id)?.grade ?? ('' as Grade)}
+                      onChange={(g) => {
+                        actions.setGrade(editing.id, g);
+                        toast(d.common.saved);
+                      }}
+                      options={GRADES.map((g) => ({ value: g, label: d.grade[g] }))}
+                    />
+                  </View>
+                )}
                 {['honneur', 'admin'].includes(db.users.find((u) => u.id === editing.id)?.role ?? '') && (
                   <Button
                     label={d.admin.editFonction}
@@ -197,7 +211,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
   const { colors } = useTheme();
   const { actions } = useStore();
   const { toast } = useDialogs();
-  const blank = { firstName: '', lastName: '', email: '', password: '', dial: '+965', phoneNumber: '', birth: '', bureauCode: '', promo: '', fonction: '', gender: 'F' as Gender, role: 'alumni' as Role, country: 'FR' };
+  const blank = { firstName: '', lastName: '', email: '', password: '', dial: '+965', phoneNumber: '', birth: '', bureauCode: '', promo: '', fonction: '', gender: 'F' as Gender, role: 'alumni' as Role, country: 'FR', grade: '' as Grade | '' };
   const [form, setForm] = useState(blank);
   const [error, setError] = useState<AuthError | null>(null);
   const [detail, setDetail] = useState<string | null>(null);
@@ -213,7 +227,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
     if (birthDate === null || (mandatory && !birthDate)) return setError('birth_date');
     const hasPhone = form.phoneNumber.trim() !== '';
     if ((mandatory || hasPhone) && !isValidPhoneNumber(form.phoneNumber)) return setError('phone');
-    const { dial, phoneNumber, birth, bureauCode, ...rest } = form;
+    const { dial, phoneNumber, birth, bureauCode, grade, ...rest } = form;
     setBusy(true);
     const r = await actions.createUser({
       ...rest,
@@ -222,6 +236,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
       birthDate,
       phone: hasPhone ? formatPhone(dial, phoneNumber) : undefined,
       bureauCode: form.role === 'admin' && bureauCode.trim() ? bureauCode.trim() : undefined,
+      grade: form.role === 'eleve' && grade ? grade : undefined,
     });
     setBusy(false);
     if (!r.ok) {
@@ -266,6 +281,12 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
                 {ROLES.map((r) => <Chip key={r} label={d.roles[r]} active={form.role === r} onPress={() => setForm((x) => ({ ...x, role: r }))} />)}
               </Row>
             </View>
+            {form.role === 'eleve' && (
+              <View style={{ gap: 8 }}>
+                <Txt variant="smallStrong" color="textMuted">{d.grade.label}</Txt>
+                <Segmented value={form.grade} onChange={(g) => setForm((x) => ({ ...x, grade: g }))} options={GRADES.map((g) => ({ value: g, label: d.grade[g] }))} />
+              </View>
+            )}
             {form.role === 'honneur' && <Input label={d.admin.fonctionField} icon="briefcase" value={form.fonction} onChangeText={set('fonction')} />}
             {form.role === 'admin' && <Input label={d.admin.bureauCodeField} icon="shield" value={form.bureauCode} onChangeText={(v) => set('bureauCode')(v.replace(/\D/g, '').slice(0, 4))} keyboardType="number-pad" maxLength={4} />}
             {error && error !== 'phone' && error !== 'birth_date' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}{error === 'unknown' && detail ? ` (${detail})` : ''}</Txt>}

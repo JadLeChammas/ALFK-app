@@ -176,7 +176,7 @@ const pirate: Dict = {
     noContact: 'No hails', pendingSince: 'Signed on {when}',
     actions: {
       approve_publication: 'nailed to the mast the proclamation', reject_publication: 'threw overboard the proclamation', approve_question: 'posted a secret question', reject_question: 'made a secret question walk th\' plank',
-      approve: 'welcomed aboard', refuse: 'sent packin’', create_user: 'recruited', change_role: 'changed the rank o’',
+      approve: 'welcomed aboard', refuse: 'sent packin’', create_user: 'recruited', promote_students: 'moved th\' crew up a deck', change_role: 'changed the rank o’',
       reset_password: 'reset the secret word o’', delete_user: 'scuttled the account o’', create_event: 'planned the shore leave',
       delete_event: 'scuttled the shore leave', delete_photo: 'scuttled a portrait from', create_publication: 'wrote in the log',
       delete_publication: 'tore out the log entry', open_reported_conversation: 'opened the reported parley', resolve_report: 'handled the report',
@@ -660,6 +660,27 @@ const pirate: Dict = {
     openCircle: 'Captains\' circle',
     organisation: 'Ship (organisation)',
     organisationPlaceholder: 'E.g. Lycée Français du Koweït, French Embassy',
+  },
+  grade: {
+    label: 'Class',
+    '2nde': 'Seconde',
+    '1ere': 'Première',
+    Tle: 'Terminale',
+    none: 'Class not set',
+  },
+  promote: {
+    title: 'Up a deck',
+    sub: 'New school year: Terminale hands become alumni (they fill in their papers afore boardin\'), Première moves to Terminale an\' Seconde to Première.',
+    button: 'Move th\' crew up',
+    confirm: 'Move {tle} Terminale hand(s) to alumni, {first} from Première to Terminale an\' {second} from Seconde to Première? No goin\' back.',
+    done: 'Done: {n} new alumni.',
+    noGrade: '{n} hand(s) without a class stay put: set their class in Members.',
+  },
+  complete: {
+    title: 'Welcome to th\' alumni crew!',
+    sub: 'Ye\'ve left th\' lycée: fill in yer alumni papers to board th\' site.',
+    save: 'Board th\' site',
+    done: 'Papers complete, welcome aboard!',
   },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

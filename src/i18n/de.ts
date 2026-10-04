@@ -175,7 +175,7 @@ const de: Dict = {
     noContact: 'Keine Nachrichten', pendingSince: 'Registriert {when}',
     actions: {
       approve_publication: 'hat die Anzeige veröffentlicht', reject_publication: 'hat die Anzeige abgelehnt', approve_question: 'hat eine anonyme Frage veröffentlicht', reject_question: 'hat eine anonyme Frage abgelehnt',
-      approve: 'hat freigegeben', refuse: 'hat abgelehnt', create_user: 'hat das Konto erstellt von', change_role: 'hat die Rolle geändert von',
+      approve: 'hat freigegeben', refuse: 'hat abgelehnt', create_user: 'hat das Konto erstellt von', promote_students: 'hat die Schüler ins nächste Schuljahr versetzt', change_role: 'hat die Rolle geändert von',
       reset_password: 'hat das Passwort zurückgesetzt von', delete_user: 'hat das Konto gelöscht von', create_event: 'hat die Veranstaltung erstellt',
       delete_event: 'hat die Veranstaltung gelöscht', delete_photo: 'hat ein Foto gelöscht aus', create_publication: 'hat veröffentlicht',
       delete_publication: 'hat den Beitrag gelöscht', open_reported_conversation: 'hat die gemeldete Unterhaltung geöffnet', resolve_report: 'hat die Meldung bearbeitet',
@@ -659,6 +659,27 @@ const de: Dict = {
     openCircle: 'Ehrenkreis',
     organisation: 'Organisation',
     organisationPlaceholder: 'Z. B. Lycée Français du Koweït, Französische Botschaft',
+  },
+  grade: {
+    label: 'Klasse',
+    '2nde': 'Seconde (10. Klasse)',
+    '1ere': 'Première (11. Klasse)',
+    Tle: 'Terminale (12. Klasse)',
+    none: 'Klasse fehlt',
+  },
+  promote: {
+    title: 'Versetzung ins nächste Schuljahr',
+    sub: 'Neues Schuljahr: Terminale wird Alumni (sie vervollständigen ihr Konto vor dem Zugang), Première wird Terminale, Seconde wird Première.',
+    button: 'Schüler versetzen',
+    confirm: '{tle} Schüler der Terminale zu Alumni, {first} von Première zu Terminale und {second} von Seconde zu Première versetzen? Dies kann nicht rückgängig gemacht werden.',
+    done: 'Erledigt: {n} neue Alumni.',
+    noGrade: '{n} Schüler ohne Klasse bleiben unverändert: Klasse unter Mitglieder eintragen.',
+  },
+  complete: {
+    title: 'Willkommen bei den Alumni!',
+    sub: 'Du hast das Lycée verlassen: Vervollständige dein Alumni-Konto, um die Seite zu nutzen.',
+    save: 'Zur Seite',
+    done: 'Konto vervollständigt, willkommen!',
   },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',

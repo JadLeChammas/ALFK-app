@@ -1,4 +1,7 @@
 export type Role = 'alumni' | 'eleve' | 'honneur' | 'admin';
+/** A student's class at the LFK: Seconde, Première, Terminale. */
+export type Grade = '2nde' | '1ere' | 'Tle';
+export const GRADES: Grade[] = ['2nde', '1ere', 'Tle'];
 export type Situation = 'student' | 'working';
 /** F, M, or N = « Je préfère ne pas dire ». */
 export type Gender = 'F' | 'M' | 'N';
@@ -38,6 +41,10 @@ export type User = {
   bureauCode?: string;
   /** Proof of schooling sent at sign-up (private: only admins can open it). Required before approval. */
   proof?: { path: string; name: string; mimeType?: string; uploadedAt: string };
+  /** Students: their class (moved up each year by an admin, see promoteStudents). */
+  grade?: Grade;
+  /** A former Terminale student just made alumni: fills in their account before using the site. */
+  needsCompletion?: boolean;
   /** Accounts created by an admin need no proof. */
   createdByAdmin?: boolean;
   /** Fields of study (several; « other:… » = typed by the member), see data/fields.ts. */
@@ -133,6 +140,7 @@ export type AdminLogAction =
   | 'approve'
   | 'refuse'
   | 'create_user'
+  | 'promote_students'
   | 'change_role'
   | 'reset_password'
   | 'delete_user'
@@ -148,7 +156,7 @@ export type AdminLogAction =
   | 'approve_question'
   | 'reject_question';
 
-export type AdminLog = { id: string; actorId: string; action: AdminLogAction; target: string; meta?: { role?: Role }; createdAt: string };
+export type AdminLog = { id: string; actorId: string; action: AdminLogAction; target: string; meta?: { role?: Role; alumni?: number; terminale?: number; premiere?: number }; createdAt: string };
 
 export type NotificationTemplate = 'message' | 'pendingOne' | 'pendingMany' | 'approved' | 'birthday' | 'photos' | 'publication' | 'publicationApproved' | 'publicationRejected' | 'publicationToReview' | 'questionToReview' | 'questionPublished' | 'questionRejected' | 'questionNew' | 'questionAnswered';
 

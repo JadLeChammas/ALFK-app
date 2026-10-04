@@ -201,7 +201,7 @@ export function createSeed(now = new Date()): Db {
   add({ firstName: 'Lucas', lastName: 'Bernard', gender: 'M', role: 'alumni', promo: 2020, school: 'ESSEC Business School', city: 'Paris', country: 'FR', birthDate: '2002-07-14', avatar: portrait('M', 75) });
   add({ firstName: 'Chloé', lastName: 'Dubois', gender: 'F', role: 'alumni', promo: 2020, school: 'École polytechnique', city: 'Paris', country: 'FR', birthDate: '2002-05-09', avatar: portrait('F', 26) });
   add({ firstName: 'Julie', lastName: 'Martin', gender: 'F', role: 'alumni', promo: 2019, school: 'Sciences Po', city: 'Paris', country: 'FR', birthDate: '2001-09-01', avatar: portrait('F', 50) });
-  const nour = add({ firstName: 'Nour', lastName: 'Haddad', gender: 'F', role: 'eleve', promo: 2027, school: 'Lycée Français du Koweït', city: 'Koweït City', country: 'KW', birthDate: birthdayIn(24, 2009), avatar: portrait('F', 90), email: DEMO_ACCOUNTS.eleve });
+  const nour = add({ firstName: 'Nour', lastName: 'Haddad', gender: 'F', role: 'eleve', grade: 'Tle', promo: 2027, school: 'Lycée Français du Koweït', city: 'Koweït City', country: 'KW', birthDate: birthdayIn(24, 2009), avatar: portrait('F', 90), email: DEMO_ACCOUNTS.eleve });
   const karim = add({ firstName: 'Karim', lastName: 'Nassar', gender: 'M', role: 'admin', promo: 2016, school: 'American University of Beirut', city: 'Koweït City', country: 'KW', birthDate: '1998-04-18', avatar: portrait('M', 8) });
   // School leadership — honorary members (see data/permissions.ts).
   const proviseur = add({
