@@ -53,7 +53,7 @@ export function LeadersTimeline({ kind, editable, title }: { kind: LeaderKind; e
                     </View>
                     <Txt variant="small" color="textSubtle" style={{ fontVariant: ['tabular-nums'] }}>{years(x)}</Txt>
                     <Txt variant="bodyStrong" align="center" numberOfLines={2}>{x.name}</Txt>
-                    {!!x.description && <Txt variant="small" color="textMuted" align="center">{x.description}</Txt>}
+                    {!!x.description && <Txt variant="small" color="primary" align="center">{x.description}</Txt>}
                     {current && <Badge label={l.current} tone="secondary" />}
                     {editable && (
                       <Row gap={4}>
