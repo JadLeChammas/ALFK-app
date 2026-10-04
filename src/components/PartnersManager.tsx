@@ -12,6 +12,7 @@ import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
+import { LEADER_KINDS, useSchoolLeaders } from '@/data/schoolLeaders';
 import { isHiDev, partnerLogo, sortPartners } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -27,6 +28,9 @@ export function PartnersManager() {
   const me = useMe();
   const admin = me.role === 'admin';
   const people = useApprovedMembers().filter((u) => u.role === 'honneur');
+  // The current leadership, from the timelines of the Bureau page (no end year = in office now).
+  const { byKind } = useSchoolLeaders();
+  const leaders = LEADER_KINDS.flatMap((k) => byKind(k).filter((x) => !x.to));
   const institutions = sortPartners(db.institutions);
   // Hi Dev always closes the list: the others move among themselves.
   const movableCount = institutions.filter((x) => !isHiDev(x)).length;
@@ -74,8 +78,22 @@ export function PartnersManager() {
       </View>
 
       <View style={{ gap: 14 }}>
-        <SectionHeader title={d.honorary.people} icon="star" count={String(people.length)} />
-        {people.length === 0 ? (
+        <SectionHeader title={d.honorary.people} icon="star" count={String(leaders.length + people.length)} />
+        {leaders.length > 0 && (
+          <Grid min={260} gap={16}>
+            {leaders.map((x) => (
+              <Card key={x.id} style={{ gap: 12, alignItems: 'center' }}>
+                <Avatar uri={x.photo} name={x.name} size={72} />
+                <View style={{ alignItems: 'center', gap: 4 }}>
+                  <Txt variant="h3" align="center">{x.name}</Txt>
+                  <Txt variant="small" color="textMuted" align="center">{d.leaders.kinds[x.kind]}</Txt>
+                  {!!x.from && <Txt variant="small" color="textSubtle" align="center">{`${d.leaders.since} ${x.from}`}</Txt>}
+                </View>
+              </Card>
+            ))}
+          </Grid>
+        )}
+        {leaders.length + people.length === 0 ? (
           <EmptyState icon="star" title={d.common.noResults} />
         ) : (
           <Grid min={260} gap={16}>
