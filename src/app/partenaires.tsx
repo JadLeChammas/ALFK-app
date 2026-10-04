@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Linking, Platform, Pressable, View } from 'react-native';
 
+import { LeadersTimeline } from '@/components/LeadersTimeline';
 import { PartnersManager } from '@/components/PartnersManager';
 import { AppShell } from '@/components/shell/AppShell';
 import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
@@ -52,6 +53,12 @@ function PublicPartners() {
 
       <Section style={{ paddingTop: 0 }}>
         <PartnerList partners={institutions} empty={p.empty} />
+      </Section>
+
+      {/* The heads of the LFK through the years (hidden while there is nobody to show). */}
+      <Section style={{ paddingTop: 0, gap: 40 }}>
+        <LeadersTimeline kind="proviseur" />
+        <LeadersTimeline kind="directeur" />
       </Section>
 
       <Section tone="blue">

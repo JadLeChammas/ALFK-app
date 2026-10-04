@@ -12,6 +12,7 @@ import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
+import { LeadersTimeline } from '@/components/LeadersTimeline';
 import { isHiDev, partnerLogo, sortPartners } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -92,6 +93,10 @@ export function PartnersManager() {
           </Grid>
         )}
       </View>
+
+      {/* The heads of the LFK through the years. */}
+      <LeadersTimeline kind="proviseur" editable={admin} />
+      <LeadersTimeline kind="directeur" editable={admin} />
 
       <InstitutionForm visible={adding} onClose={() => setAdding(false)} />
       {editing && <InstitutionForm visible editing={editing} onClose={() => setEditing(null)} />}

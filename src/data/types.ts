@@ -119,7 +119,7 @@ export type KeyDate = { id: string; title: string; month: number; day: number; y
 /** `placeAliases`: admin merges of universities / companies, JSON { alias key: place key } (see data/places.ts). */
 /** `guides`: the country guides edited by admins, JSON (see data/guide.ts); `guideFrance` is the older France-only one. */
 /** `credits`: the end credits edited by admins, JSON (see data/credits.ts). */
-export type AppSettings = { whatsappCommunity?: string; placeAliases?: string; guideFrance?: string; guides?: string; credits?: string; lfkStory?: string; showDemo?: string; emailTemplates?: string; emailSignature?: string };
+export type AppSettings = { whatsappCommunity?: string; placeAliases?: string; guideFrance?: string; guides?: string; credits?: string; lfkStory?: string; showDemo?: string; emailTemplates?: string; emailSignature?: string; schoolLeaders?: string };
 
 export type Conversation = {
   id: string;

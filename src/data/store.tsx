@@ -876,6 +876,12 @@ function useStoreValue() {
       commit((d) => ({ ...d, settings: { ...d.settings, emailTemplates: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'emailTemplates', value: value ?? null }));
     },
+    /** Admins: the proviseurs' and directors' timelines (data/schoolLeaders.ts). */
+    saveSchoolLeaders(list: object[]) {
+      const value = list.length ? JSON.stringify(list) : undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, schoolLeaders: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'schoolLeaders', value: value ?? null }));
+    },
     saveEmailSignature(text: string) {
       const value = text.trim() || undefined;
       commit((d) => ({ ...d, settings: { ...d.settings, emailSignature: value } }));
