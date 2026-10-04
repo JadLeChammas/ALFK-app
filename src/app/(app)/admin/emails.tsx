@@ -14,7 +14,8 @@ import { useI18n } from '@/i18n';
 import { pickAttachment } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const AUDIENCES: Role[] = ['alumni', 'eleve', 'honneur', 'admin'];
+// Honorary members do not receive these emails.
+const AUDIENCES: Role[] = ['alumni', 'eleve', 'admin'];
 
 /**
  * Admin → Emails: write an email to groups of members (with attachments; logo and signature added),

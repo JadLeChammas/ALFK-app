@@ -128,7 +128,8 @@ async function sendFromAdmin(admin: SupabaseClient, me: Recipient, body: Body) {
   if (body.test) {
     recipients = [me];
   } else {
-    const roles = (body.audience ?? []).filter((r) => ['alumni', 'eleve', 'honneur', 'admin'].includes(r));
+    // Honorary members do not receive the admins' emails.
+    const roles = (body.audience ?? []).filter((r) => ['alumni', 'eleve', 'admin'].includes(r));
     if (!roles.length) return json(400, { error: 'no_audience' });
     const { data } = await admin.from('profiles').select(COLUMNS).eq('approved', true).in('role', roles);
     recipients = (data ?? []).filter((r) => r.role === 'admin' || r.marketing_opt_in) as Recipient[];
