@@ -725,8 +725,8 @@ const ja: Dict = {
     unsubError: 'このリンクは無効か、すでに使用されています。',
   },
   leaders: {
-    titles: { proviseur: '歴代リセ校長', directeur: '歴代小学校校長' },
-    kinds: { proviseur: 'リセ校長', directeur: '小学校校長' },
+    titles: { proviseur: '歴代リセ校長', directeur: '歴代小学校校長', cpe: '歴代 CPE（生活指導主任）' },
+    kinds: { proviseur: 'リセ校長', directeur: '小学校校長', cpe: 'CPE' },
     add: '追加',
     edit: '編集',
     empty: 'まだいません：最初の肖像を追加してください。',

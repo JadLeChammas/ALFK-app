@@ -726,8 +726,8 @@ const pirate: Dict = {
     unsubError: 'This link ain\'t valid or was already used.',
   },
   leaders: {
-    titles: { proviseur: 'Th\' lycée\'s captains (proviseurs)', directeur: 'Th\' primary school\'s captains' },
-    kinds: { proviseur: 'Proviseur', directeur: 'Primary captain' },
+    titles: { proviseur: 'Th\' lycée\'s captains (proviseurs)', directeur: 'Th\' primary school\'s captains', cpe: 'Th’ lycée’s bosuns (CPE)' },
+    kinds: { proviseur: 'Proviseur', directeur: 'Primary captain', cpe: 'CPE' },
     add: 'Add',
     edit: 'Edit',
     empty: 'Nobody aboard yet: add th\' first portrait.',

@@ -725,8 +725,8 @@ const de: Dict = {
     unsubError: 'Dieser Link ist ungültig oder wurde bereits verwendet.',
   },
   leaders: {
-    titles: { proviseur: 'Die Schulleiter des Lycée', directeur: 'Die Leiter der Grundschule' },
-    kinds: { proviseur: 'Schulleiter (Proviseur)', directeur: 'Grundschulleiter' },
+    titles: { proviseur: 'Die Schulleiter des Lycée', directeur: 'Die Leiter der Grundschule', cpe: 'Die CPE des Lycée' },
+    kinds: { proviseur: 'Schulleiter (Proviseur)', directeur: 'Grundschulleiter', cpe: 'CPE' },
     add: 'Hinzufügen',
     edit: 'Bearbeiten',
     empty: 'Noch niemand: Fügen Sie das erste Porträt hinzu.',

@@ -725,8 +725,8 @@ const it: Dict = {
     unsubError: 'Questo link non è valido o è già stato usato.',
   },
   leaders: {
-    titles: { proviseur: 'I presidi del liceo', directeur: 'I direttori della primaria' },
-    kinds: { proviseur: 'Preside', directeur: 'Direttore della primaria' },
+    titles: { proviseur: 'I presidi del liceo', directeur: 'I direttori della primaria', cpe: 'I CPE del liceo' },
+    kinds: { proviseur: 'Preside', directeur: 'Direttore della primaria', cpe: 'CPE' },
     add: 'Aggiungi',
     edit: 'Modifica',
     empty: 'Ancora nessuno: aggiungi il primo ritratto.',

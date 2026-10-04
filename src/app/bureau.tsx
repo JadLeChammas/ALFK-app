@@ -27,7 +27,7 @@ export default function Board() {
   const { me } = useStore();
   const admin = me?.role === 'admin' && me.approved;
   const { byKind } = useSchoolLeaders();
-  const hasLeaders = byKind('proviseur').length + byKind('directeur').length > 0;
+  const hasLeaders = byKind('proviseur').length + byKind('directeur').length + byKind('cpe').length > 0;
   const b = d.site.bureau;
   // The Bureau only (no honorary members): names, role titles and photos (see public_overview),
   // in Bureau-code order — the president first.
@@ -54,6 +54,7 @@ export default function Board() {
           <View style={{ gap: 40 }}>
             <LeadersTimeline kind="proviseur" editable={admin} />
             <LeadersTimeline kind="directeur" editable={admin} />
+            <LeadersTimeline kind="cpe" editable={admin} />
           </View>
         </Section>
       )}

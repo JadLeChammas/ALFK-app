@@ -725,8 +725,8 @@ const es: Dict = {
     unsubError: 'Este enlace no es válido o ya se ha usado.',
   },
   leaders: {
-    titles: { proviseur: 'Los directores del liceo (proviseurs)', directeur: 'Los directores de primaria' },
-    kinds: { proviseur: 'Proviseur', directeur: 'Director de primaria' },
+    titles: { proviseur: 'Los directores del liceo (proviseurs)', directeur: 'Los directores de primaria', cpe: 'Los CPE del liceo' },
+    kinds: { proviseur: 'Proviseur', directeur: 'Director de primaria', cpe: 'CPE' },
     add: 'Añadir',
     edit: 'Modificar',
     empty: 'Nadie por ahora: añada el primer retrato.',

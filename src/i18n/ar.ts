@@ -725,8 +725,8 @@ const ar: Dict = {
     unsubError: 'هذا الرابط غير صالح أو استُخدم من قبل.',
   },
   leaders: {
-    titles: { proviseur: 'مديرو الثانوية', directeur: 'مديرو المرحلة الابتدائية' },
-    kinds: { proviseur: 'مدير الثانوية', directeur: 'مدير الابتدائية' },
+    titles: { proviseur: 'مديرو الثانوية', directeur: 'مديرو المرحلة الابتدائية', cpe: 'مستشارو التربية الرئيسيون' },
+    kinds: { proviseur: 'مدير الثانوية', directeur: 'مدير الابتدائية', cpe: 'مستشار تربية رئيسي' },
     add: 'إضافة',
     edit: 'تعديل',
     empty: 'لا أحد بعد: أضف أول صورة.',

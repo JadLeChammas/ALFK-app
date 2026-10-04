@@ -725,8 +725,8 @@ const zh: Dict = {
     unsubError: '此链接无效或已被使用。',
   },
   leaders: {
-    titles: { proviseur: '历任高中校长', directeur: '历任小学校长' },
-    kinds: { proviseur: '高中校长', directeur: '小学校长' },
+    titles: { proviseur: '历任高中校长', directeur: '历任小学校长', cpe: '历任教育总顾问 (CPE)' },
+    kinds: { proviseur: '高中校长', directeur: '小学校长', cpe: 'CPE' },
     add: '添加',
     edit: '编辑',
     empty: '暂无：添加第一张肖像。',

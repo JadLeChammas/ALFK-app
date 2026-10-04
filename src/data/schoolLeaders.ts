@@ -3,12 +3,12 @@ import { useMemo } from 'react';
 import { usePublicSetting } from './publicSettings';
 
 /**
- * The heads of the LFK through the years: the lycée's proviseurs and the primary school's directors,
- * shown as two timelines of round portraits (Partners / honorary members page, public).
+ * The heads of the LFK through the years: the lycée's proviseurs, the primary school's directors and
+ * the CPE (conseillers principaux d'éducation), shown as timelines of round portraits (Partners / honorary members page, public).
  * Saved by the admins as JSON in app_settings (`schoolLeaders`), readable by visitors (migration 028).
  */
-export type LeaderKind = 'proviseur' | 'directeur';
-export const LEADER_KINDS: LeaderKind[] = ['proviseur', 'directeur'];
+export type LeaderKind = 'proviseur' | 'directeur' | 'cpe';
+export const LEADER_KINDS: LeaderKind[] = ['proviseur', 'directeur', 'cpe'];
 export type SchoolLeader = {
   id: string;
   kind: LeaderKind;

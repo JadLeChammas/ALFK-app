@@ -723,8 +723,8 @@ const fr = {
     unsubError: 'Ce lien n’est pas valide ou a déjà été utilisé.',
   },
   leaders: {
-    titles: { proviseur: 'Les proviseurs du lycée', directeur: 'Les directeurs du primaire' },
-    kinds: { proviseur: 'Proviseur', directeur: 'Directeur du primaire' },
+    titles: { proviseur: 'Les proviseurs du lycée', directeur: 'Les directeurs du primaire', cpe: 'Les CPE du lycée' },
+    kinds: { proviseur: 'Proviseur', directeur: 'Directeur du primaire', cpe: 'CPE' },
     add: 'Ajouter',
     edit: 'Modifier',
     empty: 'Personne pour l’instant : ajoutez le premier portrait.',

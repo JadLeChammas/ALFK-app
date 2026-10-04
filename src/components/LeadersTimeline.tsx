@@ -34,7 +34,7 @@ export function LeadersTimeline({ kind, editable, title }: { kind: LeaderKind; e
 
   return (
     <View style={{ gap: 16 }}>
-      <SectionHeader title={title ?? l.titles[kind]} icon={kind === 'proviseur' ? 'award' : 'book-open'} count={String(list.length)} action={editable ? l.add : undefined} onAction={editable ? () => setForm('new') : undefined} />
+      <SectionHeader title={title ?? l.titles[kind]} icon={kind === 'proviseur' ? 'award' : kind === 'cpe' ? 'users' : 'book-open'} count={String(list.length)} action={editable ? l.add : undefined} onAction={editable ? () => setForm('new') : undefined} />
       {list.length === 0 ? (
         <Txt variant="small" color="textSubtle">{l.empty}</Txt>
       ) : (
@@ -44,7 +44,8 @@ export function LeadersTimeline({ kind, editable, title }: { kind: LeaderKind; e
             <View style={{ position: 'absolute', left: size / 2, right: size / 2, top: 8 + size / 2, height: 2, backgroundColor: colors.border }} />
             <Row gap={isMobile ? 16 : 28} style={{ alignItems: 'flex-start' }}>
               {list.map((x) => {
-                const current = !x.to && !!x.from;
+                // No end year = in office now (even when the start year is unknown).
+                const current = !x.to;
                 return (
                   <View key={x.id} style={{ width: size + 36, alignItems: 'center', gap: 8 }}>
                     <View style={{ padding: 3, borderRadius: size, backgroundColor: current ? colors.primary : colors.bg, borderWidth: current ? 0 : 2, borderColor: colors.border }}>
