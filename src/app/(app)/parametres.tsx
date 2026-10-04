@@ -71,7 +71,7 @@ export default function Settings() {
                 key={t.value}
                 onPress={() => setPreference(t.value)}
                 accessibilityRole="radio"
-                accessibilityState={{ checked: active }}
+                aria-checked={active}
                 style={{ borderRadius: radius.hero, borderWidth: 2, borderColor: active ? colors.primary : colors.border, padding: isMobile ? 6 : 10, gap: 10, backgroundColor: colors.surface, height: '100%' }}
                 hoverStyle={!active && { borderColor: colors.borderStrong }}>
                 <ThemePreview mode={t.value} />
@@ -95,7 +95,7 @@ export default function Settings() {
                 key={l.code}
                 onPress={() => setLang(l.code)}
                 accessibilityRole="radio"
-                accessibilityState={{ checked: active }}
+                aria-checked={active}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: isMobile ? 14 : 16, borderRadius: radius.card, borderWidth: 2, borderColor: active ? colors.primary : colors.border, backgroundColor: colors.surface }}
                 hoverStyle={!active && { borderColor: colors.borderStrong }}>
                 <Flag code={l.country} size={20} />

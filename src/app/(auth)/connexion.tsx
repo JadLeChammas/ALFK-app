@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { Link, router } from 'expo-router';
-import { useState } from 'react';
-import { Platform, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Platform, View, type TextInput } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
 import { Button, Divider, Input, Row, Tap } from '@/components/ui/primitives';
@@ -9,7 +9,7 @@ import { Txt } from '@/components/ui/Txt';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@/data/seed';
 import { useStore, type AuthError } from '@/data/store';
 import { useDemoVisible } from '@/data/demoSetting';
-import { enterDemo, getRemember, isDemoForced, setRemember } from '@/lib/supabase';
+import { enterDemo, getRemember, getRememberedEmail, isDemoForced, setRemember, setRememberedEmail } from '@/lib/supabase';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -18,7 +18,8 @@ export default function SignIn() {
   const { d } = useI18n();
   const { colors } = useTheme();
   const { actions, isRemote } = useStore();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(getRememberedEmail);
+  const passwordRef = useRef<TextInput>(null);
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
   const [remember, setRememberState] = useState(getRemember);
@@ -31,6 +32,7 @@ export default function SignIn() {
     const r = await actions.signIn(e, p);
     setBusy(false);
     if (!r.ok) setError(r.error);
+    else setRememberedEmail(remember ? e.trim() : null);
   };
 
   const demos: [string, string][] = [
@@ -73,14 +75,33 @@ export default function SignIn() {
         )
       }>
       <View style={{ gap: 16 }}>
-        <Input label={d.auth.email} icon="mail" value={email} onChangeText={(v) => { setEmail(v); setError(null); }} autoCapitalize="none" keyboardType="email-address" autoComplete="email" placeholder={d.auth.emailPlaceholder} />
+        {/* « username » + « current-password »: the pair password managers (Chrome, Safari, iCloud Keychain) save and fill in. */}
+        <Input
+          label={d.auth.email}
+          icon="mail"
+          value={email}
+          onChangeText={(v) => { setEmail(v); setError(null); }}
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="email-address"
+          autoComplete="username"
+          textContentType="username"
+          nativeID="email"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+          placeholder={d.auth.emailPlaceholder}
+        />
         <Input
           label={d.auth.password}
           icon="lock"
           value={password}
           onChangeText={(v) => { setPassword(v); setError(null); }}
+          ref={passwordRef}
           secureTextEntry={!show}
           autoComplete="current-password"
+          textContentType="password"
+          nativeID="password"
+          returnKeyType="go"
           onSubmitEditing={() => submit()}
           right={
             <Tap onPress={() => setShow((s) => !s)} hitSlop={8}>
@@ -89,7 +110,7 @@ export default function SignIn() {
           }
         />
         <Row style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-          <Tap onPress={() => setRememberState((v) => !v)} accessibilityRole="checkbox" accessibilityState={{ checked: remember }}>
+          <Tap onPress={() => setRememberState((v) => !v)} accessibilityRole="checkbox" aria-checked={remember}>
             <Row gap={8}>
               <View style={{ width: 20, height: 20, borderRadius: 6, borderWidth: 1.5, borderColor: remember ? colors.primary : colors.borderStrong, backgroundColor: remember ? colors.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
                 {remember && <Feather name="check" size={13} color="#fff" />}

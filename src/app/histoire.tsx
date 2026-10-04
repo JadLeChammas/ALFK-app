@@ -8,13 +8,15 @@ import { Section, SerifHeading, SiteFrame, useTone } from '@/components/site/Sit
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { useLfkStory, type FunFact, type StoryEvent } from '@/data/lfkStory';
-import { PHOTOS } from '@/data/photos';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { fonts } from '@/theme/tokens';
 
 /** « Le LFK » — the lycée's history (timeline) and fun facts, written by the admins. Public page. */
+/** The LFK campus from above. */
+const CAMPUS_AERIAL = require('@/assets/images/lfk-campus-aerial.png');
+
 export default function LfkStoryPage() {
   const { d } = useI18n();
   const { me } = useStore();
@@ -29,7 +31,7 @@ export default function LfkStoryPage() {
         tagline={h.eyebrow}
         title={h.title}
         description={story.intro?.trim() || h.sub}
-        image={PHOTOS.kuwaitTowersDusk.uri}
+        image={CAMPUS_AERIAL}
         primary={admin ? { label: h.edit, onPress: () => router.push('/admin/histoire' as never) } : undefined}
         secondary={{ label: d.site.nav.association, onPress: () => router.push('/association') }}
       />

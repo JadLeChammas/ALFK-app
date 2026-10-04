@@ -24,6 +24,7 @@ import { useLayout } from '@/theme/layout';
 import { brand, fonts, radius } from '@/theme/tokens';
 
 const campus = require('@/assets/images/lfk-campus.png');
+const kuwaitFlag = require('@/assets/images/lfk-kuwait-flag.png');
 
 /**
  * Public landing page of the association — what signed-out visitors see first.
@@ -43,7 +44,7 @@ export default function Landing() {
 
   const join = () => router.push('/inscription');
   const slides: PillarSlide[] = [
-    { key: 's0', label: d.site.nav.association, title: h.s1Title, accent: h.s1Italic, text: h.s1Sub, cta: h.cta1, onPress: join, bg: brand.red, fg: '#FFFFFF', muted: 'rgba(255,255,255,0.82)', accentColor: '#FFC4C5', ctaBg: '#FFFFFF', ctaFg: brand.red, shadow: '#4F0000', images: [campus, IMAGES.graduation] },
+    { key: 's0', label: d.site.nav.association, title: h.s1Title, accent: h.s1Italic, text: h.s1Sub, cta: h.cta1, onPress: join, bg: brand.red, fg: '#FFFFFF', muted: 'rgba(255,255,255,0.82)', accentColor: '#FFC4C5', ctaBg: '#FFFFFF', ctaFg: brand.red, shadow: '#4F0000', images: [campus, kuwaitFlag] },
     { key: 's1', label: d.nav.directory, title: h.s2Title, accent: h.s2Italic, text: h.s2Sub, cta: h.cta2, onPress: join, bg: brand.blue, fg: brand.navy, muted: 'rgba(14, 42, 71, 0.8)', accentColor: brand.red, ctaBg: brand.navy, ctaFg: '#FFFFFF', shadow: '#A88A47', images: [IMAGES.friends, IMAGES.group] },
     { key: 's2', label: d.nav.repere, title: h.s3Title, accent: h.s3Italic, text: h.s3Sub, cta: h.cta3, onPress: join, bg: brand.navy, fg: '#FFFFFF', muted: 'rgba(231, 236, 242,0.88)', accentColor: brand.sky, ctaBg: brand.red, ctaFg: '#FFFFFF', shadow: '#000718', images: [IMAGES.students, IMAGES.paris] },
     { key: 's3', label: d.nav.events, title: h.s4Title, accent: h.s4Italic, text: h.s4Sub, cta: h.cta4, onPress: () => router.push('/association'), bg: '#7E0A14', fg: '#FFFFFF', muted: 'rgba(255,255,255,0.82)', accentColor: '#FFC4C5', ctaBg: '#FFFFFF', ctaFg: '#7E0A14', shadow: '#360004', images: [IMAGES.gala, IMAGES.party] },

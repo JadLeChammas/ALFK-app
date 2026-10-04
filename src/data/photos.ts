@@ -6,7 +6,10 @@ export type CreditedPhoto = { uri: string; title: string; author: string; licens
 
 const commons = (path: string, file: string) => `https://upload.wikimedia.org/wikipedia/commons/thumb/${path}/${file}/1920px-${file}`;
 
-export const PHOTOS = {
+export const PHOTOS: Record<string, CreditedPhoto> = {};
+
+/** Former photos, kept for reference (credit them again if they come back). */
+export const RETIRED_PHOTOS = {
   kuwaitSunset: {
     uri: commons('c/c3', 'Kuwait_City_Sunset_View.jpg'),
     title: 'Kuwait City Sunset View',

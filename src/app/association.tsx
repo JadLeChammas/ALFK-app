@@ -4,12 +4,14 @@ import { Seo } from '@/components/Seo';
 import { ClosingCta, ContentGrid, EditorialImageHero, EditorialTestimonial, GlobeCard, RuleColumns, StatsRow, useDestinationMarkers, useQuoteCards } from '@/components/site/blocks';
 import { Container, Reveal, Section, SerifHeading, SiteFrame } from '@/components/site/SiteFrame';
 import { useCommunity } from '@/data/community';
-import { PHOTOS } from '@/data/photos';
 import { IMAGES } from '@/data/seed';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 
 /** « L'Amicale » — mission, values and actions of the association. Public page. */
+/** LFK pupils forming the school's logo in the playground. */
+const STUDENTS_LOGO = require('@/assets/images/lfk-students-logo.png');
+
 export default function Association() {
   const { d, f } = useI18n();
   const { me } = useStore();
@@ -25,7 +27,7 @@ export default function Association() {
         tagline={a.eyebrow}
         title={`${a.title} ${a.italic}`}
         description={a.sub}
-        image={PHOTOS.kuwaitSunset.uri}
+        image={STUDENTS_LOGO}
         primary={me ? undefined : { label: d.site.home.cta1, onPress: () => router.push('/inscription') }}
         secondary={{ label: d.site.nav.bureau, onPress: () => router.push('/bureau') }}
       />

@@ -71,7 +71,7 @@ export function GuideSteps({
                       <Tap
                         onPress={() => onToggle(s.id)}
                         accessibilityRole="checkbox"
-                        accessibilityState={{ checked }}
+                        aria-checked={checked}
                         accessibilityLabel={d.guide.markDone}
                         style={{ width: 28, height: 28, borderRadius: 8, marginTop: 1, borderWidth: 2, borderColor: checked ? colors.success : colors.borderStrong, backgroundColor: checked ? colors.success : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
                         {checked && <Feather name="check" size={16} color="#fff" />}

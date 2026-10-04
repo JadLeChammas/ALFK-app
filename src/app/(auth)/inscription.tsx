@@ -288,7 +288,7 @@ export default function SignUp() {
             <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />
             <Txt variant="small" color="textSubtle" style={{ flex: 1 }}>{d.proof.privacy}</Txt>
           </Row>
-          <Tap onPress={() => setNoNews((v) => !v)} accessibilityRole="checkbox" accessibilityState={{ checked: noNews }}>
+          <Tap onPress={() => setNoNews((v) => !v)} accessibilityRole="checkbox" aria-checked={noNews}>
             <Row gap={10} style={{ alignItems: 'flex-start' }}>
               <View style={{ width: 20, height: 20, marginTop: 1, borderRadius: 6, borderWidth: 1.5, borderColor: noNews ? colors.primary : colors.borderStrong, backgroundColor: noNews ? colors.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
                 {noNews && <Feather name="check" size={13} color="#fff" />}

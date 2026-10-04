@@ -73,6 +73,23 @@ export function setRemember(remember: boolean) {
   } catch {}
 }
 
+// Ticked, the e-mail of the last sign-in is also kept so the form is filled in next time (never the
+// password: the browser's password manager saves it, the fields are labelled for that).
+const EMAIL_KEY = 'lfk.lastEmail';
+export function getRememberedEmail() {
+  try {
+    return getRemember() ? (storage?.getItem(EMAIL_KEY) ?? '') : '';
+  } catch {
+    return '';
+  }
+}
+export function setRememberedEmail(email: string | null) {
+  try {
+    if (email) storage?.setItem(EMAIL_KEY, email);
+    else storage?.removeItem(EMAIL_KEY);
+  } catch {}
+}
+
 const authStorage = web
   ? {
       getItem: (k: string) => {

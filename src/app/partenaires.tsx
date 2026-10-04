@@ -5,9 +5,10 @@ import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Linking, Platform, Pressable, View } from 'react-native';
 
+import { FloatingPaths } from '@/components/fx/FloatingPaths';
 import { PartnersManager } from '@/components/PartnersManager';
 import { AppShell } from '@/components/shell/AppShell';
-import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
+import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, tonePalette, useTone } from '@/components/site/SiteFrame';
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { usePublicOverview } from '@/data/public';
@@ -16,7 +17,8 @@ import type { Institution } from '@/data/types';
 import { partnerLogo } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
-import { fonts, radius } from '@/theme/tokens';
+import { useTheme } from '@/theme/ThemeProvider';
+import { brand, fonts, radius } from '@/theme/tokens';
 
 /**
  * Partners. Approved members get it inside their space (admins manage the list there);
@@ -36,6 +38,7 @@ export default function Partners() {
 
 function PublicPartners() {
   const { d } = useI18n();
+  const { scheme } = useTheme();
   const { isDesktop } = useLayout();
   const { institutions } = usePublicOverview();
   const p = d.site.partners;
@@ -43,7 +46,7 @@ function PublicPartners() {
   return (
     <SiteFrame>
       <Seo title={p.title} description={p.sub} />
-      <Section>
+      <Section background={<FloatingPaths color={scheme === 'dark' ? '#E7ECF2' : brand.navy} fade={tonePalette('page', scheme === 'dark').bg} />}>
         <LogoCloud partners={institutions}>
           <Eyebrow text={p.eyebrow} />
           <SerifHeading title={p.title} lead={p.sub} size="lg" center />

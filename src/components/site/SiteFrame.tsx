@@ -152,13 +152,14 @@ export function Container({ children, style }: { children: ReactNode; style?: St
 }
 
 /** A full-bleed band of the site (py-20 sm:py-28 in the source blocks) in one brand tone. */
-export function Section({ children, style, tone = 'page', tint }: { children: ReactNode; style?: StyleProp<ViewStyle>; tone?: Tone; /** @deprecated use tone */ tint?: boolean }) {
+export function Section({ children, style, tone = 'page', tint, background }: { children: ReactNode; style?: StyleProp<ViewStyle>; tone?: Tone; /** @deprecated use tone */ tint?: boolean; /** Drawn behind the content, across the whole band (e.g. an animated backdrop). */ background?: ReactNode }) {
   const { scheme } = useTheme();
   const { isMobile } = useLayout();
   const t = tint && tone === 'page' ? 'blue' : tone;
   return (
     <ToneProvider tone={t}>
-      <View style={{ paddingVertical: isMobile ? 56 : 96, backgroundColor: tonePalette(t, scheme === 'dark').bg }}>
+      <View style={{ paddingVertical: isMobile ? 56 : 96, backgroundColor: tonePalette(t, scheme === 'dark').bg, overflow: background ? 'hidden' : undefined }}>
+        {background}
         <Container style={style}>{children}</Container>
       </View>
     </ToneProvider>

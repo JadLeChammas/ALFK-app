@@ -66,7 +66,7 @@ export function PublicSettings({ visible, onClose }: { visible: boolean; onClose
                       key={l.code}
                       onPress={() => setLang(l.code)}
                       accessibilityRole="radio"
-                      accessibilityState={{ checked: active }}
+                      aria-checked={active}
                       style={{ flexBasis: '47%', flexGrow: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, height: 44, borderRadius: radius.input, borderWidth: 1.5, borderColor: active ? colors.primary : colors.border, backgroundColor: colors.surface }}
                       hoverStyle={!active && { borderColor: colors.borderStrong }}>
                       <Flag code={l.country} size={16} />

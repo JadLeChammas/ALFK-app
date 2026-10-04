@@ -37,6 +37,7 @@ export default function Legal() {
         ))}
       </Card>
       {/* Wikimedia Commons photos used on the public pages: author, licence and source, as the licences require. */}
+      {Object.keys(PHOTOS).length > 0 && (
       <Card style={{ gap: 12 }}>
         <Txt variant="h3">{lang === 'fr' ? 'Crédits photos' : 'Photo credits'}</Txt>
         {Object.values(PHOTOS).map((p) => (
@@ -47,6 +48,7 @@ export default function Legal() {
           </Txt>
         ))}
       </Card>
+      )}
       <Button label={d.legal.privacy} icon="shield" variant="secondary" onPress={() => router.push('/confidentialite')} />
     </PublicPage>
   );

@@ -30,7 +30,7 @@ export function OtherSchoolsEditor({ value, onChange, country }: { value: OtherS
             <Tap
               onPress={() => update(i, { exchange: !s.exchange })}
               accessibilityRole="checkbox"
-              accessibilityState={{ checked: !!s.exchange }}
+              aria-checked={!!s.exchange}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start' }}>
               <View style={{ width: 20, height: 20, borderRadius: 5, borderWidth: 2, borderColor: s.exchange ? colors.primary : colors.borderStrong, backgroundColor: s.exchange ? colors.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
                 {s.exchange && <Feather name="check" size={13} color="#fff" />}
