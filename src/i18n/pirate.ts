@@ -718,7 +718,7 @@ const pirate: Dict = {
     listsMissing: 'Add BREVO_LIST_ALUMNI an\' BREVO_LIST_ELEVES (list ids) in Vercel to enable syncin\'.',
     optIn: 'Receive th\' Amicale\'s news',
     optInHint: 'Information an\' event letters. Unsubscribe any time.',
-    optInSignup: 'I\'d like th\' Amicale\'s news by email (events, information). Unsubscribe any time.',
+    optInSignup: 'I don’t want th’ Amicale’s news by email (events, information). Ye can also unsubscribe any time.',
     unsubTitle: 'Unsubscribe',
     unsubDone: 'Done: no more news letters from th\' Amicale. Turn \'em back on in Settings.',
     unsubError: 'This link ain\'t valid or was already used.',

@@ -717,7 +717,7 @@ const en: Dict = {
     listsMissing: 'Add BREVO_LIST_ALUMNI and BREVO_LIST_ELEVES (list ids) in Vercel to enable syncing.',
     optIn: 'Receive the Amicale’s news',
     optInHint: 'Information and event emails. Unsubscribe at any time.',
-    optInSignup: 'I would like to receive the Amicale’s news by email (events, information). Unsubscribe at any time.',
+    optInSignup: 'I do not want to receive the Amicale’s news by email (events, information). You can also unsubscribe at any time.',
     unsubTitle: 'Unsubscribe',
     unsubDone: 'Done: you will no longer receive the Amicale’s news by email. You can turn it back on in Settings.',
     unsubError: 'This link is not valid or has already been used.',

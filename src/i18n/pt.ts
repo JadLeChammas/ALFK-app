@@ -717,7 +717,7 @@ const pt: Dict = {
     listsMissing: 'Adicione BREVO_LIST_ALUMNI e BREVO_LIST_ELEVES (ids das listas) na Vercel para ativar a sincronização.',
     optIn: 'Receber as novidades da Amicale',
     optInHint: 'Emails de informação e eventos. Cancelamento a qualquer momento.',
-    optInSignup: 'Quero receber as novidades da Amicale por email (eventos, informações). Cancelamento a qualquer momento.',
+    optInSignup: 'Não quero receber as novidades da Amicale por email (eventos, informações). Você também pode cancelar a qualquer momento.',
     unsubTitle: 'Cancelar inscrição',
     unsubDone: 'Pronto: você não receberá mais as novidades da Amicale por email. Pode reativá-las nas Configurações.',
     unsubError: 'Este link não é válido ou já foi usado.',

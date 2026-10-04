@@ -717,7 +717,7 @@ const ja: Dict = {
     listsMissing: '同期するには Vercel に BREVO_LIST_ALUMNI と BREVO_LIST_ELEVES（リスト ID）を追加してください。',
     optIn: 'Amicale のお知らせを受け取る',
     optInHint: 'お知らせ・イベントのメール。いつでも配信停止できます。',
-    optInSignup: 'Amicale のお知らせ（イベント、情報）をメールで受け取ります。いつでも配信停止できます。',
+    optInSignup: 'Amicale のお知らせ（イベント、情報）をメールで受け取りません。いつでも配信停止もできます。',
     unsubTitle: '配信停止',
     unsubDone: '完了：Amicale のお知らせメールは届かなくなります。設定から再開できます。',
     unsubError: 'このリンクは無効か、すでに使用されています。',

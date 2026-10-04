@@ -717,7 +717,7 @@ const zh: Dict = {
     listsMissing: '请在 Vercel 中添加 BREVO_LIST_ALUMNI 和 BREVO_LIST_ELEVES（列表 ID）以启用同步。',
     optIn: '接收校友会资讯',
     optInHint: '信息和活动邮件，可随时退订。',
-    optInSignup: '我希望通过邮件接收校友会资讯（活动、信息），可随时退订。',
+    optInSignup: '我不希望通过邮件接收校友会资讯（活动、信息）。你也可以随时退订。',
     unsubTitle: '退订',
     unsubDone: '已完成：你将不再收到校友会的资讯邮件。可在设置中重新开启。',
     unsubError: '此链接无效或已被使用。',

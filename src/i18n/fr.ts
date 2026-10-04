@@ -715,7 +715,7 @@ const fr = {
     listsMissing: 'Ajoutez BREVO_LIST_ALUMNI et BREVO_LIST_ELEVES (identifiants des listes) dans Vercel pour activer la synchronisation.',
     optIn: 'Recevoir les actualités de l’Amicale',
     optInHint: 'Emails d’information et d’événements. Désinscription possible à tout moment.',
-    optInSignup: 'Je souhaite recevoir les actualités de l’Amicale par email (événements, informations). Désinscription possible à tout moment.',
+    optInSignup: 'Je ne souhaite pas recevoir les actualités de l’Amicale par email (événements, informations). Vous pouvez aussi vous désinscrire à tout moment.',
     unsubTitle: 'Désinscription',
     unsubDone: 'C’est fait : vous ne recevrez plus les actualités de l’Amicale par email. Vous pouvez les réactiver dans Paramètres.',
     unsubError: 'Ce lien n’est pas valide ou a déjà été utilisé.',
