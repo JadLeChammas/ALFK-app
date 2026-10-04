@@ -87,21 +87,25 @@ export async function sendMessage(opts: {
   attachments?: Attachment[];
 }) {
   const people = opts.recipients.filter((r) => /\S+@\S+\.\S+/.test(r.email));
-  for (const locale of ['fr', 'en'] as EmailLocale[]) {
-    const group = people.filter((r) => localeOf(r) === locale);
+  // Groups by language, and by whether the unsubscribe link belongs in the email (news to members:
+  // yes; admins, tests and automatic emails: no — the footer then has no link at all).
+  const groups = (['fr', 'en'] as EmailLocale[]).flatMap((locale) =>
+    [true, false].map((unsub) => ({ locale, unsub, people: people.filter((r) => localeOf(r) === locale && !!opts.withUnsubscribe?.(r) === unsub) }))
+  );
+  for (const { locale, unsub: withLink, people: group } of groups) {
     if (!group.length) continue;
     const { subject, body } = opts.text(locale);
     const common = { ...opts.vars, lien: SITE };
     for (let i = 0; i < group.length; i += 100) {
       const chunk = group.slice(i, i + 100);
-      const unsub = await Promise.all(chunk.map((r) => (opts.withUnsubscribe?.(r) ? unsubscribeUrl(r.id) : '')));
+      const unsub = await Promise.all(chunk.map((r) => (withLink ? unsubscribeUrl(r.id) : '')));
       const personal = (r: Recipient, s: string) => fillVars(fillVars(s, common), { prenom: r.first_name ?? '', nom: (r.last_name ?? '').toLocaleUpperCase('fr') });
       await brevo('/smtp/email', {
         sender: SENDER,
         replyTo: REPLY_TO ? { email: REPLY_TO, name: SENDER.name } : undefined,
         subject: fillVars(subject, common),
         // The unsubscribe link differs for each person: a Brevo parameter.
-        htmlContent: emailHtml({ body: fillVars(body, { ...common, prenom: '{{ params.prenom }}', nom: '{{ params.nom }}' }), signature: opts.signature, logoUrl: LOGO, siteUrl: SITE, unsubscribeUrl: opts.withUnsubscribe ? '{{ params.unsub }}' : undefined, locale }),
+        htmlContent: emailHtml({ body: fillVars(body, { ...common, prenom: '{{ params.prenom }}', nom: '{{ params.nom }}' }), signature: opts.signature, logoUrl: LOGO, siteUrl: SITE, unsubscribeUrl: withLink ? '{{ params.unsub }}' : undefined, locale }),
         attachment: opts.attachments?.length ? opts.attachments : undefined,
         messageVersions: chunk.map((r, k) => ({
           to: [{ email: r.email, name: [r.first_name, r.last_name].filter(Boolean).join(' ') || undefined }],
