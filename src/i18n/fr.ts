@@ -59,7 +59,7 @@ const fr = {
     pendingSub: "Merci {name} ! Votre inscription a bien été reçue. Un administrateur de l'Amicale va vérifier vos informations — vous aurez accès à toute la plateforme dès son approbation.",
     pendingStep1: 'Inscription envoyée', pendingStep2: 'Vérification par un administrateur', pendingStep3: 'Accès à la communauté',
     demoAccounts: 'Comptes de démonstration', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Élève', demoPending: 'En attente', demoDirection: 'Direction',
-    photo: 'Photo de profil', addPhoto: 'Ajouter une photo',
+    photo: 'Photo de profil', addPhoto: 'Ajouter une photo', photoRequired: 'Ajoutez une photo de profil pour créer votre compte.',
   },
   home: {
     hello: 'Bonjour {name}', heroTitle: "Une seule communauté,\ndes milliers d'histoires.",

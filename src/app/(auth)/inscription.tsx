@@ -38,6 +38,7 @@ export default function SignUp() {
   const [schoolCountry, setSchoolCountry] = useState<string | undefined>(undefined);
   const [otherSchools, setOtherSchools] = useState<OtherSchool[]>([]);
   const [photo, setPhoto] = useState<PickedImage | null>(null);
+  const [photoMissing, setPhotoMissing] = useState(false);
   const [bio, setBio] = useState('');
   const [mentor, setMentor] = useState(false);
   // Ticked = the member does NOT want the news (they receive it otherwise; unsubscribe in each email and in Settings).
@@ -67,7 +68,8 @@ export default function SignUp() {
   const [confirmEmail, setConfirmEmail] = useState(false);
 
   const submit = async () => {
-    // The proof of schooling is mandatory: no account without it.
+    // The profile photo and the proof of schooling are mandatory: no account without them.
+    if (!photo) return setPhotoMissing(true);
     if (!proof) return setError('proof');
     const promo = parseInt(form.promo, 10);
     setBusy(true);
@@ -242,7 +244,7 @@ export default function SignUp() {
               size="lg"
               style={{ flex: 1 }}
               onPress={() => {
-                // Every field of this step is required, except other universities (exchange…), the photo and the bio.
+                // Every field of this step is required, except other universities (exchange…) and the bio.
                 const alumni = form.role === 'alumni';
                 const working = alumni && form.situation === 'working';
                 const year = parseInt(form.promo, 10);
@@ -266,7 +268,7 @@ export default function SignUp() {
         </View>
       ) : (
         <View style={{ gap: 16 }}>
-          <Row gap={16} style={{ padding: 14, borderRadius: 18, backgroundColor: colors.surfaceAlt }}>
+          <Row gap={16} style={{ padding: 14, borderRadius: 18, backgroundColor: colors.surfaceAlt, borderWidth: photoMissing && !photo ? 1.5 : 0, borderColor: colors.danger }}>
             <Tap onPress={choosePhoto} accessibilityLabel={d.profile.changePhoto}>
               <Avatar uri={photo?.uri} name={`${form.firstName} ${form.lastName}`.trim() || '?'} size={72} />
               <View style={{ position: 'absolute', right: -2, bottom: -2, width: 28, height: 28, borderRadius: 14, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.surface }}>
@@ -274,7 +276,8 @@ export default function SignUp() {
               </View>
             </Tap>
             <View style={{ flex: 1, gap: 6 }}>
-              <Txt variant="bodyStrong">{`${d.auth.photo} (${d.common.optional})`}</Txt>
+              <Txt variant="bodyStrong">{d.auth.photo}</Txt>
+              {photoMissing && !photo && <Txt variant="small" color="danger">{d.auth.photoRequired}</Txt>}
               <Button label={photo ? d.profile.changePhoto : d.auth.addPhoto} icon="image" size="sm" variant="secondary" onPress={choosePhoto} style={{ alignSelf: 'flex-start' }} />
             </View>
           </Row>
@@ -296,7 +299,7 @@ export default function SignUp() {
           {error && error !== 'proof' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
           <Row gap={10}>
             <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(2)} />
-            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} disabled={!proof} />
+            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} disabled={!proof || !photo} />
           </Row>
         </View>
       )}

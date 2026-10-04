@@ -61,7 +61,7 @@ const it: Dict = {
     pendingSub: "Grazie, {name}! Abbiamo ricevuto la tua iscrizione. Un amministratore dell'Amicale verificherà i tuoi dati — avrai accesso a tutta la piattaforma appena approvata.",
     pendingStep1: 'Iscrizione inviata', pendingStep2: 'Verifica da parte di un amministratore', pendingStep3: 'Accesso alla comunità',
     demoAccounts: 'Account demo', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Studente', demoPending: 'In attesa', demoDirection: 'Direzione',
-    photo: 'Foto del profilo', addPhoto: 'Aggiungi una foto',
+    photo: 'Foto del profilo', addPhoto: 'Aggiungi una foto', photoRequired: 'Aggiungi una foto profilo per creare il tuo account.',
   },
   home: {
     hello: 'Ciao {name}', heroTitle: 'Una sola comunità,\nmigliaia di storie.',

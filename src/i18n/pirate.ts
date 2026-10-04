@@ -62,7 +62,7 @@ const pirate: Dict = {
     pendingSub: 'Thank ye {name}! Yer papers be received. A captain o’ the Amicale will look ’em over — ye’ll have the run o’ the ship once approved.',
     pendingStep1: 'Papers sent', pendingStep2: 'Checked by a captain', pendingStep3: 'Welcome aboard',
     demoAccounts: 'Demo sailors', demoAdmin: 'Captain', demoMember: 'Old Hand', demoEleve: 'Cabin Boy', demoPending: 'Waitin’', demoDirection: 'Admiralty',
-    photo: 'Yer portrait', addPhoto: 'Add a portrait',
+    photo: 'Yer portrait', addPhoto: 'Add a portrait', photoRequired: 'Add a portrait to sign aboard.',
   },
   home: {
     hello: 'Ahoy {name}', heroTitle: 'One crew,\na thousand tall tales.',

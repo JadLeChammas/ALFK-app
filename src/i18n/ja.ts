@@ -61,7 +61,7 @@ const ja: Dict = {
     pendingSub: '{name}さん、ありがとうございます！登録を受け付けました。同窓会の管理者が内容を確認します。承認後、すべての機能をご利用いただけます。',
     pendingStep1: '登録を送信', pendingStep2: '管理者による確認', pendingStep3: 'コミュニティへのアクセス',
     demoAccounts: 'デモアカウント', demoAdmin: '管理者', demoMember: '卒業生', demoEleve: '在校生', demoPending: '承認待ち', demoDirection: '学校管理職',
-    photo: 'プロフィール写真', addPhoto: '写真を追加',
+    photo: 'プロフィール写真', addPhoto: '写真を追加', photoRequired: 'アカウント作成にはプロフィール写真が必要です。',
   },
   home: {
     hello: 'こんにちは、{name}さん', heroTitle: 'ひとつのコミュニティ、\n無数のストーリー。',

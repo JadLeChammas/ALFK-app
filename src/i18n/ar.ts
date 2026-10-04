@@ -61,7 +61,7 @@ const ar: Dict = {
     pendingSub: 'شكرًا {name}! استلمنا تسجيلك. سيراجع مسؤول في الرابطة معلوماتك — وستتمكن من استخدام المنصة كاملة فور الموافقة.',
     pendingStep1: 'تم إرسال التسجيل', pendingStep2: 'مراجعة من قبل مسؤول', pendingStep3: 'الدخول إلى المجتمع',
     demoAccounts: 'حسابات تجريبية', demoAdmin: 'مسؤول', demoMember: 'خريج', demoEleve: 'طالب', demoPending: 'قيد الانتظار', demoDirection: 'الإدارة',
-    photo: 'صورة الملف الشخصي', addPhoto: 'إضافة صورة',
+    photo: 'صورة الملف الشخصي', addPhoto: 'إضافة صورة', photoRequired: 'أضف صورة شخصية لإنشاء حسابك.',
   },
   home: {
     hello: 'مرحبًا {name}', heroTitle: 'مجتمع واحد،\nوآلاف القصص.',

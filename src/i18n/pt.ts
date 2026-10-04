@@ -61,7 +61,7 @@ const pt: Dict = {
     pendingSub: 'Obrigado, {name}! Recebemos a sua inscrição. Um administrador da Amicale vai verificar os seus dados — terá acesso a toda a plataforma assim que for aprovada.',
     pendingStep1: 'Inscrição enviada', pendingStep2: 'Verificação por um administrador', pendingStep3: 'Acesso à comunidade',
     demoAccounts: 'Contas de demonstração', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Aluno', demoPending: 'Pendente', demoDirection: 'Direção',
-    photo: 'Foto de perfil', addPhoto: 'Adicionar uma foto',
+    photo: 'Foto de perfil', addPhoto: 'Adicionar uma foto', photoRequired: 'Adicione uma foto de perfil para criar sua conta.',
   },
   home: {
     hello: 'Olá, {name}', heroTitle: 'Uma só comunidade,\nmilhares de histórias.',

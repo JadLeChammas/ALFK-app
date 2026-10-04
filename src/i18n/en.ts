@@ -61,7 +61,7 @@ const en: Dict = {
     pendingSub: "Thanks {name}! We've received your sign-up. An Amicale administrator will review your details — you'll get full access as soon as it's approved.",
     pendingStep1: 'Sign-up sent', pendingStep2: 'Review by an administrator', pendingStep3: 'Access to the community',
     demoAccounts: 'Demo accounts', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Student', demoPending: 'Pending', demoDirection: 'Leadership',
-    photo: 'Profile photo', addPhoto: 'Add a photo',
+    photo: 'Profile photo', addPhoto: 'Add a photo', photoRequired: 'Add a profile photo to create your account.',
   },
   home: {
     hello: 'Hello {name}', heroTitle: 'One community,\nthousands of stories.',

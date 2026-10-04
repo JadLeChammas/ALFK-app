@@ -61,7 +61,7 @@ const zh: Dict = {
     pendingSub: '谢谢你，{name}！我们已收到你的注册。校友会管理员将核实你的信息 — 审核通过后即可使用全部功能。',
     pendingStep1: '已提交注册', pendingStep2: '管理员审核', pendingStep3: '进入社区',
     demoAccounts: '演示账号', demoAdmin: '管理员', demoMember: '校友', demoEleve: '在校生', demoPending: '待审核', demoDirection: '学校领导',
-    photo: '头像', addPhoto: '添加照片',
+    photo: '头像', addPhoto: '添加照片', photoRequired: '请添加头像以创建账户。',
   },
   home: {
     hello: '你好，{name}', heroTitle: '一个社区，\n千万个故事。',
