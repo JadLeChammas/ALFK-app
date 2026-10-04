@@ -306,7 +306,7 @@ const zh: Dict = {
       cta4: '了解校友会', studyAt: '我们的校友目前就读于', networkTitle: '从科威特',
       networkItalic: '走向全世界。', networkSub: '每条弧线都从学校出发，通向校友们如今求学的地方。', statAlumni: '校友',
       statCountries: '东道国', statPromos: 'Promo LFK', statUniversities: '大学', statNationalities: '国籍',
-      topDestinations: '主要去向', quoteTitle: '会长致辞', quote: '我们的平台终于把整个 LFK 社区聚集在一起，手机和电脑都能使用：重新相聚、互相帮助，让校友会充满活力。',
+      topDestinations: '主要去向', quoteTitle: '会长致辞', quote: '有些地方，我们离开了，却从未真正把它们留在身后。',
       stepsTitle: '加入校友会', stepsItalic: '只需三步。', step: '第',
       step1Title: '创建账户', step1Sub: '你的信息以及在 LFK 就读的证明：成绩单、证书、证明信或一张简单的照片。', step2Title: '理事会审核',
       step2Sub: '管理员核实你确实属于 LFK 社区。', step3Title: '欢迎加入', step3Sub: '通讯录、校友地图、升学指导、日历、WhatsApp 群组和私信都向你开放。',

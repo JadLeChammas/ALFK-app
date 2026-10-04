@@ -304,7 +304,7 @@ const fr = {
       cta4: 'Découvrir l\'Amicale', studyAt: 'Nos anciens étudient aujourd’hui à', networkTitle: 'De Koweït',
       networkItalic: 'vers le monde entier.', networkSub: 'Chaque arc part du lycée et mène là où nos anciens élèves étudient aujourd’hui.', statAlumni: 'Anciens élèves',
       statCountries: 'Pays hôtes', statPromos: 'Promos LFK', statUniversities: 'Universités', statNationalities: 'Nationalités',
-      topDestinations: 'Principales destinations', quoteTitle: 'Le mot du président', quote: 'Notre plateforme réunit enfin toute la communauté du LFK au même endroit, sur téléphone comme sur ordinateur : retrouvez-vous, entraidez-vous et faites vivre l’Amicale.',
+      topDestinations: 'Principales destinations', quoteTitle: 'Le mot du président', quote: 'Il y a des lieux qu’on quitte sans jamais vraiment les laisser derrière soi.',
       stepsTitle: 'Rejoindre l\'Amicale', stepsItalic: 'en trois étapes.', step: 'Étape',
       step1Title: 'Créez votre compte', step1Sub: 'Vos informations et un justificatif de scolarité au LFK : bulletin, certificat, attestation ou simple photo.', step2Title: 'Validation par le bureau',
       step2Sub: 'Un administrateur vérifie que vous faites bien partie de la communauté du LFK.', step3Title: 'Bienvenue dans le réseau', step3Sub: 'Annuaire, Repère, Orientation, calendrier, groupes WhatsApp et messagerie vous sont ouverts.',

@@ -307,7 +307,7 @@ const pirate: Dict = {
       cta4: 'Meet the crew', studyAt: 'Our old hands now study at', networkTitle: 'From Kuwait',
       networkItalic: 'to all the seven seas.', networkSub: 'Each arc sails from the lycée to where our old hands study today.', statAlumni: 'Old hands',
       statCountries: 'Host lands', statPromos: 'LFK crews', statUniversities: 'Universities', statNationalities: 'Flags',
-      topDestinations: 'Favourite harbours', quoteTitle: 'A word from the captain', quote: 'Our ship finally gathers the whole LFK crew on one deck, on phone an’ computer alike: find yer shipmates, lend a hand an’ keep the Amicale afloat.',
+      topDestinations: 'Favourite harbours', quoteTitle: 'A word from the captain', quote: 'There be ports ye leave without ever truly leavin’ ’em behind.',
       stepsTitle: 'Join the crew', stepsItalic: 'in three steps.', step: 'Step',
       step1Title: 'Sign the Articles', step1Sub: 'Yer particulars an’ proof ye sailed with the LFK: report card, certificate, attestation or a simple portrait.', step2Title: 'Checked by the officers',
       step2Sub: 'A captain checks ye truly belong to the LFK crew.', step3Title: 'Welcome aboard', step3Sub: 'Crew Roster, Crew Chart, Charts & Heading, almanac, WhatsApp crews an’ bottles be yours.',
