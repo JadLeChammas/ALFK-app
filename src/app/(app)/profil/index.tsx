@@ -67,6 +67,7 @@ export default function MyProfile() {
                 <Txt variant={isMobile ? 'h1' : 'display'}>{fullName(me)}</Txt>
                 <Row gap={8} wrap>
                   <RoleBadge role={me.role} />
+                  {me.role === 'eleve' && me.grade && <Badge label={d.grade[me.grade]} tone="info" icon="book-open" />}
                   {birthdayToday(me, me) && <Badge label={d.eggs.birthday} tone="warning" icon="gift" />}
                   <Txt color="textMuted">{[d.roles[me.role], me.fonction, me.promo && f(d.common.promo, { year: me.promo })].filter(Boolean).join(' · ')}</Txt>
                 </Row>
@@ -101,8 +102,8 @@ export default function MyProfile() {
                 icon="book"
                 leading={me.school ? <UniLogo name={me.school} fallback={<IconTile icon="book" />} /> : undefined}
                 title={me.school ?? '—'}
-                subtitle={me.situation === 'working' ? d.situation.graduatedFrom : me.situation === 'student' ? d.situation.studiesAt : d.member.school}
-                right={!!me.school && !!(me.schoolCountry ?? me.country) && <Flag code={(me.schoolCountry ?? me.country)!} size={16} />}
+                subtitle={me.role === 'eleve' && me.grade ? d.grade[me.grade] : me.situation === 'working' ? d.situation.graduatedFrom : me.situation === 'student' ? d.situation.studiesAt : d.member.school}
+                right={!!me.school && !!(me.schoolCountry ?? (me.role === 'eleve' ? 'KW' : me.country)) && <Flag code={(me.schoolCountry ?? (me.role === 'eleve' ? 'KW' : me.country))!} size={16} />}
               />
             )}
             {userFields(me).length > 0 && <ListRow icon="compass" title={userFields(me).map((x) => fieldLabel(x, d.fields)).join(', ')} subtitle={d.majors.rowLabel} />}
