@@ -5,13 +5,15 @@ import { emailHtml, emailText, fillVars, type EmailEvent, type EmailLocale, type
 /**
  * Sending emails through Brevo (server only — the « _ » prefix keeps this file from being a route).
  * Vercel env: BREVO_API_KEY, BREVO_SENDER_EMAIL (an address verified in Brevo → Senders),
- * optionally BREVO_SENDER_NAME, BREVO_LIST_ALUMNI and BREVO_LIST_ELEVES (Brevo list ids for the
+ * optionally BREVO_SENDER_NAME, BREVO_REPLY_TO, BREVO_LIST_ALUMNI and BREVO_LIST_ELEVES (Brevo list ids for the
  * members who accept the news), SITE_URL and EMAIL_LINK_SECRET.
  */
 
 export const SITE = (process.env.SITE_URL ?? 'https://www.alfk.org').replace(/\/$/, '');
 const API_KEY = process.env.BREVO_API_KEY;
 const SENDER = { email: process.env.BREVO_SENDER_EMAIL ?? '', name: process.env.BREVO_SENDER_NAME ?? 'Amicale LFK' };
+/** Where replies go (e.g. the Amicale's Gmail inbox when sending from contact@alfk.org). */
+const REPLY_TO = process.env.BREVO_REPLY_TO;
 const LIST_ALUMNI = Number(process.env.BREVO_LIST_ALUMNI) || null;
 const LIST_ELEVES = Number(process.env.BREVO_LIST_ELEVES) || null;
 const LINK_SECRET = process.env.EMAIL_LINK_SECRET ?? process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
@@ -96,6 +98,7 @@ export async function sendMessage(opts: {
       const personal = (r: Recipient, s: string) => fillVars(fillVars(s, common), { prenom: r.first_name ?? '', nom: (r.last_name ?? '').toLocaleUpperCase('fr') });
       await brevo('/smtp/email', {
         sender: SENDER,
+        replyTo: REPLY_TO ? { email: REPLY_TO, name: SENDER.name } : undefined,
         subject: fillVars(subject, common),
         // The unsubscribe link differs for each person: a Brevo parameter.
         htmlContent: emailHtml({ body: fillVars(body, { ...common, prenom: '{{ params.prenom }}', nom: '{{ params.nom }}' }), signature: opts.signature, logoUrl: LOGO, siteUrl: SITE, unsubscribeUrl: opts.withUnsubscribe ? '{{ params.unsub }}' : undefined, locale }),
