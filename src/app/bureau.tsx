@@ -16,7 +16,7 @@ import { useLayout } from '@/theme/layout';
 import { fonts } from '@/theme/tokens';
 
 /**
-^ * « Le bureau » — the association's administrators (Team Showcase), then the
+ * « Le bureau » — the association's administrators (Team Showcase), then the
  * proviseurs and primary directors of the LFK through the years (timelines, edited by admins here).
  * Public page.
  */
