@@ -293,7 +293,7 @@ const ja: Dict = {
   },
   site: {
     nav: {
-      association: 'Amicale について', lfk: 'LFK について', bureau: '役員会と名誉会員', partners: 'パートナー',
+      association: 'Amicale について', lfk: 'LFK について', bureau: '役員会', partners: 'パートナー',
       join: '入会案内', signIn: 'ログイン', cta: '参加する',
       mySpace: 'マイページ', menu: 'メニュー',
     },
@@ -325,7 +325,7 @@ const ja: Dict = {
     },
     bureau: {
       president: '会長',
-      title: '役員会と名誉会員', sub: 'Amicale を支えるボランティア。', board: '役員・管理者',
+      title: '役員会', sub: 'Amicale を支えるボランティア。', board: '役員・管理者',
       honorary: '名誉会員', member: '役員', volunteerTitle: '一緒に',
       volunteerItalic: '活動しませんか？', volunteerSub: '役員会は新しいボランティアを随時募集しています。ご応募はメッセージでどうぞ。', empty: '役員は近日発表します。',
     },

@@ -293,7 +293,7 @@ const de: Dict = {
   },
   site: {
     nav: {
-      association: 'Die Amicale', lfk: 'Das LFK', bureau: 'Vorstand & Ehrenmitglieder', partners: 'Partner',
+      association: 'Die Amicale', lfk: 'Das LFK', bureau: 'Der Vorstand', partners: 'Partner',
       join: 'Mitglied werden', signIn: 'Anmelden', cta: 'Beitreten',
       mySpace: 'Mein Bereich', menu: 'Menü',
     },
@@ -325,7 +325,7 @@ const de: Dict = {
     },
     bureau: {
       president: 'Präsident',
-      title: 'Vorstand & Ehrenmitglieder', sub: 'Die Ehrenamtlichen, die die Amicale tragen.', board: 'Vorstand & Administratoren',
+      title: 'Der Vorstand', sub: 'Die Ehrenamtlichen, die die Amicale tragen.', board: 'Vorstand & Administratoren',
       honorary: 'Ehrenmitglieder', member: 'Vorstandsmitglied', volunteerTitle: 'Lust,',
       volunteerItalic: 'sich zu engagieren?', volunteerSub: 'Der Vorstand sucht regelmäßig neue Ehrenamtliche. Schreiben Sie uns, um sich zu bewerben.', empty: 'Die Vorstandsmitglieder werden bald bekanntgegeben.',
     },

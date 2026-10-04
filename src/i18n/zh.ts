@@ -293,7 +293,7 @@ const zh: Dict = {
   },
   site: {
     nav: {
-      association: '校友会', lfk: 'LFK', bureau: '理事会与荣誉会员', partners: '合作伙伴',
+      association: '校友会', lfk: 'LFK', bureau: '理事会', partners: '合作伙伴',
       join: '入会', signIn: '登录', cta: '加入',
       mySpace: '我的空间', menu: '菜单',
     },
@@ -325,7 +325,7 @@ const zh: Dict = {
     },
     bureau: {
       president: '会长',
-      title: '理事会与荣誉会员', sub: '让校友会运转的志愿者。', board: '理事会与管理员',
+      title: '理事会', sub: '让校友会运转的志愿者。', board: '理事会与管理员',
       honorary: '荣誉会员', member: '理事', volunteerTitle: '想要',
       volunteerItalic: '参与进来吗？', volunteerSub: '理事会定期欢迎新的志愿者。请给我们写信报名。', empty: '理事会成员即将公布。',
     },

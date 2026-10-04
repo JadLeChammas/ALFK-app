@@ -293,7 +293,7 @@ const it: Dict = {
   },
   site: {
     nav: {
-      association: 'L\'Amicale', lfk: 'Il LFK', bureau: 'Direttivo e membri d’onore', partners: 'Partner',
+      association: 'L\'Amicale', lfk: 'Il LFK', bureau: 'Il direttivo', partners: 'Partner',
       join: 'Aderire', signIn: 'Accedi', cta: 'Unisciti',
       mySpace: 'Il mio spazio', menu: 'Menu',
     },
@@ -325,7 +325,7 @@ const it: Dict = {
     },
     bureau: {
       president: 'Presidente',
-      title: 'Direttivo e membri d’onore', sub: 'I volontari che fanno vivere l’Amicale.', board: 'Direttivo e amministratori',
+      title: 'Il direttivo', sub: 'I volontari che fanno vivere l’Amicale.', board: 'Direttivo e amministratori',
       honorary: 'Membri onorari', member: 'Membro del direttivo', volunteerTitle: 'Vuoi',
       volunteerItalic: 'impegnarti?', volunteerSub: 'Il direttivo accoglie regolarmente nuovi volontari. Scrivici per candidarti.', empty: 'La composizione del direttivo sarà pubblicata presto.',
     },
