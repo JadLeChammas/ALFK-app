@@ -47,6 +47,8 @@ const it: Dict = {
     step1: 'Identità', step2: 'Percorso', continue: 'Continua', passwordHint: 'Almeno 8 caratteri',
     errors: {
       proof: 'Per iscriversi è obbligatorio un documento che attesti la frequenza al LFK.',
+      file_type: 'Questo tipo di file non è accettato, oppure il contenuto non corrisponde all’estensione.',
+      file_too_large: 'File troppo pesante: massimo 10 MB.',
       invalid_credentials: 'E-mail o password errati.', email_taken: 'Esiste già un account con questa e-mail.',
       weak_password: 'La password deve avere almeno 8 caratteri.', unknown_email: 'Nessun account con questa e-mail.',
       wrong_password: 'La password attuale è errata.', birth_date: 'Data di nascita non valida: formato GG/MM/AAAA, una data passata.', phone: 'Numero di telefono non valido: scegli il prefisso e poi 6-14 cifre.', invalid_code: 'Il codice Bureau deve avere esattamente 4 cifre.', code_taken: 'Questo codice Bureau è già assegnato a un altro membro.', unknown: 'Si è verificato un errore. Riprova tra un momento.', mismatch: 'Le password non coincidono.', missing: 'Compila tutti i campi obbligatori.',
@@ -61,7 +63,7 @@ const it: Dict = {
     pendingSub: "Grazie, {name}! Abbiamo ricevuto la tua iscrizione. Un amministratore dell'Amicale verificherà i tuoi dati — avrai accesso a tutta la piattaforma appena approvata.",
     pendingStep1: 'Iscrizione inviata', pendingStep2: 'Verifica da parte di un amministratore', pendingStep3: 'Accesso alla comunità',
     demoAccounts: 'Account demo', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Studente', demoPending: 'In attesa', demoDirection: 'Direzione',
-    photo: 'Foto del profilo', addPhoto: 'Aggiungi una foto', photoRequired: 'Aggiungi una foto profilo per creare il tuo account.',
+    photo: 'Foto del profilo', addPhoto: 'Aggiungi una foto', photoRequired: 'Aggiungi una foto profilo per creare il tuo account.', requiredLegend: '* Campi obbligatori',
   },
   home: {
     hello: 'Ciao {name}', heroTitle: 'Una sola comunità,\nmigliaia di storie.',

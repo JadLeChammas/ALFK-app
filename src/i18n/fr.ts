@@ -45,6 +45,8 @@ const fr = {
     step1: 'Identité', step2: 'Parcours', continue: 'Continuer', passwordHint: '8 caractères minimum',
     errors: {
       proof: 'Le justificatif de scolarité au LFK est obligatoire pour s’inscrire.',
+      file_type: 'Ce type de fichier n’est pas accepté, ou son contenu ne correspond pas à son extension.',
+      file_too_large: 'Fichier trop lourd : 10 Mo maximum.',
       invalid_credentials: 'E-mail ou mot de passe incorrect.', email_taken: 'Un compte existe déjà avec cet e-mail.',
       weak_password: 'Le mot de passe doit contenir au moins 8 caractères.', unknown_email: 'Aucun compte avec cet e-mail.',
       wrong_password: 'Mot de passe actuel incorrect.', birth_date: 'Date de naissance invalide : format JJ/MM/AAAA, date passée.', phone: 'Numéro de téléphone invalide : choisissez l’indicatif puis 6 à 14 chiffres.', invalid_code: 'Le code Bureau doit comporter exactement 4 chiffres.', code_taken: 'Ce code Bureau est déjà attribué à un autre membre.', unknown: 'Une erreur est survenue. Réessayez dans un instant.', mismatch: 'Les mots de passe ne correspondent pas.', missing: 'Merci de remplir tous les champs obligatoires.',
@@ -59,7 +61,7 @@ const fr = {
     pendingSub: "Merci {name} ! Votre inscription a bien été reçue. Un administrateur de l'Amicale va vérifier vos informations — vous aurez accès à toute la plateforme dès son approbation.",
     pendingStep1: 'Inscription envoyée', pendingStep2: 'Vérification par un administrateur', pendingStep3: 'Accès à la communauté',
     demoAccounts: 'Comptes de démonstration', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Élève', demoPending: 'En attente', demoDirection: 'Direction',
-    photo: 'Photo de profil', addPhoto: 'Ajouter une photo', photoRequired: 'Ajoutez une photo de profil pour créer votre compte.',
+    photo: 'Photo de profil', addPhoto: 'Ajouter une photo', photoRequired: 'Ajoutez une photo de profil pour créer votre compte.', requiredLegend: '* Champs obligatoires',
   },
   home: {
     hello: 'Bonjour {name}', heroTitle: "Une seule communauté,\ndes milliers d'histoires.",

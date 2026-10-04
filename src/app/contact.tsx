@@ -16,7 +16,7 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
 
 /**
  * Public contact page — lands in the admin contact inbox (separate from member messages).
@@ -172,7 +172,7 @@ export default function Contact() {
                     )}
                   </View>
                   <FieldRow>
-                    <Input label={l.name} value={form.name} onChangeText={set('name')} icon="user" containerStyle={{ flex: 1 }} error={touched && !form.name.trim() ? d.common.required : undefined} />
+                    <Input label={l.name} value={form.name} onChangeText={set('name')} maxLength={120} icon="user" containerStyle={{ flex: 1 }} error={touched && !form.name.trim() ? d.common.required : undefined} />
                     <Input
                       label={d.auth.email}
                       value={form.email}
@@ -180,17 +180,19 @@ export default function Contact() {
                       icon="mail"
                       autoCapitalize="none"
                       keyboardType="email-address"
+                      maxLength={254}
                       containerStyle={{ flex: 1 }}
                       error={touched && !emailOk ? (form.email.trim() ? l.emailInvalid : d.common.required) : undefined}
                     />
                   </FieldRow>
-                  <Input label={l.subject} value={form.subject} onChangeText={set('subject')} icon="tag" error={touched && !form.subject.trim() ? d.common.required : undefined} />
+                  <Input label={l.subject} value={form.subject} onChangeText={set('subject')} maxLength={200} icon="tag" error={touched && !form.subject.trim() ? d.common.required : undefined} />
                   <Input
                     label={l.message}
                     value={form.message}
                     onChangeText={set('message')}
                     placeholder={l.messagePlaceholder}
                     multiline
+                    maxLength={5000}
                     style={{ minHeight: 140, textAlignVertical: 'top' }}
                     error={touched && !form.message.trim() ? d.common.required : undefined}
                   />

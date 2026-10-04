@@ -26,6 +26,7 @@ import { CityPicker } from '@/components/CityPicker';
 import { AvatarCropper } from '@/components/AvatarCropper';
 import type { PickedImage } from '@/data/remote';
 import { OtherSchoolsEditor } from '@/components/OtherSchools';
+import { isFileRejected } from '@/lib/fileSafety';
 
 export default function EditProfile() {
   const { d, lang } = useI18n();
@@ -131,7 +132,7 @@ export default function EditProfile() {
     } catch (e) {
       setForm((f) => ({ ...f, avatar: previous }));
       if (previous) actions.previewAvatar(previous);
-      toast(`${d.auth.errors.unknown} (${(e as Error)?.message ?? e})`, 'danger');
+      toast(isFileRejected(e) ? d.auth.errors[e.reason] : `${d.auth.errors.unknown} (${(e as Error)?.message ?? e})`, 'danger');
     } finally {
       setUploading(false);
     }
@@ -158,8 +159,8 @@ export default function EditProfile() {
           <Card style={{ gap: 16 }}>
             <Txt variant="h3">{d.profile.info}</Txt>
             <FieldRow>
-              <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} containerStyle={{ flex: 1 }} />
-              <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
+              <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} maxLength={80} containerStyle={{ flex: 1 }} />
+              <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
             </FieldRow>
             <FieldRow>
               <PhoneField
@@ -237,7 +238,7 @@ export default function EditProfile() {
                 </Row>
               </>
             )}
-            <Input label={d.profile.bio} value={form.bio} onChangeText={set('bio')} multiline />
+            <Input label={d.profile.bio} value={form.bio} onChangeText={set('bio')} multiline maxLength={1000} />
             <View style={{ gap: 6 }}>
               <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
               <Row gap={10} style={{ height: 48, borderRadius: 14, paddingHorizontal: 14, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>

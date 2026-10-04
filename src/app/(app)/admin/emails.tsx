@@ -13,6 +13,7 @@ import type { Role } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickAttachment } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
+import { isFileRejected } from '@/lib/fileSafety';
 
 // Honorary members do not receive these emails.
 const AUDIENCES: Role[] = ['alumni', 'eleve', 'admin'];
@@ -89,8 +90,8 @@ function Compose() {
     try {
       const file = await actions.uploadMailAttachment(doc);
       setFiles((x) => [...x, file]);
-    } catch {
-      toast(d.auth.errors.unknown, 'danger');
+    } catch (err) {
+      toast(isFileRejected(err) ? d.auth.errors[err.reason] : d.auth.errors.unknown, 'danger');
     }
     setBusy(null);
   };

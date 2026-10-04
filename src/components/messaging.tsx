@@ -222,6 +222,7 @@ function Thread({ id }: { id: string }) {
             placeholder={d.messages.placeholder}
             placeholderTextColor={colors.textSubtle}
             multiline
+            maxLength={5000}
             onKeyPress={(e) => {
               const ev = e.nativeEvent as unknown as { key: string; shiftKey?: boolean };
               if (Platform.OS === 'web' && ev.key === 'Enter' && !ev.shiftKey) {

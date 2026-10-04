@@ -18,6 +18,7 @@ import {
   publicationRow,
   toConversation,
   toUser,
+  loadProfiles,
   toMessage,
   toCircleMessage,
   toNotification,
@@ -306,8 +307,8 @@ function useStoreValue() {
 
   /** Supabase: uploads the proof to the private bucket and records it on the profile. */
   const saveProof = async (userId: string, doc: PickedDoc) => {
-    const path = await uploadProof(userId, doc);
-    const row = { proof_path: path, proof_name: doc.name, proof_mime: doc.mimeType ?? null, proof_uploaded_at: nowIso() };
+    const { path, type } = await uploadProof(userId, doc);
+    const row = { proof_path: path, proof_name: doc.name.slice(0, 200), proof_mime: type, proof_uploaded_at: nowIso() };
     const { error: e } = await supabase!.from('profiles').update(row).eq('id', userId);
     if (e) throw e;
     return path;
@@ -1002,7 +1003,7 @@ function useStoreValue() {
     /** Supabase: re-reads one profile (after server-side rules changed it). */
     async refreshUser(id: string) {
       if (!supabase) return;
-      const { data } = await supabase.from('profiles').select('*').eq('id', id).single();
+      const [data] = await loadProfiles(id).catch(() => []);
       if (data) commit((d) => ({ ...d, users: d.users.map((u) => (u.id === id ? toUser(data) : u)) }));
     },
     openReportedConversation(id: string) {

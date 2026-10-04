@@ -3,7 +3,7 @@ import { Seo } from '@/components/Seo';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import type { ReactNode } from 'react';
-import { Linking, Platform, Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 
 import { FloatingPaths } from '@/components/fx/FloatingPaths';
 import { PartnersManager } from '@/components/PartnersManager';
@@ -19,6 +19,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
+import { openExternal } from '@/lib/links';
 
 /**
  * Partners. Approved members get it inside their space (admins manage the list there);
@@ -126,7 +127,7 @@ function LogoCloud({ partners, children }: { partners: Institution[]; children: 
         );
         return (
           <Reveal key={x.id} index={i} style={{ position: 'absolute', ...pos, transform: [{ rotate: `${slot.tilt}deg` }] } as object}>
-            {x.website ? <Pressable onPress={() => Linking.openURL(x.website!)} accessibilityRole="link" accessibilityLabel={x.name}>{mark}</Pressable> : mark}
+            {x.website ? <Pressable onPress={() => openExternal(x.website!)} accessibilityRole="link" accessibilityLabel={x.name}>{mark}</Pressable> : mark}
           </Reveal>
         );
       })}
@@ -154,7 +155,7 @@ function PartnerList({ partners, empty }: { partners: Institution[]; empty: stri
               <View style={{ flex: 1, gap: 8 }}>
                 <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 30 : 40, lineHeight: isMobile ? 34 : 44, color: t.fg }}>{x.name}</Txt>
                 <Txt style={{ fontFamily: fonts.regular, fontSize: 15, lineHeight: 24, color: t.muted, maxWidth: 560 }}>{x.description}</Txt>
-                {x.website && <LinkCta label={d.honorary.website} onPress={() => Linking.openURL(x.website!)} />}
+                {x.website && <LinkCta label={d.honorary.website} onPress={() => openExternal(x.website!)} />}
               </View>
             </View>
           </Reveal>

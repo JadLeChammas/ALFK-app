@@ -45,7 +45,14 @@ type Body = {
   photo?: { path: string };
 };
 
-const ext = (e?: string) => (e ?? '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 5) || 'jpg';
+// Only these extensions get an upload link (the buckets also refuse any other file type).
+const PROOF_EXTS = ['jpg', 'png', 'webp', 'gif', 'heic', 'heif', 'pdf'];
+const PHOTO_EXTS = ['jpg', 'png', 'webp', 'gif', 'heic', 'heif'];
+const PROOF_MIMES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif', 'application/pdf'];
+const ext = (e: string | undefined, allowed: string[]) => {
+  const x = (e ?? '').toLowerCase().replace(/[^a-z0-9]/g, '').replace('jpeg', 'jpg');
+  return allowed.includes(x) ? x : null;
+};
 const randomId = () => crypto.randomUUID();
 
 const ROLES = ['alumni', 'eleve', 'honneur', 'admin'];
@@ -77,13 +84,16 @@ export async function POST(request: Request) {
 
     if (body.action === 'signup-upload') {
       const out: Record<string, { path: string; token: string }> = {};
-      if (body.proofExt && !p.proof_path) {
-        const { data, error } = await admin.storage.from('proofs').createSignedUploadUrl(`${userId}/${randomId()}.${ext(body.proofExt)}`);
+      const proofExt = ext(body.proofExt, PROOF_EXTS);
+      const photoExt = ext(body.photoExt, PHOTO_EXTS);
+      if ((body.proofExt && !proofExt) || (body.photoExt && !photoExt)) return json(400, { error: 'file_type' });
+      if (proofExt && !p.proof_path) {
+        const { data, error } = await admin.storage.from('proofs').createSignedUploadUrl(`${userId}/${randomId()}.${proofExt}`);
         if (error || !data) return json(500, { error: error?.message ?? 'failed' });
         out.proof = { path: data.path, token: data.token };
       }
-      if (body.photoExt && !p.avatar) {
-        const { data, error } = await admin.storage.from('media').createSignedUploadUrl(`${userId}/avatars/${randomId()}.${ext(body.photoExt)}`);
+      if (photoExt && !p.avatar) {
+        const { data, error } = await admin.storage.from('media').createSignedUploadUrl(`${userId}/avatars/${randomId()}.${photoExt}`);
         if (error || !data) return json(500, { error: error?.message ?? 'failed' });
         out.photo = { path: data.path, token: data.token };
       }
@@ -99,7 +109,8 @@ export async function POST(request: Request) {
     };
     const row: Record<string, string | null> = {};
     if (body.proof?.path && !p.proof_path && body.proof.path.startsWith(`${userId}/`) && (await exists('proofs', body.proof.path))) {
-      Object.assign(row, { proof_path: body.proof.path, proof_name: (body.proof.name ?? 'justificatif').slice(0, 200), proof_mime: body.proof.mime ?? null, proof_uploaded_at: new Date().toISOString() });
+      const mime = PROOF_MIMES.includes(body.proof.mime ?? '') ? body.proof.mime! : null;
+      Object.assign(row, { proof_path: body.proof.path, proof_name: (body.proof.name ?? 'justificatif').slice(0, 200), proof_mime: mime, proof_uploaded_at: new Date().toISOString() });
     }
     if (body.photo?.path && !p.avatar && body.photo.path.startsWith(`${userId}/avatars/`) && (await exists('media', body.photo.path))) {
       row.avatar = admin.storage.from('media').getPublicUrl(body.photo.path).data.publicUrl;

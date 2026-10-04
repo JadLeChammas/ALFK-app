@@ -47,6 +47,8 @@ const pt: Dict = {
     step1: 'Identidade', step2: 'Percurso', continue: 'Continuar', passwordHint: 'Mínimo de 8 caracteres',
     errors: {
       proof: 'É obrigatório um comprovativo de escolaridade no LFK para se inscrever.',
+      file_type: 'Este tipo de ficheiro não é aceite, ou o conteúdo não corresponde à extensão.',
+      file_too_large: 'Ficheiro demasiado pesado: 10 MB no máximo.',
       invalid_credentials: 'E-mail ou palavra-passe incorretos.', email_taken: 'Já existe uma conta com este e-mail.',
       weak_password: 'A palavra-passe deve ter pelo menos 8 caracteres.', unknown_email: 'Nenhuma conta com este e-mail.',
       wrong_password: 'A palavra-passe atual está incorreta.', birth_date: 'Data de nascimento inválida: formato DD/MM/AAAA, uma data passada.', phone: 'Número de telefone inválido: escolha o indicativo e depois 6 a 14 algarismos.', invalid_code: 'O código de Bureau deve ter exatamente 4 algarismos.', code_taken: 'Este código de Bureau já está atribuído a outro membro.', unknown: 'Ocorreu um erro. Tente novamente dentro de instantes.', mismatch: 'As palavras-passe não coincidem.', missing: 'Preencha todos os campos obrigatórios.',
@@ -61,7 +63,7 @@ const pt: Dict = {
     pendingSub: 'Obrigado, {name}! Recebemos a sua inscrição. Um administrador da Amicale vai verificar os seus dados — terá acesso a toda a plataforma assim que for aprovada.',
     pendingStep1: 'Inscrição enviada', pendingStep2: 'Verificação por um administrador', pendingStep3: 'Acesso à comunidade',
     demoAccounts: 'Contas de demonstração', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Aluno', demoPending: 'Pendente', demoDirection: 'Direção',
-    photo: 'Foto de perfil', addPhoto: 'Adicionar uma foto', photoRequired: 'Adicione uma foto de perfil para criar sua conta.',
+    photo: 'Foto de perfil', addPhoto: 'Adicionar uma foto', photoRequired: 'Adicione uma foto de perfil para criar sua conta.', requiredLegend: '* Campos obrigatórios',
   },
   home: {
     hello: 'Olá, {name}', heroTitle: 'Uma só comunidade,\nmilhares de histórias.',

@@ -16,6 +16,7 @@ import { LANGUAGES, useI18n } from '@/i18n';
 import { period, sortEntries } from '@/lib/cvPdf';
 import { pickPdf, PROOF_MAX_BYTES } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
+import { isFileRejected } from '@/lib/fileSafety';
 
 const SECTIONS: { key: CvSection; icon: IconName }[] = [
   { key: 'experience', icon: 'briefcase' },
@@ -71,8 +72,8 @@ export default function CvEditor() {
       const next = { ...cv, file: { path, name: doc.name, uploadedAt: new Date().toISOString() } };
       setCv(next);
       save(next);
-    } catch {
-      toast(d.errors.saveFailed, 'danger');
+    } catch (e) {
+      toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.errors.saveFailed, 'danger');
     } finally {
       setUploading(false);
     }

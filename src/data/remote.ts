@@ -1,5 +1,6 @@
 import * as Crypto from 'expo-crypto';
 
+import { ATTACHMENT_TYPES, checkUpload, CV_TYPES, extensionFor, IMAGE_TYPES, PROOF_TYPES } from '@/lib/fileSafety';
 import { apiBase, supabase } from '@/lib/supabase';
 import type {
   AdminLog,
@@ -33,7 +34,7 @@ export const toUser = (r: Row): User => ({
   id: r.id,
   firstName: r.first_name,
   lastName: r.last_name,
-  email: r.email,
+  email: r.email ?? '',
   password: '',
   gender: r.gender,
   role: r.role,
@@ -130,6 +131,27 @@ const toContact = (r: Row): ContactMessage => ({ id: r.id, name: r.name, email: 
 const toLog = (r: Row): AdminLog => ({ id: r.id, actorId: r.actor_id ?? '', action: r.action, target: r.target, meta: opt(r.meta), createdAt: r.created_at });
 export const toNotification = (r: Row): AppNotification => ({ id: r.id, userId: r.user_id, kind: r.kind, template: r.template, params: opt(r.params), href: opt(r.href), createdAt: r.created_at, read: r.read });
 
+/** Profile columns any approved member may read (migration 031 limits direct reads to these). */
+const PROFILE_PUBLIC_COLUMNS =
+  'id, first_name, last_name, gender, role, approved, promo, school, fonction, city, country, avatar, bio, show_email, show_phone, show_birthday, ' +
+  'created_at, last_active_at, alumni_number, created_by_admin, field_of_study, mentor, situation, employer, job_title, cv, nationalities, ' +
+  'other_schools, fields_of_study, school_country, grade, needs_completion, locale';
+
+/**
+ * Profiles: the public columns, plus the private ones from member_private_fields() — e-mail, phone and
+ * birth date only when the member shows them (always for oneself and for admins), proof of schooling,
+ * Bureau code and news consent only for oneself and admins. `onlyId`: just that profile.
+ */
+export async function loadProfiles(onlyId?: string): Promise<Row[]> {
+  const sb = supabase!;
+  let q = sb.from('profiles').select(PROFILE_PUBLIC_COLUMNS);
+  if (onlyId) q = q.eq('id', onlyId);
+  const [{ data, error }, priv] = await Promise.all([q, sb.rpc('member_private_fields', onlyId ? { only_id: onlyId } : {})]);
+  if (error) throw error;
+  const extra = new Map(((priv.data ?? []) as Row[]).map((r) => [r.id, r]));
+  return ((data ?? []) as Row[]).map((r) => ({ ...r, ...extra.get(r.id) }));
+}
+
 /** Loads everything this user is allowed to see (row-level security filters the rest). */
 export async function loadDb(): Promise<Db> {
   const sb = supabase!;
@@ -143,7 +165,7 @@ export async function loadDb(): Promise<Db> {
   // Tables added by migration 003: an empty list until it has been run, instead of breaking the app.
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
   const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle] = await Promise.all([
-    all('profiles'),
+    loadProfiles(),
     all('promos'),
     all('events', 'date'),
     all('event_photos', 'created_at'),
@@ -210,30 +232,39 @@ function base64ToBytes(b64: string) {
 /** Uploads a picked image to the public "media" bucket under the user's folder; returns its URL. */
 export async function uploadImage(userId: string, img: PickedImage, folder: string): Promise<string> {
   const sb = supabase!;
-  const type = img.mimeType ?? 'image/jpeg';
-  const ext = type.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg';
   let body: Uint8Array | Blob;
   if (img.base64) body = base64ToBytes(img.base64);
   else body = await (await fetch(img.uri)).blob();
-  const path = `${userId}/${folder}/${newId()}.${ext}`;
+  const type = await checkUpload(body, img.uri, img.mimeType, IMAGE_TYPES);
+  const path = `${userId}/${folder}/${newId()}.${extensionFor(type)}`;
   const { error } = await sb.storage.from('media').upload(path, body, { contentType: type, upsert: false });
   if (error) throw error;
   return sb.storage.from('media').getPublicUrl(path).data.publicUrl;
+}
+
+/**
+ * Checks a file as soon as it is picked (type, size, real contents), so a bad file is refused at once
+ * instead of after the form is sent. Throws FileRejected.
+ */
+export async function checkPicked(file: PickedDoc | PickedImage, allowed: string[]): Promise<void> {
+  const body =
+    'file' in file && file.file ? file.file : file.base64 ? base64ToBytes(file.base64) : await (await fetch(file.uri)).arrayBuffer();
+  await checkUpload(body, 'name' in file ? file.name : file.uri, file.mimeType, allowed);
 }
 
 // ——— Proof of schooling (private bucket "proofs": the member uploads, only admins can read) ———
 
 export type PickedDoc = { uri: string; name: string; mimeType?: string | null; file?: Blob | null; base64?: string | null; size?: number };
 
-/** Uploads the proof into proofs/<userId>/…; returns the storage path saved on the profile. */
-export async function uploadProof(userId: string, doc: PickedDoc): Promise<string> {
+/** Uploads the proof into proofs/<userId>/…; returns the storage path saved on the profile and the checked type. */
+export async function uploadProof(userId: string, doc: PickedDoc): Promise<{ path: string; type: string }> {
   const sb = supabase!;
-  const ext = (doc.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
   const body = doc.file ?? (doc.base64 ? base64ToBytes(doc.base64) : await (await fetch(doc.uri)).arrayBuffer());
-  const path = `${userId}/${newId()}.${ext}`;
-  const { error } = await sb.storage.from('proofs').upload(path, body, { contentType: doc.mimeType ?? undefined, upsert: false });
+  const type = await checkUpload(body, doc.name, doc.mimeType, PROOF_TYPES);
+  const path = `${userId}/${newId()}.${extensionFor(type)}`;
+  const { error } = await sb.storage.from('proofs').upload(path, body, { contentType: type, upsert: false });
   if (error) throw error;
-  return path;
+  return { path, type };
 }
 
 /**
@@ -249,20 +280,20 @@ export async function uploadSignupFiles(userId: string, email: string, proof: Pi
     if (!res.ok) throw new Error(json.error ?? `http_${res.status}`);
     return json;
   };
-  const proofExt = proof ? (proof.name.split('.').pop() || 'jpg') : undefined;
-  const photoType = photo?.mimeType ?? 'image/jpeg';
-  const photoExt = photo ? photoType.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg' : undefined;
-  const links = await post({ action: 'signup-upload', proofExt, photoExt });
+  // Both files are checked before anything is sent.
+  const proofBody = proof ? (proof.file ?? (proof.base64 ? base64ToBytes(proof.base64) : await (await fetch(proof.uri)).arrayBuffer())) : null;
+  const proofType = proof && proofBody ? await checkUpload(proofBody, proof.name, proof.mimeType, PROOF_TYPES) : null;
+  const photoBody = photo ? (photo.base64 ? base64ToBytes(photo.base64) : await (await fetch(photo.uri)).blob()) : null;
+  const photoType = photo && photoBody ? await checkUpload(photoBody, photo.uri, photo.mimeType, IMAGE_TYPES) : null;
+  const links = await post({ action: 'signup-upload', proofExt: proofType ? extensionFor(proofType) : undefined, photoExt: photoType ? extensionFor(photoType) : undefined });
   const done: Record<string, unknown> = {};
-  if (proof && links.proof) {
-    const body = proof.file ?? (proof.base64 ? base64ToBytes(proof.base64) : await (await fetch(proof.uri)).arrayBuffer());
-    const { error } = await sb.storage.from('proofs').uploadToSignedUrl(links.proof.path, links.proof.token, body, { contentType: proof.mimeType ?? undefined });
+  if (proof && proofBody && proofType && links.proof) {
+    const { error } = await sb.storage.from('proofs').uploadToSignedUrl(links.proof.path, links.proof.token, proofBody, { contentType: proofType });
     if (error) throw error;
-    done.proof = { path: links.proof.path, name: proof.name, mime: proof.mimeType ?? undefined };
+    done.proof = { path: links.proof.path, name: proof.name, mime: proofType };
   }
-  if (photo && links.photo) {
-    const body = photo.base64 ? base64ToBytes(photo.base64) : await (await fetch(photo.uri)).blob();
-    const { error } = await sb.storage.from('media').uploadToSignedUrl(links.photo.path, links.photo.token, body, { contentType: photoType });
+  if (photoBody && photoType && links.photo) {
+    const { error } = await sb.storage.from('media').uploadToSignedUrl(links.photo.path, links.photo.token, photoBody, { contentType: photoType });
     if (!error) done.photo = { path: links.photo.path };
   }
   if (done.proof || done.photo) await post({ action: 'signup-finish', ...done });
@@ -279,6 +310,7 @@ export async function proofUrl(path: string): Promise<string | null> {
 export async function uploadCvFile(userId: string, doc: PickedDoc): Promise<string> {
   const sb = supabase!;
   const body = doc.file ?? (doc.base64 ? base64ToBytes(doc.base64) : await (await fetch(doc.uri)).arrayBuffer());
+  await checkUpload(body, doc.name, doc.mimeType, CV_TYPES);
   const path = `${userId}/${newId()}.pdf`;
   const { error } = await sb.storage.from('cvs').upload(path, body, { contentType: 'application/pdf', upsert: false });
   if (error) throw error;
@@ -319,9 +351,10 @@ export async function callEmailApi<T extends object = object>(action: string, pa
 export async function uploadMailAttachment(userId: string, doc: PickedDoc): Promise<{ path: string; name: string }> {
   const sb = supabase!;
   const body = doc.file ?? (doc.base64 ? base64ToBytes(doc.base64) : await (await fetch(doc.uri)).arrayBuffer());
+  const type = await checkUpload(body, doc.name, doc.mimeType, ATTACHMENT_TYPES);
   const safe = doc.name.replace(/[^\w.\-]+/g, '_').slice(-80) || 'fichier';
   const path = `${userId}/${newId()}-${safe}`;
-  const { error } = await sb.storage.from('mail-attachments').upload(path, body, { contentType: doc.mimeType ?? undefined, upsert: false });
+  const { error } = await sb.storage.from('mail-attachments').upload(path, body, { contentType: type, upsert: false });
   if (error) throw error;
   return { path, name: doc.name };
 }

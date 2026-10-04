@@ -47,6 +47,8 @@ const de: Dict = {
     step1: 'Identität', step2: 'Werdegang', continue: 'Weiter', passwordHint: 'Mindestens 8 Zeichen',
     errors: {
       proof: 'Für die Anmeldung ist ein Schulnachweis des LFK erforderlich.',
+      file_type: 'Dieser Dateityp wird nicht akzeptiert, oder der Inhalt passt nicht zur Dateiendung.',
+      file_too_large: 'Datei zu groß: maximal 10 MB.',
       invalid_credentials: 'E-Mail oder Passwort ist falsch.', email_taken: 'Mit dieser E-Mail existiert bereits ein Konto.',
       weak_password: 'Das Passwort muss mindestens 8 Zeichen haben.', unknown_email: 'Kein Konto mit dieser E-Mail.',
       wrong_password: 'Das aktuelle Passwort ist falsch.', birth_date: 'Ungültiges Geburtsdatum: Format TT/MM/JJJJ, ein vergangenes Datum.', phone: 'Ungültige Telefonnummer: Vorwahl wählen, dann 6 bis 14 Ziffern.', invalid_code: 'Der Bureau-Code muss genau 4 Ziffern haben.', code_taken: 'Dieser Bureau-Code ist bereits einem anderen Mitglied zugewiesen.', unknown: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es gleich noch einmal.', mismatch: 'Die Passwörter stimmen nicht überein.', missing: 'Bitte füllen Sie alle Pflichtfelder aus.',
@@ -61,7 +63,7 @@ const de: Dict = {
     pendingSub: 'Danke, {name}! Ihre Registrierung ist eingegangen. Ein Administrator der Amicale prüft Ihre Angaben — nach der Freigabe haben Sie Zugriff auf die ganze Plattform.',
     pendingStep1: 'Registrierung gesendet', pendingStep2: 'Prüfung durch einen Administrator', pendingStep3: 'Zugang zur Gemeinschaft',
     demoAccounts: 'Demo-Konten', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Schüler', demoPending: 'Ausstehend', demoDirection: 'Schulleitung',
-    photo: 'Profilfoto', addPhoto: 'Foto hinzufügen', photoRequired: 'Fügen Sie ein Profilfoto hinzu, um Ihr Konto zu erstellen.',
+    photo: 'Profilfoto', addPhoto: 'Foto hinzufügen', photoRequired: 'Fügen Sie ein Profilfoto hinzu, um Ihr Konto zu erstellen.', requiredLegend: '* Pflichtfelder',
   },
   home: {
     hello: 'Hallo {name}', heroTitle: 'Eine Gemeinschaft,\ntausende Geschichten.',

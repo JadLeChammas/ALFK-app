@@ -48,6 +48,8 @@ const pirate: Dict = {
     step1: 'Who ye be', step2: 'Yer voyage', continue: 'Onward', passwordHint: 'At least 8 characters',
     errors: {
       proof: 'Ye must show proof ye sailed with the LFK to sign the Articles.',
+      file_type: 'That cargo be not allowed aboard, or its insides don’t match its label, matey.',
+      file_too_large: 'Too heavy fer the hold: 10 MB at most.',
       invalid_credentials: 'Wrong email or secret word, matey.', email_taken: 'A sailor already sails under this email.',
       weak_password: 'Yer secret word needs at least 8 characters.', unknown_email: 'No sailor with this email.',
       wrong_password: 'That be not yer current secret word.', birth_date: 'Bad birth day: use DD/MM/YYYY, a day gone by.', phone: 'Bad horn number: pick the country code, then 6 to 14 digits.', invalid_code: 'The Bureau code must be exactly 4 digits.', code_taken: 'This Bureau code already belongs to another sailor.', unknown: 'Shiver me timbers, somethin’ went wrong. Try again in a moment.', mismatch: 'The secret words don’t match.', missing: 'Fill in every needed field, matey.',
@@ -62,7 +64,7 @@ const pirate: Dict = {
     pendingSub: 'Thank ye {name}! Yer papers be received. A captain o’ the Amicale will look ’em over — ye’ll have the run o’ the ship once approved.',
     pendingStep1: 'Papers sent', pendingStep2: 'Checked by a captain', pendingStep3: 'Welcome aboard',
     demoAccounts: 'Demo sailors', demoAdmin: 'Captain', demoMember: 'Old Hand', demoEleve: 'Cabin Boy', demoPending: 'Waitin’', demoDirection: 'Admiralty',
-    photo: 'Yer portrait', addPhoto: 'Add a portrait', photoRequired: 'Add a portrait to sign aboard.',
+    photo: 'Yer portrait', addPhoto: 'Add a portrait', photoRequired: 'Add a portrait to sign aboard.', requiredLegend: '* Ye must fill these, sailor',
   },
   home: {
     hello: 'Ahoy {name}', heroTitle: 'One crew,\na thousand tall tales.',

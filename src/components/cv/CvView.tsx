@@ -13,6 +13,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { useDialogs } from '../ui/Dialogs';
 import { Button, Card, Row } from '../ui/primitives';
 import { Txt } from '../ui/Txt';
+import { openExternal } from '@/lib/links';
+import { isFileRejected } from '@/lib/fileSafety';
 
 export const LFK_NAME = 'Lycée Français du Koweït';
 
@@ -140,8 +142,8 @@ export function CvView({ user }: { user: User }) {
       )}
       {(cv.linkedin || cv.website) && (
         <Row gap={8} wrap>
-          {cv.linkedin && <Button label="LinkedIn" icon="linkedin" size="sm" variant="secondary" onPress={() => Linking.openURL(cv.linkedin!)} />}
-          {cv.website && <Button label={d.cv.website} icon="link" size="sm" variant="secondary" onPress={() => Linking.openURL(cv.website!)} />}
+          {cv.linkedin && <Button label="LinkedIn" icon="linkedin" size="sm" variant="secondary" onPress={() => openExternal(cv.linkedin!)} />}
+          {cv.website && <Button label={d.cv.website} icon="link" size="sm" variant="secondary" onPress={() => openExternal(cv.website!)} />}
         </Row>
       )}
     </Card>
@@ -193,7 +195,7 @@ function Timeline({ title, icon, entries }: { title: string; icon: React.Compone
             {(e.start || e.end) && <Txt variant="small" color="textSubtle">{period(e, locale, d.cv.present)}</Txt>}
             {!!e.description && <Txt variant="small" color="textMuted" style={{ marginTop: 4 }}>{e.description}</Txt>}
             {!!e.url && (
-              <Txt variant="small" color="primary" onPress={() => Linking.openURL(e.url!)} numberOfLines={1}>{e.url}</Txt>
+              <Txt variant="small" color="primary" onPress={() => openExternal(e.url!)} numberOfLines={1}>{e.url}</Txt>
             )}
           </View>
         </Row>
@@ -221,8 +223,8 @@ export function useCvUpload() {
       const path = await actions.uploadCvFile(doc);
       const r = actions.updateProfile({ cv: { ...me.cv, file: { path, name: doc.name, uploadedAt: new Date().toISOString() } } });
       toast(r.ok ? d.cv.posted : d.errors.saveFailed, r.ok ? 'success' : 'danger');
-    } catch {
-      toast(d.errors.saveFailed, 'danger');
+    } catch (e) {
+      toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.errors.saveFailed, 'danger');
     } finally {
       setUploading(false);
     }

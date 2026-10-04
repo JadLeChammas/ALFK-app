@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 
 import { MemberCard } from '@/components/cards';
 import { useDialogs } from '@/components/ui/Dialogs';
@@ -18,6 +18,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
+import { openExternal } from '@/lib/links';
 
 export default function PromoPage() {
   const { annee } = useLocalSearchParams<{ annee: string }>();
@@ -65,7 +66,7 @@ export default function PromoPage() {
           </Row>
           <Row gap={10} wrap>
             {info?.whatsapp ? (
-              <Button label={d.promo.whatsapp} icon="message-square" onPress={() => Linking.openURL(info.whatsapp!)} style={{ backgroundColor: '#25D366', borderColor: '#25D366' }} />
+              <Button label={d.promo.whatsapp} icon="message-square" onPress={() => openExternal(info.whatsapp!)} style={{ backgroundColor: '#25D366', borderColor: '#25D366' }} />
             ) : (
               <Badge label={d.promo.noWhatsapp} tone="neutral" icon="message-square" />
             )}

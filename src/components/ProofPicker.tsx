@@ -3,9 +3,10 @@ import { Image } from 'expo-image';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import type { PickedDoc } from '@/data/remote';
+import { checkPicked, type PickedDoc } from '@/data/remote';
 import { useI18n } from '@/i18n';
-import { pickProof, PROOF_MAX_BYTES } from '@/lib/media';
+import { isFileRejected, PROOF_TYPES } from '@/lib/fileSafety';
+import { pickProof } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Button, Row } from './ui/primitives';
 import { Txt } from './ui/Txt';
@@ -14,20 +15,23 @@ import { Txt } from './ui/Txt';
  * Proof of schooling at the LFK (report card, school certificate, attestation or a simple photo).
  * Required to sign up: an admin checks it before approving the account.
  */
-export function ProofPicker({ value, onChange, error }: { value: PickedDoc | null; onChange: (doc: PickedDoc | null) => void; error?: boolean }) {
+export function ProofPicker({ value, onChange, error, required }: { value: PickedDoc | null; onChange: (doc: PickedDoc | null) => void; error?: boolean; required?: boolean }) {
   const { d } = useI18n();
   const { colors } = useTheme();
-  const [tooBig, setTooBig] = useState(false);
+  // A refused file: too large, not an image or a PDF, or contents that do not match its name.
+  const [rejected, setRejected] = useState<'file_type' | 'file_too_large' | null>(null);
   const isImage = !!value?.mimeType?.startsWith('image/');
 
   const pick = async () => {
     const doc = await pickProof();
     if (!doc) return;
-    if (doc.size && doc.size > PROOF_MAX_BYTES) {
-      setTooBig(true);
+    try {
+      await checkPicked(doc, PROOF_TYPES);
+    } catch (e) {
+      setRejected(isFileRejected(e) ? e.reason : 'file_type');
       return;
     }
-    setTooBig(false);
+    setRejected(null);
     onChange(doc);
   };
 
@@ -40,7 +44,7 @@ export function ProofPicker({ value, onChange, error }: { value: PickedDoc | nul
           borderRadius: 18,
           borderWidth: 1.5,
           borderStyle: value ? 'solid' : 'dashed',
-          borderColor: error || tooBig ? colors.danger : value ? colors.success : colors.borderStrong,
+          borderColor: error || rejected ? colors.danger : value ? colors.success : colors.borderStrong,
           backgroundColor: value ? colors.successSoft : colors.surface,
         }}>
         <Row gap={12} style={{ alignItems: 'flex-start' }}>
@@ -48,7 +52,7 @@ export function ProofPicker({ value, onChange, error }: { value: PickedDoc | nul
             <Feather name={value ? 'check' : 'file-plus'} size={20} color={value ? '#fff' : colors.primary} />
           </View>
           <View style={{ flex: 1, gap: 4 }}>
-            <Txt variant="bodyStrong">{d.proof.title}</Txt>
+            <Txt variant="bodyStrong">{required ? `${d.proof.title} *` : d.proof.title}</Txt>
             <Txt variant="small" color="textMuted">{d.proof.sub}</Txt>
           </View>
         </Row>
@@ -66,8 +70,8 @@ export function ProofPicker({ value, onChange, error }: { value: PickedDoc | nul
         <Button label={value ? d.proof.replace : d.proof.pick} icon="upload" variant={value ? 'secondary' : 'primary'} onPress={pick} />
         <Txt variant="small" color="textSubtle">{d.proof.formats}</Txt>
       </View>
-      {tooBig && <Txt variant="smallStrong" color="danger">{d.proof.tooBig}</Txt>}
-      {error && !tooBig && <Txt variant="smallStrong" color="danger">{d.auth.errors.proof}</Txt>}
+      {rejected && <Txt variant="smallStrong" color="danger">{rejected === 'file_too_large' ? d.proof.tooBig : d.auth.errors.file_type}</Txt>}
+      {error && !rejected && <Txt variant="smallStrong" color="danger">{d.auth.errors.proof}</Txt>}
     </View>
   );
 }

@@ -1,12 +1,13 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useUpcomingProcedures } from '@/data/keyDates';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Badge, Card, IconButton, SectionHeader, Tap } from './ui/primitives';
 import { Txt } from './ui/Txt';
+import { openExternal } from '@/lib/links';
 
 /** « Démarches à venir »: Parcoursup, competitive exams, applications — in progress or coming up. */
 export function ProceduresCard({ limit = 4, footer = true }: { limit?: number; footer?: boolean }) {
@@ -35,7 +36,7 @@ export function ProceduresCard({ limit = 4, footer = true }: { limit?: number; f
                 />
               </View>
             </View>
-            {!!o.k.url && <IconButton icon="external-link" size={34} onPress={() => Linking.openURL(o.k.url!)} label={d.calendar.openLink} />}
+            {!!o.k.url && <IconButton icon="external-link" size={34} onPress={() => openExternal(o.k.url!)} label={d.calendar.openLink} />}
           </View>
         ))}
       </View>

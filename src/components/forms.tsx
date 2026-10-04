@@ -48,12 +48,12 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
 
   return (
     <Sheet visible={visible} title={d.events.create} onClose={onClose}>
-      <Input label={d.events.titleField} value={form.title} onChangeText={set('title')} />
+      <Input label={d.events.titleField} value={form.title} onChangeText={set('title')} maxLength={300} />
       <FieldRow>
         <Input label={d.events.dateField} value={form.date} onChangeText={set('date')} containerStyle={{ flex: 1 }} />
         <Input label={d.events.timeField} value={form.time} onChangeText={set('time')} containerStyle={{ minWidth: 120 }} />
       </FieldRow>
-      <Input label={d.events.locationField} icon="map-pin" value={form.location} onChangeText={set('location')} />
+      <Input label={d.events.locationField} icon="map-pin" value={form.location} onChangeText={set('location')} maxLength={300} />
       <View style={{ gap: 8 }}>
         <Txt variant="smallStrong" color="textMuted">{d.events.category}</Txt>
         <Row gap={8} wrap>
@@ -63,7 +63,7 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
         </Row>
       </View>
       <Input label={d.events.coverField} icon="image" value={form.cover} onChangeText={set('cover')} autoCapitalize="none" />
-      <Input label={d.events.descriptionField} value={form.description} onChangeText={set('description')} multiline />
+      <Input label={d.events.descriptionField} value={form.description} onChangeText={set('description')} multiline maxLength={10000} />
       <Button
         label={d.common.create}
         full
@@ -108,7 +108,7 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
           <Txt variant="small" color="textMuted" style={{ flex: 1 }}>{d.pubReview.proposeSub}</Txt>
         </Row>
       )}
-      <Input label={d.events.titleField} value={form.title} onChangeText={set('title')} />
+      <Input label={d.events.titleField} value={form.title} onChangeText={set('title')} maxLength={300} />
       {admin && <Select label={d.publications.author} value={authorId} onChange={setAuthorId} searchable options={authors} />}
       {direct && (
         <Row gap={8} wrap>
@@ -118,8 +118,8 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
         </Row>
       )}
       <Input label={d.events.coverField} icon="image" value={form.cover} onChangeText={set('cover')} autoCapitalize="none" />
-      <Input label={d.publications.excerptField} value={form.excerpt} onChangeText={set('excerpt')} />
-      <Input label={d.publications.bodyField} value={form.body} onChangeText={set('body')} multiline />
+      <Input label={d.publications.excerptField} value={form.excerpt} onChangeText={set('excerpt')} maxLength={2000} />
+      <Input label={d.publications.bodyField} value={form.body} onChangeText={set('body')} multiline maxLength={50000} />
       <Button
         label={editing ? d.common.save : direct ? d.common.create : d.pubReview.submit}
         full

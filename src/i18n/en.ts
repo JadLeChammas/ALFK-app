@@ -47,6 +47,8 @@ const en: Dict = {
     step1: 'Identity', step2: 'Background', continue: 'Continue', passwordHint: 'At least 8 characters',
     errors: {
       proof: 'Proof of schooling at the LFK is required to sign up.',
+      file_type: 'This file type is not accepted, or the file’s contents do not match its extension.',
+      file_too_large: 'File too large: 10 MB max.',
       invalid_credentials: 'Incorrect email or password.', email_taken: 'An account already exists with this email.',
       weak_password: 'Password must be at least 8 characters.', unknown_email: 'No account with this email.',
       wrong_password: 'Current password is incorrect.', birth_date: 'Invalid date of birth: use DD/MM/YYYY, a past date.', phone: 'Invalid phone number: pick the country code, then 6 to 14 digits.', invalid_code: 'The Bureau code must be exactly 4 digits.', code_taken: 'This Bureau code is already assigned to another member.', unknown: 'Something went wrong. Please try again in a moment.', mismatch: 'Passwords do not match.', missing: 'Please fill in all required fields.',
@@ -61,7 +63,7 @@ const en: Dict = {
     pendingSub: "Thanks {name}! We've received your sign-up. An Amicale administrator will review your details — you'll get full access as soon as it's approved.",
     pendingStep1: 'Sign-up sent', pendingStep2: 'Review by an administrator', pendingStep3: 'Access to the community',
     demoAccounts: 'Demo accounts', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Student', demoPending: 'Pending', demoDirection: 'Leadership',
-    photo: 'Profile photo', addPhoto: 'Add a photo', photoRequired: 'Add a profile photo to create your account.',
+    photo: 'Profile photo', addPhoto: 'Add a photo', photoRequired: 'Add a profile photo to create your account.', requiredLegend: '* Required fields',
   },
   home: {
     hello: 'Hello {name}', heroTitle: 'One community,\nthousands of stories.',

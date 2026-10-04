@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { INSTAGRAM_HANDLE, InstagramButton, InstagramGlyph, instagramLinkProps } from '@/components/site/Instagram';
 import { router } from 'expo-router';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Badge, Button, Card, EmptyState, Row, SectionHeader, Tap } from '@/components/ui/primitives';
@@ -11,6 +11,7 @@ import { useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
+import { openExternal } from '@/lib/links';
 
 const WHATSAPP = '#25D366';
 export const isWhatsappLink = (url: string) => /^https:\/\/(chat\.whatsapp\.com|wa\.me|whatsapp\.com)\//i.test(url.trim());
@@ -53,7 +54,7 @@ export default function Whatsapp() {
         </Row>
         <Row gap={10} wrap>
           {community ? (
-            <Button label={d.whatsapp.join} icon="external-link" onPress={() => Linking.openURL(community)} style={{ backgroundColor: WHATSAPP, borderColor: WHATSAPP }} />
+            <Button label={d.whatsapp.join} icon="external-link" onPress={() => openExternal(community)} style={{ backgroundColor: WHATSAPP, borderColor: WHATSAPP }} />
           ) : (
             <Badge label={d.whatsapp.noCommunity} tone="neutral" icon="clock" />
           )}
@@ -92,7 +93,7 @@ export default function Whatsapp() {
           ) : myPromo?.whatsapp ? (
             <Row gap={12} wrap>
               <Txt variant="h3" style={{ flex: 1 }}>{f(d.common.promo, { year: me.promo })}</Txt>
-              <Button label={d.promo.whatsapp} icon="message-square" onPress={() => Linking.openURL(myPromo.whatsapp!)} style={{ backgroundColor: WHATSAPP, borderColor: WHATSAPP }} />
+              <Button label={d.promo.whatsapp} icon="message-square" onPress={() => openExternal(myPromo.whatsapp!)} style={{ backgroundColor: WHATSAPP, borderColor: WHATSAPP }} />
             </Row>
           ) : (
             <View style={{ gap: 10 }}>
@@ -114,7 +115,7 @@ export default function Whatsapp() {
               {groups.map((p) => (
                 <Tap
                   key={p.year}
-                  onPress={() => Linking.openURL(p.whatsapp!)}
+                  onPress={() => openExternal(p.whatsapp!)}
                   style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 16, backgroundColor: colors.surface, borderWidth: 1, borderColor: p.year === me.promo ? WHATSAPP : colors.border }}
                   hoverStyle={{ borderColor: WHATSAPP }}>
                   <Feather name="message-square" size={18} color={WHATSAPP} />

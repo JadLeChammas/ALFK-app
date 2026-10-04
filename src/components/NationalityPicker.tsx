@@ -11,7 +11,7 @@ import { Select } from './ui/Select';
 import { Txt } from './ui/Txt';
 
 /** One or more nationalities, picked from the list of countries. */
-export function NationalityPicker({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+export function NationalityPicker({ value, onChange, required }: { value: string[]; onChange: (v: string[]) => void; required?: boolean }) {
   const { d, lang } = useI18n();
   const { colors } = useTheme();
   const options = useMemo(
@@ -20,7 +20,7 @@ export function NationalityPicker({ value, onChange }: { value: string[]; onChan
   );
   return (
     <View style={{ gap: 8 }}>
-      <Txt variant="smallStrong" color="textMuted">{d.nat.label}</Txt>
+      <Txt variant="smallStrong" color="textMuted">{required ? `${d.nat.label} *` : d.nat.label}</Txt>
       {value.length > 0 && (
         <Row gap={8} wrap>
           {value.map((code) => (

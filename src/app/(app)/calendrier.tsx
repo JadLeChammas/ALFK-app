@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Sheet } from '@/components/forms';
 import { ProceduresCard } from '@/components/ProceduresCard';
@@ -16,6 +16,7 @@ import type { KeyDate, KeyDateCategory } from '@/data/types';
 import { LANGUAGES, useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
+import { openExternal } from '@/lib/links';
 
 const CATEGORIES: KeyDateCategory[] = ['demarches', 'francophonie', 'aefe', 'lfk', 'france', 'koweit', 'amicale'];
 const CATEGORY_TONE: Record<KeyDateCategory, Tone> = { francophonie: 'violet', aefe: 'info', lfk: 'primary', france: 'danger', koweit: 'success', amicale: 'ink', demarches: 'secondary' };
@@ -193,7 +194,7 @@ export default function Calendar() {
           </Txt>
         </View>
       </Tap>
-      {!!it.keyDate?.url && <IconButton icon="external-link" size={32} onPress={() => Linking.openURL(it.keyDate!.url!)} label={d.calendar.openLink} />}
+      {!!it.keyDate?.url && <IconButton icon="external-link" size={32} onPress={() => openExternal(it.keyDate!.url!)} label={d.calendar.openLink} />}
       {admin && it.keyDate && <IconButton icon="trash-2" size={32} onPress={() => removeDate(it.keyDate!)} label={d.common.delete} />}
     </Row>
   );

@@ -47,6 +47,8 @@ const zh: Dict = {
     step1: '身份', step2: '经历', continue: '继续', passwordHint: '至少 8 个字符',
     errors: {
       proof: '注册必须提供在 LFK 就读的证明。',
+      file_type: '不接受此文件类型，或文件内容与扩展名不符。',
+      file_too_large: '文件过大：最大 10 MB。',
       invalid_credentials: '邮箱或密码不正确。', email_taken: '该邮箱已注册账号。',
       weak_password: '密码至少需要 8 个字符。', unknown_email: '没有使用该邮箱的账号。',
       wrong_password: '当前密码不正确。', birth_date: '出生日期无效：请使用 DD/MM/YYYY 格式，且为过去的日期。', phone: '电话号码无效：请选择国家代码，再输入 6 至 14 位数字。', invalid_code: '理事会编号必须正好是 4 位数字。', code_taken: '该理事会编号已分配给其他成员。', unknown: '出现错误，请稍后再试。', mismatch: '两次输入的密码不一致。', missing: '请填写所有必填项。',
@@ -61,7 +63,7 @@ const zh: Dict = {
     pendingSub: '谢谢你，{name}！我们已收到你的注册。校友会管理员将核实你的信息 — 审核通过后即可使用全部功能。',
     pendingStep1: '已提交注册', pendingStep2: '管理员审核', pendingStep3: '进入社区',
     demoAccounts: '演示账号', demoAdmin: '管理员', demoMember: '校友', demoEleve: '在校生', demoPending: '待审核', demoDirection: '学校领导',
-    photo: '头像', addPhoto: '添加照片', photoRequired: '请添加头像以创建账户。',
+    photo: '头像', addPhoto: '添加照片', photoRequired: '请添加头像以创建账户。', requiredLegend: '* 为必填项',
   },
   home: {
     hello: '你好，{name}', heroTitle: '一个社区，\n千万个故事。',

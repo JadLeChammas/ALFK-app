@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 
 import { RoleBadge } from '@/components/cards';
 import { Sheet } from '@/components/forms';
@@ -16,6 +16,7 @@ import { LEADER_KINDS, useSchoolLeaders } from '@/data/schoolLeaders';
 import { isHiDev, partnerLogo, sortPartners } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
+import { openExternal } from '@/lib/links';
 
 /** Logos shipped with the app; any other value is an image URL. */
 
@@ -139,7 +140,7 @@ function InstitutionCard({ inst, onDelete, onEdit, onUp, onDown }: { inst: Insti
         </Row>
       )}
       <Txt color="textMuted" style={{ flex: 1 }}>{inst.description}</Txt>
-      {inst.website && <Button label={d.honorary.website} icon="external-link" size="sm" variant="secondary" style={{ alignSelf: 'flex-start' }} onPress={() => Linking.openURL(inst.website!)} />}
+      {inst.website && <Button label={d.honorary.website} icon="external-link" size="sm" variant="secondary" style={{ alignSelf: 'flex-start' }} onPress={() => openExternal(inst.website!)} />}
     </Card>
   );
 }

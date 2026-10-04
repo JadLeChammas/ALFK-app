@@ -64,8 +64,8 @@ export default function HonoraryAccounts() {
               <Txt variant="small" color="textMuted">{h.formHint}</Txt>
             </View>
             <FieldRow>
-              <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} containerStyle={{ flex: 1 }} />
-              <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
+              <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} maxLength={80} containerStyle={{ flex: 1 }} />
+              <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
             </FieldRow>
             <Input label={d.auth.email} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" />
             <Input label={d.admin.initialPassword} icon="lock" value={form.password} onChangeText={set('password')} hint={d.auth.passwordHint} autoCapitalize="none" />

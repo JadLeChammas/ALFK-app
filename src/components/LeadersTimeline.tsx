@@ -11,6 +11,7 @@ import { pickImages } from '@/lib/media';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
+import { isFileRejected } from '@/lib/fileSafety';
 
 /**
  * A timeline of round portraits — the lycée's proviseurs or the primary school's directors — from
@@ -112,8 +113,8 @@ function LeaderForm({ initial, onClose, onSave }: { initial: SchoolLeader; onClo
     try {
       const photo = await actions.uploadImage(img, 'leaders');
       setX((v) => ({ ...v, photo }));
-    } catch {
-      toast(d.auth.errors.unknown, 'danger');
+    } catch (e) {
+      toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.auth.errors.unknown, 'danger');
     }
     setUploading(false);
   };

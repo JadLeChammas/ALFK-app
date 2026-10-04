@@ -47,6 +47,8 @@ const es: Dict = {
     step1: 'Identidad', step2: 'Trayectoria', continue: 'Continuar', passwordHint: 'Mínimo 8 caracteres',
     errors: {
       proof: 'Para registrarse es obligatorio un justificante de escolaridad en el LFK.',
+      file_type: 'Este tipo de archivo no se acepta, o su contenido no corresponde a su extensión.',
+      file_too_large: 'Archivo demasiado pesado: 10 MB como máximo.',
       invalid_credentials: 'Correo o contraseña incorrectos.', email_taken: 'Ya existe una cuenta con este correo.',
       weak_password: 'La contraseña debe tener al menos 8 caracteres.', unknown_email: 'No hay ninguna cuenta con este correo.',
       wrong_password: 'La contraseña actual es incorrecta.', birth_date: 'Fecha de nacimiento no válida: formato DD/MM/AAAA, una fecha pasada.', phone: 'Número de teléfono no válido: elige el prefijo y luego 6 a 14 cifras.', invalid_code: 'El código de Bureau debe tener exactamente 4 cifras.', code_taken: 'Este código de Bureau ya está asignado a otro miembro.', unknown: 'Se produjo un error. Inténtalo de nuevo en un momento.', mismatch: 'Las contraseñas no coinciden.', missing: 'Rellena todos los campos obligatorios.',
@@ -61,7 +63,7 @@ const es: Dict = {
     pendingSub: '¡Gracias, {name}! Hemos recibido tu registro. Un administrador de la Amicale revisará tus datos — tendrás acceso a toda la plataforma en cuanto sea aprobada.',
     pendingStep1: 'Registro enviado', pendingStep2: 'Revisión por un administrador', pendingStep3: 'Acceso a la comunidad',
     demoAccounts: 'Cuentas de demostración', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Alumno', demoPending: 'Pendiente', demoDirection: 'Dirección',
-    photo: 'Foto de perfil', addPhoto: 'Añadir una foto', photoRequired: 'Añada una foto de perfil para crear su cuenta.',
+    photo: 'Foto de perfil', addPhoto: 'Añadir una foto', photoRequired: 'Añada una foto de perfil para crear su cuenta.', requiredLegend: '* Campos obligatorios',
   },
   home: {
     hello: 'Hola, {name}', heroTitle: 'Una sola comunidad,\nmiles de historias.',

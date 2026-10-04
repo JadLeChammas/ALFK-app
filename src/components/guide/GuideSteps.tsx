@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Sheet } from '@/components/forms';
 import { useDialogs } from '@/components/ui/Dialogs';
@@ -9,6 +9,7 @@ import { Txt } from '@/components/ui/Txt';
 import { PHASES, type CountryGuide, type GuidePhase, type GuideStep } from '@/data/guide';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
+import { openExternal } from '@/lib/links';
 
 const PHASE_ICON: Record<GuidePhase, IconName> = { before: 'briefcase', arrival: 'map-pin', months: 'home', year: 'repeat' };
 
@@ -82,7 +83,7 @@ export function GuideSteps({
                       <Txt color="textMuted">{s.body}</Txt>
                       {!!s.url && (
                         <Row>
-                          <Button label={s.urlLabel || d.guide.openLink} icon="external-link" size="sm" variant="secondary" onPress={() => Linking.openURL(s.url!)} />
+                          <Button label={s.urlLabel || d.guide.openLink} icon="external-link" size="sm" variant="secondary" onPress={() => openExternal(s.url!)} />
                         </Row>
                       )}
                     </View>
