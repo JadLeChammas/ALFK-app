@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { WORLD_GUIDES } from './guidesWorld';
 import { useStore } from './store';
 
 /**
@@ -20,6 +21,8 @@ export type CountryGuide = {
   /** Drafts are only visible to admins. */
   published: boolean;
   steps: GuideStep[];
+  /** A built-in guide an admin deleted: kept in the saved list so that it does not come back. */
+  hidden?: boolean;
 };
 
 export const PHASES: GuidePhase[] = ['before', 'arrival', 'months', 'year'];
@@ -119,7 +122,11 @@ const parse = <T,>(raw?: string): T | null => {
 
 export const defaultGuides = (franceSteps?: GuideStep[] | null): CountryGuide[] => [
   { id: 'guide-fr', country: 'FR', title: 'Arriver en France', published: true, steps: franceSteps ?? DEFAULT_GUIDE },
+  ...WORLD_GUIDES,
 ];
+
+/** Built-in guides (France, Spain, Canada, United States, United Kingdom, Italy). */
+export const isBuiltInGuide = (id: string) => defaultGuides().some((g) => g.id === id);
 
 /** All country guides (drafts included; filter on `published` for members). */
 export function useGuides() {
@@ -128,8 +135,12 @@ export function useGuides() {
   const legacy = db.settings.guideFrance;
   return useMemo(() => {
     const saved = parse<CountryGuide[]>(raw);
-    if (Array.isArray(saved)) return { guides: saved, custom: true };
+    if (Array.isArray(saved)) {
+      // Built-in guides added after the admins saved theirs are offered too (unless deleted: hidden).
+      const all = [...saved, ...defaultGuides().filter((g) => !saved.some((x) => x.id === g.id || x.country === g.country))];
+      return { guides: all.filter((g) => !g.hidden), tombstones: all.filter((g) => g.hidden), custom: true };
+    }
     const france = parse<GuideStep[]>(legacy);
-    return { guides: defaultGuides(Array.isArray(france) ? france : null), custom: false };
+    return { guides: defaultGuides(Array.isArray(france) ? france : null), tombstones: [] as CountryGuide[], custom: false };
   }, [raw, legacy]);
 }

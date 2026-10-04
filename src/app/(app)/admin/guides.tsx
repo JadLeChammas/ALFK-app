@@ -12,7 +12,7 @@ import { Select } from '@/components/ui/Select';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
-import { useGuides, type CountryGuide } from '@/data/guide';
+import { isBuiltInGuide, useGuides, type CountryGuide } from '@/data/guide';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 
@@ -23,13 +23,14 @@ export default function AdminGuides() {
   const { actions } = useStore();
   const { confirm, toast } = useDialogs();
   const params = useLocalSearchParams<{ pays?: string; nouveau?: string }>();
-  const { guides, custom } = useGuides();
+  const { guides, tombstones, custom } = useGuides();
   const titleOf = useGuideTitle();
   const [selected, setSelected] = useState<string | undefined>(params.pays?.toUpperCase());
   const [adding, setAdding] = useState(!!params.nouveau);
   const guide = guides.find((x) => x.country === selected) ?? guides[0];
 
-  const save = (next: CountryGuide[]) => actions.saveGuides(next);
+  // Deleted built-in guides stay saved as « hidden » so they do not come back.
+  const save = (next: CountryGuide[]) => actions.saveGuides([...next, ...tombstones]);
   const update = (id: string, patch: Partial<CountryGuide>) => save(guides.map((x) => (x.id === id ? { ...x, ...patch } : x)));
 
   return (
@@ -61,7 +62,8 @@ export default function AdminGuides() {
             onSee={() => router.push(`/guide?pays=${guide.country}` as never)}
             onDelete={async () => {
               if (await confirm({ title: g.deleteGuide, message: titleOf(guide), danger: true, confirmLabel: d.common.delete })) {
-                save(guides.filter((x) => x.id !== guide.id));
+                const rest = guides.filter((x) => x.id !== guide.id);
+                actions.saveGuides([...rest, ...tombstones, ...(isBuiltInGuide(guide.id) ? [{ ...guide, hidden: true, published: false, steps: [] }] : [])]);
                 setSelected(undefined);
               }
             }}
