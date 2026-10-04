@@ -292,7 +292,7 @@ const en: Dict = {
   },
   site: {
     nav: {
-      association: 'The Amicale', lfk: 'The LFK', bureau: 'The Board', partners: 'Partners',
+      association: 'The Amicale', lfk: 'The LFK', bureau: 'Board & Honorary members', partners: 'Partners',
       join: 'Membership', signIn: 'Sign in', cta: 'Join',
       mySpace: 'My space', menu: 'Menu',
     },
@@ -324,7 +324,7 @@ const en: Dict = {
     },
     bureau: {
       president: 'President',
-      title: 'The Board', sub: 'The volunteers who run the Amicale.', board: 'Board & administrators',
+      title: 'Board & Honorary members', sub: 'The volunteers who run the Amicale.', board: 'Board & administrators',
       honorary: 'Honorary members', member: 'Board member', volunteerTitle: 'Want to',
       volunteerItalic: 'get involved?', volunteerSub: 'The Board regularly welcomes new volunteers. Write to us to apply.', empty: 'The Board members will be announced soon.',
     },

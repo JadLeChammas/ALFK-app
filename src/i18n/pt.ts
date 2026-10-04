@@ -292,7 +292,7 @@ const pt: Dict = {
   },
   site: {
     nav: {
-      association: 'A Amicale', lfk: 'O LFK', bureau: 'A direção', partners: 'Parceiros',
+      association: 'A Amicale', lfk: 'O LFK', bureau: 'Direção e membros de honra', partners: 'Parceiros',
       join: 'Aderir', signIn: 'Entrar', cta: 'Aderir',
       mySpace: 'O meu espaço', menu: 'Menu',
     },
@@ -324,7 +324,7 @@ const pt: Dict = {
     },
     bureau: {
       president: 'Presidente',
-      title: 'A direção', sub: 'Os voluntários que dão vida à Amicale.', board: 'Direção e administradores',
+      title: 'Direção e membros de honra', sub: 'Os voluntários que dão vida à Amicale.', board: 'Direção e administradores',
       honorary: 'Membros honorários', member: 'Membro da direção', volunteerTitle: 'Quer',
       volunteerItalic: 'participar?', volunteerSub: 'A direção acolhe regularmente novos voluntários. Escreva-nos para se candidatar.', empty: 'A composição da direção será publicada em breve.',
     },

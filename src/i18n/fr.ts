@@ -290,7 +290,7 @@ const fr = {
   },
   site: {
     nav: {
-      association: 'L\'Amicale', lfk: 'Le LFK', bureau: 'Le bureau', partners: 'Partenaires',
+      association: 'L\'Amicale', lfk: 'Le LFK', bureau: 'Bureau et Membres d’honneur', partners: 'Partenaires',
       join: 'Adhérer', signIn: 'Se connecter', cta: 'Rejoindre',
       mySpace: 'Mon espace', menu: 'Menu',
     },
@@ -322,7 +322,7 @@ const fr = {
     },
     bureau: {
       president: 'Président',
-      title: 'Le bureau', sub: 'Les bénévoles qui font vivre l’Amicale.', board: 'Bureau & administrateurs',
+      title: 'Bureau et Membres d’honneur', sub: 'Les bénévoles qui font vivre l’Amicale.', board: 'Bureau & administrateurs',
       honorary: 'Membres d\'honneur', member: 'Membre du bureau', volunteerTitle: 'Envie de',
       volunteerItalic: 'vous investir ?', volunteerSub: 'Le bureau s’ouvre régulièrement à de nouveaux bénévoles. Écrivez-nous pour proposer votre candidature.', empty: 'La composition du bureau sera bientôt publiée.',
     },

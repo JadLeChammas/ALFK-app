@@ -292,7 +292,7 @@ const es: Dict = {
   },
   site: {
     nav: {
-      association: 'La Amicale', lfk: 'El LFK', bureau: 'La junta', partners: 'Socios',
+      association: 'La Amicale', lfk: 'El LFK', bureau: 'Junta y miembros de honor', partners: 'Socios',
       join: 'Afiliarse', signIn: 'Iniciar sesión', cta: 'Unirse',
       mySpace: 'Mi espacio', menu: 'Menú',
     },
@@ -324,7 +324,7 @@ const es: Dict = {
     },
     bureau: {
       president: 'Presidente',
-      title: 'La junta', sub: 'Los voluntarios que dan vida a la Amicale.', board: 'Junta y administradores',
+      title: 'Junta y miembros de honor', sub: 'Los voluntarios que dan vida a la Amicale.', board: 'Junta y administradores',
       honorary: 'Miembros de honor', member: 'Miembro de la junta', volunteerTitle: '¿Quiere',
       volunteerItalic: 'implicarse?', volunteerSub: 'La junta acoge regularmente a nuevos voluntarios. Escríbanos para presentar su candidatura.', empty: 'La composición de la junta se publicará pronto.',
     },

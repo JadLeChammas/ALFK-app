@@ -261,7 +261,9 @@ function SideLink({ item, active, compact, dense }: { item: NavItem; active: boo
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        height: dense ? 30 : 35,
+        // Grows to two lines for a long name (« Bureau et Membres d’honneur ») instead of overlapping.
+        minHeight: dense ? 30 : 35,
+        paddingVertical: 4,
         paddingHorizontal: compact ? 0 : 12,
         justifyContent: compact ? 'center' : 'flex-start',
         borderRadius: radius.input,

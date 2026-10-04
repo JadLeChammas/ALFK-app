@@ -293,7 +293,7 @@ const pirate: Dict = {
   },
   site: {
     nav: {
-      association: 'The Crew', lfk: 'Th\' LFK', bureau: 'The Officers', partners: 'Allies',
+      association: 'The Crew', lfk: 'Th\' LFK', bureau: 'Officers & honorary crew', partners: 'Allies',
       join: 'Sign the Articles', signIn: 'Come aboard', cta: 'Join',
       mySpace: 'Me quarters', menu: 'Menu',
     },
@@ -325,7 +325,7 @@ const pirate: Dict = {
     },
     bureau: {
       president: 'Captain',
-      title: 'The Officers', sub: 'The volunteers who keep the Amicale afloat.', board: 'Officers & captains',
+      title: 'Officers & honorary crew', sub: 'The volunteers who keep the Amicale afloat.', board: 'Officers & captains',
       honorary: 'Honorary buccaneers', member: 'Officer', volunteerTitle: 'Fancy',
       volunteerItalic: 'joinin’ the officers?', volunteerSub: 'The officers often welcome new volunteers. Send us a bottle to apply.', empty: 'The officers will be announced soon.',
     },
