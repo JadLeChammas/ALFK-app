@@ -105,6 +105,8 @@ const SLOTS: { left?: number; right?: number; top?: number; bottom?: number; siz
 function LogoCloud({ partners, children }: { partners: Institution[]; children: ReactNode }) {
   const t = useTone();
   const { isMobile } = useLayout();
+  const { scheme } = useTheme();
+  const dark = scheme === 'dark';
   const base = isMobile ? 58 : 104;
   const shown = partners.slice(0, SLOTS.length);
   return (
@@ -120,8 +122,15 @@ function LogoCloud({ partners, children }: { partners: Institution[]; children: 
           ...(slot.bottom !== undefined && { bottom: `${slot.bottom}%` }),
         } as const;
         const mark = logo ? (
-          // « multiply » lets the page colour through a logo's own white background.
-          <Image source={logo} style={[{ width: size, height: size }, Platform.OS === 'web' ? ({ mixBlendMode: 'multiply' } as object) : null]} contentFit="contain" accessibilityLabel={x.name} />
+          dark ? (
+            // Dark page: on a white disc, so dark logos (Hi Dev's navy mark) stay visible.
+            <View style={{ width: size * 1.28, height: size * 1.28, borderRadius: size, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
+              <Image source={logo} style={{ width: size * 0.86, height: size * 0.86 }} contentFit="contain" accessibilityLabel={x.name} />
+            </View>
+          ) : (
+            // « multiply » lets the page colour through a logo's own white background.
+            <Image source={logo} style={[{ width: size, height: size }, Platform.OS === 'web' ? ({ mixBlendMode: 'multiply' } as object) : null]} contentFit="contain" accessibilityLabel={x.name} />
+          )
         ) : (
           <Txt numberOfLines={2} style={{ width: size * 1.4, fontFamily: fonts.serif, fontSize: isMobile ? 14 : 18, textAlign: 'center', color: t.fg }}>{x.name}</Txt>
         );

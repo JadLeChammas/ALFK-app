@@ -70,6 +70,8 @@ type HeroProps = {
   accent?: ReactNode;
   /** Under the buttons, on every screen (e.g. a few figures). */
   extra?: ReactNode;
+  /** Phones and tablets: a piece over the photo's bottom corner (positioned by the caller). */
+  mobileAccent?: ReactNode;
 };
 
 /**
@@ -142,11 +144,13 @@ export function HeroFigures({ items }: { items: { v: number; l: string }[] }) {
   );
 }
 
-function ImageHeroInner({ tagline, title, description, image, primary, secondary, extra }: HeroProps) {
+function ImageHeroInner({ tagline, title, description, image, primary, secondary, extra, mobileAccent }: HeroProps) {
   const t = useTone();
   const { isDesktop, isMobile } = useLayout();
   return (
     <View>
+      {/* the photo clips its zoom; the corner piece sits outside that clip, over the edge */}
+      <View style={{ zIndex: 2 }}>
       <View style={{ width: '100%', aspectRatio: isMobile ? 1.5 : 9 / 3.6, overflow: 'hidden' }}>
         <SettleZoom>
           <Image source={src(image)} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={300} />
@@ -154,6 +158,8 @@ function ImageHeroInner({ tagline, title, description, image, primary, secondary
         {/* keeps the transparent header legible over the photo */}
         <LinearGradient colors={['rgba(14, 42, 71,0.7)', 'rgba(14, 42, 71,0)']} locations={[0, 0.45]} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <LinearGradient colors={[`${t.bg}00`, t.bg]} locations={[0.62, 1]} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      </View>
+      {mobileAccent}
       </View>
       <Container style={{ flexDirection: isDesktop ? 'row' : 'column', gap: isDesktop ? 0 : 24, paddingTop: isMobile ? 16 : 40, paddingBottom: isMobile ? 56 : 104 }}>
         <Reveal style={{ width: isDesktop ? '33%' : '100%', paddingRight: 24 }}>

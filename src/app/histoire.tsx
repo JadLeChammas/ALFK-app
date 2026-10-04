@@ -44,7 +44,11 @@ export default function LfkStoryPage() {
         image={CAMPUS_AERIAL}
         primary={admin ? { label: h.edit, onPress: () => router.push('/admin/histoire' as never) } : undefined}
         secondary={{ label: d.site.nav.association, onPress: () => router.push('/association') }}
-        extra={isDesktop ? undefined : <ResultSeal value={h.bacValue} label={h.bacLabel} compact />}
+        mobileAccent={
+          <Float style={{ right: 18, bottom: -30 }} delay={900} amplitude={4} rotate={8}>
+            <ResultSeal value={h.bacValue} label={h.bacLabel} size={108} />
+          </Float>
+        }
         accent={
           <>
             <Float style={{ left: -60, bottom: -52 }} delay={1300} amplitude={6}>
@@ -124,13 +128,20 @@ function FactsGrid({ facts }: { facts: FunFact[] }) {
 function Timeline({ events }: { events: StoryEvent[] }) {
   const t = useTone();
   const { isMobile } = useLayout();
+  const col = isMobile ? 76 : 130;
+  const base = isMobile ? 32 : 44;
   return (
     <View style={{ marginTop: 36 }}>
-      {events.map((e, i) => (
+      {events.map((e, i) => {
+        // A year keeps the big size; a longer label (« Aujourd'hui ») shrinks to fit the column
+        // (the condensed display face is about 0.36 em per letter) instead of running off the screen.
+        const size = Math.min(base, Math.floor(col / (Math.max(1, e.year.length) * 0.37)));
+        const line = size + 4;
+        return (
         <Reveal key={e.id} index={i % 4}>
           <View style={{ flexDirection: 'row', gap: isMobile ? 14 : 28 }}>
-            <View style={{ width: isMobile ? 70 : 120, alignItems: 'flex-end' }}>
-              <Txt style={{ fontFamily: fonts.display, fontSize: isMobile ? 32 : 44, lineHeight: isMobile ? 36 : 48, color: t.accent }}>{e.year}</Txt>
+            <View style={{ width: col, alignItems: 'flex-end' }}>
+              <Txt numberOfLines={1} style={{ fontFamily: fonts.display, fontSize: size, lineHeight: line, color: t.accent, marginTop: (base + 4 - line) / 2 }}>{e.year}</Txt>
             </View>
             <View style={{ alignItems: 'center' }}>
               <View style={{ width: 14, height: 14, borderRadius: 7, marginTop: isMobile ? 10 : 16, backgroundColor: t.accent, borderWidth: 3, borderColor: t.bg }} />
@@ -142,7 +153,8 @@ function Timeline({ events }: { events: StoryEvent[] }) {
             </View>
           </View>
         </Reveal>
-      ))}
+        );
+      })}
     </View>
   );
 }

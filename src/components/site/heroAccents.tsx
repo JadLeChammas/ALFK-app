@@ -172,7 +172,7 @@ export function FacesCard({ people, caption }: { people: { name: string; avatar?
 }
 
 /** Gold seal with a figure and its caption (e.g. « 100 % · de réussite au bac »); `compact`: a pill. */
-export function ResultSeal({ value, label, compact }: { value: string; label: string; compact?: boolean }) {
+export function ResultSeal({ value, label, compact, size = 138 }: { value: string; label: string; compact?: boolean; size?: number }) {
   if (compact) {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', gap: 12, paddingVertical: 8, paddingLeft: 8, paddingRight: 18, borderRadius: 999, backgroundColor: 'rgba(215,180,106,0.16)', borderWidth: 1, borderColor: 'rgba(215,180,106,0.55)' }}>
@@ -185,12 +185,12 @@ export function ResultSeal({ value, label, compact }: { value: string; label: st
     );
   }
   return (
-    <LinearGradient colors={['#EED9A2', '#D2AE5C', '#A98330']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[{ width: 138, height: 138, borderRadius: 69, alignItems: 'center', justifyContent: 'center', padding: 14 }, shadow]}>
+    <LinearGradient colors={['#EED9A2', '#D2AE5C', '#A98330']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[{ width: size, height: size, borderRadius: size / 2, alignItems: 'center', justifyContent: 'center', padding: size * 0.1 }, shadow]}>
       {/* inner ring, like a printed seal */}
-      <View style={{ position: 'absolute', top: 7, left: 7, right: 7, bottom: 7, borderRadius: 62, borderWidth: 1, borderColor: 'rgba(14,42,71,0.35)', borderStyle: 'dashed' }} />
-      <Feather name="award" size={18} color={brand.navy} />
-      <Txt style={{ fontFamily: fonts.display, fontSize: 36, lineHeight: 40, color: brand.navy }}>{value}</Txt>
-      <Txt numberOfLines={2} style={{ fontFamily: fonts.semibold, fontSize: 10, lineHeight: 13, letterSpacing: 1, textTransform: 'uppercase', textAlign: 'center', color: brand.navy }}>{label}</Txt>
+      <View style={{ position: 'absolute', top: 7, left: 7, right: 7, bottom: 7, borderRadius: size / 2 - 7, borderWidth: 1, borderColor: 'rgba(14,42,71,0.35)', borderStyle: 'dashed' }} />
+      <Feather name="award" size={Math.round(size * 0.13)} color={brand.navy} />
+      <Txt style={{ fontFamily: fonts.display, fontSize: Math.round(size * 0.26), lineHeight: Math.round(size * 0.29), color: brand.navy }}>{value}</Txt>
+      <Txt numberOfLines={2} style={{ fontFamily: fonts.semibold, fontSize: Math.max(8.5, size * 0.072), lineHeight: Math.max(11, size * 0.094), letterSpacing: size < 130 ? 0.6 : 1, textTransform: 'uppercase', textAlign: 'center', color: brand.navy }}>{label}</Txt>
     </LinearGradient>
   );
 }
