@@ -50,6 +50,8 @@ export const toUser = (r: Row): User => ({
   createdByAdmin: !!r.created_by_admin,
   grade: r.grade === '2nde' || r.grade === '1ere' || r.grade === 'Tle' ? r.grade : undefined,
   needsCompletion: !!r.needs_completion,
+  marketingOptIn: !!r.marketing_opt_in,
+  locale: r.locale === 'en' ? 'en' : 'fr',
   fieldOfStudy: opt(r.field_of_study),
   fields: Array.isArray(r.fields_of_study) && r.fields_of_study.length ? r.fields_of_study : undefined,
   schoolCountry: opt(r.school_country),
@@ -95,6 +97,7 @@ const PROFILE_COLUMNS: Record<string, string> = {
   mentor: 'mentor',
   grade: 'grade',
   needsCompletion: 'needs_completion',
+  locale: 'locale',
 };
 
 export function profilePatchToRow(patch: Partial<User>): Row {
@@ -291,6 +294,37 @@ export async function cvFileUrl(path: string): Promise<string | null> {
 // ——— Server-side admin actions (api/admin.ts) ———
 
 export type AdminApiResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * Emails (api/email.ts). Signed in by default; `signup-notify` is sent without a session (a brand-new
+ * account checked by the server). Returns the server's answer, with `ok`.
+ */
+export async function callEmailApi<T extends object = object>(action: string, payload: Record<string, unknown> = {}, signedIn = true): Promise<{ ok: boolean; error?: string } & Partial<T>> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (signedIn) {
+    const { data } = await supabase!.auth.getSession();
+    if (!data.session) return { ok: false, error: 'unauthorized' } as { ok: boolean; error?: string } & Partial<T>;
+    headers.Authorization = `Bearer ${data.session.access_token}`;
+  }
+  try {
+    const res = await fetch(`${apiBase}/api/email`, { method: 'POST', headers, body: JSON.stringify({ action, ...payload }) });
+    const json = (await res.json().catch(() => ({}))) as { error?: string } & Partial<T>;
+    return { ...json, ok: res.ok, error: res.ok ? undefined : json.error ?? `http_${res.status}` };
+  } catch {
+    return { ok: false, error: 'network' } as { ok: boolean; error?: string } & Partial<T>;
+  }
+}
+
+/** A file attached to an admin's email: private bucket « mail-attachments ». */
+export async function uploadMailAttachment(userId: string, doc: PickedDoc): Promise<{ path: string; name: string }> {
+  const sb = supabase!;
+  const body = doc.file ?? (doc.base64 ? base64ToBytes(doc.base64) : await (await fetch(doc.uri)).arrayBuffer());
+  const safe = doc.name.replace(/[^\w.\-]+/g, '_').slice(-80) || 'fichier';
+  const path = `${userId}/${newId()}-${safe}`;
+  const { error } = await sb.storage.from('mail-attachments').upload(path, body, { contentType: doc.mimeType ?? undefined, upsert: false });
+  if (error) throw error;
+  return { path, name: doc.name };
+}
 
 export async function callAdminApi(action: string, payload: Record<string, unknown> = {}): Promise<AdminApiResult> {
   const { data } = await supabase!.auth.getSession();

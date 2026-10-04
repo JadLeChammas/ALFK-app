@@ -18,6 +18,7 @@ const ICON: Record<AdminLogAction, [IconName, Tone]> = {
   reject_question: ['help-circle', 'danger'],
   create_user: ['user-plus', 'primary'],
   promote_students: ['trending-up', 'success'],
+  send_email: ['mail', 'primary'],
   change_role: ['sliders', 'ink'],
   reset_password: ['key', 'secondary'],
   delete_user: ['trash-2', 'danger'],

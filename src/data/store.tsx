@@ -27,6 +27,8 @@ import {
   uploadImage,
   uploadProof,
   uploadSignupFiles,
+  uploadMailAttachment,
+  callEmailApi,
   uploadCvFile,
   cvFileUrl,
   type PickedDoc,
@@ -115,6 +117,9 @@ export type SignUpInput = {
   schoolCountry?: string;
   /** Students: their class. */
   grade?: Grade;
+  /** Accepts the Amicale's news by email; language of the emails. */
+  marketing?: boolean;
+  locale?: 'fr' | 'en';
 };
 
 export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools' | 'fields' | 'schoolCountry' | 'needsCompletion'>>;
@@ -372,6 +377,8 @@ function useStoreValue() {
           } catch {
             // The account exists; the pending screen offers to send the proof again.
           }
+          // « Inscription reçue » to the member, alert to the admins (emails; not blocking).
+          await callEmailApi('signup-notify', { userId: data.user.id, email: input.email, locale: input.locale ?? 'fr', marketing: !!input.marketing }, false);
           if (data.session) await reload();
           setSendingSignupFiles(false);
         }
@@ -771,7 +778,15 @@ function useStoreValue() {
           fullName(u)
         );
       });
-      if (supabase) send(supabase.from('profiles').update({ approved: true }).eq('id', id));
+      if (supabase) {
+        // Approved in the database first, then the « compte validé » email.
+        Promise.resolve(supabase.from('profiles').update({ approved: true }).eq('id', id)).then(({ error: e }) => {
+          if (e) {
+            setError(e.message);
+            reload();
+          } else callEmailApi('approved', { userId: id }).catch(() => {});
+        });
+      }
     },
     async refuseUser(id: string): Promise<Result> {
       return actions.removeAccount(id, 'refuse');
@@ -823,6 +838,48 @@ function useStoreValue() {
       const [numbered, user] = withRules(dbRef.current!, draft);
       commit(() => log({ ...numbered, users: [...numbered.users, user] }, 'create_user', fullName(user)));
       return { ok: true };
+    },
+    // ——— Emails ———
+    /** The member's own choice: receive the Amicale's news by email (Brevo lists follow). */
+    setMarketing(on: boolean) {
+      if (!meId) return;
+      commit((d) => ({ ...d, users: d.users.map((x) => (x.id === meId ? { ...x, marketingOptIn: on } : x)) }));
+      if (supabase) callEmailApi('marketing', { on }).then((r) => {
+        if (!r.ok) reload();
+      });
+    },
+    /** Language of the emails, following the language chosen on the site. */
+    setLocale(locale: 'fr' | 'en') {
+      if (!meId) return;
+      commit((d) => ({ ...d, users: d.users.map((x) => (x.id === meId ? { ...x, locale } : x)) }));
+      if (supabase) send(supabase.from('profiles').update({ locale }).eq('id', meId));
+    },
+    async emailStatus() {
+      if (!supabase) return { ok: false, configured: false, lists: false, sender: '' };
+      return callEmailApi<{ configured: boolean; lists: boolean; sender: string }>('status');
+    },
+    async uploadMailAttachment(doc: PickedDoc) {
+      if (!supabase || !meId) return { path: doc.uri, name: doc.name };
+      return uploadMailAttachment(meId, doc);
+    },
+    /** An admin's email to groups of members (or a test to themself). Demo: nothing is sent. */
+    async sendEmail(input: { audience: Role[]; subject: string; body: string; attachments: { path: string; name: string }[]; test?: boolean }) {
+      if (!supabase) return { ok: false, error: 'demo', sent: 0 };
+      return callEmailApi<{ sent: number }>('send', input);
+    },
+    async syncContacts() {
+      if (!supabase) return { ok: false, error: 'demo' };
+      return callEmailApi<{ alumni: number; eleves: number }>('sync-contacts');
+    },
+    saveEmailTemplates(templates: object | null) {
+      const value = templates ? JSON.stringify(templates) : undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, emailTemplates: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'emailTemplates', value: value ?? null }));
+    },
+    saveEmailSignature(text: string) {
+      const value = text.trim() || undefined;
+      commit((d) => ({ ...d, settings: { ...d.settings, emailSignature: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'emailSignature', value: value ?? null }));
     },
     /** Students: set the class (admins, e.g. for students who signed up before classes existed). */
     setGrade(id: string, grade: Grade) {

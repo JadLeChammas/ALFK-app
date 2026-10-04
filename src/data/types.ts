@@ -45,6 +45,10 @@ export type User = {
   grade?: Grade;
   /** A former Terminale student just made alumni: fills in their account before using the site. */
   needsCompletion?: boolean;
+  /** Accepts the Amicale's news by email (sign-up box, Settings; unsubscribe link in each email). */
+  marketingOptIn?: boolean;
+  /** Language of the emails sent to the member. */
+  locale?: 'fr' | 'en';
   /** Accounts created by an admin need no proof. */
   createdByAdmin?: boolean;
   /** Fields of study (several; « other:… » = typed by the member), see data/fields.ts. */
@@ -115,7 +119,7 @@ export type KeyDate = { id: string; title: string; month: number; day: number; y
 /** `placeAliases`: admin merges of universities / companies, JSON { alias key: place key } (see data/places.ts). */
 /** `guides`: the country guides edited by admins, JSON (see data/guide.ts); `guideFrance` is the older France-only one. */
 /** `credits`: the end credits edited by admins, JSON (see data/credits.ts). */
-export type AppSettings = { whatsappCommunity?: string; placeAliases?: string; guideFrance?: string; guides?: string; credits?: string; lfkStory?: string; showDemo?: string };
+export type AppSettings = { whatsappCommunity?: string; placeAliases?: string; guideFrance?: string; guides?: string; credits?: string; lfkStory?: string; showDemo?: string; emailTemplates?: string; emailSignature?: string };
 
 export type Conversation = {
   id: string;
@@ -141,6 +145,7 @@ export type AdminLogAction =
   | 'refuse'
   | 'create_user'
   | 'promote_students'
+  | 'send_email'
   | 'change_role'
   | 'reset_password'
   | 'delete_user'
@@ -156,7 +161,7 @@ export type AdminLogAction =
   | 'approve_question'
   | 'reject_question';
 
-export type AdminLog = { id: string; actorId: string; action: AdminLogAction; target: string; meta?: { role?: Role; alumni?: number; terminale?: number; premiere?: number }; createdAt: string };
+export type AdminLog = { id: string; actorId: string; action: AdminLogAction; target: string; meta?: { role?: Role; alumni?: number; terminale?: number; premiere?: number; count?: number }; createdAt: string };
 
 export type NotificationTemplate = 'message' | 'pendingOne' | 'pendingMany' | 'approved' | 'birthday' | 'photos' | 'publication' | 'publicationApproved' | 'publicationRejected' | 'publicationToReview' | 'questionToReview' | 'questionPublished' | 'questionRejected' | 'questionNew' | 'questionAnswered';
 

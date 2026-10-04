@@ -90,6 +90,7 @@ function RootNavigator() {
         <Stack.Screen name="confidentialite" />
         <Stack.Screen name="plan-du-site" />
         <Stack.Screen name="contact" />
+        <Stack.Screen name="desinscription" />
         <Stack.Screen name="+not-found" />
       </Stack>
     </NavThemeProvider>

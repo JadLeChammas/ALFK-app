@@ -39,7 +39,8 @@ export default function Settings() {
     <Section title={d.settings.notifications} icon="bell" card>
       <ListRow icon="message-circle" title={d.settings.notifMessages} right={<Switch value={notif.messages} onValueChange={(v) => setNotif((n) => ({ ...n, messages: v }))} />} />
       <ListRow icon="calendar" title={d.settings.notifEvents} right={<Switch value={notif.events} onValueChange={(v) => setNotif((n) => ({ ...n, events: v }))} />} />
-      <ListRow icon="gift" title={d.settings.notifBirthdays} right={<Switch value={notif.birthdays} onValueChange={(v) => setNotif((n) => ({ ...n, birthdays: v }))} />} last />
+      <ListRow icon="gift" title={d.settings.notifBirthdays} right={<Switch value={notif.birthdays} onValueChange={(v) => setNotif((n) => ({ ...n, birthdays: v }))} />} />
+      <ListRow icon="mail" title={d.emails.optIn} subtitle={d.emails.optInHint} right={<Switch value={!!me.marketingOptIn} onValueChange={actions.setMarketing} />} last />
     </Section>
   );
   const privacy = (

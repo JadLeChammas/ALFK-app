@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
+import { sendEvent } from './_email';
+
 /**
  * Server-side account actions that need Supabase's secret key (never shipped to the browser):
  *   create-user · delete-user                    → admins only
@@ -183,6 +185,8 @@ export async function POST(request: Request) {
         return json(taken ? 409 : 500, { error: taken ? 'email_taken' : error?.message ?? 'failed' });
       }
       await log('create_user', `${firstName} ${lastName}`);
+      // « Votre compte a été créé » (Admin → Emails); the account works even if the email fails.
+      await sendEvent(admin, 'accountCreated', [{ id: data.user.id, email, first_name: firstName, last_name: lastName, locale: 'fr', role }]).catch(() => {});
       return json(200, { ok: true });
     }
 
