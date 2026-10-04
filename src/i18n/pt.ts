@@ -187,6 +187,7 @@ const pt: Dict = {
     subject: 'Assunto', message: 'Mensagem', name: 'Nome', sent: 'Mensagem enviada, obrigado!', contactLead: 'Adesão, eventos, parcerias ou uma simples pergunta: escreva-nos e um membro da direção responde.', topic: 'Assunto', topicMembership: 'Adesão', topicEvents: 'Eventos', topicPartnership: 'Parceria', topicOrientation: 'Orientação', topicOther: 'Outro', replyTime: 'Resposta em 48 h', privateNote: 'Só a direção lê a sua mensagem', otherWays: 'Outras formas de nos contactar', wayBoardSub: 'Quem dá vida à Amicale', wayJoinSub: 'Juntar-se à rede de antigos alunos', wayAssociationSub: 'A nossa história e missão', sentTitle: 'Mensagem enviada', sentSub: 'Obrigado! Um membro da direção responde em breve, por e-mail.', sendAnother: 'Enviar outra mensagem', messagePlaceholder: 'Diga-nos em poucas palavras…', emailInvalid: 'Endereço de e-mail inválido',
   },
   proof: {
+    sending: 'Enviando seu comprovante…',
     title: 'Comprovativo de escolaridade no LFK', sub: 'Obrigatório: boletim de notas, certificado de matrícula, declaração ou uma simples fotografia que comprove a sua passagem pelo LFK.', pick: 'Escolher um ficheiro',
     replace: 'Mudar de ficheiro', formats: 'Imagem ou PDF · máximo 10 MB', tooBig: 'Ficheiro demasiado grande: máximo 10 MB.',
     privacy: 'Apenas os administradores veem este documento, para validar a inscrição.', sent: 'Comprovativo enviado', send: 'Enviar o comprovativo',

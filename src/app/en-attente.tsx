@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
 import { ProofPicker } from '@/components/ProofPicker';
@@ -15,7 +15,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 export default function Pending() {
   const { d, f } = useI18n();
   const { colors } = useTheme();
-  const { me, actions } = useStore();
+  const { me, actions, sendingSignupFiles } = useStore();
   const { toast } = useDialogs();
   const [doc, setDoc] = useState<PickedDoc | null>(null);
   const [busy, setBusy] = useState(false);
@@ -53,7 +53,13 @@ export default function Pending() {
           );
         })}
       </View>
-      {hasProof ? (
+      {!hasProof && sendingSignupFiles ? (
+        // Just signed up: the proof chosen in the form is still on its way.
+        <Row gap={10} style={{ padding: 14, borderRadius: 16, backgroundColor: colors.surfaceAlt }}>
+          <ActivityIndicator size="small" color={colors.primary} />
+          <Txt variant="smallStrong" style={{ flex: 1 }}>{d.proof.sending}</Txt>
+        </Row>
+      ) : hasProof ? (
         <Row gap={10} style={{ padding: 14, borderRadius: 16, backgroundColor: colors.successSoft }}>
           <Feather name="file-text" size={18} color={colors.success} />
           <Txt variant="smallStrong" style={{ flex: 1 }} numberOfLines={1}>{me?.proof?.name ?? d.proof.adminCreated}</Txt>

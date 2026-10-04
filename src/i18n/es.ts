@@ -187,6 +187,7 @@ const es: Dict = {
     subject: 'Asunto', message: 'Mensaje', name: 'Nombre', sent: 'Mensaje enviado, ¡gracias!', contactLead: 'Afiliación, eventos, colaboraciones o una simple pregunta: escríbenos y un miembro de la junta te responderá.', topic: 'Asunto', topicMembership: 'Afiliación', topicEvents: 'Eventos', topicPartnership: 'Colaboración', topicOrientation: 'Orientación', topicOther: 'Otro', replyTime: 'Respuesta en 48 h', privateNote: 'Solo la junta lee tu mensaje', otherWays: 'Otras formas de contactarnos', wayBoardSub: 'Quienes dan vida a la Amicale', wayJoinSub: 'Unirse a la red de antiguos alumnos', wayAssociationSub: 'Nuestra historia y misión', sentTitle: 'Mensaje enviado', sentSub: '¡Gracias! Un miembro de la junta te responderá pronto por correo.', sendAnother: 'Enviar otro mensaje', messagePlaceholder: 'Cuéntanos en pocas palabras…', emailInvalid: 'Correo electrónico no válido',
   },
   proof: {
+    sending: 'Enviando su justificante…',
     title: 'Justificante de escolaridad en el LFK', sub: 'Obligatorio: boletín de notas, certificado de escolaridad, constancia o una simple foto que demuestre su paso por el LFK.', pick: 'Elegir un archivo',
     replace: 'Cambiar de archivo', formats: 'Imagen o PDF · 10 MB máximo', tooBig: 'Archivo demasiado grande: 10 MB máximo.',
     privacy: 'Solo los administradores ven este documento, para validar su registro.', sent: 'Justificante enviado', send: 'Enviar el justificante',

@@ -187,6 +187,7 @@ const en: Dict = {
     subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank you!', contactLead: 'Membership, events, partnerships or a simple question: write to us and a board member will reply.', topic: 'Topic', topicMembership: 'Membership', topicEvents: 'Events', topicPartnership: 'Partnership', topicOrientation: 'Guidance', topicOther: 'Other', replyTime: 'Reply within 48 h', privateNote: 'Only the board reads your message', otherWays: 'Other ways to reach us', wayBoardSub: 'The people who run the Amicale', wayJoinSub: 'Join the alumni network', wayAssociationSub: 'Our story and our mission', sentTitle: 'Message sent', sentSub: 'Thank you! A board member will get back to you soon, by email.', sendAnother: 'Send another message', messagePlaceholder: 'Tell us in a few words…', emailInvalid: 'Invalid email address',
   },
   proof: {
+    sending: 'Sending your proof of schooling…',
     title: 'Proof of schooling at the LFK', sub: 'Required: report card, school certificate, attestation or a simple photo showing you studied at the LFK.', pick: 'Choose a file',
     replace: 'Change file', formats: 'Image or PDF · 10 MB max', tooBig: 'File too large: 10 MB max.',
     privacy: 'Only administrators can see this document, to approve your sign-up.', sent: 'Proof sent', send: 'Send the proof',

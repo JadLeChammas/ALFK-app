@@ -187,6 +187,7 @@ const ja: Dict = {
     subject: '件名', message: 'メッセージ', name: 'お名前', sent: 'メッセージを送信しました。ありがとうございます！', contactLead: '入会、イベント、パートナーシップ、またはちょっとした質問など、お気軽にご連絡ください。役員がお答えします。', topic: '件名', topicMembership: '入会', topicEvents: 'イベント', topicPartnership: 'パートナーシップ', topicOrientation: '進路', topicOther: 'その他', replyTime: '48時間以内に返信', privateNote: 'メッセージは役員のみが読みます', otherWays: 'その他の連絡方法', wayBoardSub: 'アミカルを支えるメンバー', wayJoinSub: '卒業生ネットワークに参加', wayAssociationSub: '私たちの歩みと使命', sentTitle: '送信しました', sentSub: 'ありがとうございます！役員より近日中にメールでご返信します。', sendAnother: '別のメッセージを送る', messagePlaceholder: '簡単にご記入ください…', emailInvalid: 'メールアドレスが無効です',
   },
   proof: {
+    sending: '在学証明を送信中…',
     title: 'LFK の在籍証明書類', sub: '必須：成績表、在学証明書、証明書、または LFK に在籍していたことがわかる写真。', pick: 'ファイルを選択',
     replace: 'ファイルを変更', formats: '画像または PDF・最大 10 MB', tooBig: 'ファイルが大きすぎます（最大 10 MB）。',
     privacy: 'この書類は登録確認のため管理者のみが閲覧します。', sent: '証明書類を送信しました', send: '証明書類を送信',

@@ -185,6 +185,7 @@ const fr = {
     subject: 'Objet', message: 'Message', name: 'Nom', sent: 'Message envoyé, merci !', contactLead: 'Adhésion, événements, partenariat ou simple question : écrivez-nous, un membre du bureau vous répond.', topic: 'Sujet', topicMembership: 'Adhésion', topicEvents: 'Événements', topicPartnership: 'Partenariat', topicOrientation: 'Orientation', topicOther: 'Autre', replyTime: 'Réponse sous 48 h', privateNote: 'Seul le bureau lit votre message', otherWays: 'Autres façons de nous joindre', wayBoardSub: 'Les membres qui font vivre l’Amicale', wayJoinSub: 'Rejoindre le réseau des anciens', wayAssociationSub: 'Notre histoire et nos missions', sentTitle: 'Message envoyé', sentSub: 'Merci ! Un membre du bureau vous répond très vite, par e-mail.', sendAnother: 'Envoyer un autre message', messagePlaceholder: 'Dites-nous en quelques mots…', emailInvalid: 'Adresse e-mail invalide',
   },
   proof: {
+    sending: 'Envoi de votre justificatif en cours…',
     title: 'Justificatif de scolarité au LFK', sub: 'Obligatoire : bulletin scolaire, certificat de scolarité, attestation ou simple photo prouvant votre passage au LFK.', pick: 'Choisir un fichier',
     replace: 'Changer de fichier', formats: 'Image ou PDF · 10 Mo maximum', tooBig: 'Fichier trop lourd : 10 Mo maximum.',
     privacy: 'Le justificatif n’est visible que par les administrateurs, pour valider votre inscription.', sent: 'Justificatif envoyé', send: 'Envoyer le justificatif',

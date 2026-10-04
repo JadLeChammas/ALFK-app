@@ -187,6 +187,7 @@ const zh: Dict = {
     subject: '主题', message: '消息', name: '姓名', sent: '消息已发送，谢谢！', contactLead: '入会、活动、合作或只是一个问题：给我们写信，理事会成员会回复您。', topic: '主题', topicMembership: '入会', topicEvents: '活动', topicPartnership: '合作', topicOrientation: '升学指导', topicOther: '其他', replyTime: '48 小时内回复', privateNote: '只有理事会阅读您的留言', otherWays: '其他联系方式', wayBoardSub: '让校友会运转的成员', wayJoinSub: '加入校友网络', wayAssociationSub: '我们的历史与使命', sentTitle: '留言已发送', sentSub: '谢谢！理事会成员会尽快通过电子邮件回复您。', sendAnother: '再发一条留言', messagePlaceholder: '简单写几句…', emailInvalid: '电子邮件地址无效',
   },
   proof: {
+    sending: '正在发送在读证明…',
     title: 'LFK 就读证明', sub: '必填：成绩单、在读证明、证明信，或能证明您曾在 LFK 就读的照片。', pick: '选择文件',
     replace: '更换文件', formats: '图片或 PDF · 最大 10 MB', tooBig: '文件过大：最大 10 MB。',
     privacy: '只有管理员能看到此文件，用于审核您的注册。', sent: '证明已发送', send: '发送证明',

@@ -187,6 +187,7 @@ const de: Dict = {
     subject: 'Betreff', message: 'Nachricht', name: 'Name', sent: 'Nachricht gesendet, danke!', contactLead: 'Mitgliedschaft, Veranstaltungen, Partnerschaften oder einfach eine Frage: Schreiben Sie uns, ein Vorstandsmitglied antwortet Ihnen.', topic: 'Thema', topicMembership: 'Mitgliedschaft', topicEvents: 'Veranstaltungen', topicPartnership: 'Partnerschaft', topicOrientation: 'Orientierung', topicOther: 'Sonstiges', replyTime: 'Antwort innerhalb von 48 Std.', privateNote: 'Nur der Vorstand liest Ihre Nachricht', otherWays: 'Weitere Kontaktwege', wayBoardSub: 'Die Menschen hinter der Amicale', wayJoinSub: 'Dem Alumni-Netzwerk beitreten', wayAssociationSub: 'Unsere Geschichte und Aufgaben', sentTitle: 'Nachricht gesendet', sentSub: 'Danke! Ein Vorstandsmitglied antwortet Ihnen bald per E-Mail.', sendAnother: 'Weitere Nachricht senden', messagePlaceholder: 'Schreiben Sie uns in wenigen Worten…', emailInvalid: 'Ungültige E-Mail-Adresse',
   },
   proof: {
+    sending: 'Ihr Nachweis wird gesendet…',
     title: 'Schulnachweis des LFK', sub: 'Pflicht: Zeugnis, Schulbescheinigung, Bestätigung oder ein einfaches Foto, das Ihren Schulbesuch am LFK belegt.', pick: 'Datei auswählen',
     replace: 'Datei ändern', formats: 'Bild oder PDF · max. 10 MB', tooBig: 'Datei zu groß: max. 10 MB.',
     privacy: 'Nur Administratoren sehen dieses Dokument, um Ihre Anmeldung zu prüfen.', sent: 'Nachweis gesendet', send: 'Nachweis senden',

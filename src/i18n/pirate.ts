@@ -188,6 +188,7 @@ const pirate: Dict = {
     subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank ye kindly!', contactLead: 'Joinin’, shindigs, alliances or just a question: send word, an’ an officer o’ the crew will answer ye.', topic: 'Matter', topicMembership: 'Joinin’', topicEvents: 'Shindigs', topicPartnership: 'Alliance', topicOrientation: 'Headin’', topicOther: 'Other', replyTime: 'Answer within 48 bells', privateNote: 'Only the officers read yer message', otherWays: 'Other ways t’ hail us', wayBoardSub: 'The hands that sail the Amicale', wayJoinSub: 'Join the crew o’ old hands', wayAssociationSub: 'Our tale an’ our quest', sentTitle: 'Message sent', sentSub: 'Thankee! An officer will answer ye soon, by letter.', sendAnother: 'Send another message', messagePlaceholder: 'Tell us in a few words…', emailInvalid: 'That email be no good',
   },
   proof: {
+    sending: 'Sendin’ yer school papers…',
     title: 'Proof ye sailed with the LFK', sub: 'Required: report card, school certificate, attestation or a simple portrait showin’ ye studied at the LFK.', pick: 'Pick a scroll',
     replace: 'Swap the scroll', formats: 'Image or PDF · 10 MB at most', tooBig: 'Scroll too heavy: 10 MB at most.',
     privacy: 'Only the captains can see this scroll, to approve yer papers.', sent: 'Proof sent', send: 'Send the proof',

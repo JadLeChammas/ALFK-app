@@ -187,6 +187,7 @@ const it: Dict = {
     subject: 'Oggetto', message: 'Messaggio', name: 'Nome', sent: 'Messaggio inviato, grazie!', contactLead: 'Iscrizione, eventi, partnership o una semplice domanda: scrivici, un membro del direttivo ti risponderà.', topic: 'Argomento', topicMembership: 'Iscrizione', topicEvents: 'Eventi', topicPartnership: 'Partnership', topicOrientation: 'Orientamento', topicOther: 'Altro', replyTime: 'Risposta entro 48 h', privateNote: 'Solo il direttivo legge il tuo messaggio', otherWays: 'Altri modi per contattarci', wayBoardSub: 'Le persone che animano l’Amicale', wayJoinSub: 'Entra nella rete degli ex alunni', wayAssociationSub: 'La nostra storia e missione', sentTitle: 'Messaggio inviato', sentSub: 'Grazie! Un membro del direttivo ti risponderà presto via e-mail.', sendAnother: 'Invia un altro messaggio', messagePlaceholder: 'Raccontaci in poche parole…', emailInvalid: 'Indirizzo e-mail non valido',
   },
   proof: {
+    sending: 'Invio del certificato in corso…',
     title: 'Documento di frequenza al LFK', sub: 'Obbligatorio: pagella, certificato di frequenza, attestato o una semplice foto che dimostri il suo passaggio al LFK.', pick: 'Scegli un file',
     replace: 'Cambia file', formats: 'Immagine o PDF · max 10 MB', tooBig: 'File troppo grande: max 10 MB.',
     privacy: 'Solo gli amministratori vedono questo documento, per convalidare l’iscrizione.', sent: 'Documento inviato', send: 'Invia il documento',

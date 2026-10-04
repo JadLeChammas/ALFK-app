@@ -141,6 +141,8 @@ function useStoreValue() {
   const [db, setDb] = useState<Db | null>(null);
   const [session, setSession] = useState<Session>(null);
   const [error, setError] = useState<string | null>(null);
+  // The sign-up proof and photo are still being sent: the pending screen says so instead of « not received ».
+  const [sendingSignupFiles, setSendingSignupFiles] = useState(false);
   const dbRef = useRef<Db | null>(null);
   const loadingFor = useRef<string | null>(null);
   /** True while signed in through a password-reset link (overrides every other state). */
@@ -364,12 +366,14 @@ function useStoreValue() {
         // The proof and the photo go up now, with or without a session (e-mail to confirm). When the
         // address was already used, Supabase answers with a placeholder account and nothing is sent.
         if (data.user?.identities?.length) {
+          setSendingSignupFiles(true);
           try {
             await uploadSignupFiles(data.user.id, input.email, proof, photo);
           } catch {
             // The account exists; the pending screen offers to send the proof again.
           }
           if (data.session) await reload();
+          setSendingSignupFiles(false);
         }
         if (!data.session || !data.user) return { ok: true, confirmEmail: true };
         return { ok: true };
@@ -1043,7 +1047,7 @@ function useStoreValue() {
     reload,
   };
 
-  return { ready: db !== null, db: (db ?? EMPTY_DB) as Db, session, me, actions, error, isRemote };
+  return { ready: db !== null, db: (db ?? EMPTY_DB) as Db, session, me, actions, error, isRemote, sendingSignupFiles };
 }
 
 /** Applies the membership rules to one user and advances the never-reused Alumni number counter. */
