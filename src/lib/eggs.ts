@@ -42,11 +42,20 @@ export function isSandWord(q: string) {
   return n === 'chameau' || n === 'shamal' || n === '50°c' || n === '50c' || n === '50°';
 }
 
-/** The site's creator. */
-export const CREATOR = 'Jad El Chammas';
-/** Only the full name, « Jad El Chammas » (any case, accents or spacing). */
-export function isCreatorQuery(q: string) {
-  return norm(q).replace(/\s+/g, ' ') === 'jad el chammas';
+/**
+ * Legends: searching one of these full names (any case, accents or spacing) shows their special card —
+ * the site's creator, and the Amicale's legendary ambassador. `kind` picks the texts (`eggs.legends`).
+ */
+export const LEGENDS = [
+  { name: 'Jad El Chammas', kind: 'developer', emoji: '🏆' },
+  { name: 'Adriano Sfeir', kind: 'ambassador', emoji: '🎖️' },
+] as const;
+export type Legend = (typeof LEGENDS)[number];
+export const CREATOR = LEGENDS[0].name;
+/** The legend whose full name was typed, if any. */
+export function legendQuery(q: string): Legend | undefined {
+  const n = norm(q).replace(/\s+/g, ' ');
+  return LEGENDS.find((l) => norm(l.name) === n);
 }
 
 /** Birthday today, and allowed to be seen by this viewer. */

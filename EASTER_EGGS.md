@@ -10,6 +10,7 @@ Des surprises cachées dans le site. Chut, ne le dites pas à tout le monde 🤫
 | 4 | **Anniversaire** : des ballons s'envolent sur le profil et le nom scintille en doré ✨ dans l'annuaire | Automatique **le jour de votre anniversaire**. Visible par les autres seulement si vous avez choisi d'afficher votre anniversaire. |
 | 5 | **Jour du bac** : bannière « Bon courage aux Terminales ! » | Automatique le jour d'une date du calendrier dont le titre contient « **Bac** » (un admin ajoute par exemple « Bac : épreuve de philosophie » à la bonne date). |
 | 6 | **Développeur légendaire** : une fiche spéciale avec un badge 🏆 | Rechercher le nom complet « **Jad El Chammas** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
+| 6 bis | **Ambassadeur légendaire** : une fiche spéciale avec un badge 🎖️ | Rechercher le nom complet « **Adriano Sfeir** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 7 | **Tempête de sable** : quelques secondes de vent de sable sur l'écran | Rechercher « **chameau** », « **50°C** » ou « **shamal** » dans la recherche ou l'Annuaire. |
 
 ## Pour les développeurs

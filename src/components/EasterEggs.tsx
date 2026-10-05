@@ -9,7 +9,7 @@ import { useCreditsConfig, type CreditsConfig } from '@/data/credits';
 import { usePublicOverview } from '@/data/public';
 import { fullName, useApprovedMembers, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
-import { CREATOR, eggs, takeCreditsPreview } from '@/lib/eggs';
+import { eggs, takeCreditsPreview, type Legend } from '@/lib/eggs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
 import { Avatar, Badge, Tap } from './ui/primitives';
@@ -220,12 +220,13 @@ export function SparkleName({ name }: { name: string }) {
 
 // ——— Searching for the creator ———
 
-/** « Jad » in a search box: the legendary developer card. */
-export function CreatorCard({ onOpen }: { onOpen: (href: string) => void }) {
+/** A legend's full name in a search box: their card (the legendary developer, the legendary ambassador). */
+export function LegendCard({ legend, onOpen }: { legend: Legend; onOpen: (href: string) => void }) {
   const { d } = useI18n();
+  const t = legend.kind === 'developer' ? { title: d.eggs.legendTitle, text: d.eggs.legendText, badge: d.eggs.legendBadge } : { title: d.eggs.ambassadorTitle, text: d.eggs.ambassadorText, badge: d.eggs.ambassadorBadge };
   const { colors } = useTheme();
   const members = useApprovedMembers();
-  const jad = useMemo(() => members.find((u) => fullName(u).toLowerCase() === CREATOR.toLowerCase()), [members]);
+  const jad = useMemo(() => members.find((u) => fullName(u).toLowerCase() === legend.name.toLowerCase()), [members, legend.name]);
   const shine = useSharedValue(0);
   useEffect(() => {
     shine.value = withRepeat(withTiming(1, { duration: 1600 }), -1, true);
@@ -236,17 +237,17 @@ export function CreatorCard({ onOpen }: { onOpen: (href: string) => void }) {
     <Tap onPress={() => jad && onOpen(`/membre/${jad.id}`)} disabled={!jad}>
       <Animated.View style={[{ margin: 6, padding: 16, borderRadius: 18, borderWidth: 2, backgroundColor: colors.navy, flexDirection: 'row', alignItems: 'center', gap: 14 }, ring]}>
         <View>
-          <Avatar uri={jad?.avatar} name={CREATOR} size={56} />
+          <Avatar uri={jad?.avatar} name={legend.name} size={56} />
           <View style={{ position: 'absolute', right: -6, bottom: -6, width: 26, height: 26, borderRadius: 13, backgroundColor: '#E8B820', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.navy }}>
-            <Txt style={{ fontSize: 13 }}>🏆</Txt>
+            <Txt style={{ fontSize: 13 }}>{legend.emoji}</Txt>
           </View>
         </View>
         <View style={{ flex: 1, gap: 4 }}>
-          <Txt style={{ color: '#E8B820', fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 2, textTransform: 'uppercase' }}>{d.eggs.legendTitle}</Txt>
-          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 24, lineHeight: 28 }}>{CREATOR}</Txt>
-          <Txt style={{ color: '#E7ECF2', fontSize: 13 }}>{d.eggs.legendText}</Txt>
+          <Txt style={{ color: '#E8B820', fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 2, textTransform: 'uppercase' }}>{t.title}</Txt>
+          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: 24, lineHeight: 28 }}>{legend.name}</Txt>
+          <Txt style={{ color: '#E7ECF2', fontSize: 13 }}>{t.text}</Txt>
           <View style={{ flexDirection: 'row', marginTop: 2 }}>
-            <Badge label={d.eggs.legendBadge} tone="warning" icon="award" />
+            <Badge label={t.badge} tone="warning" icon="award" />
           </View>
         </View>
       </Animated.View>

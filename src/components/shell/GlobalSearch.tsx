@@ -12,8 +12,8 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
-import { eggs, isCreatorQuery, isSandWord } from '@/lib/eggs';
-import { CreatorCard, SandstormLayer } from '../EasterEggs';
+import { eggs, isSandWord, legendQuery } from '@/lib/eggs';
+import { LegendCard, SandstormLayer } from '../EasterEggs';
 import { Avatar, SearchBar, Tap, type IconName } from '../ui/primitives';
 import { Flag } from '../ui/Flag';
 import { Txt } from '../ui/Txt';
@@ -47,7 +47,7 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
   useEffect(() => {
     if (isSandWord(q)) eggs.emit('sandstorm');
   }, [q]);
-  const creator = isCreatorQuery(q);
+  const legend = legendQuery(q);
 
   const go = (href: string) => {
     onClose();
@@ -70,9 +70,9 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
             </Tap>
           </View>
           <ScrollView contentContainerStyle={{ padding: 10 }} keyboardShouldPersistTaps="handled">
-            {creator && <CreatorCard onOpen={go} />}
+            {legend && <LegendCard legend={legend} onOpen={go} />}
             {!results && <Txt variant="small" color="textSubtle" style={{ padding: 16 }}>{d.search.empty}</Txt>}
-            {results && count === 0 && !creator && <Txt variant="small" color="textSubtle" style={{ padding: 16 }}>{d.common.noResults}</Txt>}
+            {results && count === 0 && !legend && <Txt variant="small" color="textSubtle" style={{ padding: 16 }}>{d.common.noResults}</Txt>}
             {results && results.m.length > 0 && (
               <Group title={d.search.members}>
                 {results.m.map((u) => (

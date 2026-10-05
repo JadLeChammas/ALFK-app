@@ -20,8 +20,8 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
-import { eggs, isCreatorQuery, isSandWord } from '@/lib/eggs';
-import { CreatorCard } from '@/components/EasterEggs';
+import { eggs, isSandWord, legendQuery } from '@/lib/eggs';
+import { LegendCard } from '@/components/EasterEggs';
 
 const PREVIEW = 8;
 const byName = (a: User, b: User) => a.lastName.localeCompare(b.lastName, 'fr', { sensitivity: 'base' }) || a.firstName.localeCompare(b.firstName, 'fr', { sensitivity: 'base' });
@@ -166,7 +166,7 @@ export default function Directory() {
             </Row>
           </>
         )}
-        {isCreatorQuery(q) && <CreatorCard onOpen={(href) => router.push(href as never)} />}
+        {legendQuery(q) && <LegendCard legend={legendQuery(q)!} onOpen={(href) => router.push(href as never)} />}
       </View>
 
       <BottomSheet
