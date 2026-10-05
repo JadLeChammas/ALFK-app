@@ -846,7 +846,8 @@ function useStoreValue() {
         const promos = exists ? d.promos.map((p) => (p.year === year ? { ...p, whatsapp: url || undefined } : p)) : [...d.promos, { year, whatsapp: url || undefined }];
         return { ...d, promos };
       });
-      if (supabase) send(supabase.from('promos').upsert({ year, whatsapp: url || null }));
+      // Through a function: since migration 035 the links can't be read (so neither upserted) from the table directly.
+      if (supabase) send(supabase.rpc('set_promo_whatsapp', { p_year: year, p_url: url }));
     },
 
     // ——— Admin ———
