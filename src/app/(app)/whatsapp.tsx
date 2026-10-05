@@ -5,7 +5,7 @@ import { View } from 'react-native';
 
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Badge, Button, Card, EmptyState, Row, SectionHeader, Tap } from '@/components/ui/primitives';
-import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
+import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -28,8 +28,6 @@ export default function Whatsapp() {
   const alumni = me.role === 'alumni' || me.role === 'admin';
   const community = db.settings.whatsappCommunity;
   const myPromo = me.promo ? db.promos.find((p) => p.year === me.promo) : undefined;
-  // Every promo's group: admins only — a member sees their own promo's link (« Ma promo »).
-  const groups = admin ? [...db.promos].filter((p) => p.whatsapp).sort((a, b) => b.year - a.year) : [];
 
   const editCommunity = async () => {
     const url = await prompt({ title: d.whatsapp.editCommunity, placeholder: 'https://chat.whatsapp.com/…', initial: community });
@@ -106,28 +104,6 @@ export default function Whatsapp() {
         </Card>
       )}
 
-      {admin && (
-        <View style={{ gap: 14 }}>
-          <SectionHeader title={d.whatsapp.allGroups} icon="message-circle" count={String(groups.length)} />
-          {groups.length === 0 ? (
-            <EmptyState icon="message-circle" title={d.whatsapp.noGroup} />
-          ) : (
-            <Grid min={200} gap={12}>
-              {groups.map((p) => (
-                <Tap
-                  key={p.year}
-                  onPress={() => openExternal(p.whatsapp!)}
-                  style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 16, backgroundColor: colors.surface, borderWidth: 1, borderColor: p.year === me.promo ? WHATSAPP : colors.border }}
-                  hoverStyle={{ borderColor: WHATSAPP }}>
-                  <Feather name="message-square" size={18} color={WHATSAPP} />
-                  <Txt variant="bodyStrong" style={{ flex: 1 }}>{f(d.common.promo, { year: p.year })}</Txt>
-                  <Feather name="external-link" size={14} color={colors.textSubtle} />
-                </Tap>
-              ))}
-            </Grid>
-          )}
-        </View>
-      )}
     </Screen>
   );
 }

@@ -6,7 +6,6 @@ import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 
 import { MemberCard } from '@/components/cards';
-import { useDialogs } from '@/components/ui/Dialogs';
 import { HBarList } from '@/components/ui/Charts';
 import { Flag } from '@/components/ui/Flag';
 import { Avatar, Badge, Button, Card, Row, SectionHeader, Tap } from '@/components/ui/primitives';
@@ -27,8 +26,7 @@ export default function PromoPage() {
   const { d, f, relative, country } = useI18n();
   const { colors } = useTheme();
   const { isMobile } = useLayout();
-  const { db, actions } = useStore();
-  const { prompt, toast } = useDialogs();
+  const { db } = useStore();
   const me = useMe();
   const all = useApprovedMembers();
   const members = useMemo(() => all.filter((u) => u.promo === year).sort((a, b) => a.lastName.localeCompare(b.lastName)), [all, year]);
@@ -40,14 +38,6 @@ export default function PromoPage() {
   const schools = useMemo(() => groupByPlace(members, (u) => u.school, aliases).map((g) => [g.label, g.items.length] as [string, number]), [members, aliases]);
   const countries = useMemo(() => countBy(members.map((u) => u.country)), [members]);
   const recent = [...members].sort((a, b) => (a.lastActiveAt < b.lastActiveAt ? 1 : -1)).slice(0, 5);
-
-  const editWhatsapp = async () => {
-    const url = await prompt({ title: d.promo.editWhatsapp, placeholder: 'https://chat.whatsapp.com/…', initial: info?.whatsapp });
-    if (url !== null) {
-      actions.setPromoWhatsapp(year, url.trim());
-      toast(d.common.saved);
-    }
-  };
 
   return (
     <Screen>
@@ -69,13 +59,13 @@ export default function PromoPage() {
               <Stat icon="globe" text={f(d.repere.countriesCount, { n: countries.length })} />
             </Row>
             <Row gap={10} wrap>
-              {/* The group's link: only for this promo's members (and the admins). */}
-              {(me.promo === year || me.role === 'admin') && (info?.whatsapp ? (
+              {/* The group's link: only for this promo's own members — admins included, who manage every link from the dashboard. */}
+              {me.promo === year && (info?.whatsapp ? (
                 <Button label={d.promo.whatsapp} icon="message-square" onPress={() => openExternal(info.whatsapp!)} style={{ backgroundColor: '#25D366', borderColor: '#25D366' }} />
               ) : (
                 <Badge label={d.promo.noWhatsapp} tone="neutral" icon="message-square" />
               ))}
-              {me.role === 'admin' && <Button label={d.promo.editWhatsapp} variant="secondary" size="sm" icon="edit-2" onPress={editWhatsapp} />}
+              {me.role === 'admin' && <Button label={d.promo.editWhatsapp} variant="secondary" size="sm" icon="edit-2" onPress={() => router.push('/admin/whatsapp')} />}
             </Row>
           </View>
         </View>
