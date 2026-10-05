@@ -16,7 +16,7 @@ import { sortedCountries } from '@/data/countries';
 import { userFields } from '@/data/fields';
 import { FieldsPicker } from '@/components/FieldsPicker';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
-import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
+import { fullName, useApprovedMembers, useMe, useStore, properFirstName } from '@/data/store';
 import type { OtherSchool, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
@@ -159,7 +159,7 @@ export default function EditProfile() {
           <Card style={{ gap: 16 }}>
             <Txt variant="h3">{d.profile.info}</Txt>
             <FieldRow>
-              <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} maxLength={80} containerStyle={{ flex: 1 }} />
+              <Input label={d.auth.firstName} value={form.firstName} onChangeText={(v) => set('firstName')(properFirstName(v))} maxLength={80} containerStyle={{ flex: 1 }} />
               <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
             </FieldRow>
             <FieldRow>

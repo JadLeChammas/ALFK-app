@@ -14,7 +14,7 @@ import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
 import { formatPhone, isValidPhoneNumber, parseFrDate, requiresContact } from '@/data/members';
-import { fullName, useMe, useStore, type AuthError } from '@/data/store';
+import { fullName, useMe, useStore, type AuthError, properFirstName } from '@/data/store';
 import { GRADES, type Gender, type Grade, type Role, type User } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -276,7 +276,7 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
           </Row>
           <ScrollView contentContainerStyle={{ padding: 20, gap: 14 }} keyboardShouldPersistTaps="handled">
             <FieldRow>
-              <Input label={d.auth.firstName} value={form.firstName} onChangeText={set('firstName')} maxLength={80} containerStyle={{ flex: 1 }} />
+              <Input label={d.auth.firstName} value={form.firstName} onChangeText={(v) => set('firstName')(properFirstName(v))} maxLength={80} containerStyle={{ flex: 1 }} />
               <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
             </FieldRow>
             <Input label={d.auth.email} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" />

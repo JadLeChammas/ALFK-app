@@ -2,6 +2,7 @@ import * as Crypto from 'expo-crypto';
 
 import { ATTACHMENT_TYPES, checkUpload, CV_TYPES, extensionFor, IMAGE_TYPES, PROOF_TYPES } from '@/lib/fileSafety';
 import { apiBase, supabase } from '@/lib/supabase';
+import { properFirstName } from './members';
 import type {
   AdminLog,
   AppNotification,
@@ -30,9 +31,11 @@ export const newId = () => Crypto.randomUUID();
 
 export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], settings: {} };
 
+
 export const toUser = (r: Row): User => ({
   id: r.id,
-  firstName: r.first_name,
+  // Shown as « Jean-Claude EL CHAMMAS » whatever was typed (store.tsx; the database does it too, 032).
+  firstName: properFirstName(r.first_name ?? ''),
   lastName: r.last_name,
   email: r.email ?? '',
   password: '',

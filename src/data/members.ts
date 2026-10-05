@@ -2,6 +2,13 @@ import { resolvePlace, type PlaceAliases } from './placeKey';
 import type { Role, User } from './types';
 
 /**
+ * First names start with a capital, every part of a compound one too (« Jean-Claude », « Jean Marie »,
+ * « habari » → « Habari », « JEAN » → « Jean »). Last names are all capitals (store.tsx, upperName).
+ * The database applies the same rules (migration 032).
+ */
+export const properFirstName = (s: string) => s.toLocaleLowerCase('fr').replace(/(^|[\s'’-])(\p{L})/gu, (_, sep: string, ch: string) => sep + ch.toLocaleUpperCase('fr'));
+
+/**
  * Membership rules shared by every screen and by the demo store.
  * The same rules are enforced by the database (supabase/schema.sql), so they cannot be bypassed.
  */

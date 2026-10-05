@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { Platform } from 'react-native';
 
 import { isRemote, supabase } from '@/lib/supabase';
-import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL } from './members';
+import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL, properFirstName } from './members';
 import { can, canMessage, SELF_SIGNUP_ROLES } from './permissions';
 import { parseAliases } from './places';
 import { isHiDev, sortPartners } from './partners';
@@ -66,6 +66,8 @@ import type {
  *   reloaded and `error` is set so the UI can say so.
  * - **Local demo** otherwise: seeded data saved on the device (src/data/seed.ts).
  */
+
+export { properFirstName };
 
 const STORAGE_KEY = 'lfk.demo.db.v12';
 const SESSION_KEY = 'lfk.demo.session.v1';
@@ -130,7 +132,7 @@ const makeId = (p: string) => (isRemote ? newId() : demoId(p));
 const nowIso = () => new Date().toISOString();
 /** Last names are always shown in capitals (« Jad EL CHAMMAS »). */
 export const upperName = (s: string) => s.toLocaleUpperCase('fr');
-export const fullName = (u?: Pick<User, 'firstName' | 'lastName'>) => (u ? `${u.firstName} ${upperName(u.lastName)}` : '');
+export const fullName = (u?: Pick<User, 'firstName' | 'lastName'>) => (u ? `${properFirstName(u.firstName)} ${upperName(u.lastName)}` : '');
 
 function authError(message?: string, code?: string): AuthError {
   const m = `${code ?? ''} ${message ?? ''}`.toLowerCase();

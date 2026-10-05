@@ -22,7 +22,7 @@ import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import { checkPicked, type PickedDoc, type PickedImage } from '@/data/remote';
 import { IMAGE_TYPES, isFileRejected } from '@/lib/fileSafety';
 import { pickImages } from '@/lib/media';
-import { useStore, type AuthError } from '@/data/store';
+import { useStore, type AuthError, properFirstName } from '@/data/store';
 import { GRADES, type Gender, type Grade, type OtherSchool, type Role, type Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -153,7 +153,7 @@ export default function SignUp() {
         <CredentialForm ref={identityForm} onSubmit={next}>
         <View style={{ gap: 16 }}>
           <FieldRow>
-            <Input label={req(d.auth.firstName)} value={form.firstName} onChangeText={set('firstName')} maxLength={80} containerStyle={{ flex: 1 }} autoComplete="given-name" />
+            <Input label={req(d.auth.firstName)} value={form.firstName} onChangeText={(v) => set('firstName')(properFirstName(v))} maxLength={80} containerStyle={{ flex: 1 }} autoComplete="given-name" />
             <Input label={req(d.auth.lastName)} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} autoComplete="family-name" />
           </FieldRow>
           <Input label={req(d.auth.email)} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" autoCorrect={false} keyboardType="email-address" autoComplete="username" textContentType="username" nativeID="email" />
