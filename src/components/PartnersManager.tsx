@@ -14,7 +14,9 @@ import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
 import { LEADER_KINDS, useSchoolLeaders } from '@/data/schoolLeaders';
-import { isHiDev, partnerLogo, sortPartners } from '@/data/partners';
+import { partnerLogo, sortPartners } from '@/data/partners';
+import type { PickedImage } from '@/data/remote';
+import { AvatarCropper } from '@/components/AvatarCropper';
 import { useI18n } from '@/i18n';
 import { isFileRejected } from '@/lib/fileSafety';
 import { pickImages } from '@/lib/media';
@@ -37,7 +39,7 @@ export function PartnersManager() {
   const leaders = LEADER_KINDS.flatMap((k) => byKind(k).filter((x) => !x.to));
   const institutions = sortPartners(db.institutions);
   // Hi Dev always closes the list: the others move among themselves.
-  const movableCount = institutions.filter((x) => !isHiDev(x)).length;
+  const movableCount = institutions.length;
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<Institution | null>(null);
 
@@ -60,8 +62,8 @@ export function PartnersManager() {
                 key={inst.id}
                 inst={inst}
                 onEdit={admin ? () => setEditing(inst) : undefined}
-                onUp={admin && !isHiDev(inst) && i > 0 ? () => actions.moveInstitution(inst.id, -1) : undefined}
-                onDown={admin && !isHiDev(inst) && i < movableCount - 1 ? () => actions.moveInstitution(inst.id, 1) : undefined}
+                onUp={admin && i > 0 ? () => actions.moveInstitution(inst.id, -1) : undefined}
+                onDown={admin && i < movableCount - 1 ? () => actions.moveInstitution(inst.id, 1) : undefined}
                 onDelete={
                   admin
                     ? async () => {
@@ -159,9 +161,13 @@ function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onCl
   const validSite = !website || /^https?:\/\/\S+$/i.test(website);
   // The logo: an address, or an image file sent by the partner (stored with the site's photos).
   const [uploading, setUploading] = useState(false);
+  const [cropping, setCropping] = useState<PickedImage | null>(null);
   const uploadLogo = async () => {
     const [img] = await pickImages(false);
-    if (!img) return;
+    if (img) setCropping(img);
+  };
+  const saveLogo = async (img: PickedImage) => {
+    setCropping(null);
     setUploading(true);
     try {
       set('logo')(await actions.uploadImage(img, 'partners'));
@@ -181,6 +187,8 @@ function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onCl
         {!!form.logo && <Image source={partnerLogo({ name: form.name, logo: form.logo })} style={{ width: 48, height: 48 }} contentFit="contain" />}
         <Button label={d.honorary.uploadLogo} icon="upload" variant="secondary" size="sm" onPress={uploadLogo} loading={uploading} />
       </Row>
+      {/* Placed and zoomed like a profile photo before it is saved. */}
+      {cropping && <AvatarCropper image={cropping} onCancel={() => setCropping(null)} onDone={saveLogo} />}
       <Button
         label={editing ? d.common.save : d.common.add}
         full
