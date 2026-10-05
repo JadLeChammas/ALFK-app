@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
-import { Modal, Platform, Pressable, View, useWindowDimensions } from 'react-native';
+import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
 import Animated, { cancelAnimation, Easing, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Ellipse, Path } from 'react-native-svg';
@@ -9,28 +9,17 @@ import { useCreditsConfig, type CreditsConfig } from '@/data/credits';
 import { usePublicOverview } from '@/data/public';
 import { fullName, useApprovedMembers, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
-import { CREATOR, eggs, idleFor, listenForShake, markActive, takeCreditsPreview } from '@/lib/eggs';
+import { CREATOR, eggs, takeCreditsPreview } from '@/lib/eggs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
 import { Avatar, Badge, Tap } from './ui/primitives';
 import { Txt } from './ui/Txt';
 
-const IDLE_MS = 5 * 60_000;
-
-/** Root layer: credits, sandstorm, idle camel, baccalaureate banner, shake detection. */
+/** Root layer: credits, sandstorm, baccalaureate banner. */
 export function EasterEggs() {
-  useEffect(() => listenForShake(), []);
-  // Any key, mouse or scroll counts as activity (touches are caught by the root view).
-  useEffect(() => {
-    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
-    const evs = ['mousemove', 'keydown', 'wheel', 'touchstart', 'scroll'] as const;
-    evs.forEach((e) => window.addEventListener(e, markActive, { passive: true }));
-    return () => evs.forEach((e) => window.removeEventListener(e, markActive));
-  }, []);
   return (
     <>
       <BacBanner />
-      <Camel />
       <SandstormLayer />
       <Credits />
     </>
@@ -59,45 +48,6 @@ function BacBanner() {
         </Tap>
       </View>
     </View>
-  );
-}
-
-// ——— Idle camel ———
-
-function Camel() {
-  const { width, height } = useWindowDimensions();
-  const [walking, setWalking] = useState(false);
-  const x = useSharedValue(-90);
-  const bob = useSharedValue(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (!walking && idleFor() > IDLE_MS) setWalking(true);
-    }, 10_000);
-    return () => clearInterval(id);
-  }, [walking]);
-
-  useEffect(() => {
-    if (!walking) return;
-    const done = () => {
-      markActive();
-      setWalking(false);
-    };
-    x.value = -90;
-    x.value = withTiming(width + 90, { duration: 14_000, easing: Easing.linear }, (fin) => fin && runOnJS(done)());
-    bob.value = withRepeat(withSequence(withTiming(-5, { duration: 350 }), withTiming(0, { duration: 350 })), -1);
-    return () => {
-      cancelAnimation(x);
-      cancelAnimation(bob);
-    };
-  }, [walking, width, x, bob]);
-
-  const style = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }, { translateY: bob.value }, { scaleX: -1 }] }));
-  if (!walking) return null;
-  return (
-    <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, top: height * 0.72, zIndex: 1001 }, style]}>
-      <Txt style={{ fontSize: 56, lineHeight: 64 }}>🐪</Txt>
-    </Animated.View>
   );
 }
 

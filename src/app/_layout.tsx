@@ -15,7 +15,6 @@ import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
 import { StoreProvider, useStore } from '@/data/store';
 import { I18nProvider, useI18n } from '@/i18n';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
-import { markActive } from '@/lib/eggs';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -25,7 +24,7 @@ export default function RootLayout() {
       <I18nProvider>
         <StoreProvider>
           <DialogProvider>
-            <View style={{ flex: 1 }} onTouchStart={markActive}>
+            <View style={{ flex: 1 }}>
               <RootNavigator />
             </View>
             <StoreErrorToast />

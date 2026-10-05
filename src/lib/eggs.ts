@@ -1,13 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
 
 import type { User } from '@/data/types';
 
 /**
  * Easter eggs (the full list with how to find them is in EASTER_EGGS.md).
- * A tiny event bus lets a search box, a shake or the footer trigger an effect drawn at the root.
+ * A tiny event bus lets a search box or the footer trigger an effect drawn at the root.
  */
-export type EggEvent = 'shake' | 'sandstorm' | 'credits';
+export type EggEvent = 'sandstorm' | 'credits';
 
 const listeners = new Map<EggEvent, Set<() => void>>();
 /** Credits shown once instead of the saved ones (admin preview of unsaved changes). */
@@ -79,47 +78,3 @@ export function logoTap(handlers: { first?: () => void; five: () => void; seven:
 const PREV_LANG = 'lfk.prevLang';
 export const rememberLang = (l: string) => AsyncStorage.setItem(PREV_LANG, l).catch(() => {});
 export const previousLang = async () => (await AsyncStorage.getItem(PREV_LANG).catch(() => null)) ?? 'fr';
-
-// ——— Activity (for the idle camel) ———
-let lastActive = Date.now();
-export const markActive = () => {
-  lastActive = Date.now();
-};
-export const idleFor = () => Date.now() - lastActive;
-
-// ——— Shake (mobile web, devicemotion) ———
-let motionAsked = false;
-/** iPhone asks for permission to read motion; call from a tap (e.g. on the globe). */
-export function askMotionPermission() {
-  if (motionAsked || Platform.OS !== 'web' || typeof DeviceMotionEvent === 'undefined') return;
-  motionAsked = true;
-  const req = (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> }).requestPermission;
-  if (req) req().catch(() => {});
-}
-
-export function listenForShake() {
-  if (Platform.OS !== 'web' || typeof window === 'undefined' || typeof DeviceMotionEvent === 'undefined') return () => {};
-  let prev: [number, number, number] | null = null;
-  let hits: number[] = [];
-  let cooldown = 0;
-  const onMotion = (e: DeviceMotionEvent) => {
-    const a = e.accelerationIncludingGravity;
-    if (!a || a.x === null || a.y === null || a.z === null) return;
-    const cur: [number, number, number] = [a.x, a.y, a.z];
-    if (prev) {
-      const jolt = Math.abs(cur[0] - prev[0]) + Math.abs(cur[1] - prev[1]) + Math.abs(cur[2] - prev[2]);
-      const now = Date.now();
-      if (jolt > 28) {
-        hits = [...hits.filter((t) => now - t < 1000), now];
-        if (hits.length >= 3 && now > cooldown) {
-          hits = [];
-          cooldown = now + 2500;
-          eggs.emit('shake');
-        }
-      }
-    }
-    prev = cur;
-  };
-  window.addEventListener('devicemotion', onMotion);
-  return () => window.removeEventListener('devicemotion', onMotion);
-}

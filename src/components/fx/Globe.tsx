@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { useReducedMotion } from 'react-native-reanimated';
 import Svg, { Circle, Defs, G, Line, Path, RadialGradient, Rect, Stop, Text as SvgText } from 'react-native-svg';
 
 import { LFK_LL } from '@/data/countries';
 import { globeDots, mapDots } from '@/data/worldDots';
 import { useI18n } from '@/i18n';
-import { askMotionPermission, eggs } from '@/lib/eggs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
 import { useOnScreen } from './useOnScreen';
@@ -88,19 +87,6 @@ export function Globe({
   const { lang, d } = useI18n();
   const [box, onScreen] = useOnScreen();
 
-  // Easter egg: shake the phone and the globe drops, then bounces back.
-  const drop = useSharedValue(0);
-  const spin = useSharedValue(0);
-  useEffect(
-    () =>
-      eggs.on('shake', () => {
-        drop.value = withSequence(withTiming(180, { duration: 420, easing: Easing.in(Easing.quad) }), withSpring(0, { damping: 4, stiffness: 140 }));
-        spin.value = withSequence(withTiming(25, { duration: 420 }), withSpring(0, { damping: 5 }));
-      }),
-    [drop, spin],
-  );
-  const fall = useAnimatedStyle(() => ({ transform: [{ translateY: drop.value }, { rotate: `${spin.value}deg` }] }));
-
   const land = useMemo(() => globeDots().map(([la, lo]) => toVec(la, lo)), []);
   const origin = useMemo(() => toVec(LFK_LL[0], LFK_LL[1]), []);
   const targets = useMemo(() => markers.map((m) => ({ ...m, v: toVec(m.ll[0], m.ll[1]) })), [markers]);
@@ -161,7 +147,6 @@ export function Globe({
 
   type Touch = { nativeEvent: { pageX: number; pageY: number } };
   const onGrant = () => {
-    askMotionPermission();
     drag.current = { active: true, dx: 0, dy: 0, phi0: live.current.phi, theta0: live.current.theta };
   };
   const onMove = (e: Touch) => {
@@ -284,14 +269,14 @@ export function Globe({
   // Easter egg: in Pirate, an old treasure map with an X on Kuwait.
   if (TREASURE_MAP && lang === 'pirate') {
     return (
-      <Animated.View style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, style, fall]} onLayout={fixedSize ? undefined : (e) => setMeasured(e.nativeEvent.layout.width)}>
+      <Animated.View style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, style]} onLayout={fixedSize ? undefined : (e) => setMeasured(e.nativeEvent.layout.width)}>
         {size > 0 && <TreasureMap size={size} markers={markers} label={d.eggs.treasure} title={d.eggs.mapTitle} />}
       </Animated.View>
     );
   }
 
   return (
-    <Animated.View style={[{ alignSelf: 'center', width: fixedSize ?? '100%', maxWidth: maxSize }, fall]}>
+    <Animated.View style={{ alignSelf: 'center', width: fixedSize ?? '100%', maxWidth: maxSize }}>
     <View
       ref={box}
       style={[{ width: fixedSize ?? '100%', maxWidth: maxSize, aspectRatio: 1, alignSelf: 'center' }, PAN_Y, style]}
