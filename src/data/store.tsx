@@ -21,6 +21,7 @@ import {
   loadProfiles,
   toMessage,
   toCircleMessage,
+  toClubPost,
   toNotification,
   institutionRow,
   keyDateRow,
@@ -41,6 +42,9 @@ import type {
   AdminLogAction,
   Conversation,
   Db,
+  Club,
+  ClubMember,
+  ClubPost,
   Gender,
   Grade,
   Institution,
@@ -69,7 +73,7 @@ import type {
 
 export { properFirstName };
 
-const STORAGE_KEY = 'lfk.demo.db.v12';
+const STORAGE_KEY = 'lfk.demo.db.v13';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -270,6 +274,15 @@ function useStoreValue() {
         if (p.eventType === 'DELETE') return;
         const c = toConversation(p.new);
         commit((d) => ({ ...d, conversations: d.conversations.some((x) => x.id === c.id) ? d.conversations.map((x) => (x.id === c.id ? c : x)) : [...d.conversations, c] }));
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'club_posts' }, (p) => {
+        if (p.eventType === 'DELETE') {
+          const id = (p.old as { id?: string }).id;
+          commit((d) => ({ ...d, clubPosts: d.clubPosts.filter((x) => x.id !== id) }));
+          return;
+        }
+        const m = toClubPost(p.new);
+        commit((d) => (d.clubPosts.some((x) => x.id === m.id) ? d : { ...d, clubPosts: [...d.clubPosts, m] }));
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'circle_messages' }, (p) => {
         if (p.eventType === 'DELETE') {
@@ -679,6 +692,59 @@ function useStoreValue() {
         return log({ ...d, publications: d.publications.filter((x) => x.id !== id) }, 'delete_publication', p?.title ?? id);
       });
       if (supabase) send(supabase.from('publications').delete().eq('id', id));
+    },
+
+    // ——— Clubs ———
+    /** An alumnus proposes a club; it waits for an admin. The creator becomes its manager. */
+    proposeClub(input: { name: string; description: string; cover?: string }) {
+      if (!meId) return;
+      const club: Club = { id: makeId('club'), name: input.name.trim(), description: input.description.trim(), cover: input.cover || undefined, status: 'pending', createdBy: meId, createdAt: nowIso() };
+      const manager: ClubMember = { clubId: club.id, userId: meId, role: 'manager', status: 'active', createdAt: nowIso() };
+      commit((d) => ({ ...d, clubs: [...d.clubs, club], clubMembers: [...d.clubMembers, manager] }));
+      // The database makes the creator manager by itself (trigger, migration 033).
+      if (supabase) send(supabase.from('clubs').insert({ id: club.id, name: club.name, description: club.description, cover: club.cover ?? null, status: 'pending', created_by: meId }));
+    },
+    /** Admins: approve or refuse a proposed club. */
+    reviewClub(id: string, status: 'approved' | 'rejected') {
+      commit((d) => ({ ...d, clubs: d.clubs.map((c) => (c.id === id ? { ...c, status } : c)) }));
+      if (supabase) send(supabase.from('clubs').update({ status }).eq('id', id));
+    },
+    updateClub(id: string, patch: { name: string; description: string; cover?: string }) {
+      const next = { name: patch.name.trim(), description: patch.description.trim(), cover: patch.cover || undefined };
+      commit((d) => ({ ...d, clubs: d.clubs.map((c) => (c.id === id ? { ...c, ...next } : c)) }));
+      if (supabase) send(supabase.from('clubs').update({ name: next.name, description: next.description, cover: next.cover ?? null }).eq('id', id));
+    },
+    deleteClub(id: string) {
+      commit((d) => ({ ...d, clubs: d.clubs.filter((c) => c.id !== id), clubMembers: d.clubMembers.filter((m) => m.clubId !== id), clubPosts: d.clubPosts.filter((p) => p.clubId !== id) }));
+      if (supabase) send(supabase.from('clubs').delete().eq('id', id));
+    },
+    /** Asks to join (a manager accepts). */
+    requestToJoinClub(clubId: string) {
+      if (!meId) return;
+      const m: ClubMember = { clubId, userId: meId, role: 'member', status: 'pending', createdAt: nowIso() };
+      commit((d) => ({ ...d, clubMembers: [...d.clubMembers.filter((x) => !(x.clubId === clubId && x.userId === meId)), m] }));
+      if (supabase) send(supabase.from('club_members').insert({ club_id: clubId, user_id: meId, role: 'member', status: 'pending' }));
+    },
+    /** Leaving, cancelling a request, or (managers) removing someone / refusing a request. */
+    removeClubMember(clubId: string, userId: string) {
+      commit((d) => ({ ...d, clubMembers: d.clubMembers.filter((x) => !(x.clubId === clubId && x.userId === userId)) }));
+      if (supabase) send(supabase.from('club_members').delete().eq('club_id', clubId).eq('user_id', userId));
+    },
+    /** Managers: accept a request, or name / unname a co-manager. */
+    updateClubMember(clubId: string, userId: string, patch: Partial<Pick<ClubMember, 'role' | 'status'>>) {
+      commit((d) => ({ ...d, clubMembers: d.clubMembers.map((x) => (x.clubId === clubId && x.userId === userId ? { ...x, ...patch } : x)) }));
+      if (supabase) send(supabase.from('club_members').update(patch).eq('club_id', clubId).eq('user_id', userId));
+    },
+    postToClub(clubId: string, kind: ClubPost['kind'], text: string) {
+      const body = text.trim();
+      if (!meId || !body) return;
+      const p: ClubPost = { id: makeId('cp'), clubId, authorId: meId, kind, text: body, createdAt: nowIso() };
+      commit((d) => ({ ...d, clubPosts: [...d.clubPosts, p] }));
+      if (supabase) send(supabase.from('club_posts').insert({ id: p.id, club_id: clubId, author_id: meId, kind, text: body }));
+    },
+    deleteClubPost(id: string) {
+      commit((d) => ({ ...d, clubPosts: d.clubPosts.filter((p) => p.id !== id) }));
+      if (supabase) send(supabase.from('club_posts').delete().eq('id', id));
     },
 
     // ——— Honorary members' circle ———

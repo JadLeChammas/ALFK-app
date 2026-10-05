@@ -37,4 +37,7 @@ export const canMessage = (a: Pick<User, 'role'> | null | undefined, b: Pick<Use
 export const SELF_SIGNUP_ROLES: Role[] = ['alumni', 'eleve'];
 
 /** The honorary members' circle (their page and group discussion): honorary members and admins. */
+/** Clubs (page « Clubs »): alumni and admins for now — students and honorary members later, if wanted. */
+export const canSeeClubs = (user: Pick<User, 'role' | 'approved'> | null | undefined) => !!user && user.approved && (user.role === 'alumni' || user.role === 'admin');
+
 export const inCircle = (user: Pick<User, 'role'> | null | undefined) => !!user && (user.role === 'honneur' || user.role === 'admin');

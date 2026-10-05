@@ -431,6 +431,22 @@ export function createSeed(now = new Date()): Db {
     institutions, keyDates, questions, answers, circleMessages: [
       { id: 'cm1', authorId: proviseur.id, text: 'Bienvenue dans le cercle des membres d’honneur ! Cet espace nous permet d’échanger entre nous et avec le bureau de l’Amicale.', createdAt: ago(6) },
       { id: 'cm2', authorId: jad.id, text: 'Merci Monsieur le Proviseur. N’hésitez pas à nous proposer des idées d’événements avec le lycée.', createdAt: ago(5.5) },
-    ], settings: { whatsappCommunity: 'https://chat.whatsapp.com/lfk-communaute' },
+    ],
+    // Clubs: one running (Sarah manages it, Jad is a member, Léa asked to join), one waiting for the admins.
+    clubs: [
+      { id: 'club-finance', name: 'Club Finance', description: 'Les alumni qui travaillent ou étudient dans la finance : partage d’offres, conseils pour les entretiens, rencontres à Paris et Londres.', cover: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200', status: 'approved', createdBy: sarah.id, createdAt: ago(40) },
+      { id: 'club-lyon', name: 'Les Lyonnais du LFK', description: 'Pour se retrouver entre anciens installés à Lyon.', status: 'pending', createdBy: lea.id, createdAt: ago(1) },
+    ],
+    clubMembers: [
+      { clubId: 'club-finance', userId: sarah.id, role: 'manager', status: 'active', createdAt: ago(40) },
+      { clubId: 'club-finance', userId: jad.id, role: 'member', status: 'active', createdAt: ago(30) },
+      { clubId: 'club-finance', userId: lea.id, role: 'member', status: 'pending', createdAt: ago(2) },
+      { clubId: 'club-lyon', userId: lea.id, role: 'manager', status: 'active', createdAt: ago(1) },
+    ],
+    clubPosts: [
+      { id: 'cp1', clubId: 'club-finance', authorId: sarah.id, kind: 'announcement', text: 'Afterwork du Club Finance le mois prochain à Paris : inscrivez-vous en répondant ici !', createdAt: ago(10) },
+      { id: 'cp2', clubId: 'club-finance', authorId: jad.id, kind: 'message', text: 'Je serai là ! Quelqu’un a des conseils pour les entretiens en banque d’affaires ?', createdAt: ago(9) },
+    ],
+    settings: { whatsappCommunity: 'https://chat.whatsapp.com/lfk-communaute' },
   };
 }

@@ -34,6 +34,7 @@ export default function AdminDashboard() {
     { label: d.questions.queue, value: db.questions.filter((q) => q.status === 'pending').length, icon: 'help-circle', href: '/admin/questions', todo: true },
     { label: d.admin.reported, value: db.conversations.filter((c) => c.report && !c.report.resolved).length, icon: 'flag', href: '/admin/contenus', todo: true },
     { label: d.admin.upcomingEvents, value: db.events.filter((e) => new Date(e.date) >= now).length, icon: 'calendar', href: '/evenements', status: nextEvent ? f(d.admin.kpiNext, { date: formatDate(nextEvent.date, { year: false }) }) : undefined },
+    { label: d.clubs.kpi, value: db.clubs.filter((c) => c.status === 'pending').length, icon: 'grid', href: '/clubs', todo: true },
     { label: d.admin.unreadContact, value: db.contacts.filter((c) => !c.read).length, icon: 'inbox', href: '/admin/contact', todo: true },
   ];
 

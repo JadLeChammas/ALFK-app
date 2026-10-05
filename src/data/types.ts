@@ -212,6 +212,14 @@ export type Answer = { id: string; questionId: string; authorId?: string; text: 
 /** A message in the honorary members' group discussion. */
 export type CircleMessage = { id: string; authorId?: string; text: string; createdAt: string };
 
+/** Clubs (migration 033): proposed by an alumnus, approved by an admin, run by its managers. */
+export type ClubStatus = 'pending' | 'approved' | 'rejected';
+export type Club = { id: string; name: string; description: string; cover?: string; status: ClubStatus; createdBy?: string; createdAt: string };
+/** `pending` = asked to join; `manager` = runs the club (can name co-managers). */
+export type ClubMember = { clubId: string; userId: string; role: 'manager' | 'member'; status: 'pending' | 'active'; createdAt: string };
+/** The club's group discussion (`message`) and its managers' announcements (`announcement`). */
+export type ClubPost = { id: string; clubId: string; authorId?: string; kind: 'message' | 'announcement'; text: string; createdAt: string };
+
 export type Db = {
   /** Demo only: next Alumni number to hand out (numbers are never reused). */
   nextAlumniNumber?: number;
@@ -230,6 +238,9 @@ export type Db = {
   questions: Question[];
   answers: Answer[];
   circleMessages: CircleMessage[];
+  clubs: Club[];
+  clubMembers: ClubMember[];
+  clubPosts: ClubPost[];
   settings: AppSettings;
 };
 

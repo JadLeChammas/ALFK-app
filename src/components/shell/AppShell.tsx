@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { can, inCircle } from '@/data/permissions';
+import { can, canSeeClubs, inCircle } from '@/data/permissions';
 import { fullName, useInbox, useMe, useStore, useUnreadNotifications } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -55,6 +55,8 @@ function useNav() {
   const circle: NavItem[] = inCircle(me) ? [{ href: '/cercle', icon: 'award', label: d.circle.nav }] : [];
   const community: NavItem[] = [
     { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
+    // Clubs: alumni and admins (data/permissions.ts).
+    ...(canSeeClubs(me) ? [{ href: '/clubs', icon: 'grid' as const, label: d.clubs.nav }] : []),
     ...(me.role === 'admin' ? [] : circle),
     { href: INSTAGRAM_URL, icon: 'instagram', label: 'Instagram', external: 'instagram' },
   ];

@@ -15,6 +15,9 @@ import type {
   Question,
   Answer,
   CircleMessage,
+  Club,
+  ClubMember,
+  ClubPost,
   LfkEvent,
   Message,
   Promo,
@@ -29,7 +32,7 @@ const opt = <T,>(v: T | null | undefined) => (v === null || v === undefined ? un
 
 export const newId = () => Crypto.randomUUID();
 
-export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], settings: {} };
+export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], clubs: [], clubMembers: [], clubPosts: [], settings: {} };
 
 
 export const toUser = (r: Row): User => ({
@@ -125,6 +128,9 @@ const toPhoto = (r: Row): EventPhoto => ({ id: r.id, eventId: r.event_id, uri: r
 const toPublication = (r: Row): Publication => ({ id: r.id, title: r.title, category: r.category, date: r.date, cover: r.cover, excerpt: r.excerpt, body: r.body, authorId: r.author_id ?? '', status: r.status ?? 'published' });
 const toInstitution = (r: Row): Institution => ({ id: r.id, name: r.name, description: r.description ?? '', logo: opt(r.logo), website: opt(r.website), order: r.sort_order ?? 0 });
 const toQuestion = (r: Row): Question => ({ id: r.id, text: r.text, topic: r.topic, status: r.status, createdAt: r.created_at, publishedAt: opt(r.published_at) });
+export const toClub = (r: Row): Club => ({ id: r.id, name: r.name, description: r.description ?? '', cover: opt(r.cover), status: r.status, createdBy: opt(r.created_by), createdAt: r.created_at });
+export const toClubMember = (r: Row): ClubMember => ({ clubId: r.club_id, userId: r.user_id, role: r.role, status: r.status, createdAt: r.created_at });
+export const toClubPost = (r: Row): ClubPost => ({ id: r.id, clubId: r.club_id, authorId: opt(r.author_id), kind: r.kind, text: r.text, createdAt: r.created_at });
 export const toCircleMessage = (r: Row): CircleMessage => ({ id: r.id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
 const toAnswer = (r: Row): Answer => ({ id: r.id, questionId: r.question_id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
 const toKeyDate = (r: Row): KeyDate => ({ id: r.id, title: r.title, month: r.month, day: r.day, year: opt(r.year), category: r.category, endMonth: opt(r.end_month), endDay: opt(r.end_day), url: opt(r.url) });
@@ -167,7 +173,7 @@ export async function loadDb(): Promise<Db> {
   };
   // Tables added by migration 003: an empty list until it has been run, instead of breaking the app.
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
-  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle] = await Promise.all([
+  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, clubs, clubMembers, clubPosts] = await Promise.all([
     loadProfiles(),
     all('promos'),
     all('events', 'date'),
@@ -185,6 +191,9 @@ export async function loadDb(): Promise<Db> {
     optional('question_authors'),
     optional('answers'),
     optional('circle_messages'),
+    optional('clubs'),
+    optional('club_members'),
+    optional('club_posts'),
   ]);
   // Only the user's own questions (or all of them for admins) come back with an author.
   const askedBy = new Map(questionAuthors.map((r: Row) => [r.question_id, r.user_id]));
@@ -204,6 +213,9 @@ export async function loadDb(): Promise<Db> {
     questions: questions.map((r: Row) => ({ ...toQuestion(r), authorId: askedBy.get(r.id) })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     answers: answers.map(toAnswer).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
     circleMessages: circle.map(toCircleMessage).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
+    clubs: clubs.map(toClub).sort((a, b) => a.name.localeCompare(b.name)),
+    clubMembers: clubMembers.map(toClubMember),
+    clubPosts: clubPosts.map(toClubPost).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
     settings: Object.fromEntries(settings.map((s: Row) => [s.key, s.value])),
   };
 }
