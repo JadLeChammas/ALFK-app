@@ -131,6 +131,7 @@ function GraduateCard({ user }: { user: User }) {
       </Tap>
       <Row gap={6} wrap>
         {userFields(user).map((f) => <Badge key={f} label={fieldLabel(f, d.fields)} tone="primary" />)}
+        {!!user.specialty && <Badge label={user.specialty} tone="neutral" icon="target" />}
         {user.mentor && <Badge label={d.orientation.mentor} tone="success" icon="compass" />}
       </Row>
       <View style={{ gap: 6 }}>

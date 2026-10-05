@@ -82,7 +82,7 @@ const it: Dict = {
   directory: {
     title: 'Annuario', subtitle: 'Ritrova i membri per Classe LFK, paese o ricerca.',
     searchPlaceholder: 'Cerca per nome, Classe LFK, paese o scuola…', filterPromo: 'Classe LFK', filterCountry: 'Paese', filterSchool: 'Scuola',
-    allPromos: 'Tutte le Classi LFK', allCountries: 'Tutti i paesi', seePromo: 'Vedi la Classe LFK', results: '{n} risultati',
+    allPromos: 'Tutte le Classi LFK', allCountries: 'Tutti i paesi', seePromo: 'Vedi di più', moreMembers: 'Vedi tutti i {n} membri', results: '{n} risultati',
     honorary: 'Direzione del liceo', noPromo: 'Senza Classe LFK', jumpTo: 'Vai a', filters: 'Filtri', clearAll: 'Cancella tutto', showResults: 'Mostra {n} membri',
   },
   promo: {
@@ -828,6 +828,11 @@ const it: Dict = {
     shownToast: '{name} ora è visibile.',
     hiddenToast: '{name} ora è nascosto.',
     note: 'Solo gli admin vedono i partner nascosti (in grigio, con la dicitura « Nascosto ») nella pagina Partner.',
+  },
+  specialty: {
+    label: 'Specializzazione',
+    hint: 'Ciò che vuoi precisare: sistemi embedded, IA, cybersicurezza, medicina generale, cardiologia…',
+    rowLabel: 'Specializzazione',
   },
   uni: {
     pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',

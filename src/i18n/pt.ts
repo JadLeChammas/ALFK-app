@@ -82,7 +82,7 @@ const pt: Dict = {
   directory: {
     title: 'Diretório', subtitle: 'Encontre os membros por Turma LFK, país ou pesquisa.',
     searchPlaceholder: 'Pesquisar por nome, Turma LFK, país ou escola…', filterPromo: 'Turma LFK', filterCountry: 'País', filterSchool: 'Escola',
-    allPromos: 'Todas as Turmas LFK', allCountries: 'Todos os países', seePromo: 'Ver a Turma LFK', results: '{n} resultados',
+    allPromos: 'Todas as Turmas LFK', allCountries: 'Todos os países', seePromo: 'Ver mais', moreMembers: 'Ver os {n} membros', results: '{n} resultados',
     honorary: 'Direção do liceu', noPromo: 'Sem Turma LFK', jumpTo: 'Ir para', filters: 'Filtros', clearAll: 'Limpar tudo', showResults: 'Ver {n} membros',
   },
   promo: {
@@ -828,6 +828,11 @@ const pt: Dict = {
     shownToast: '{name} agora está visível.',
     hiddenToast: '{name} agora está oculto.',
     note: 'Só os admins veem os parceiros ocultos (em cinza, com a menção « Oculto ») na página Parceiros.',
+  },
+  specialty: {
+    label: 'Especialidade',
+    hint: 'O que quiser precisar: sistemas embarcados, IA, cibersegurança, clínica geral, cardiologia…',
+    rowLabel: 'Especialidade',
   },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',

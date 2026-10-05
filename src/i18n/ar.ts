@@ -82,7 +82,7 @@ const ar: Dict = {
   directory: {
     title: 'الدليل', subtitle: 'اعثر على أعضاء المجتمع حسب دفعة LFK أو الدولة أو بالبحث.',
     searchPlaceholder: 'ابحث بالاسم أو دفعة LFK أو الدولة أو المدرسة…', filterPromo: 'دفعة LFK', filterCountry: 'الدولة', filterSchool: 'المدرسة',
-    allPromos: 'كل دفعات LFK', allCountries: 'كل الدول', seePromo: 'عرض دفعة LFK', results: '{n} نتيجة',
+    allPromos: 'كل دفعات LFK', allCountries: 'كل الدول', seePromo: 'عرض المزيد', moreMembers: 'عرض الأعضاء الـ{n}', results: '{n} نتيجة',
     honorary: 'إدارة الثانوية', noPromo: 'بدون دفعة LFK', jumpTo: 'انتقل إلى', filters: 'عوامل التصفية', clearAll: 'مسح الكل', showResults: 'عرض {n} عضو',
   },
   promo: {
@@ -828,6 +828,11 @@ const ar: Dict = {
     shownToast: '{name} ظاهر الآن.',
     hiddenToast: '{name} مخفي الآن.',
     note: 'المشرفون فقط يرون الشركاء المخفيين (باللون الرمادي مع عبارة « مخفي ») في صفحة الشركاء.',
+  },
+  specialty: {
+    label: 'التخصص',
+    hint: 'ما تريد توضيحه: الأنظمة المدمجة، الذكاء الاصطناعي، الأمن السيبراني، الطب العام، أمراض القلب…',
+    rowLabel: 'التخصص',
   },
   uni: {
     pick: 'اختر من القائمة', searchPlaceholder: 'اكتب الاسم أو الاختصار (مثل I أو ISEP أو Sorbonne)…', inCity: 'في {city}',

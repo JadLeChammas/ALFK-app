@@ -82,7 +82,7 @@ const ja: Dict = {
   directory: {
     title: '名簿', subtitle: 'LFK学年、国、または検索でメンバーを探せます。',
     searchPlaceholder: '名前、LFK学年、国、学校で検索…', filterPromo: 'LFK学年', filterCountry: '国', filterSchool: '学校',
-    allPromos: 'すべてのLFK学年', allCountries: 'すべての国', seePromo: 'LFK学年を見る', results: '{n}件',
+    allPromos: 'すべてのLFK学年', allCountries: 'すべての国', seePromo: 'もっと見る', moreMembers: '{n} 人全員を見る', results: '{n}件',
     honorary: '学校管理職', noPromo: 'LFK学年なし', jumpTo: '移動', filters: 'フィルター', clearAll: 'すべてクリア', showResults: '{n}人のメンバーを表示',
   },
   promo: {
@@ -828,6 +828,11 @@ const ja: Dict = {
     shownToast: '{name} を表示しました。',
     hiddenToast: '{name} を非表示にしました。',
     note: '非表示のパートナーはパートナーページで管理者だけに表示されます（グレー表示、「非表示」の表示付き）。',
+  },
+  specialty: {
+    label: '専門',
+    hint: '補足したい内容：組込みシステム、AI、サイバーセキュリティ、総合診療、循環器内科など',
+    rowLabel: '専門',
   },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',

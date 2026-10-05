@@ -24,6 +24,7 @@ import { eggs, isCreatorQuery, isSandWord } from '@/lib/eggs';
 import { CreatorCard } from '@/components/EasterEggs';
 
 const PREVIEW = 8;
+const byName = (a: User, b: User) => a.lastName.localeCompare(b.lastName, 'fr', { sensitivity: 'base' }) || a.firstName.localeCompare(b.firstName, 'fr', { sensitivity: 'base' });
 
 export default function Directory() {
   const { d, f, country: countryOf } = useI18n();
@@ -92,6 +93,8 @@ export default function Directory() {
   const byPromo = useMemo(() => {
     const map = new Map<number, User[]>();
     for (const u of filtered) if (u.promo) map.set(u.promo, [...(map.get(u.promo) ?? []), u]);
+    // Within each promo: alphabetical (last name, then first name).
+    for (const list of map.values()) list.sort(byName);
     return [...map.entries()].sort((a, b) => b[0] - a[0]);
   }, [filtered]);
   const honorary = filtered.filter((u) => !u.promo);
@@ -227,6 +230,15 @@ export default function Directory() {
               <Grid min={isMobile ? 150 : 190} gap={isMobile ? 12 : 16}>
                 {list.slice(0, isFiltering ? list.length : PREVIEW).map((u) => <MemberCard key={u.id} user={u} />)}
               </Grid>
+              {/* Only the first ones are shown here: a clear button to the whole promo. */}
+              {!isFiltering && list.length > PREVIEW && (
+                <Button
+                  label={f(d.directory.moreMembers, { n: list.length })}
+                  iconRight="arrow-right"
+                  onPress={() => router.push(`/annuaire/promo/${year}`)}
+                  style={{ alignSelf: isMobile ? 'stretch' : 'center' }}
+                />
+              )}
             </View>
           ))}
           {honorary.length > 0 && (
@@ -273,7 +285,7 @@ function PromoHeader({ year, count, mine }: { year: number; count: number; mine:
         <Txt color="textSubtle">— {f(count > 1 ? d.common.members : d.common.member, { n: count })}</Txt>
       </Row>
       <View style={{ paddingTop: 12 }}>
-        <Button label={d.directory.seePromo} size="sm" variant="secondary" iconRight="arrow-right" onPress={() => router.push(`/annuaire/promo/${year}`)} />
+        <Button label={d.directory.seePromo} size="sm" iconRight="arrow-right" onPress={() => router.push(`/annuaire/promo/${year}`)} />
       </View>
     </View>
   );

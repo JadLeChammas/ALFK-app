@@ -83,7 +83,7 @@ const pirate: Dict = {
   directory: {
     title: 'Crew Roster', subtitle: 'Find yer shipmates by LFK crew, land or search.',
     searchPlaceholder: 'Search by name, LFK crew, land or school…', filterPromo: 'LFK crew', filterCountry: 'Land', filterSchool: 'School',
-    allPromos: 'All LFK crews', allCountries: 'All lands', seePromo: 'See the LFK crew', results: '{n} sailors found',
+    allPromos: 'All LFK crews', allCountries: 'All lands', seePromo: 'See more', moreMembers: 'See all {n} hands', results: '{n} sailors found',
     honorary: 'Admiralty o’ the Lycée', noPromo: 'No LFK crew', jumpTo: 'Sail to', filters: 'Sieves', clearAll: 'Scuttle all', showResults: 'Show {n} hearties',
   },
   promo: {
@@ -829,6 +829,11 @@ const pirate: Dict = {
     shownToast: '{name} be visible now.',
     hiddenToast: '{name} be hidden now.',
     note: 'Only the captains see hidden allies (greyed, marked « Hidden ») on the Allies page.',
+  },
+  specialty: {
+    label: 'Specialty',
+    hint: 'What ye want to add: embedded systems, AI, cyber-defence, general medicine, cardiology…',
+    rowLabel: 'Specialty',
   },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

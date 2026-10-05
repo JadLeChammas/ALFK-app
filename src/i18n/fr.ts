@@ -80,7 +80,7 @@ const fr = {
   directory: {
     title: 'Annuaire', subtitle: 'Retrouvez les membres de la communauté par Promo LFK, pays ou recherche.',
     searchPlaceholder: 'Rechercher par nom, Promo LFK, pays ou école…', filterPromo: 'Promo LFK', filterCountry: 'Pays', filterSchool: 'École',
-    allPromos: 'Toutes les Promos LFK', allCountries: 'Tous les pays', seePromo: 'Voir la Promo LFK', results: '{n} résultats',
+    allPromos: 'Toutes les Promos LFK', allCountries: 'Tous les pays', seePromo: 'Voir plus', moreMembers: 'Voir les {n} membres', results: '{n} résultats',
     honorary: 'Direction du lycée', noPromo: 'Sans Promo LFK', jumpTo: 'Aller à', filters: 'Filtres', clearAll: 'Tout effacer', showResults: 'Voir {n} membres',
   },
   promo: {
@@ -826,6 +826,11 @@ const fr = {
     shownToast: '{name} est maintenant visible.',
     hiddenToast: '{name} est maintenant masqué.',
     note: 'Seuls les admins voient les partenaires masqués (grisés, avec la mention « Masqué ») sur la page Partenaires.',
+  },
+  specialty: {
+    label: 'Spécialité',
+    hint: 'Ce que vous voulez préciser : systèmes embarqués, IA, cybersécurité, médecine générale, cardiologie…',
+    rowLabel: 'Spécialité',
   },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',

@@ -82,7 +82,7 @@ const en: Dict = {
   directory: {
     title: 'Directory', subtitle: 'Find community members by LFK Class, country or search.',
     searchPlaceholder: 'Search by name, LFK Class, country or school…', filterPromo: 'LFK Class', filterCountry: 'Country', filterSchool: 'School',
-    allPromos: 'All LFK Classes', allCountries: 'All countries', seePromo: 'View LFK Class', results: '{n} results',
+    allPromos: 'All LFK Classes', allCountries: 'All countries', seePromo: 'See more', moreMembers: 'See all {n} members', results: '{n} results',
     honorary: 'School leadership', noPromo: 'No LFK Class', jumpTo: 'Jump to', filters: 'Filters', clearAll: 'Clear all', showResults: 'Show {n} members',
   },
   promo: {
@@ -828,6 +828,11 @@ const en: Dict = {
     shownToast: '{name} is now visible.',
     hiddenToast: '{name} is now hidden.',
     note: 'Only admins see hidden partners (greyed out, marked « Hidden ») on the Partners page.',
+  },
+  specialty: {
+    label: 'Specialty',
+    hint: 'Anything you want to add: embedded systems, AI, cybersecurity, general medicine, cardiology…',
+    rowLabel: 'Specialty',
   },
   uni: {
     pick: 'Pick from the list', searchPlaceholder: 'Type the name or acronym (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

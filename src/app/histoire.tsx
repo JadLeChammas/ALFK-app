@@ -12,12 +12,14 @@ import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { foundingYear, parseStoryText, useLfkStory, type FunFact, type StoryEvent } from '@/data/lfkStory';
 import { LFK_LOGO } from '@/data/partners';
+import { useSchoolLeaders } from '@/data/schoolLeaders';
+import { LeadersTimeline } from '@/components/LeadersTimeline';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { brand, fonts, radius } from '@/theme/tokens';
 
-/** « Le LFK » — the lycée's history (timeline) and fun facts, written by the admins. Public page. */
+/** « Le LFK » — the lycée's history (timeline), fun facts and its heads through the years, written by the admins. Public page. */
 /** The LFK campus from above. */
 const CAMPUS_AERIAL = require('@/assets/images/lfk-campus-aerial.png');
 /** The school's front, and pupils forming the logo in the playground (beside the story). */
@@ -30,6 +32,9 @@ export default function LfkStoryPage() {
   const { story } = useLfkStory();
   const h = d.lfk;
   const admin = me?.role === 'admin';
+  const leaderAdmin = admin && !!me?.approved;
+  const { byKind } = useSchoolLeaders();
+  const hasLeaders = byKind('proviseur').length + byKind('directeur').length + byKind('cpe').length > 0;
   const { isDesktop } = useLayout();
   const year = foundingYear(story);
   const intro = story.intro?.trim();
@@ -73,6 +78,20 @@ export default function LfkStoryPage() {
         </Reveal>
         {story.facts.length ? <FactsGrid facts={story.facts} /> : <Soon text={h.soon} admin={admin} />}
       </Section>
+
+      {/* Leadership history: the heads of the LFK through the years (admins add them here). */}
+      {(hasLeaders || leaderAdmin) && (
+        <Section>
+          <Reveal style={{ marginBottom: 32 }}>
+            <SerifHeading title={d.site.bureau.history} />
+          </Reveal>
+          <View style={{ gap: 40 }}>
+            <LeadersTimeline kind="proviseur" editable={leaderAdmin} />
+            <LeadersTimeline kind="directeur" editable={leaderAdmin} />
+            <LeadersTimeline kind="cpe" editable={leaderAdmin} />
+          </View>
+        </Section>
+      )}
 
       <Section tone="navy">
         {/* laptop: the heading on the left, the dates on the right */}

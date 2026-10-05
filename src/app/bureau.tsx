@@ -7,28 +7,17 @@ import { FacesCard, Float } from '@/components/site/heroAccents';
 import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
-import { LeadersTimeline } from '@/components/LeadersTimeline';
 import { usePublicOverview } from '@/data/public';
-import { useSchoolLeaders } from '@/data/schoolLeaders';
-import { useStore } from '@/data/store';
 import { IMAGES } from '@/data/seed';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { fonts } from '@/theme/tokens';
 
-/**
- * « Le bureau » — the association's administrators (Team Showcase), then the
- * proviseurs and primary directors of the LFK through the years (timelines, edited by admins here).
- * Public page.
- */
+/** « Le bureau » — the association's administrators (Team Showcase). Public page. */
 export default function Board() {
   const { d, f } = useI18n();
   const { isDesktop } = useLayout();
   const { bureau } = usePublicOverview();
-  const { me } = useStore();
-  const admin = me?.role === 'admin' && me.approved;
-  const { byKind } = useSchoolLeaders();
-  const hasLeaders = byKind('proviseur').length + byKind('directeur').length + byKind('cpe').length > 0;
   const b = d.site.bureau;
   // The Bureau only (no honorary members): names, role titles and photos (see public_overview),
   // in Bureau-code order — the president first.
@@ -58,20 +47,6 @@ export default function Board() {
         </Reveal>
         {team.length ? <TeamShowcase members={team} /> : <Empty text={b.empty} />}
       </Section>
-
-      {/* Leadership history: the heads of the LFK through the years (admins add them here). */}
-      {(hasLeaders || admin) && (
-        <Section style={{ paddingTop: 0 }}>
-          <Reveal style={{ marginBottom: 32 }}>
-            <SerifHeading title={b.history} />
-          </Reveal>
-          <View style={{ gap: 40 }}>
-            <LeadersTimeline kind="proviseur" editable={admin} />
-            <LeadersTimeline kind="directeur" editable={admin} />
-            <LeadersTimeline kind="cpe" editable={admin} />
-          </View>
-        </Section>
-      )}
 
       <Section tone="navy">
         <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 24 }}>

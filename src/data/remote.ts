@@ -70,6 +70,7 @@ export const toUser = (r: Row): User => ({
   birthDate: opt(r.birth_date),
   avatar: opt(r.avatar),
   bio: opt(r.bio),
+  specialty: opt(r.specialty),
   createdAt: r.created_at,
   lastActiveAt: r.last_active_at,
   privacy: { showEmail: r.show_email, showPhone: r.show_phone, showBirthday: r.show_birthday },
@@ -93,6 +94,7 @@ const PROFILE_COLUMNS: Record<string, string> = {
   country: 'country',
   avatar: 'avatar',
   bio: 'bio',
+  specialty: 'specialty',
   role: 'role',
   approved: 'approved',
   fonction: 'fonction',
@@ -159,9 +161,9 @@ export async function loadProfiles(onlyId?: string): Promise<Row[]> {
     if (onlyId) q = q.eq('id', onlyId);
     return q;
   };
-  // email_verified comes with migration 034: without it, the profiles still load.
-  const [first, priv] = await Promise.all([query(`${PROFILE_PUBLIC_COLUMNS}, email_verified`), sb.rpc('member_private_fields', onlyId ? { only_id: onlyId } : {})]);
-  const { data, error } = first.error && /email_verified/.test(first.error.message) ? await query(PROFILE_PUBLIC_COLUMNS) : first;
+  // email_verified (migration 034) and specialty (038): without them, the profiles still load.
+  const [first, priv] = await Promise.all([query(`${PROFILE_PUBLIC_COLUMNS}, email_verified, specialty`), sb.rpc('member_private_fields', onlyId ? { only_id: onlyId } : {})]);
+  const { data, error } = first.error && /email_verified|specialty/.test(first.error.message) ? await query(PROFILE_PUBLIC_COLUMNS) : first;
   if (error) throw error;
   const extra = new Map(((priv.data ?? []) as Row[]).map((r) => [r.id, r]));
   return ((data ?? []) as Row[]).map((r) => ({ ...r, ...extra.get(r.id) }));

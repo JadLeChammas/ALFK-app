@@ -49,6 +49,7 @@ export default function EditProfile() {
     fieldOfStudy: me.fieldOfStudy ?? '',
     employer: me.employer ?? '',
     jobTitle: me.jobTitle ?? '',
+    specialty: me.specialty ?? '',
   });
   const [mentor, setMentor] = useState(!!me.mentor);
   const [nationalities, setNationalities] = useState<string[]>(me.nationalities ?? []);
@@ -98,6 +99,8 @@ export default function EditProfile() {
       jobTitle: working ? form.jobTitle.trim() || undefined : undefined,
       nationalities: nationalities.length ? nationalities : undefined,
       otherSchools: me.role !== 'eleve' && otherSchools.length ? otherSchools : undefined,
+      // Sent only when changed (the column comes with migration 038).
+      ...(form.specialty.trim() !== (me.specialty ?? '') ? { specialty: form.specialty.trim() || undefined } : {}),
     });
     if (!r.ok) {
       if (r.error === 'birth_date' || r.error === 'phone') setFieldError(r.error);
@@ -228,6 +231,14 @@ export default function EditProfile() {
             {graduate && (
               <>
                 <FieldsPicker value={fields} onChange={setFields} />
+                <Input
+                  label={`${d.specialty.label} (${d.common.optional})`}
+                  icon="target"
+                  value={form.specialty}
+                  onChangeText={set('specialty')}
+                  placeholder={d.specialty.hint}
+                  maxLength={120}
+                />
                 <Row gap={12} style={{ padding: 14, borderRadius: 14, backgroundColor: colors.surfaceAlt }}>
                   <Feather name="compass" size={18} color={colors.primary} />
                   <View style={{ flex: 1 }}>

@@ -111,6 +111,7 @@ export default function MemberProfile() {
               />
             )}
             {userFields(user).length > 0 && <ListRow icon="compass" title={userFields(user).map((x) => fieldLabel(x, d.fields)).join(', ')} subtitle={d.majors.rowLabel} />}
+            {!!user.specialty && <ListRow icon="target" title={user.specialty} subtitle={d.specialty.rowLabel} />}
             {!!user.otherSchools?.length && <OtherSchoolsRows schools={user.otherSchools} />}
 {!!user.nationalities?.length && (
               <ListRow

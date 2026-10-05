@@ -57,6 +57,8 @@ export type User = {
   fields?: string[];
   /** Country of the main university (its flag on the profile). */
   schoolCountry?: string;
+  /** Free text detailing the studies or job (« systèmes embarqués », « cardiologie »…), migration 038. */
+  specialty?: string;
   /** Field of study, for the Orientation space (see data/fields.ts). */
   fieldOfStudy?: string;
   /** Accepts being contacted by current students about their studies (Orientation). */

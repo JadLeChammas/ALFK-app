@@ -82,7 +82,7 @@ const zh: Dict = {
   directory: {
     title: '通讯录', subtitle: '按 LFK 年级、国家或搜索查找社区成员。',
     searchPlaceholder: '按姓名、LFK 年级、国家或学校搜索…', filterPromo: 'LFK 年级', filterCountry: '国家', filterSchool: '学校',
-    allPromos: '全部 LFK 年级', allCountries: '全部国家', seePromo: '查看 LFK 年级', results: '{n} 个结果',
+    allPromos: '全部 LFK 年级', allCountries: '全部国家', seePromo: '查看更多', moreMembers: '查看全部 {n} 位成员', results: '{n} 个结果',
     honorary: '学校领导', noPromo: '无 LFK 年级', jumpTo: '跳转到', filters: '筛选', clearAll: '全部清除', showResults: '查看 {n} 位成员',
   },
   promo: {
@@ -828,6 +828,11 @@ const zh: Dict = {
     shownToast: '{name} 现已可见。',
     hiddenToast: '{name} 现已隐藏。',
     note: '只有管理员能在合作伙伴页面看到已隐藏的合作伙伴（灰色显示，标有「已隐藏」）。',
+  },
+  specialty: {
+    label: '专业方向',
+    hint: '想补充说明的内容：嵌入式系统、人工智能、网络安全、全科医学、心脏病学……',
+    rowLabel: '专业方向',
   },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',

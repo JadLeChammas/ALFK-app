@@ -29,7 +29,7 @@ export default function PromoPage() {
   const { db } = useStore();
   const me = useMe();
   const all = useApprovedMembers();
-  const members = useMemo(() => all.filter((u) => u.promo === year).sort((a, b) => a.lastName.localeCompare(b.lastName)), [all, year]);
+  const members = useMemo(() => all.filter((u) => u.promo === year).sort((a, b) => a.lastName.localeCompare(b.lastName, 'fr', { sensitivity: 'base' }) || a.firstName.localeCompare(b.firstName, 'fr', { sensitivity: 'base' })), [all, year]);
   const info = db.promos.find((p) => p.year === year);
   const [now] = useState(() => Date.now());
 

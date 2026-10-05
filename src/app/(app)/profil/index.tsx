@@ -107,6 +107,7 @@ export default function MyProfile() {
               />
             )}
             {userFields(me).length > 0 && <ListRow icon="compass" title={userFields(me).map((x) => fieldLabel(x, d.fields)).join(', ')} subtitle={d.majors.rowLabel} />}
+            {!!me.specialty && <ListRow icon="target" title={me.specialty} subtitle={d.specialty.rowLabel} />}
             {!!me.otherSchools?.length && <OtherSchoolsRows schools={me.otherSchools} />}
             {!!me.nationalities?.length && (
               <ListRow

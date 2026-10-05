@@ -82,7 +82,7 @@ const es: Dict = {
   directory: {
     title: 'Directorio', subtitle: 'Encuentra a los miembros por Promoción LFK, país o búsqueda.',
     searchPlaceholder: 'Buscar por nombre, Promoción LFK, país o escuela…', filterPromo: 'Promoción LFK', filterCountry: 'País', filterSchool: 'Escuela',
-    allPromos: 'Todas las Promociones LFK', allCountries: 'Todos los países', seePromo: 'Ver la Promoción LFK', results: '{n} resultados',
+    allPromos: 'Todas las Promociones LFK', allCountries: 'Todos los países', seePromo: 'Ver más', moreMembers: 'Ver los {n} miembros', results: '{n} resultados',
     honorary: 'Dirección del liceo', noPromo: 'Sin Promoción LFK', jumpTo: 'Ir a', filters: 'Filtros', clearAll: 'Borrar todo', showResults: 'Ver {n} miembros',
   },
   promo: {
@@ -828,6 +828,11 @@ const es: Dict = {
     shownToast: '{name} ahora es visible.',
     hiddenToast: '{name} ahora está oculto.',
     note: 'Solo los administradores ven los socios ocultos (en gris, con la mención « Oculto ») en la página Socios.',
+  },
+  specialty: {
+    label: 'Especialidad',
+    hint: 'Lo que quiera precisar: sistemas embebidos, IA, ciberseguridad, medicina general, cardiología…',
+    rowLabel: 'Especialidad',
   },
   uni: {
     pick: 'Elegir en la lista', searchPlaceholder: 'Escriba el nombre o la sigla (p. ej. I, ISEP, Sorbonne)…', inCity: 'En {city}',

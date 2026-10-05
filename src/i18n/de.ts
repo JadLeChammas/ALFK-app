@@ -82,7 +82,7 @@ const de: Dict = {
   directory: {
     title: 'Verzeichnis', subtitle: 'Finden Sie Mitglieder nach LFK-Jahrgang, Land oder Suche.',
     searchPlaceholder: 'Nach Name, LFK-Jahrgang, Land oder Schule suchen…', filterPromo: 'LFK-Jahrgang', filterCountry: 'Land', filterSchool: 'Schule',
-    allPromos: 'Alle LFK-Jahrgänge', allCountries: 'Alle Länder', seePromo: 'LFK-Jahrgang ansehen', results: '{n} Ergebnisse',
+    allPromos: 'Alle LFK-Jahrgänge', allCountries: 'Alle Länder', seePromo: 'Mehr anzeigen', moreMembers: 'Alle {n} Mitglieder ansehen', results: '{n} Ergebnisse',
     honorary: 'Schulleitung', noPromo: 'Ohne LFK-Jahrgang', jumpTo: 'Springe zu', filters: 'Filter', clearAll: 'Alle löschen', showResults: '{n} Mitglieder anzeigen',
   },
   promo: {
@@ -828,6 +828,11 @@ const de: Dict = {
     shownToast: '{name} ist jetzt sichtbar.',
     hiddenToast: '{name} ist jetzt ausgeblendet.',
     note: 'Nur Admins sehen ausgeblendete Partner (ausgegraut, mit dem Hinweis « Ausgeblendet ») auf der Partnerseite.',
+  },
+  specialty: {
+    label: 'Spezialisierung',
+    hint: 'Was Sie genauer angeben möchten: eingebettete Systeme, KI, Cybersicherheit, Allgemeinmedizin, Kardiologie…',
+    rowLabel: 'Spezialisierung',
   },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',
