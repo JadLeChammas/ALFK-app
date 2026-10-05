@@ -47,10 +47,9 @@ export function PartnersManager() {
   const [editing, setEditing] = useState<Institution | null>(null);
 
   return (
-    <Screen maxWidth={1040}>
-      {/* As on the public page: the partners' logos scattered around the title. */}
-      <View style={{ borderRadius: 24, overflow: 'hidden' }}>
-        <FloatingPaths color={scheme === 'dark' ? '#E7ECF2' : brand.navy} fade={colors.bg} />
+    <Screen maxWidth={1040} background={<FloatingPaths color={scheme === 'dark' ? '#E7ECF2' : brand.navy} intensity={0.75} />}>
+      {/* As on the public page: the partners' logos scattered around the title (lines: the page's background). */}
+      <View>
         <LogoCloud partners={institutions}>
           <Eyebrow text={d.site.partners.eyebrow} />
           <Txt variant="display" align="center">{d.honorary.title}</Txt>

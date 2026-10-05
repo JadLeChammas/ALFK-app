@@ -18,7 +18,8 @@ export function useGutter() {
   return isDesktop ? 36 : isTablet ? 28 : 16;
 }
 
-export function Screen({ children, scroll = true, maxWidth = MAX_CONTENT, contentStyle }: { children: ReactNode; scroll?: boolean; maxWidth?: number; contentStyle?: StyleProp<ViewStyle> }) {
+/** `background`: drawn behind the whole page and still while it scrolls (e.g. the Partners page's animated lines). */
+export function Screen({ children, scroll = true, maxWidth = MAX_CONTENT, contentStyle, background }: { children: ReactNode; scroll?: boolean; maxWidth?: number; contentStyle?: StyleProp<ViewStyle>; background?: ReactNode }) {
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const gutter = useGutter();
@@ -26,9 +27,9 @@ export function Screen({ children, scroll = true, maxWidth = MAX_CONTENT, conten
   const column = <View style={[{ width: '100%', maxWidth, gap: isMobile ? space.xxl : space.xxxl }, contentStyle]}>{children}</View>;
   const inner = <View style={{ width: '100%', maxWidth: MAX_CONTENT, alignSelf: 'center' }}>{column}</View>;
   if (!scroll) return <View style={{ flex: 1, backgroundColor: colors.bg, padding: gutter }}>{inner}</View>;
-  return (
+  const page = (
     <ScrollView
-      style={{ flex: 1, backgroundColor: colors.bg }}
+      style={{ flex: 1, backgroundColor: background ? 'transparent' : colors.bg }}
       contentContainerStyle={{ paddingHorizontal: gutter, paddingTop: isMobile ? space.lg : space.xxl, paddingBottom: isMobile ? 120 : space.huge }}
       keyboardShouldPersistTaps="handled">
       {inner}
@@ -37,6 +38,13 @@ export function Screen({ children, scroll = true, maxWidth = MAX_CONTENT, conten
         {`© ${new Date().getFullYear()} Amicale LFK`}
       </Txt>
     </ScrollView>
+  );
+  if (!background) return page;
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      {background}
+      {page}
+    </View>
   );
 }
 
