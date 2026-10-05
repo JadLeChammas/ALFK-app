@@ -28,7 +28,8 @@ export default function Whatsapp() {
   const alumni = me.role === 'alumni' || me.role === 'admin';
   const community = db.settings.whatsappCommunity;
   const myPromo = me.promo ? db.promos.find((p) => p.year === me.promo) : undefined;
-  const groups = [...db.promos].filter((p) => p.whatsapp).sort((a, b) => b.year - a.year);
+  // Every promo's group: admins only — a member sees their own promo's link (« Ma promo »).
+  const groups = admin ? [...db.promos].filter((p) => p.whatsapp).sort((a, b) => b.year - a.year) : [];
 
   const editCommunity = async () => {
     const url = await prompt({ title: d.whatsapp.editCommunity, placeholder: 'https://chat.whatsapp.com/…', initial: community });
@@ -105,7 +106,7 @@ export default function Whatsapp() {
         </Card>
       )}
 
-      {alumni && (
+      {admin && (
         <View style={{ gap: 14 }}>
           <SectionHeader title={d.whatsapp.allGroups} icon="message-circle" count={String(groups.length)} />
           {groups.length === 0 ? (

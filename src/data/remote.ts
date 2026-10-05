@@ -167,6 +167,23 @@ export async function loadProfiles(onlyId?: string): Promise<Row[]> {
   return ((data ?? []) as Row[]).map((r) => ({ ...r, ...extra.get(r.id) }));
 }
 
+/**
+ * Promos with their WhatsApp link: each member gets only their own promo's link, the admins every
+ * link (promo_whatsapp_links, migration 035). Before that migration: the whole table, as before.
+ */
+async function loadPromos(): Promise<Row[]> {
+  const sb = supabase!;
+  const [base, links] = await Promise.all([sb.from('promos').select('year, group_photo'), sb.rpc('promo_whatsapp_links')]);
+  if (links.error) {
+    const { data, error } = await sb.from('promos').select('*');
+    if (error) throw error;
+    return data ?? [];
+  }
+  if (base.error) throw base.error;
+  const byYear = new Map(((links.data ?? []) as Row[]).map((r) => [r.year, r.whatsapp]));
+  return ((base.data ?? []) as Row[]).map((r) => ({ ...r, whatsapp: byYear.get(r.year) ?? null }));
+}
+
 /** Loads everything this user is allowed to see (row-level security filters the rest). */
 export async function loadDb(): Promise<Db> {
   const sb = supabase!;
@@ -181,7 +198,7 @@ export async function loadDb(): Promise<Db> {
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
   const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, clubs, clubMembers, clubPosts] = await Promise.all([
     loadProfiles(),
-    all('promos'),
+    loadPromos(),
     all('events', 'date'),
     all('event_photos', 'created_at'),
     all('publications', 'date'),

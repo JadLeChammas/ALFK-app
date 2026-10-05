@@ -65,11 +65,12 @@ export default function PromoPage() {
             <Stat icon="globe" text={f(d.repere.countriesCount, { n: countries.length })} />
           </Row>
           <Row gap={10} wrap>
-            {info?.whatsapp ? (
+            {/* The group's link: only for this promo's members (and the admins). */}
+            {(me.promo === year || me.role === 'admin') && (info?.whatsapp ? (
               <Button label={d.promo.whatsapp} icon="message-square" onPress={() => openExternal(info.whatsapp!)} style={{ backgroundColor: '#25D366', borderColor: '#25D366' }} />
             ) : (
               <Badge label={d.promo.noWhatsapp} tone="neutral" icon="message-square" />
-            )}
+            ))}
             {me.role === 'admin' && <Button label={d.promo.editWhatsapp} variant="secondary" size="sm" icon="edit-2" onPress={editWhatsapp} />}
           </Row>
         </View>
