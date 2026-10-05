@@ -6,10 +6,12 @@ import { View } from 'react-native';
 
 import { RoleBadge } from '@/components/cards';
 import { Sheet } from '@/components/forms';
+import { FloatingPaths } from '@/components/fx/FloatingPaths';
+import { Eyebrow, LogoCloud } from '@/components/site/LogoCloud';
 import { FramedPhoto } from '@/components/FramedPhoto';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Button, Card, EmptyState, IconButton, Input, Row, SectionHeader } from '@/components/ui/primitives';
-import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
+import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
@@ -21,6 +23,7 @@ import { useI18n } from '@/i18n';
 import { isFileRejected } from '@/lib/fileSafety';
 import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
+import { brand } from '@/theme/tokens';
 import { openExternal } from '@/lib/links';
 
 /** Logos shipped with the app; any other value is an image URL. */
@@ -28,7 +31,7 @@ import { openExternal } from '@/lib/links';
 /** Members' Partners page: institutions (admins add or remove them) and the school's leadership. */
 export function PartnersManager() {
   const { d } = useI18n();
-  const { colors } = useTheme();
+  const { colors, scheme } = useTheme();
   const { db, actions } = useStore();
   const { confirm } = useDialogs();
   const me = useMe();
@@ -45,11 +48,16 @@ export function PartnersManager() {
 
   return (
     <Screen maxWidth={1040}>
-      <PageHeader
-        title={d.honorary.title}
-        subtitle={d.honorary.subtitle}
-        right={admin && <Button label={d.honorary.add} icon="plus" variant="secondary" onPress={() => setAdding(true)} />}
-      />
+      {/* As on the public page: the partners' logos scattered around the title. */}
+      <View style={{ borderRadius: 24, overflow: 'hidden' }}>
+        <FloatingPaths color={scheme === 'dark' ? '#E7ECF2' : brand.navy} fade={colors.bg} />
+        <LogoCloud partners={institutions}>
+          <Eyebrow text={d.site.partners.eyebrow} />
+          <Txt variant="display" align="center">{d.honorary.title}</Txt>
+          <Txt color="textMuted" align="center">{d.honorary.subtitle}</Txt>
+          {admin && <Button label={d.honorary.add} icon="plus" variant="secondary" onPress={() => setAdding(true)} style={{ marginTop: 8 }} />}
+        </LogoCloud>
+      </View>
 
       <View style={{ gap: 14 }}>
         <SectionHeader title={d.honorary.institutions} icon="home" count={String(institutions.length)} />
