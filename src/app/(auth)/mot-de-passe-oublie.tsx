@@ -19,12 +19,16 @@ export default function ForgotPassword() {
   const [error, setError] = useState<AuthError | null>(null);
 
   const [busy, setBusy] = useState(false);
+  const [detail, setDetail] = useState<string | null>(null);
   const submit = async () => {
     setBusy(true);
     const r = await actions.requestPasswordReset(email);
     setBusy(false);
     if (r.ok) setSent(true);
-    else setError(r.error);
+    else {
+      setError(r.error);
+      setDetail(r.detail ?? null);
+    }
   };
 
   if (sent) {
@@ -45,7 +49,7 @@ export default function ForgotPassword() {
   return (
     <AuthFrame title={d.auth.forgotTitle} subtitle={d.auth.forgotSub}>
       <View style={{ gap: 16 }}>
-        <Input label={d.auth.email} icon="mail" value={email} onChangeText={(v) => { setEmail(v); setError(null); }} autoCapitalize="none" keyboardType="email-address" onSubmitEditing={submit} error={error ? d.auth.errors[error] : undefined} />
+        <Input label={d.auth.email} icon="mail" value={email} onChangeText={(v) => { setEmail(v); setError(null); }} autoCapitalize="none" keyboardType="email-address" onSubmitEditing={submit} error={error ? (error === 'unknown' && detail ? `${d.auth.errors.unknown} (${detail})` : d.auth.errors[error]) : undefined} />
         <Button label={d.auth.sendLink} full size="lg" onPress={submit} disabled={!email} loading={busy} />
         <Button label={d.auth.backToSignIn} variant="ghost" icon="arrow-left" full onPress={() => router.replace('/connexion')} />
       </View>

@@ -456,7 +456,8 @@ function useStoreValue() {
     async requestPasswordReset(email: string): Promise<Result> {
       if (supabase) {
         const { error: e } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: redirectUrl });
-        return e ? { ok: false, error: authError(e.message, e.code) } : { ok: true };
+        // The e-mail service's own message too (« Error sending recovery email », a rate limit…).
+        return e ? { ok: false, error: authError(e.message, e.code), detail: e.message } : { ok: true };
       }
       return findByEmail(email) ? { ok: true } : { ok: false, error: 'unknown_email' };
     },
