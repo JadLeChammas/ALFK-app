@@ -263,7 +263,7 @@ const pirate: Dict = {
     title: 'Allies', subtitle: 'The institutions an’ folk who sail alongside the Amicale.', institutions: 'Institutions',
     people: 'Admiralty o’ the Lycée', website: 'Website', add: 'Add an ally',
     name: 'Name', description: 'Description', websiteField: 'Website (if ye please)',
-    logoField: 'Flag: image address (if ye please)', invalidUrl: 'Bad address: it must start with https://', permissionNote: 'An institution only flies here with its written consent (its flag too).',
+    logoField: 'Flag: image address (if ye please)', uploadLogo: 'Hoist th’ logo', invalidUrl: 'Bad address: it must start with https://', permissionNote: 'An institution only flies here with its written consent (its flag too).',
     edit: 'Edit th\' ally',
   },
   orientation: {

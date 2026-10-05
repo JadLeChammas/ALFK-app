@@ -262,7 +262,7 @@ const es: Dict = {
     title: 'Socios', subtitle: 'Las instituciones y personalidades que acompañan a la Amicale.', institutions: 'Instituciones',
     people: 'Dirección del liceo', website: 'Sitio web', add: 'Añadir un socio',
     name: 'Nombre', description: 'Descripción', websiteField: 'Sitio web (opcional)',
-    logoField: 'Logo: dirección de la imagen (opcional)', invalidUrl: 'Dirección no válida: debe empezar por https://', permissionNote: 'Una institución solo aparece aquí con su consentimiento por escrito (también para su logo).',
+    logoField: 'Logo: dirección de la imagen (opcional)', uploadLogo: 'Subir el logo', invalidUrl: 'Dirección no válida: debe empezar por https://', permissionNote: 'Una institución solo aparece aquí con su consentimiento por escrito (también para su logo).',
     edit: 'Editar el socio',
   },
   orientation: {

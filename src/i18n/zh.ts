@@ -262,7 +262,7 @@ const zh: Dict = {
     title: '合作伙伴', subtitle: '支持校友会的机构和人士。', institutions: '机构',
     people: '学校领导', website: '网站', add: '添加合作伙伴',
     name: '名称', description: '简介', websiteField: '网站（可选）',
-    logoField: '标志：图片地址（可选）', invalidUrl: '地址无效：必须以 https:// 开头', permissionNote: '机构须经其书面同意（包括使用其标志）方可在此显示。',
+    logoField: '标志：图片地址（可选）', uploadLogo: '上传标志', invalidUrl: '地址无效：必须以 https:// 开头', permissionNote: '机构须经其书面同意（包括使用其标志）方可在此显示。',
     edit: '编辑合作伙伴',
   },
   orientation: {

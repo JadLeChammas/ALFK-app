@@ -262,7 +262,7 @@ const it: Dict = {
     title: 'Partner', subtitle: 'Le istituzioni e le personalità che accompagnano l’Amicale.', institutions: 'Istituzioni',
     people: 'Direzione del liceo', website: 'Sito web', add: 'Aggiungi un partner',
     name: 'Nome', description: 'Descrizione', websiteField: 'Sito web (facoltativo)',
-    logoField: 'Logo: indirizzo dell’immagine (facoltativo)', invalidUrl: 'Indirizzo non valido: deve iniziare con https://', permissionNote: 'Un’istituzione compare qui solo con il suo consenso scritto (anche per il logo).',
+    logoField: 'Logo: indirizzo dell’immagine (facoltativo)', uploadLogo: 'Carica il logo', invalidUrl: 'Indirizzo non valido: deve iniziare con https://', permissionNote: 'Un’istituzione compare qui solo con il suo consenso scritto (anche per il logo).',
     edit: 'Modifica il partner',
   },
   orientation: {

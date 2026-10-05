@@ -262,7 +262,7 @@ const de: Dict = {
     title: 'Partner', subtitle: 'Die Institutionen und Persönlichkeiten, die die Amicale unterstützen.', institutions: 'Institutionen',
     people: 'Schulleitung', website: 'Website', add: 'Partner hinzufügen',
     name: 'Name', description: 'Beschreibung', websiteField: 'Website (optional)',
-    logoField: 'Logo: Bildadresse (optional)', invalidUrl: 'Ungültige Adresse: Sie muss mit https:// beginnen', permissionNote: 'Eine Institution erscheint hier nur mit ihrer schriftlichen Zustimmung (auch für ihr Logo).',
+    logoField: 'Logo: Bildadresse (optional)', uploadLogo: 'Logo hochladen', invalidUrl: 'Ungültige Adresse: Sie muss mit https:// beginnen', permissionNote: 'Eine Institution erscheint hier nur mit ihrer schriftlichen Zustimmung (auch für ihr Logo).',
     edit: 'Partner bearbeiten',
   },
   orientation: {

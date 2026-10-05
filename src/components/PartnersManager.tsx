@@ -16,6 +16,8 @@ import type { Institution } from '@/data/types';
 import { LEADER_KINDS, useSchoolLeaders } from '@/data/schoolLeaders';
 import { isHiDev, partnerLogo, sortPartners } from '@/data/partners';
 import { useI18n } from '@/i18n';
+import { isFileRejected } from '@/lib/fileSafety';
+import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 import { openExternal } from '@/lib/links';
 
@@ -155,6 +157,19 @@ function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onCl
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const website = form.website.trim();
   const validSite = !website || /^https?:\/\/\S+$/i.test(website);
+  // The logo: an address, or an image file sent by the partner (stored with the site's photos).
+  const [uploading, setUploading] = useState(false);
+  const uploadLogo = async () => {
+    const [img] = await pickImages(false);
+    if (!img) return;
+    setUploading(true);
+    try {
+      set('logo')(await actions.uploadImage(img, 'partners'));
+    } catch (e) {
+      toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.auth.errors.unknown, 'danger');
+    }
+    setUploading(false);
+  };
   return (
     <Sheet visible={visible} title={editing ? d.honorary.edit : d.honorary.add} onClose={onClose}>
       <Txt variant="small" color="textMuted">{d.honorary.permissionNote}</Txt>
@@ -162,11 +177,15 @@ function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onCl
       <Input label={d.honorary.description} value={form.description} onChangeText={set('description')} multiline />
       <Input label={d.honorary.websiteField} icon="link" value={form.website} onChangeText={set('website')} autoCapitalize="none" placeholder="https://" error={validSite ? undefined : d.honorary.invalidUrl} />
       <Input label={d.honorary.logoField} icon="image" value={form.logo} onChangeText={set('logo')} autoCapitalize="none" placeholder="https://" />
+      <Row gap={10}>
+        {!!form.logo && <Image source={partnerLogo({ name: form.name, logo: form.logo })} style={{ width: 48, height: 48 }} contentFit="contain" />}
+        <Button label={d.honorary.uploadLogo} icon="upload" variant="secondary" size="sm" onPress={uploadLogo} loading={uploading} />
+      </Row>
       <Button
         label={editing ? d.common.save : d.common.add}
         full
         size="lg"
-        disabled={!form.name.trim() || !form.description.trim() || !validSite}
+        disabled={!form.name.trim() || !form.description.trim() || !validSite || uploading}
         onPress={() => {
           const values = { name: form.name.trim(), description: form.description.trim(), website: website || undefined, logo: form.logo.trim() || undefined };
           if (editing) actions.updateInstitution(editing.id, values);

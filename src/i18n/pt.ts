@@ -262,7 +262,7 @@ const pt: Dict = {
     title: 'Parceiros', subtitle: 'As instituições e personalidades que acompanham a Amicale.', institutions: 'Instituições',
     people: 'Direção do liceu', website: 'Site', add: 'Adicionar um parceiro',
     name: 'Nome', description: 'Descrição', websiteField: 'Site (opcional)',
-    logoField: 'Logótipo: endereço da imagem (opcional)', invalidUrl: 'Endereço inválido: deve começar por https://', permissionNote: 'Uma instituição só aparece aqui com o seu acordo escrito (incluindo para o logótipo).',
+    logoField: 'Logótipo: endereço da imagem (opcional)', uploadLogo: 'Enviar o logo', invalidUrl: 'Endereço inválido: deve começar por https://', permissionNote: 'Uma instituição só aparece aqui com o seu acordo escrito (incluindo para o logótipo).',
     edit: 'Editar o parceiro',
   },
   orientation: {

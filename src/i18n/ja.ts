@@ -262,7 +262,7 @@ const ja: Dict = {
     title: 'パートナー', subtitle: 'Amicale を支える機関と人々。', institutions: '機関',
     people: '学校長・管理職', website: 'ウェブサイト', add: 'パートナーを追加',
     name: '名称', description: '説明', websiteField: 'ウェブサイト（任意）',
-    logoField: 'ロゴ：画像のアドレス（任意）', invalidUrl: '無効なアドレスです。https:// で始めてください', permissionNote: '機関は書面による同意（ロゴの使用を含む）がある場合にのみ掲載されます。',
+    logoField: 'ロゴ：画像のアドレス（任意）', uploadLogo: 'ロゴをアップロード', invalidUrl: '無効なアドレスです。https:// で始めてください', permissionNote: '機関は書面による同意（ロゴの使用を含む）がある場合にのみ掲載されます。',
     edit: 'パートナーを編集',
   },
   orientation: {

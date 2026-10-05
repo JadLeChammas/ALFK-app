@@ -260,7 +260,7 @@ const fr = {
     title: 'Partenaires', subtitle: 'Les institutions et les personnalités qui accompagnent l’Amicale.', institutions: 'Institutions',
     people: 'Direction du lycée', website: 'Site web', add: 'Ajouter un partenaire',
     name: 'Nom', description: 'Description', websiteField: 'Site web (facultatif)',
-    logoField: 'Logo : adresse de l’image (facultatif)', invalidUrl: 'Adresse invalide : elle doit commencer par https://', permissionNote: 'Une institution n’apparaît ici qu’avec son accord écrit (et celui d’utiliser son logo).',
+    logoField: 'Logo : adresse de l’image (facultatif)', uploadLogo: 'Téléverser le logo', invalidUrl: 'Adresse invalide : elle doit commencer par https://', permissionNote: 'Une institution n’apparaît ici qu’avec son accord écrit (et celui d’utiliser son logo).',
     edit: 'Modifier le partenaire',
   },
   orientation: {
