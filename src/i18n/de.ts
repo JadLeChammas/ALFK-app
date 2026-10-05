@@ -817,6 +817,18 @@ const de: Dict = {
     saved: 'Link für Jahrgang {year} gespeichert.',
     removed: 'Link für Jahrgang {year} entfernt.',
   },
+  adminPartners: {
+    nav: 'Partner',
+    title: 'Sichtbare Partner',
+    subtitle: '{n} von {total} Partner(n) sichtbar. Blenden Sie einen Partner aus, bis die Partnerschaft unterzeichnet ist: Er verschwindet von der öffentlichen Seite und der Mitgliederseite.',
+    visible: 'Für alle sichtbar',
+    hiddenBadge: 'Ausgeblendet',
+    hide: 'Ausblenden',
+    show: 'Anzeigen',
+    shownToast: '{name} ist jetzt sichtbar.',
+    hiddenToast: '{name} ist jetzt ausgeblendet.',
+    note: 'Nur Admins sehen ausgeblendete Partner (ausgegraut, mit dem Hinweis « Ausgeblendet ») auf der Partnerseite.',
+  },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Anderswo — {country}', none: 'Keine Einrichtung gefunden', notListed: 'Meine Hochschule ist nicht in der Liste',

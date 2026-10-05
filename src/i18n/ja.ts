@@ -817,6 +817,18 @@ const ja: Dict = {
     saved: '{year} 期のリンクを保存しました。',
     removed: '{year} 期のリンクを削除しました。',
   },
+  adminPartners: {
+    nav: 'パートナー',
+    title: '表示中のパートナー',
+    subtitle: '{total} 件中 {n} 件のパートナーを表示中。提携が締結されるまでパートナーを非表示にできます。公開ページとメンバーページから消えます。',
+    visible: '全員に表示',
+    hiddenBadge: '非表示',
+    hide: '非表示にする',
+    show: '表示する',
+    shownToast: '{name} を表示しました。',
+    hiddenToast: '{name} を非表示にしました。',
+    note: '非表示のパートナーはパートナーページで管理者だけに表示されます（グレー表示、「非表示」の表示付き）。',
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

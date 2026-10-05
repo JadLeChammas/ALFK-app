@@ -817,6 +817,18 @@ const pt: Dict = {
     saved: 'Link da turma {year} salvo.',
     removed: 'Link da turma {year} removido.',
   },
+  adminPartners: {
+    nav: 'Parceiros',
+    title: 'Parceiros visíveis',
+    subtitle: '{n} de {total} parceiro(s) visíveis. Oculte um parceiro até a parceria ser assinada: ele some da página pública e da página dos membros.',
+    visible: 'Visível para todos',
+    hiddenBadge: 'Oculto',
+    hide: 'Ocultar',
+    show: 'Mostrar',
+    shownToast: '{name} agora está visível.',
+    hiddenToast: '{name} agora está oculto.',
+    note: 'Só os admins veem os parceiros ocultos (em cinza, com a menção « Oculto ») na página Parceiros.',
+  },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',
     elsewhere: 'Noutro lugar — {country}', none: 'Nenhuma instituição encontrada', notListed: 'A minha instituição não está na lista',

@@ -818,6 +818,18 @@ const pirate: Dict = {
     saved: 'Promo {year} link saved.',
     removed: 'Promo {year} link removed.',
   },
+  adminPartners: {
+    nav: 'Allies',
+    title: 'Visible allies',
+    subtitle: '{n} o\' {total} ally(ies) visible. Hide an ally till the pact be signed: it vanishes from the public page an\' the crew\'s page.',
+    visible: 'Seen by all hands',
+    hiddenBadge: 'Hidden',
+    hide: 'Hide',
+    show: 'Show',
+    shownToast: '{name} be visible now.',
+    hiddenToast: '{name} be hidden now.',
+    note: 'Only the captains see hidden allies (greyed, marked « Hidden ») on the Allies page.',
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

@@ -109,7 +109,8 @@ export type Publication = {
 export type PublicationStatus = 'pending' | 'published' | 'rejected';
 
 /** Honorary members that are institutions (LFK, SCAC…), shown on the Membres d'honneur page. */
-export type Institution = { id: string; name: string; description: string; logo?: string; website?: string; order: number };
+/** `hidden`: kept back by the admins (e.g. until the partnership is signed) — only admins see it. */
+export type Institution = { id: string; name: string; description: string; logo?: string; website?: string; order: number; hidden?: boolean };
 
 export type KeyDateCategory = 'francophonie' | 'aefe' | 'lfk' | 'france' | 'koweit' | 'amicale' | 'demarches';
 /**

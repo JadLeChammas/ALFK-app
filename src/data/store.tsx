@@ -1211,6 +1211,11 @@ function useStoreValue() {
       commit((d) => ({ ...d, institutions: renumbered }));
       if (supabase) for (const x of renumbered) send(supabase.from('institutions').update({ sort_order: x.order }).eq('id', x.id));
     },
+    /** Admins: hide a partner (only admins still see it) or show it again to members and visitors. */
+    setInstitutionHidden(id: string, hidden: boolean) {
+      commit((d) => ({ ...d, institutions: d.institutions.map((i) => (i.id === id ? { ...i, hidden } : i)) }));
+      if (supabase) send(supabase.from('institutions').update({ hidden }).eq('id', id));
+    },
     deleteInstitution(id: string) {
       commit((d) => ({ ...d, institutions: d.institutions.filter((i) => i.id !== id) }));
       if (supabase) send(supabase.from('institutions').delete().eq('id', id));

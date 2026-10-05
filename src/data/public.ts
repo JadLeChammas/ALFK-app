@@ -66,7 +66,7 @@ function fromDb(db: Db): PublicOverview {
     destinations: countries.map(([code, n]) => ({ code, n })),
     schools: schools.map(([s]) => s).slice(0, 30),
     bureau,
-    institutions: sortPartners(db.institutions),
+    institutions: sortPartners(db.institutions.filter((i) => !i.hidden)),
   };
 }
 

@@ -817,6 +817,18 @@ const it: Dict = {
     saved: 'Link della Promo {year} salvato.',
     removed: 'Link della Promo {year} rimosso.',
   },
+  adminPartners: {
+    nav: 'Partner',
+    title: 'Partner visibili',
+    subtitle: '{n} partner su {total} visibili. Nascondi un partner finché la collaborazione non è firmata: scompare dalla pagina pubblica e da quella dei membri.',
+    visible: 'Visibile a tutti',
+    hiddenBadge: 'Nascosto',
+    hide: 'Nascondi',
+    show: 'Mostra',
+    shownToast: '{name} ora è visibile.',
+    hiddenToast: '{name} ora è nascosto.',
+    note: 'Solo gli admin vedono i partner nascosti (in grigio, con la dicitura « Nascosto ») nella pagina Partner.',
+  },
   uni: {
     pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',
     elsewhere: 'Altrove — {country}', none: 'Nessun istituto trovato', notListed: 'Il mio istituto non è nell’elenco',

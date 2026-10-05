@@ -817,6 +817,18 @@ const zh: Dict = {
     saved: '{year} 届链接已保存。',
     removed: '{year} 届链接已移除。',
   },
+  adminPartners: {
+    nav: '合作伙伴',
+    title: '可见的合作伙伴',
+    subtitle: '{total} 个合作伙伴中有 {n} 个可见。在合作签署之前可以隐藏合作伙伴：它会从公开页面和成员页面中消失。',
+    visible: '所有人可见',
+    hiddenBadge: '已隐藏',
+    hide: '隐藏',
+    show: '显示',
+    shownToast: '{name} 现已可见。',
+    hiddenToast: '{name} 现已隐藏。',
+    note: '只有管理员能在合作伙伴页面看到已隐藏的合作伙伴（灰色显示，标有「已隐藏」）。',
+  },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',
     elsewhere: '其他地方 — {country}', none: '未找到院校', notListed: '我的学校不在列表中',

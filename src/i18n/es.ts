@@ -817,6 +817,18 @@ const es: Dict = {
     saved: 'Enlace de la promoción {year} guardado.',
     removed: 'Enlace de la promoción {year} retirado.',
   },
+  adminPartners: {
+    nav: 'Socios',
+    title: 'Socios visibles',
+    subtitle: '{n} de {total} socio(s) visibles. Oculte un socio hasta que se firme la colaboración: desaparece de la página pública y de la de los miembros.',
+    visible: 'Visible para todos',
+    hiddenBadge: 'Oculto',
+    hide: 'Ocultar',
+    show: 'Mostrar',
+    shownToast: '{name} ahora es visible.',
+    hiddenToast: '{name} ahora está oculto.',
+    note: 'Solo los administradores ven los socios ocultos (en gris, con la mención « Oculto ») en la página Socios.',
+  },
   uni: {
     pick: 'Elegir en la lista', searchPlaceholder: 'Escriba el nombre o la sigla (p. ej. I, ISEP, Sorbonne)…', inCity: 'En {city}',
     elsewhere: 'En otro lugar — {country}', none: 'Ningún centro encontrado', notListed: 'Mi centro no está en la lista',

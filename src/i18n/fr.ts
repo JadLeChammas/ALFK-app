@@ -815,6 +815,18 @@ const fr = {
     saved: 'Lien de la Promo {year} enregistré.',
     removed: 'Lien de la Promo {year} retiré.',
   },
+  adminPartners: {
+    nav: 'Partenaires',
+    title: 'Partenaires visibles',
+    subtitle: '{n} partenaire(s) sur {total} visibles. Masquez un partenaire tant que le partenariat n’est pas signé : il disparaît de la page publique et de celle des membres.',
+    visible: 'Visible par tous',
+    hiddenBadge: 'Masqué',
+    hide: 'Masquer',
+    show: 'Afficher',
+    shownToast: '{name} est maintenant visible.',
+    hiddenToast: '{name} est maintenant masqué.',
+    note: 'Seuls les admins voient les partenaires masqués (grisés, avec la mention « Masqué ») sur la page Partenaires.',
+  },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',
     elsewhere: 'Ailleurs — {country}', none: 'Aucun établissement trouvé', notListed: 'Mon établissement n’est pas dans la liste',

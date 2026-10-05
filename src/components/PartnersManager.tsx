@@ -10,7 +10,7 @@ import { FloatingPaths } from '@/components/fx/FloatingPaths';
 import { Eyebrow, LogoCloud } from '@/components/site/LogoCloud';
 import { FramedPhoto } from '@/components/FramedPhoto';
 import { useDialogs } from '@/components/ui/Dialogs';
-import { Avatar, Button, Card, EmptyState, IconButton, Input, Row, SectionHeader } from '@/components/ui/primitives';
+import { Avatar, Badge, Button, Card, EmptyState, IconButton, Input, Row, SectionHeader } from '@/components/ui/primitives';
 import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
@@ -40,7 +40,8 @@ export function PartnersManager() {
   // The current leadership, from the timelines of the Bureau page (no end year = in office now).
   const { byKind } = useSchoolLeaders();
   const leaders = LEADER_KINDS.flatMap((k) => byKind(k).filter((x) => !x.to));
-  const institutions = sortPartners(db.institutions);
+  // Hidden partners (not signed yet): only the admins see them, marked « Masqué ».
+  const institutions = sortPartners(db.institutions.filter((i) => admin || !i.hidden));
   // Hi Dev always closes the list: the others move among themselves.
   const movableCount = institutions.length;
   const [adding, setAdding] = useState(false);
@@ -50,7 +51,7 @@ export function PartnersManager() {
     <Screen maxWidth={1040} background={<FloatingPaths color={scheme === 'dark' ? '#E7ECF2' : brand.navy} intensity={0.75} />}>
       {/* As on the public page: the partners' logos scattered around the title (lines: the page's background). */}
       <View>
-        <LogoCloud partners={institutions}>
+        <LogoCloud partners={institutions.filter((i) => !i.hidden)}>
           <Eyebrow text={d.site.partners.eyebrow} />
           <Txt variant="display" align="center">{d.honorary.title}</Txt>
           <Txt color="textMuted" align="center">{d.honorary.subtitle}</Txt>
@@ -69,6 +70,7 @@ export function PartnersManager() {
                 key={inst.id}
                 inst={inst}
                 onEdit={admin ? () => setEditing(inst) : undefined}
+                onToggleHidden={admin ? () => actions.setInstitutionHidden(inst.id, !inst.hidden) : undefined}
                 onUp={admin && i > 0 ? () => actions.moveInstitution(inst.id, -1) : undefined}
                 onDown={admin && i < movableCount - 1 ? () => actions.moveInstitution(inst.id, 1) : undefined}
                 onDelete={
@@ -131,22 +133,26 @@ export function PartnersManager() {
   );
 }
 
-function InstitutionCard({ inst, onDelete, onEdit, onUp, onDown }: { inst: Institution; onDelete?: () => void; onEdit?: () => void; onUp?: () => void; onDown?: () => void }) {
+function InstitutionCard({ inst, onDelete, onEdit, onUp, onDown, onToggleHidden }: { inst: Institution; onDelete?: () => void; onEdit?: () => void; onUp?: () => void; onDown?: () => void; onToggleHidden?: () => void }) {
   const { d } = useI18n();
   const { colors } = useTheme();
   const logo = partnerLogo(inst);
   return (
-    <Card style={{ gap: 14, height: '100%' }}>
+    <Card style={{ gap: 14, height: '100%', opacity: inst.hidden ? 0.6 : 1 }}>
       <Row gap={14}>
         <View style={{ width: 64, height: 64, borderRadius: 16, backgroundColor: '#fff', borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
           {logo ? <Image source={logo} style={{ width: 54, height: 54 }} contentFit="contain" /> : <Feather name="home" size={24} color={colors.primary} />}
         </View>
-        <Txt variant="h3" style={{ flex: 1 }}>{inst.name}</Txt>
+        <View style={{ flex: 1, gap: 6 }}>
+          <Txt variant="h3">{inst.name}</Txt>
+          {inst.hidden && <Badge label={d.adminPartners.hiddenBadge} icon="eye-off" tone="neutral" style={{ alignSelf: 'flex-start' }} />}
+        </View>
         {onDelete && <IconButton icon="trash-2" size={34} onPress={onDelete} label={d.common.delete} />}
       </Row>
       {onEdit && (
         <Row gap={6} wrap>
           <Button label={d.common.edit} icon="edit-2" size="sm" variant="secondary" onPress={onEdit} />
+          {onToggleHidden && <IconButton icon={inst.hidden ? 'eye' : 'eye-off'} size={32} onPress={onToggleHidden} label={inst.hidden ? d.adminPartners.show : d.adminPartners.hide} />}
           {onUp && <IconButton icon="arrow-up" size={32} onPress={onUp} label={d.guide.up} />}
           {onDown && <IconButton icon="arrow-down" size={32} onPress={onDown} label={d.guide.down} />}
         </Row>
