@@ -14,6 +14,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { isWhatsappLink } from '../whatsapp';
 
 const WHATSAPP = '#25D366';
+/** The LFK's first promo. */
+const FIRST_PROMO = 1989;
 
 /**
  * Admins: every promo with the link of its WhatsApp group — paste it, save, and the promo's members
@@ -24,13 +26,12 @@ export default function AdminWhatsapp() {
   const w = d.adminWhatsapp;
   const { db } = useStore();
   const members = useApprovedMembers();
-  // The promos with members or a link, from the newest; plus the next few years (current students).
+  // Every promo since the first one (1989) up to the current students' (in three years), newest first.
   const years = useMemo(() => {
     const set = new Set<number>();
+    for (let y = FIRST_PROMO; y <= new Date().getFullYear() + 3; y++) set.add(y);
     members.forEach((u) => u.promo && set.add(u.promo));
     db.promos.forEach((p) => set.add(p.year));
-    const next = new Date().getFullYear() + 3;
-    for (let y = new Date().getFullYear(); y <= next; y++) set.add(y);
     return [...set].sort((a, b) => b - a);
   }, [members, db.promos]);
   const count = (y: number) => members.filter((u) => u.promo === y).length;
