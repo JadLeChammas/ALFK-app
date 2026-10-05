@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 
 import { AdminNav } from '@/components/AdminNav';
+import { PromoLogo } from '@/components/PromoLogo';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Button, Card, Input, Row } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
@@ -69,10 +70,13 @@ function PromoRow({ year, members, link, last }: { year: number; members: number
 
   return (
     <View style={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', gap: 12, paddingVertical: 12, borderBottomWidth: last ? 0 : 1, borderBottomColor: colors.border }}>
-      <Row gap={10} style={{ width: isMobile ? undefined : 190 }}>
-        <Feather name="message-square" size={18} color={link ? WHATSAPP : colors.textSubtle} />
+      <Row gap={10} style={{ width: isMobile ? undefined : 230 }}>
+        <PromoLogo year={year} size={52} />
         <View>
-          <Txt variant="bodyStrong">{f(d.common.promo, { year })}</Txt>
+          <Row gap={6}>
+            <Feather name="message-square" size={14} color={link ? WHATSAPP : colors.textSubtle} />
+            <Txt variant="bodyStrong">{f(d.common.promo, { year })}</Txt>
+          </Row>
           <Txt variant="small" color="textSubtle">{f(d.common.members, { n: members })}</Txt>
         </View>
       </Row>
