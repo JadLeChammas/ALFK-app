@@ -20,6 +20,8 @@ const ICON: Record<AdminLogAction, [IconName, Tone]> = {
   promote_students: ['trending-up', 'success'],
   send_email: ['mail', 'primary'],
   change_role: ['sliders', 'ink'],
+  restrict_user: ['slash', 'danger'],
+  unrestrict_user: ['unlock', 'success'],
   reset_password: ['key', 'secondary'],
   delete_user: ['trash-2', 'danger'],
   create_event: ['calendar', 'primary'],

@@ -58,6 +58,7 @@ export const toUser = (r: Row): User => ({
   grade: r.grade === '2nde' || r.grade === '1ere' || r.grade === 'Tle' ? r.grade : undefined,
   needsCompletion: !!r.needs_completion,
   emailVerified: r.email_verified === undefined ? undefined : !!r.email_verified,
+  restricted: !!r.restricted,
   marketingOptIn: !!r.marketing_opt_in,
   locale: r.locale === 'en' ? 'en' : 'fr',
   fieldOfStudy: opt(r.field_of_study),
@@ -149,7 +150,7 @@ export const toNotification = (r: Row): AppNotification => ({ id: r.id, userId: 
 const PROFILE_PUBLIC_COLUMNS =
   'id, first_name, last_name, gender, role, approved, promo, school, fonction, city, country, avatar, bio, show_email, show_phone, show_birthday, ' +
   'created_at, last_active_at, alumni_number, created_by_admin, field_of_study, mentor, situation, employer, job_title, cv, nationalities, ' +
-  'other_schools, fields_of_study, school_country, grade, needs_completion, locale';
+  'other_schools, fields_of_study, school_country, grade, needs_completion, locale, email_verified, specialty, restricted';
 
 /**
  * Profiles: the public columns, plus the private ones from member_private_fields() — e-mail, phone and

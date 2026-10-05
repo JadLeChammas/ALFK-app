@@ -10,7 +10,7 @@ import { useDialogs } from '@/components/ui/Dialogs';
 import { Button, Card, Chip, IconButton, Input, Row, SectionHeader, type IconName } from '@/components/ui/primitives';
 import { BackLink, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { useMe, useStore } from '@/data/store';
+import { isUnavailable, useMe, useStore } from '@/data/store';
 import type { Cv, CvEntry, CvLanguage, CvSection } from '@/data/types';
 import { LANGUAGES, useI18n } from '@/i18n';
 import { period, sortEntries } from '@/lib/cvPdf';
@@ -53,7 +53,7 @@ export default function CvEditor() {
 
   const save = (next: Cv = cv, quiet = false) => {
     const r = actions.updateProfile({ cv: next });
-    if (!quiet) toast(r.ok ? d.common.saved : d.errors.saveFailed, r.ok ? 'success' : 'danger');
+    if (!quiet && !(!r.ok && r.error === 'unavailable')) toast(r.ok ? d.common.saved : d.errors.saveFailed, r.ok ? 'success' : 'danger');
     return r.ok;
   };
   const leave = () => (router.canGoBack() ? router.back() : router.replace('/profil'));
@@ -73,7 +73,7 @@ export default function CvEditor() {
       setCv(next);
       save(next);
     } catch (e) {
-      toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.errors.saveFailed, 'danger');
+      if (!isUnavailable(e)) toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.errors.saveFailed, 'danger');
     } finally {
       setUploading(false);
     }

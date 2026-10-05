@@ -129,7 +129,7 @@ function AskSheet({ visible, onClose }: { visible: boolean; onClose: () => void 
         size="lg"
         disabled={!ok}
         onPress={() => {
-          actions.askQuestion(text.trim(), topic);
+          if (actions.askQuestion(text.trim(), topic) === false) return;
           toast(d.questions.sent);
           setText('');
           onClose();

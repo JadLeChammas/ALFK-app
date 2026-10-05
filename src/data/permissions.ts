@@ -9,6 +9,13 @@ import type { Role, User } from './types';
  */
 export type Permission = 'viewEvents' | 'publish' | 'createEvent' | 'viewStats' | 'manage';
 
+/**
+ * Restricted by an admin (Admin → Membres): reads everything, writes nothing, and nobody can write to
+ * them. The interface looks the same (no banner, the Bureau tells the member itself); a write attempt
+ * only opens a neutral « feature unavailable » pop-up. The database refuses the writes (migrations 040–041).
+ */
+export const isRestricted = (user: (Pick<User, 'role'> & { restricted?: boolean }) | null | undefined) => !!user?.restricted && user.role !== 'admin';
+
 const GRANTS: Record<Role, Permission[]> = {
   admin: ['viewEvents', 'publish', 'createEvent', 'viewStats', 'manage'],
   honneur: ['viewEvents', 'publish', 'createEvent', 'viewStats'],

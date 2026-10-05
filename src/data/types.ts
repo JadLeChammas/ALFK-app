@@ -22,6 +22,8 @@ export type User = {
   email: string;
   /** Demo only — the real backend (Supabase Auth) never exposes passwords. */
   password: string;
+  /** Restricted by an admin: reads everything, writes nothing, nobody can message them (migration 040). */
+  restricted?: boolean;
   gender: Gender;
   role: Role;
   approved: boolean;
@@ -151,6 +153,8 @@ export type AdminLogAction =
   | 'create_user'
   | 'promote_students'
   | 'send_email'
+  | 'restrict_user'
+  | 'unrestrict_user'
   | 'change_role'
   | 'reset_password'
   | 'delete_user'

@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 import { isRemote, supabase } from '@/lib/supabase';
 import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL, properFirstName } from './members';
-import { can, canMessage, SELF_SIGNUP_ROLES } from './permissions';
+import { can, canMessage, isRestricted, SELF_SIGNUP_ROLES } from './permissions';
 import { parseAliases } from './places';
 import { sortPartners } from './partners';
 import {
@@ -76,10 +76,22 @@ import type {
 
 export { properFirstName };
 
+/** Thrown by an upload refused to a restricted account (the « unavailable » pop-up is already shown). */
+export class UnavailableError extends Error {
+  constructor() {
+    super('unavailable');
+  }
+}
+export const isUnavailable = (e: unknown): e is UnavailableError => e instanceof UnavailableError;
+
+/** What the app shows when a write is refused: to a restricted member, or towards one. */
+export type Notice = { kind: 'unavailable' | 'recipient'; at: number };
+
 const STORAGE_KEY = 'lfk.demo.db.v13';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
+  | 'unavailable'
   | 'invalid_credentials'
   | 'email_taken'
   | 'weak_password'
@@ -158,6 +170,7 @@ function useStoreValue() {
   const [db, setDb] = useState<Db | null>(null);
   const [session, setSession] = useState<Session>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<Notice | null>(null);
   // The sign-up proof and photo are still being sent: the pending screen says so instead of « not received ».
   const [sendingSignupFiles, setSendingSignupFiles] = useState(false);
   const dbRef = useRef<Db | null>(null);
@@ -264,6 +277,16 @@ function useStoreValue() {
 
   const me = db && session ? db.users.find((u) => u.id === session.userId) ?? null : null;
   const meId = me?.id;
+  /**
+   * Restricted by an admin: the actions below that write do nothing (the database refuses them too).
+   * The member only sees « this feature isn't available to you right now » when they try — never the
+   * word « restricted »; the Bureau tells them itself. `deny('recipient')`: someone writing to them.
+   */
+  const readOnly = isRestricted(me);
+  const deny = (kind: Notice['kind'] = 'unavailable') => {
+    setNotice({ kind, at: Date.now() });
+    return false as const;
+  };
 
   // ——— Supabase: live messages, conversations and notifications ———
   useEffect(() => {
@@ -514,6 +537,10 @@ function useStoreValue() {
     /** Saves the signed-in member's profile after checking the membership rules. */
     updateProfile(patch: ProfilePatch): Result {
       if (!me) return { ok: false, error: 'unknown' };
+      if (readOnly) {
+        deny();
+        return { ok: false, error: 'unavailable' };
+      }
       const merged = { ...me, ...patch };
       const contact = contactError(me.role, merged.birthDate, merged.phone);
       if (contact) return { ok: false, error: contact };
@@ -546,6 +573,10 @@ function useStoreValue() {
     },
     /** Uploads a CV as a PDF and returns the path to store in `cv.file` (the demo keeps the local URI). */
     async uploadCvFile(doc: PickedDoc): Promise<string> {
+      if (readOnly) {
+        deny();
+        throw new UnavailableError();
+      }
       if (!supabase || !meId) return doc.uri;
       return uploadCvFile(meId, doc);
     },
@@ -555,6 +586,10 @@ function useStoreValue() {
     },
     /** Uploads a picked image (Supabase) and returns the URL to store; the demo keeps the local URI. */
     async uploadImage(img: PickedImage, folder: string): Promise<string> {
+      if (readOnly) {
+        deny();
+        throw new UnavailableError();
+      }
       if (!supabase || !meId) return img.uri;
       return uploadImage(meId, img, folder);
     },
@@ -564,6 +599,14 @@ function useStoreValue() {
     conversationWith(otherId: string): string | null {
       const d = dbRef.current!;
       if (!canMessage(me, d.users.find((u) => u.id === otherId))) return null;
+      if (readOnly) {
+        deny();
+        return null;
+      }
+      if (isRestricted(d.users.find((u) => u.id === otherId))) {
+        deny('recipient');
+        return null;
+      }
       const existing = d.conversations.find((c) => c.members.includes(meId!) && c.members.includes(otherId));
       if (existing) return existing.id;
       const id = makeId('c');
@@ -575,6 +618,11 @@ function useStoreValue() {
     sendMessage(conversationId: string, text: string) {
       const body = text.trim();
       if (!body || !meId) return;
+      // Nothing goes out from or to a restricted account.
+      const conv = dbRef.current?.conversations.find((c) => c.id === conversationId);
+      const otherId = conv?.members.find((m) => m !== meId);
+      if (readOnly) return deny();
+      if (isRestricted(dbRef.current?.users.find((u) => u.id === otherId))) return deny('recipient');
       const at = nowIso();
       const id = makeId('m');
       commit((d) => {
@@ -622,6 +670,10 @@ function useStoreValue() {
     // ——— Events & galleries ———
     async addPhotos(eventId: string, images: PickedImage[]): Promise<number> {
       if (!meId || !images.length) return 0;
+      if (readOnly) {
+        deny();
+        return 0;
+      }
       let uris = images.map((i) => i.uri);
       if (supabase) {
         try {
@@ -646,6 +698,10 @@ function useStoreValue() {
       if (supabase) send(supabase.from('event_photos').delete().eq('id', photoId));
     },
     createEvent(e: Omit<LfkEvent, 'id' | 'createdBy'>) {
+      if (readOnly) {
+        deny();
+        return '';
+      }
       const ev: LfkEvent = { ...e, id: makeId('e'), createdBy: meId! };
       if (supabase) send(supabase.from('events').insert(eventRow(ev)));
       commit((d) => log({ ...d, events: [...d.events, ev] }, 'create_event', e.title));
@@ -665,6 +721,10 @@ function useStoreValue() {
      * Returns the new id and whether it is pending.
      */
     createPublication(p: Omit<Publication, 'id' | 'authorId' | 'date' | 'status'>, authorId?: string) {
+      if (readOnly) {
+        deny();
+        return { id: '', pending: false, blocked: true as const };
+      }
       const direct = can(me, 'publish');
       // Admins may publish in someone else's name (« publié par le président »).
       const author = me?.role === 'admin' && authorId ? authorId : meId!;
@@ -715,6 +775,10 @@ function useStoreValue() {
     updatePublication(id: string, patch: Pick<Publication, 'title' | 'excerpt' | 'body' | 'cover' | 'category'> & { authorId?: string }) {
       const p = dbRef.current?.publications.find((x) => x.id === id);
       if (!p) return { pending: false };
+      if (readOnly) {
+        deny();
+        return { pending: false, blocked: true as const };
+      }
       const reviewAgain = !can(me, 'publish') && me?.role !== 'admin';
       const status = reviewAgain ? 'pending' : p.status;
       // Only admins change who the publication is signed by.
@@ -735,6 +799,7 @@ function useStoreValue() {
     /** An alumnus proposes a club; it waits for an admin. The creator becomes its manager. */
     proposeClub(input: { name: string; description: string; cover?: string }) {
       if (!meId) return;
+      if (readOnly) return deny();
       const club: Club = { id: makeId('club'), name: input.name.trim(), description: input.description.trim(), cover: input.cover || undefined, status: 'pending', createdBy: meId, createdAt: nowIso() };
       const manager: ClubMember = { clubId: club.id, userId: meId, role: 'manager', status: 'active', createdAt: nowIso() };
       commit((d) => ({ ...d, clubs: [...d.clubs, club], clubMembers: [...d.clubMembers, manager] }));
@@ -747,6 +812,7 @@ function useStoreValue() {
       if (supabase) send(supabase.from('clubs').update({ status }).eq('id', id));
     },
     updateClub(id: string, patch: { name: string; description: string; cover?: string }) {
+      if (readOnly) return deny();
       const next = { name: patch.name.trim(), description: patch.description.trim(), cover: patch.cover || undefined };
       commit((d) => ({ ...d, clubs: d.clubs.map((c) => (c.id === id ? { ...c, ...next } : c)) }));
       if (supabase) send(supabase.from('clubs').update({ name: next.name, description: next.description, cover: next.cover ?? null }).eq('id', id));
@@ -758,6 +824,7 @@ function useStoreValue() {
     /** Asks to join (a manager accepts). */
     requestToJoinClub(clubId: string) {
       if (!meId) return;
+      if (readOnly) return deny();
       const m: ClubMember = { clubId, userId: meId, role: 'member', status: 'pending', createdAt: nowIso() };
       commit((d) => ({ ...d, clubMembers: [...d.clubMembers.filter((x) => !(x.clubId === clubId && x.userId === meId)), m] }));
       if (supabase) send(supabase.from('club_members').insert({ club_id: clubId, user_id: meId, role: 'member', status: 'pending' }));
@@ -775,6 +842,7 @@ function useStoreValue() {
     postToClub(clubId: string, kind: ClubPost['kind'], text: string) {
       const body = text.trim();
       if (!meId || !body) return;
+      if (readOnly) return deny();
       const p: ClubPost = { id: makeId('cp'), clubId, authorId: meId, kind, text: body, createdAt: nowIso() };
       commit((d) => ({ ...d, clubPosts: [...d.clubPosts, p] }));
       if (supabase) send(supabase.from('club_posts').insert({ id: p.id, club_id: clubId, author_id: meId, kind, text: body }));
@@ -788,6 +856,7 @@ function useStoreValue() {
     postCircleMessage(text: string) {
       const body = text.trim();
       if (!meId || !body) return;
+      if (readOnly) return deny();
       const m = { id: makeId('cm'), authorId: meId, text: body, createdAt: nowIso() };
       commit((d) => ({ ...d, circleMessages: [...d.circleMessages, m] }));
       if (supabase) send(supabase.from('circle_messages').insert({ id: m.id, author_id: meId, text: body }));
@@ -801,6 +870,7 @@ function useStoreValue() {
     /** Students: ask a question. It stays hidden until an admin publishes it; the name is never shown. */
     askQuestion(text: string, topic: QuestionTopic) {
       if (!meId) return;
+      if (readOnly) return deny();
       const q: Question = { id: makeId('q'), text, topic, status: 'pending', createdAt: nowIso(), authorId: meId };
       if (supabase) send(supabase.rpc('ask_question', { p_id: q.id, p_text: text, p_topic: topic }));
       commit((d) => {
@@ -841,6 +911,7 @@ function useStoreValue() {
     /** Alumni: answer a published question (answers are signed). */
     answerQuestion(questionId: string, text: string) {
       if (!meId) return;
+      if (readOnly) return deny();
       const a = { id: makeId('a'), questionId, authorId: meId, text, createdAt: nowIso() };
       if (supabase) send(supabase.from('answers').insert({ id: a.id, question_id: questionId, author_id: meId, text }));
       commit((d) => {
@@ -1092,6 +1163,18 @@ function useStoreValue() {
         });
       }
     },
+    /**
+     * Admins: makes an account read-only (Admin → Membres), or gives it back its normal access. A
+     * restricted member reads everything but cannot message, post, upload or edit their profile, and
+     * nobody can message them. Admins cannot be restricted.
+     */
+    setRestricted(id: string, restricted: boolean): Result {
+      const u = dbRef.current?.users.find((x) => x.id === id);
+      if (!u || u.role === 'admin' || me?.role !== 'admin') return { ok: false, error: 'unknown' };
+      commit((d) => log({ ...d, users: d.users.map((x) => (x.id === id ? { ...x, restricted } : x)) }, restricted ? 'restrict_user' : 'unrestrict_user', fullName(u)));
+      if (supabase) send(supabase.from('profiles').update({ restricted }).eq('id', id));
+      return { ok: true };
+    },
     /** Bureau code: 4 digits, unique, admins (Bureau members) only. */
     async setBureauCode(id: string, code: string): Promise<Result> {
       const value = code.trim();
@@ -1279,10 +1362,13 @@ function useStoreValue() {
     clearError() {
       setError(null);
     },
+    clearNotice() {
+      setNotice(null);
+    },
     reload,
   };
 
-  return { ready: db !== null, db: (db ?? EMPTY_DB) as Db, session, me, actions, error, isRemote, sendingSignupFiles };
+  return { ready: db !== null, db: (db ?? EMPTY_DB) as Db, session, me, actions, error, notice, isRemote, sendingSignupFiles };
 }
 
 /** Applies the membership rules to one user and advances the never-reused Alumni number counter. */

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Linking, Platform, View } from 'react-native';
 
 import { countryName } from '@/data/countries';
-import { fullName, useMe, useStore } from '@/data/store';
+import { fullName, isUnavailable, useMe, useStore } from '@/data/store';
 import type { Cv, CvEntry, User } from '@/data/types';
 import { LANGUAGES, useI18n } from '@/i18n';
 import { exportCvPdf, period, sortEntries, type CvDoc } from '@/lib/cvPdf';
@@ -224,7 +224,7 @@ export function useCvUpload() {
       const r = actions.updateProfile({ cv: { ...me.cv, file: { path, name: doc.name, uploadedAt: new Date().toISOString() } } });
       toast(r.ok ? d.cv.posted : d.errors.saveFailed, r.ok ? 'success' : 'danger');
     } catch (e) {
-      toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.errors.saveFailed, 'danger');
+      if (!isUnavailable(e)) toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.errors.saveFailed, 'danger');
     } finally {
       setUploading(false);
     }

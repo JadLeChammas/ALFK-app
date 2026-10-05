@@ -2,7 +2,7 @@ import { InstrumentSerif_400Regular, InstrumentSerif_400Regular_Italic } from '@
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { ComicNeue_400Regular, ComicNeue_700Bold } from '@expo-google-fonts/comic-neue';
 import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold, useFonts } from '@expo-google-fonts/inter';
-import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider, Stack } from 'expo-router';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider, router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -101,13 +101,26 @@ function RootNavigator() {
 
 /** Surfaces writes the backend refused (the store has already resynced the data). */
 function StoreErrorToast() {
-  const { error, actions } = useStore();
-  const { toast } = useDialogs();
+  const { error, notice, actions } = useStore();
+  const { toast, confirm } = useDialogs();
   const { d, f } = useI18n();
   useEffect(() => {
     if (!error) return;
     toast(f(d.errors.saveFailed, { msg: error }), 'danger');
     actions.clearError();
   }, [error]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A restricted account tried to write (or someone tried to write to one): a neutral message only.
+  useEffect(() => {
+    if (!notice) return;
+    actions.clearNotice();
+    if (notice.kind === 'recipient') {
+      toast(d.unavailable.recipient, 'danger');
+      return;
+    }
+    confirm({ title: d.unavailable.title, message: d.unavailable.body, confirmLabel: d.unavailable.contact }).then((go) => {
+      if (go) router.push('/contact');
+    });
+  }, [notice]); // eslint-disable-line react-hooks/exhaustive-deps
   return null;
 }

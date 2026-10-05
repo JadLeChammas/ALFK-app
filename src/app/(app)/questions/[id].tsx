@@ -122,7 +122,7 @@ export default function QuestionPage() {
             icon="send"
             disabled={!reply.trim()}
             onPress={() => {
-              actions.answerQuestion(q.id, reply.trim());
+              if (actions.answerQuestion(q.id, reply.trim()) === false) return;
               setReply('');
               toast(d.questions.answered);
             }}

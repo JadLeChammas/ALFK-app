@@ -6,7 +6,7 @@ import { Sheet } from '@/components/forms';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Button, Input } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
-import { useStore } from '@/data/store';
+import { isUnavailable, useStore } from '@/data/store';
 import type { Club } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
@@ -31,18 +31,18 @@ export function ClubForm({ editing, onClose }: { editing?: Club; onClose: () => 
     setUploading(true);
     try {
       setCover(await actions.uploadImage(img, 'clubs'));
-    } catch {
-      toast(d.auth.errors.unknown, 'danger');
+    } catch (e) {
+      if (!isUnavailable(e)) toast(d.auth.errors.unknown, 'danger');
     }
     setUploading(false);
   };
 
   const save = () => {
     if (editing) {
-      actions.updateClub(editing.id, { name, description, cover });
+      if (actions.updateClub(editing.id, { name, description, cover }) === false) return;
       toast(d.common.saved, 'success');
     } else {
-      actions.proposeClub({ name, description, cover });
+      if (actions.proposeClub({ name, description, cover }) === false) return;
       toast(c.proposed, 'success');
     }
     onClose();

@@ -6,7 +6,7 @@ import { AdminNav } from '@/components/AdminNav';
 import { RoleBadge } from '@/components/cards';
 import { norm } from '@/components/shell/GlobalSearch';
 import { useDialogs } from '@/components/ui/Dialogs';
-import { FieldRow, Avatar, Button, Card, Chip, IconButton, Input, Row, SearchBar, Segmented, Tap } from '@/components/ui/primitives';
+import { FieldRow, Avatar, Badge, Button, Card, Chip, IconButton, Input, Row, SearchBar, Segmented, Tap } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { DateField, PhoneField } from '@/components/ui/fields';
 import { Select } from '@/components/ui/Select';
@@ -56,6 +56,23 @@ export default function ManageMembers() {
     // `true` means the member was deleted: nothing to come back to.
     if ((await run(u)) !== true) setEditing(u);
   };
+  /**
+   * One button per member: read-only account (or back to normal). Silent for the member — they only see
+   * « feature unavailable » if they try to write; the Bureau tells them itself. Admins can't be restricted.
+   */
+  const toggleRestrict = async (u: User) => {
+    const on = !u.restricted;
+    const name = fullName(u);
+    const ok = await confirm({
+      title: f(on ? d.restriction.confirmTitle : d.restriction.liftTitle, { name }),
+      message: f(on ? d.restriction.confirmBody : d.restriction.liftBody, { name }),
+      danger: on,
+      confirmLabel: on ? d.restriction.restrict : d.restriction.lift,
+    });
+    if (!ok) return;
+    const r = actions.setRestricted(u.id, on);
+    toast(r.ok ? (on ? d.restriction.done : d.restriction.lifted) : d.auth.errors.unknown, r.ok ? 'success' : 'danger');
+  };
   const remove = async (u: User) => {
     if (await confirm({ title: d.admin.deleteUser, message: f(d.admin.deleteUserConfirm, { name: fullName(u) }), danger: true, confirmLabel: d.common.delete, typeToConfirm: fullName(u) })) {
       const r = await actions.deleteUser(u.id);
@@ -97,6 +114,7 @@ export default function ManageMembers() {
               <View style={{ flex: 1 }}>
                 <Txt variant="bodyStrong" numberOfLines={1} style={{ fontSize: 14 }}>{fullName(u)}{u.id === me.id ? ` (${d.common.you})` : ''}</Txt>
                 <Txt variant="small" color="textSubtle" numberOfLines={1}>{u.email}</Txt>
+                {u.restricted && <Badge label={d.restriction.badge} tone="danger" icon="slash" style={{ alignSelf: 'flex-start', marginTop: 4 }} />}
               </View>
             </Tap>
             {!isMobile && (
@@ -111,6 +129,17 @@ export default function ManageMembers() {
               </>
             )}
             <Row gap={6} style={{ width: isMobile ? undefined : 130, justifyContent: 'flex-end' }}>
+              {/* filled red = restricted (on), outlined = normal access (off) */}
+              {u.role !== 'admin' && (
+                <IconButton
+                  icon="slash"
+                  size={34}
+                  variant={u.restricted ? 'primary' : 'surface'}
+                  color={u.restricted ? undefined : colors.textSubtle}
+                  onPress={() => toggleRestrict(u)}
+                  label={u.restricted ? d.restriction.lift : d.restriction.restrict}
+                />
+              )}
               <IconButton icon="sliders" size={34} onPress={() => setEditing(u)} label={d.admin.changeRole} />
               {!isMobile && u.id !== me.id && <IconButton icon="trash-2" size={34} onPress={() => remove(u)} color={colors.danger} label={d.admin.deleteUser} />}
             </Row>
@@ -208,6 +237,19 @@ export default function ManageMembers() {
                         toast(r.ok ? d.settings.passwordChanged : r.error === 'unknown' && r.detail ? `${d.auth.errors.unknown} (${r.detail})` : d.auth.errors[r.error], r.ok ? 'success' : 'danger');
                       })
                     }
+                  />
+                )}
+                {editing.role !== 'admin' && (
+                  <Button
+                    label={editing.restricted ? d.restriction.lift : d.restriction.restrict}
+                    icon={editing.restricted ? 'unlock' : 'slash'}
+                    variant="secondary"
+                    full
+                    onPress={() => {
+                      const u = editing;
+                      setEditing(null);
+                      toggleRestrict(u);
+                    }}
                   />
                 )}
                 {editing.id !== me.id && <Button label={d.admin.deleteUser} icon="trash-2" variant="danger" full onPress={() => fromCard(remove)} />}

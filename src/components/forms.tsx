@@ -71,6 +71,7 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
         disabled={!valid}
         onPress={() => {
           const id = actions.createEvent({ title: form.title, description: form.description, date: date.toISOString(), location: form.location, cover: form.cover || IMAGES.party, category: form.category });
+          if (!id) return;
           toast(d.common.saved);
           setForm(blank);
           onClose();
@@ -129,11 +130,13 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
           const data = { ...form, excerpt: form.excerpt || form.body.slice(0, 140) };
           if (editing) {
             const r = actions.updatePublication(editing.id, { ...data, authorId: admin ? authorId : undefined });
+            if ('blocked' in r) return;
             toast(r.pending ? d.publications.editPending : d.common.saved);
             onClose();
             return;
           }
           const r = actions.createPublication(data, admin ? authorId : undefined);
+          if ('blocked' in r) return;
           toast(r.pending ? d.pubReview.submitted : d.common.saved);
           setForm(blank);
           onClose();

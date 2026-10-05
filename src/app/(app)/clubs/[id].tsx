@@ -69,7 +69,7 @@ export default function ClubPage() {
           {!!club.description && <Txt color="textMuted" style={{ lineHeight: 24 }}>{club.description}</Txt>}
           <Txt variant="small" color="textSubtle">{f(c.memberCount, { n: active.length })}</Txt>
           <Row gap={10} wrap>
-            {club.status === 'approved' && !mine && <Button label={c.join} icon="user-plus" onPress={() => { actions.requestToJoinClub(club.id); toast(c.requestSent, 'success'); }} />}
+            {club.status === 'approved' && !mine && <Button label={c.join} icon="user-plus" onPress={() => { if (actions.requestToJoinClub(club.id) !== false) toast(c.requestSent, 'success'); }} />}
             {mine?.status === 'pending' && <Button label={c.cancelRequest} icon="x" variant="secondary" onPress={() => actions.removeClubMember(club.id, me.id)} />}
             {isMember && mine?.role !== 'manager' && (
               <Button label={c.leave} icon="log-out" variant="secondary" onPress={async () => (await confirm({ title: c.leave, message: club.name, confirmLabel: c.leave })) && actions.removeClubMember(club.id, me.id)} />
@@ -179,8 +179,7 @@ function Posts({ posts, canWrite, kind, clubId }: { posts: ClubPost[]; canWrite:
   const [text, setText] = useState('');
   const list = kind === 'announcement' ? [...posts].reverse() : posts;
   const send = () => {
-    actions.postToClub(clubId, kind, text);
-    setText('');
+    if (actions.postToClub(clubId, kind, text) !== false) setText('');
   };
   return (
     <Card style={{ gap: 14 }}>

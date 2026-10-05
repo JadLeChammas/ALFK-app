@@ -30,8 +30,7 @@ export default function Circle() {
 
   const send = () => {
     if (!text.trim()) return;
-    actions.postCircleMessage(text);
-    setText('');
+    if (actions.postCircleMessage(text) !== false) setText('');
   };
 
   return (

@@ -64,7 +64,7 @@ export default function CompleteAccount() {
       nationalities,
       needsCompletion: false,
     });
-    if (!r.ok) return toast(d.auth.errors[r.error], 'danger');
+    if (!r.ok) return r.error === 'unavailable' ? undefined : toast(d.auth.errors[r.error], 'danger');
     toast(c.done, 'success');
   };
 

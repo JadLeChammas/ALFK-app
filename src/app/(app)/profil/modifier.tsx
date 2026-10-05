@@ -16,7 +16,7 @@ import { sortedCountries } from '@/data/countries';
 import { userFields } from '@/data/fields';
 import { FieldsPicker } from '@/components/FieldsPicker';
 import { formatPhone, isoToFrDate, isValidPhoneNumber, LFK_SCHOOL, parseFrDate, parsePhone, requiresContact } from '@/data/members';
-import { fullName, useApprovedMembers, useMe, useStore, properFirstName } from '@/data/store';
+import { fullName, isUnavailable, useApprovedMembers, useMe, useStore, properFirstName } from '@/data/store';
 import type { OtherSchool, Situation } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickImages } from '@/lib/media';
@@ -104,7 +104,7 @@ export default function EditProfile() {
     });
     if (!r.ok) {
       if (r.error === 'birth_date' || r.error === 'phone') setFieldError(r.error);
-      else toast(d.auth.errors[r.error], 'danger');
+      else if (r.error !== 'unavailable') toast(d.auth.errors[r.error], 'danger');
       return;
     }
     toast(d.common.saved);
@@ -135,7 +135,7 @@ export default function EditProfile() {
     } catch (e) {
       setForm((f) => ({ ...f, avatar: previous }));
       if (previous) actions.previewAvatar(previous);
-      toast(isFileRejected(e) ? d.auth.errors[e.reason] : `${d.auth.errors.unknown} (${(e as Error)?.message ?? e})`, 'danger');
+      if (!isUnavailable(e)) toast(isFileRejected(e) ? d.auth.errors[e.reason] : `${d.auth.errors.unknown} (${(e as Error)?.message ?? e})`, 'danger');
     } finally {
       setUploading(false);
     }
