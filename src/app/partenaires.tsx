@@ -9,9 +9,11 @@ import { FloatingPaths } from '@/components/fx/FloatingPaths';
 import { PartnersManager } from '@/components/PartnersManager';
 import { AppShell } from '@/components/shell/AppShell';
 import { LinkCta, Reveal, Section, SerifHeading, SiteFrame, tonePalette, useTone } from '@/components/site/SiteFrame';
-import { Button } from '@/components/ui/primitives';
+import { FramedPhoto } from '@/components/FramedPhoto';
+import { Avatar, Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import { usePublicOverview } from '@/data/public';
+import { LEADER_KINDS, useSchoolLeaders } from '@/data/schoolLeaders';
 import { useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
 import { partnerLogo } from '@/data/partners';
@@ -57,6 +59,8 @@ function PublicPartners() {
       <Section style={{ paddingTop: 0 }}>
         <PartnerList partners={institutions} empty={p.empty} />
       </Section>
+
+      <CurrentLeadership />
 
       <Section tone="blue">
         <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 24 }}>
@@ -142,6 +146,37 @@ function LogoCloud({ partners, children }: { partners: Institution[]; children: 
       })}
       <Reveal style={{ gap: 14, alignItems: 'center', maxWidth: isMobile ? 240 : 460, paddingVertical: isMobile ? 120 : 0 }}>{children}</Reveal>
     </View>
+  );
+}
+
+/**
+ * The school's current leadership — proviseur, primary director, CPE — from the Bureau page's
+ * timelines (no end year = in office), as on the members' Partners page. Hidden while empty.
+ */
+function CurrentLeadership() {
+  const t = useTone();
+  const { d } = useI18n();
+  const { isMobile } = useLayout();
+  const { byKind } = useSchoolLeaders();
+  const leaders = LEADER_KINDS.flatMap((k) => byKind(k).filter((x) => !x.to));
+  if (!leaders.length) return null;
+  return (
+    <Section style={{ paddingTop: 0 }}>
+      <Reveal style={{ marginBottom: 32 }}>
+        <SerifHeading title={d.honorary.people} />
+      </Reveal>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: isMobile ? 24 : 40, justifyContent: isMobile ? 'center' : 'flex-start' }}>
+        {leaders.map((x, i) => (
+          <Reveal key={x.id} index={i} style={{ width: isMobile ? 150 : 200, alignItems: 'center', gap: 8 }}>
+            {x.photo ? <FramedPhoto uri={x.photo} size={isMobile ? 110 : 140} frame={x.photoFrame} /> : <Avatar name={x.name} size={isMobile ? 110 : 140} />}
+            <Txt style={{ fontFamily: fonts.semibold, fontSize: 17, textAlign: 'center', color: t.fg, marginTop: 4 }}>{x.name}</Txt>
+            <Txt style={{ fontFamily: fonts.medium, fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', textAlign: 'center', color: t.muted }}>{d.leaders.kinds[x.kind]}</Txt>
+            {!!x.from && <Txt style={{ fontSize: 13, color: t.muted }}>{`${d.leaders.since} ${x.from}`}</Txt>}
+            {!!x.description && <Txt style={{ fontSize: 13, textAlign: 'center', color: brand.red }}>{x.description}</Txt>}
+          </Reveal>
+        ))}
+      </View>
+    </Section>
   );
 }
 
