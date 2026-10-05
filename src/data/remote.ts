@@ -14,7 +14,7 @@ import type {
   KeyDate,
   Question,
   Answer,
-  CircleMessage,
+  CircleMessage, UrgentMessage,
   Club,
   ClubMember,
   ClubPost,
@@ -135,6 +135,8 @@ export const toClub = (r: Row): Club => ({ id: r.id, name: r.name, description: 
 export const toClubMember = (r: Row): ClubMember => ({ clubId: r.club_id, userId: r.user_id, role: r.role, status: r.status, createdAt: r.created_at });
 export const toClubPost = (r: Row): ClubPost => ({ id: r.id, clubId: r.club_id, authorId: opt(r.author_id), kind: r.kind, text: r.text, createdAt: r.created_at });
 export const toCircleMessage = (r: Row): CircleMessage => ({ id: r.id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
+export const toUrgentMessage = (r: Row): UrgentMessage => ({ id: r.id, userId: r.user_id, title: opt(r.title), body: opt(r.body), reasons: r.reasons ?? [], createdBy: opt(r.created_by), createdAt: r.created_at, acknowledgedAt: opt(r.acknowledged_at) });
+export const urgentMessageRow = (m: UrgentMessage) => ({ id: m.id, user_id: m.userId, title: m.title ?? null, body: m.body ?? null, reasons: m.reasons, created_by: m.createdBy ?? null, created_at: m.createdAt });
 const toAnswer = (r: Row): Answer => ({ id: r.id, questionId: r.question_id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
 const toKeyDate = (r: Row): KeyDate => ({ id: r.id, title: r.title, month: r.month, day: r.day, year: opt(r.year), category: r.category, endMonth: opt(r.end_month), endDay: opt(r.end_day), url: opt(r.url) });
 export const toConversation = (r: Row): Conversation => ({ id: r.id, members: [r.members[0], r.members[1]], lastRead: r.last_read ?? {}, report: opt(r.report) });
@@ -198,7 +200,7 @@ export async function loadDb(): Promise<Db> {
   };
   // Tables added by migration 003: an empty list until it has been run, instead of breaking the app.
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
-  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, clubs, clubMembers, clubPosts] = await Promise.all([
+  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, clubs, clubMembers, clubPosts, urgent] = await Promise.all([
     loadProfiles(),
     loadPromos(),
     all('events', 'date'),
@@ -219,6 +221,7 @@ export async function loadDb(): Promise<Db> {
     optional('clubs'),
     optional('club_members'),
     optional('club_posts'),
+    optional('urgent_messages'),
   ]);
   // Only the user's own questions (or all of them for admins) come back with an author.
   const askedBy = new Map(questionAuthors.map((r: Row) => [r.question_id, r.user_id]));
@@ -241,6 +244,7 @@ export async function loadDb(): Promise<Db> {
     clubs: clubs.map(toClub).sort((a, b) => a.name.localeCompare(b.name)),
     clubMembers: clubMembers.map(toClubMember),
     clubPosts: clubPosts.map(toClubPost).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
+    urgentMessages: urgent.map(toUrgentMessage).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
     settings: Object.fromEntries(settings.map((s: Row) => [s.key, s.value])),
   };
 }

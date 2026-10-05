@@ -11,6 +11,7 @@ import { View } from 'react-native';
 import { DemoBadge } from '@/components/DemoBadge';
 import { EasterEggs } from '@/components/EasterEggs';
 import { RetroLayer } from '@/components/RetroLayer';
+import { UrgentMessages } from '@/components/UrgentMessages';
 import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
 import { StoreProvider, useStore } from '@/data/store';
 import { I18nProvider, useI18n } from '@/i18n';
@@ -28,6 +29,8 @@ export default function RootLayout() {
               <RootNavigator />
             </View>
             <StoreErrorToast />
+            {/* The admins' urgent messages: a pop-up over every page until acknowledged. */}
+            <UrgentMessages />
             <DemoBadge />
             <RetroLayer />
             <EasterEggs />

@@ -27,6 +27,7 @@ export function AdminNav() {
     { href: '/admin/honneur', label: d.honoraryAdmin.nav, icon: 'award' },
     { href: '/admin/contenus', label: d.nav.content, icon: 'layers', count: reports || undefined },
     { href: '/admin/contact', label: d.nav.contact, icon: 'inbox', count: unread || undefined },
+    { href: '/admin/urgent', label: d.urgent.nav, icon: 'alert-triangle' },
     { href: '/admin/emails', label: d.emails.nav, icon: 'mail' },
     { href: '/admin/partenaires', label: d.adminPartners.nav, icon: 'eye' },
     { href: '/admin/whatsapp', label: d.adminWhatsapp.nav, icon: 'message-square' },

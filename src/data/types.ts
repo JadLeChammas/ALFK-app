@@ -217,6 +217,14 @@ export type Answer = { id: string; questionId: string; authorId?: string; text: 
 /** A message in the honorary members' group discussion. */
 export type CircleMessage = { id: string; authorId?: string; text: string; createdAt: string };
 
+/**
+ * An urgent message from the admins to one member (migration 039): shown in a pop-up, on every page,
+ * until the member clicks « J'ai compris ». `reasons`: ready-made problems (see data/urgentReasons.ts),
+ * shown in the member's language; `title` / `body`: the admin's own words. A send to several members
+ * makes one row each, with the same `createdAt`.
+ */
+export type UrgentMessage = { id: string; userId: string; title?: string; body?: string; reasons: string[]; createdBy?: string; createdAt: string; acknowledgedAt?: string };
+
 /** Clubs (migration 033): proposed by an alumnus, approved by an admin, run by its managers. */
 export type ClubStatus = 'pending' | 'approved' | 'rejected';
 export type Club = { id: string; name: string; description: string; cover?: string; status: ClubStatus; createdBy?: string; createdAt: string };
@@ -246,6 +254,8 @@ export type Db = {
   clubs: Club[];
   clubMembers: ClubMember[];
   clubPosts: ClubPost[];
+  /** Optional: demo data saved before urgent messages existed has none. */
+  urgentMessages?: UrgentMessage[];
   settings: AppSettings;
 };
 

@@ -44,8 +44,15 @@ export function CommunityStats() {
   const multi = members.filter((u) => (u.nationalities?.length ?? 0) > 1).length;
   const filled = members.filter((u) => u.nationalities?.length).length;
 
+  // Former students and current pupils counted apart: the promos are the alumni's (and admins'),
+  // the pupils still at the LFK are counted by class (Seconde, Première, Terminale).
+  const alumniCount = members.filter((u) => u.role === 'alumni' || u.role === 'admin').length;
+  const pupils = members.filter((u) => u.role === 'eleve');
+  const byGrade = (['2nde', '1ere', 'Tle'] as const).map((g) => ({ label: d.grade[g], value: pupils.filter((u) => u.grade === g).length }));
+  const noGrade = pupils.filter((u) => !u.grade).length;
+  if (noGrade) byGrade.push({ label: d.grade.none, value: noGrade });
   const promoMap = new Map<number, number>();
-  members.forEach((u) => u.promo && promoMap.set(u.promo, (promoMap.get(u.promo) ?? 0) + 1));
+  members.forEach((u) => u.promo && (u.role === 'alumni' || u.role === 'admin') && promoMap.set(u.promo, (promoMap.get(u.promo) ?? 0) + 1));
   const byPromo = [...promoMap.entries()].sort((a, b) => b[0] - a[0]).slice(0, 8).map(([y, v]) => ({ label: f(d.common.promo, { year: y }), value: v }));
 
   // Where alumni went to study (same population as Repère).
@@ -75,6 +82,7 @@ export function CommunityStats() {
             <Badge label={`+${pct}%`} tone="success" icon="trending-up" style={{ marginBottom: 8 }} />
           </Row>
           <Txt variant="small" color="textSubtle">{d.admin.vsLastYear}</Txt>
+          <Txt variant="smallStrong" color="textMuted">{f(d.studentStats.split, { alumni: alumniCount, pupils: pupils.length })}</Txt>
           <View style={{ marginTop: 12 }}>
             <SectionHeader title={d.admin.growth} style={{ marginBottom: 10 }} />
             <AreaLine data={growth} height={110} />
@@ -97,6 +105,11 @@ export function CommunityStats() {
         <Card style={{ height: '100%' }}>
           <SectionHeader title={d.admin.byPromo} icon="award" action={d.nav.directory} onAction={() => router.push('/annuaire')} />
           <HBarList data={byPromo} />
+        </Card>
+        <Card style={{ height: '100%', gap: 8 }}>
+          <SectionHeader title={d.studentStats.title} icon="book" />
+          <Txt style={{ fontFamily: fonts.display, fontSize: 52, lineHeight: 54, color: colors.text }}>{pupils.length}</Txt>
+          <HBarList data={byGrade} />
         </Card>
         <Card style={{ height: '100%' }}>
           <SectionHeader title={d.admin.newPerMonth} icon="bar-chart-2" />

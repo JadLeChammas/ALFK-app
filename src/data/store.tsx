@@ -21,6 +21,8 @@ import {
   loadProfiles,
   toMessage,
   toCircleMessage,
+  toUrgentMessage,
+  urgentMessageRow,
   toClubPost,
   toNotification,
   institutionRow,
@@ -45,6 +47,7 @@ import type {
   Club,
   ClubMember,
   ClubPost,
+  UrgentMessage,
   Gender,
   Grade,
   Institution,
@@ -294,6 +297,19 @@ function useStoreValue() {
         }
         const m = toCircleMessage(p.new);
         commit((d) => (d.circleMessages.some((x) => x.id === m.id) ? d : { ...d, circleMessages: [...d.circleMessages, m] }));
+      })
+      // Urgent messages: a new one pops up at once; the admins also see when they are read.
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'urgent_messages' }, (p) => {
+        if (p.eventType === 'DELETE') {
+          const id = (p.old as { id?: string }).id;
+          commit((d) => ({ ...d, urgentMessages: (d.urgentMessages ?? []).filter((x) => x.id !== id) }));
+          return;
+        }
+        const m = toUrgentMessage(p.new);
+        commit((d) => {
+          const list = d.urgentMessages ?? [];
+          return { ...d, urgentMessages: list.some((x) => x.id === m.id) ? list.map((x) => (x.id === m.id ? m : x)) : [...list, m] };
+        });
       })
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${meId}` }, (p) => {
         const n = toNotification(p.new);
@@ -1215,6 +1231,28 @@ function useStoreValue() {
     setInstitutionHidden(id: string, hidden: boolean) {
       commit((d) => ({ ...d, institutions: d.institutions.map((i) => (i.id === id ? { ...i, hidden } : i)) }));
       if (supabase) send(supabase.from('institutions').update({ hidden }).eq('id', id));
+    },
+    /**
+     * Admins: an urgent message to each of `userIds` — ready-made reasons (e.g. an invalid profile photo)
+     * and/or the admin's own title and text. It pops up for them until they acknowledge it.
+     */
+    sendUrgentMessage(userIds: string[], msg: { title?: string; body?: string; reasons: string[] }) {
+      if (!meId || !userIds.length) return;
+      const createdAt = nowIso();
+      const rows: UrgentMessage[] = userIds.map((userId) => ({ id: makeId('urg'), userId, title: msg.title || undefined, body: msg.body || undefined, reasons: msg.reasons, createdBy: meId, createdAt }));
+      commit((d) => ({ ...d, urgentMessages: [...(d.urgentMessages ?? []), ...rows] }));
+      if (supabase) send(supabase.from('urgent_messages').insert(rows.map(urgentMessageRow)));
+    },
+    /** The member read an urgent message (« J'ai compris »): it stops popping up. */
+    acknowledgeUrgentMessage(id: string) {
+      const at = nowIso();
+      commit((d) => ({ ...d, urgentMessages: (d.urgentMessages ?? []).map((m) => (m.id === id ? { ...m, acknowledgedAt: at } : m)) }));
+      if (supabase) send(supabase.from('urgent_messages').update({ acknowledged_at: at }).eq('id', id));
+    },
+    /** Admins: withdraw an urgent message (one recipient), read or not. */
+    deleteUrgentMessage(id: string) {
+      commit((d) => ({ ...d, urgentMessages: (d.urgentMessages ?? []).filter((m) => m.id !== id) }));
+      if (supabase) send(supabase.from('urgent_messages').delete().eq('id', id));
     },
     deleteInstitution(id: string) {
       commit((d) => ({ ...d, institutions: d.institutions.filter((i) => i.id !== id) }));
