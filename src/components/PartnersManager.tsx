@@ -6,6 +6,7 @@ import { View } from 'react-native';
 
 import { RoleBadge } from '@/components/cards';
 import { Sheet } from '@/components/forms';
+import { FramedPhoto } from '@/components/FramedPhoto';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Button, Card, EmptyState, IconButton, Input, Row, SectionHeader } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
@@ -84,7 +85,7 @@ export function PartnersManager() {
           <Grid min={260} gap={16}>
             {leaders.map((x) => (
               <Card key={x.id} style={{ gap: 12, alignItems: 'center' }}>
-                <Avatar uri={x.photo} name={x.name} size={72} />
+                {x.photo ? <FramedPhoto uri={x.photo} size={72} frame={x.photoFrame} /> : <Avatar name={x.name} size={72} />}
                 <View style={{ alignItems: 'center', gap: 4 }}>
                   <Txt variant="h3" align="center">{x.name}</Txt>
                   <Txt variant="small" color="textMuted" align="center">{d.leaders.kinds[x.kind]}</Txt>

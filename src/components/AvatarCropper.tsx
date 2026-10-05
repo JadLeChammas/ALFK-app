@@ -6,6 +6,7 @@ import { Image as RNImage, Modal, Platform, Pressable, View } from 'react-native
 import Svg, { Path } from 'react-native-svg';
 
 import type { PickedImage } from '@/data/remote';
+import type { PhotoFrame } from './FramedPhoto';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
@@ -19,13 +20,27 @@ const MAX_ZOOM = 4;
 /**
  * Adjust a profile photo before saving it: drag to place it, zoom with − / + (or the mouse wheel),
  * and only the circle is kept (a 512×512 JPEG).
+ * « Frame » mode (`onFrame`): nothing is cut, only the placement and zoom are returned, to show the
+ * photo framed (FramedPhoto) — for photos hosted elsewhere that the browser will not let us cut.
  */
-export function AvatarCropper({ image, onCancel, onDone }: { image: PickedImage; onCancel: () => void; onDone: (img: PickedImage) => void }) {
+export function AvatarCropper({
+  image,
+  onCancel,
+  onDone,
+  onFrame,
+  initialFrame,
+}: {
+  image: PickedImage;
+  onCancel: () => void;
+  onDone?: (img: PickedImage) => void;
+  onFrame?: (frame: PhotoFrame) => void;
+  initialFrame?: PhotoFrame;
+}) {
   const { d } = useI18n();
   const { colors } = useTheme();
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
-  const [zoom, setZoom] = useState(1);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(initialFrame?.zoom ?? 1);
+  const [pos, setPos] = useState({ x: (initialFrame?.x ?? 0) * BOX, y: (initialFrame?.y ?? 0) * BOX });
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
   const drag = useRef({ x: 0, y: 0, px: 0, py: 0 });
@@ -52,6 +67,7 @@ export function AvatarCropper({ image, onCancel, onDone }: { image: PickedImage;
 
   const save = async () => {
     if (!size) return;
+    if (onFrame) return onFrame({ x: pos.x / BOX, y: pos.y / BOX, zoom });
     setBusy(true);
     try {
       // Top-left of the image in the box, then the box in image pixels.
@@ -67,7 +83,7 @@ export function AvatarCropper({ image, onCancel, onDone }: { image: PickedImage;
       ctx.crop({ originX, originY, width: side, height: side }).resize({ width: OUT, height: OUT });
       const ref = await ctx.renderAsync();
       const out = await ref.saveAsync({ format: SaveFormat.JPEG, compress: 0.85, base64: true });
-      onDone({ uri: out.uri, base64: out.base64 ?? null, mimeType: 'image/jpeg' });
+      onDone?.({ uri: out.uri, base64: out.base64 ?? null, mimeType: 'image/jpeg' });
     } catch (e) {
       setFailed(String((e as Error)?.message ?? e));
     } finally {

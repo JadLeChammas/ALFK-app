@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import type { PhotoFrame } from '@/components/FramedPhoto';
+
 import { usePublicSetting } from './publicSettings';
 
 /**
@@ -17,6 +19,8 @@ export type SchoolLeader = {
   from?: number;
   to?: number;
   photo?: string;
+  /** How the photo sits in its circle (position and zoom), set with « Ajuster la photo ». */
+  photoFrame?: PhotoFrame;
   /** A few words under the name (optional): career, memories, what they brought to the LFK. */
   description?: string;
 };

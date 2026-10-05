@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 
+import { AvatarCropper } from '@/components/AvatarCropper';
+import { FramedPhoto } from '@/components/FramedPhoto';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, FieldRow, IconButton, Input, Row, SectionHeader, Segmented, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
@@ -50,7 +52,7 @@ export function LeadersTimeline({ kind, editable, title }: { kind: LeaderKind; e
                 return (
                   <View key={x.id} style={{ width: size + 76, alignItems: 'center', gap: 8 }}>
                     <View style={{ padding: 3, borderRadius: size, backgroundColor: current ? colors.primary : colors.bg, borderWidth: current ? 0 : 2, borderColor: colors.border }}>
-                      <Avatar uri={x.photo} name={x.name} size={size} />
+                      {x.photo ? <FramedPhoto uri={x.photo} size={size} frame={x.photoFrame} /> : <Avatar name={x.name} size={size} />}
                     </View>
                     <Txt variant="small" color="textSubtle" style={{ fontVariant: ['tabular-nums'] }}>{years(x)}</Txt>
                     <Txt variant="bodyStrong" align="center" numberOfLines={2}>{x.name}</Txt>
@@ -101,6 +103,8 @@ function LeaderForm({ initial, onClose, onSave }: { initial: SchoolLeader; onClo
   const [from, setFrom] = useState(initial.from ? String(initial.from) : '');
   const [to, setTo] = useState(initial.to ? String(initial.to) : '');
   const [uploading, setUploading] = useState(false);
+  // Placing and zooming the photo in its circle (only the framing is saved, the file stays as it is).
+  const [adjusting, setAdjusting] = useState(false);
   const year = (v: string) => {
     const n = parseInt(v, 10);
     return n >= 1900 && n <= 2100 ? n : undefined;
@@ -112,7 +116,8 @@ function LeaderForm({ initial, onClose, onSave }: { initial: SchoolLeader; onClo
     setUploading(true);
     try {
       const photo = await actions.uploadImage(img, 'leaders');
-      setX((v) => ({ ...v, photo }));
+      setX((v) => ({ ...v, photo, photoFrame: undefined }));
+      setAdjusting(true);
     } catch (e) {
       toast(isFileRejected(e) ? d.auth.errors[e.reason] : d.auth.errors.unknown, 'danger');
     }
@@ -129,10 +134,24 @@ function LeaderForm({ initial, onClose, onSave }: { initial: SchoolLeader; onClo
           </Row>
           <Row gap={14}>
             <Tap onPress={pickPhoto} accessibilityLabel={l.photo}>
-              <Avatar uri={x.photo} name={x.name || '?'} size={72} />
+              {x.photo ? <FramedPhoto uri={x.photo} size={72} frame={x.photoFrame} /> : <Avatar name={x.name || '?'} size={72} />}
             </Tap>
-            <Button label={x.photo ? l.changePhoto : l.photo} icon="image" variant="secondary" size="sm" onPress={pickPhoto} loading={uploading} />
+            <View style={{ gap: 8 }}>
+              <Button label={x.photo ? l.changePhoto : l.photo} icon="image" variant="secondary" size="sm" onPress={pickPhoto} loading={uploading} />
+              {!!x.photo && <Button label={d.crop.adjust} icon="crop" variant="ghost" size="sm" onPress={() => setAdjusting(true)} />}
+            </View>
           </Row>
+          {adjusting && !!x.photo && (
+            <AvatarCropper
+              image={{ uri: x.photo }}
+              initialFrame={x.photoFrame}
+              onCancel={() => setAdjusting(false)}
+              onFrame={(photoFrame) => {
+                setX((v) => ({ ...v, photoFrame }));
+                setAdjusting(false);
+              }}
+            />
+          )}
           <Segmented value={x.kind} onChange={(kind) => setX((v) => ({ ...v, kind }))} options={LEADER_KINDS.map((k) => ({ value: k, label: l.kinds[k] }))} />
           <Input label={l.name} value={x.name} onChangeText={(name) => setX((v) => ({ ...v, name }))} />
           <Input label={`${l.description} (${d.common.optional})`} value={x.description ?? ''} onChangeText={(description) => setX((v) => ({ ...v, description }))} multiline maxLength={400} placeholder={l.descriptionPlaceholder} />
