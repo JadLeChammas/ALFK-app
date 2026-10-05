@@ -360,10 +360,11 @@ export function Badge({ label, tone = 'neutral', icon, style }: { label: string;
   const { colors } = useTheme();
   const t = toneColors(colors, tone);
   return (
-    <View style={[{ flexDirection: 'row' }, style]}>
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: t.bg, borderRadius: radius.sm - 1, paddingHorizontal: 8, paddingVertical: 3 }}>
+    // Never wider than its container: a long label (a typed field of study…) wraps instead of overflowing.
+    <View style={[{ flexDirection: 'row', maxWidth: '100%' }, style]}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, flexShrink: 1, backgroundColor: t.bg, borderRadius: radius.sm - 1, paddingHorizontal: 8, paddingVertical: 3 }}>
       {icon && <Feather name={icon} size={11} color={t.fg} />}
-      <Txt style={{ color: t.fg, fontFamily: fonts.semibold, fontSize: 11, lineHeight: 14 }}>{label}</Txt>
+      <Txt style={{ flexShrink: 1, color: t.fg, fontFamily: fonts.semibold, fontSize: 11, lineHeight: 14 }}>{label}</Txt>
     </View>
     </View>
   );
