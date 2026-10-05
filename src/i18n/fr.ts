@@ -808,6 +808,13 @@ const fr = {
     resent: 'Nouveau code envoyé.',
     spamHint: 'Pas reçu ? Regardez dans les spams ou les promotions.',
   },
+  adminWhatsapp: {
+    nav: 'Groupes WhatsApp',
+    title: 'Groupes WhatsApp des promos',
+    subtitle: 'Collez le lien du groupe de chaque promo : ses membres le voient sur leurs pages WhatsApp et Promo (chacun seulement celui de sa promo). {n} groupe(s) renseigné(s).',
+    saved: 'Lien de la Promo {year} enregistré.',
+    removed: 'Lien de la Promo {year} retiré.',
+  },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',
     elsewhere: 'Ailleurs — {country}', none: 'Aucun établissement trouvé', notListed: 'Mon établissement n’est pas dans la liste',

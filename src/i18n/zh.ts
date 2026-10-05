@@ -810,6 +810,13 @@ const zh: Dict = {
     resent: '已发送新验证码。',
     spamHint: '没收到？请查看垃圾邮件或推广邮件。',
   },
+  adminWhatsapp: {
+    nav: 'WhatsApp 群组',
+    title: '各届 WhatsApp 群组',
+    subtitle: '粘贴每一届的群组链接：该届成员会在 WhatsApp 和届别页面看到它（每人只看到自己那一届的）。已填写 {n} 个群组。',
+    saved: '{year} 届链接已保存。',
+    removed: '{year} 届链接已移除。',
+  },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',
     elsewhere: '其他地方 — {country}', none: '未找到院校', notListed: '我的学校不在列表中',

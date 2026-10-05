@@ -28,6 +28,7 @@ export function AdminNav() {
     { href: '/admin/contenus', label: d.nav.content, icon: 'layers', count: reports || undefined },
     { href: '/admin/contact', label: d.nav.contact, icon: 'inbox', count: unread || undefined },
     { href: '/admin/emails', label: d.emails.nav, icon: 'mail' },
+    { href: '/admin/whatsapp', label: d.adminWhatsapp.nav, icon: 'message-square' },
     { href: '/admin/journal', label: d.nav.logs, icon: 'list' },
     { href: '/admin/guides', label: d.guide.adminNav, icon: 'map' },
     { href: '/admin/histoire', label: d.site.nav.lfk, icon: 'book' },

@@ -810,6 +810,13 @@ const de: Dict = {
     resent: 'Neuer Code gesendet.',
     spamHint: 'Nicht erhalten? Schauen Sie im Spam- oder Werbeordner nach.',
   },
+  adminWhatsapp: {
+    nav: 'WhatsApp-Gruppen',
+    title: 'WhatsApp-Gruppen der Jahrgänge',
+    subtitle: 'Fügen Sie den Gruppenlink jedes Jahrgangs ein: Seine Mitglieder sehen ihn auf ihren WhatsApp- und Jahrgangsseiten (jeweils nur den eigenen). {n} Gruppe(n) eingetragen.',
+    saved: 'Link für Jahrgang {year} gespeichert.',
+    removed: 'Link für Jahrgang {year} entfernt.',
+  },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Anderswo — {country}', none: 'Keine Einrichtung gefunden', notListed: 'Meine Hochschule ist nicht in der Liste',

@@ -810,6 +810,13 @@ const pt: Dict = {
     resent: 'Novo código enviado.',
     spamHint: 'Não recebeu? Veja no spam ou em promoções.',
   },
+  adminWhatsapp: {
+    nav: 'Grupos de WhatsApp',
+    title: 'Grupos de WhatsApp das turmas',
+    subtitle: 'Cole o link do grupo de cada turma: os membros o veem nas páginas WhatsApp e Turma (cada um só o da sua). {n} grupo(s) informado(s).',
+    saved: 'Link da turma {year} salvo.',
+    removed: 'Link da turma {year} removido.',
+  },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',
     elsewhere: 'Noutro lugar — {country}', none: 'Nenhuma instituição encontrada', notListed: 'A minha instituição não está na lista',

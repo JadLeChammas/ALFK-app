@@ -810,6 +810,13 @@ const en: Dict = {
     resent: 'New code sent.',
     spamHint: 'Not received? Look in your spam or promotions folder.',
   },
+  adminWhatsapp: {
+    nav: 'WhatsApp groups',
+    title: 'Promo WhatsApp groups',
+    subtitle: 'Paste each promo’s group link: its members see it on their WhatsApp and Promo pages (each only their own promo’s). {n} group(s) set.',
+    saved: 'Promo {year} link saved.',
+    removed: 'Promo {year} link removed.',
+  },
   uni: {
     pick: 'Pick from the list', searchPlaceholder: 'Type the name or acronym (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Elsewhere — {country}', none: 'No establishment found', notListed: 'My school isn’t in the list',

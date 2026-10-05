@@ -811,6 +811,13 @@ const pirate: Dict = {
     resent: 'New code sent.',
     spamHint: 'Not received? Look in yer spam hold.',
   },
+  adminWhatsapp: {
+    nav: 'WhatsApp crews',
+    title: 'Promo WhatsApp crews',
+    subtitle: 'Paste each promo\'s group link: its hands see it on their WhatsApp an\' Promo pages (each only their own). {n} group(s) set.',
+    saved: 'Promo {year} link saved.',
+    removed: 'Promo {year} link removed.',
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

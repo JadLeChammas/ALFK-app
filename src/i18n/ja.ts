@@ -810,6 +810,13 @@ const ja: Dict = {
     resent: '新しいコードを送信しました。',
     spamHint: '届かない場合は迷惑メールやプロモーションを確認してください。',
   },
+  adminWhatsapp: {
+    nav: 'WhatsApp グループ',
+    title: '各期の WhatsApp グループ',
+    subtitle: '各期のグループリンクを貼り付けてください。メンバーは WhatsApp と期のページで見られます（自分の期のリンクのみ）。設定済み {n} 件。',
+    saved: '{year} 期のリンクを保存しました。',
+    removed: '{year} 期のリンクを削除しました。',
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',
