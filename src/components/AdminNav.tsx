@@ -8,6 +8,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Chip, type IconName } from './ui/primitives';
+import { awaitsApproval } from '@/data/members';
 
 export function AdminNav() {
   const { d } = useI18n();
@@ -16,7 +17,7 @@ export function AdminNav() {
   const { isMobile } = useLayout();
   const { colors } = useTheme();
   const scroller = useRef<ScrollView>(null);
-  const pending = db.users.filter((u) => !u.approved).length;
+  const pending = db.users.filter(awaitsApproval).length;
   const reports = db.conversations.filter((c) => c.report && !c.report.resolved).length;
   const unread = db.contacts.filter((c) => !c.read).length;
   const tabs: { href: string; label: string; icon: IconName; count?: number }[] = [

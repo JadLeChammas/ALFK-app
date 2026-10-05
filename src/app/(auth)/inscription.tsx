@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Switch, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { VerifyEmailCode } from '@/components/VerifyEmailCode';
 import { CredentialForm, offerToSavePassword, type CredentialFormHandle } from '@/components/ui/CredentialForm';
 import { FieldsPicker } from '@/components/FieldsPicker';
 import { NationalityPicker } from '@/components/NationalityPicker';
@@ -116,9 +117,11 @@ export default function SignUp() {
   };
 
   if (confirmEmail) {
+    // The address is confirmed with the code e-mailed by Supabase; then the request goes to the admins.
     return (
-      <AuthFrame title={d.auth.confirmTitle} subtitle={d.auth.confirmSub}>
-        <Button label={d.auth.backToSignIn} full size="lg" onPress={() => router.replace('/connexion')} />
+      <AuthFrame title={d.verify.title} subtitle={d.verify.sub}>
+        <VerifyEmailCode email={form.email.trim()} extras={{ locale: lang === 'fr' ? 'fr' : 'en', marketing: !noNews }} />
+        <Button label={d.auth.backToSignIn} variant="ghost" full onPress={() => router.replace('/connexion')} />
       </AuthFrame>
     );
   }

@@ -57,6 +57,7 @@ export const toUser = (r: Row): User => ({
   createdByAdmin: !!r.created_by_admin,
   grade: r.grade === '2nde' || r.grade === '1ere' || r.grade === 'Tle' ? r.grade : undefined,
   needsCompletion: !!r.needs_completion,
+  emailVerified: r.email_verified === undefined ? undefined : !!r.email_verified,
   marketingOptIn: !!r.marketing_opt_in,
   locale: r.locale === 'en' ? 'en' : 'fr',
   fieldOfStudy: opt(r.field_of_study),
@@ -153,9 +154,14 @@ const PROFILE_PUBLIC_COLUMNS =
  */
 export async function loadProfiles(onlyId?: string): Promise<Row[]> {
   const sb = supabase!;
-  let q = sb.from('profiles').select(PROFILE_PUBLIC_COLUMNS);
-  if (onlyId) q = q.eq('id', onlyId);
-  const [{ data, error }, priv] = await Promise.all([q, sb.rpc('member_private_fields', onlyId ? { only_id: onlyId } : {})]);
+  const query = (columns: string) => {
+    let q = sb.from('profiles').select(columns);
+    if (onlyId) q = q.eq('id', onlyId);
+    return q;
+  };
+  // email_verified comes with migration 034: without it, the profiles still load.
+  const [first, priv] = await Promise.all([query(`${PROFILE_PUBLIC_COLUMNS}, email_verified`), sb.rpc('member_private_fields', onlyId ? { only_id: onlyId } : {})]);
+  const { data, error } = first.error && /email_verified/.test(first.error.message) ? await query(PROFILE_PUBLIC_COLUMNS) : first;
   if (error) throw error;
   const extra = new Map(((priv.data ?? []) as Row[]).map((r) => [r.id, r]));
   return ((data ?? []) as Row[]).map((r) => ({ ...r, ...extra.get(r.id) }));

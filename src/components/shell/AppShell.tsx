@@ -17,6 +17,7 @@ import { Logo, LogoMark } from '../ui/Logo';
 import { Avatar, CountBadge, IconButton, Tap, type IconName } from '../ui/primitives';
 import { Txt } from '../ui/Txt';
 import { GlobalSearch } from './GlobalSearch';
+import { awaitsApproval } from '@/data/members';
 
 /** `external`: opens outside the app (new tab on the web) and shows the Instagram glyph. */
 type NavItem = { href: string; icon: IconName; label: string; short?: string; badge?: number; match?: string[]; external?: 'instagram' };
@@ -139,7 +140,7 @@ function Sidebar({ compact }: { compact: boolean }) {
   const pathname = usePathname();
   const { main, community, amicale, adminCircle } = useNav();
   const notif = useUnreadNotifications();
-  const pending = db.users.filter((u) => !u.approved).length;
+  const pending = db.users.filter(awaitsApproval).length;
   // Laptop-height windows: slightly tighter rows so the whole menu fits without scrolling;
   // if it still overflows, a fade at the bottom shows there is more below.
   const { height } = useWindowDimensions();

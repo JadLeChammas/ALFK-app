@@ -6,6 +6,9 @@ import type { Role, User } from './types';
  * « habari » → « Habari », « JEAN » → « Jean »). Last names are all capitals (store.tsx, upperName).
  * The database applies the same rules (migration 032).
  */
+/** A request the admins can review: not approved yet, e-mail address confirmed with the code. */
+export const awaitsApproval = (u: { approved: boolean; emailVerified?: boolean }) => !u.approved && u.emailVerified !== false;
+
 export const properFirstName = (s: string) => s.toLocaleLowerCase('fr').replace(/(^|[\s'’-])(\p{L})/gu, (_, sep: string, ch: string) => sep + ch.toLocaleUpperCase('fr'));
 
 /**

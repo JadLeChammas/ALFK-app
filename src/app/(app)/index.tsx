@@ -11,7 +11,7 @@ import { Avatar, Badge, Button, Card, CountBadge, MetaLine, Row, SectionHeader, 
 import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { COUNTRIES } from '@/data/countries';
-import { contactError } from '@/data/members';
+import { awaitsApproval, contactError } from '@/data/members';
 import { can } from '@/data/permissions';
 import { fullName, useApprovedMembers, useInbox, useMe, usePublished, useStore, useUpcomingBirthdays } from '@/data/store';
 import { Flag } from '@/components/ui/Flag';
@@ -33,7 +33,7 @@ export default function Home() {
   const news = published.slice(0, 3);
   const promoMates = me.promo ? members.filter((u) => u.promo === me.promo) : [];
   const promoInfo = db.promos.find((p) => p.year === me.promo);
-  const pending = db.users.filter((u) => !u.approved).length;
+  const pending = db.users.filter(awaitsApproval).length;
   const markers = useDestinationMarkers();
 
   const actions: { icon: IconName; label: string; href: string; badge?: number; external?: boolean }[] = [

@@ -15,6 +15,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
+import { awaitsApproval } from '@/data/members';
 
 export default function AdminDashboard() {
   const { toast } = useDialogs();
@@ -29,7 +30,7 @@ export default function AdminDashboard() {
   const nextEvent = [...db.events].filter((e) => new Date(e.date) >= now).sort((x, y) => (x.date > y.date ? 1 : -1))[0];
   // `todo` tiles are work for the admin: red when something is waiting, calm when it's clear.
   const kpis: { label: string; value: number; icon: IconName; href: string; todo?: boolean; status?: string }[] = [
-    { label: d.admin.toApprove, value: db.users.filter((u) => !u.approved).length, icon: 'user-plus', href: '/admin/approbations', todo: true },
+    { label: d.admin.toApprove, value: db.users.filter(awaitsApproval).length, icon: 'user-plus', href: '/admin/approbations', todo: true },
     { label: d.pubReview.queue, value: db.publications.filter((p) => p.status === 'pending').length, icon: 'file-text', href: '/admin/contenus', todo: true },
     { label: d.questions.queue, value: db.questions.filter((q) => q.status === 'pending').length, icon: 'help-circle', href: '/admin/questions', todo: true },
     { label: d.admin.reported, value: db.conversations.filter((c) => c.report && !c.report.resolved).length, icon: 'flag', href: '/admin/contenus', todo: true },

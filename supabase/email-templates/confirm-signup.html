@@ -1,0 +1,17 @@
+<!-- Supabase → Authentication → Emails → Templates → « Confirm signup ».
+     Subject: Votre code ALFK Alumni / Your ALFK Alumni code
+     {{ .Token }} = the code the member types on the site (sign-up, or sign-in before confirming). -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EEF2F7;padding:24px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#1C2B3A;font-size:15px;line-height:1.6">
+<tr><td style="background:#102A4C;padding:20px 28px"><img src="https://www.alfk.org/email-logo.png" alt="Amicale LFK" height="44" style="display:block;height:44px;border:0"></td></tr>
+<tr><td style="padding:28px">
+<p style="margin:0 0 16px">Bonjour,</p>
+<p style="margin:0 0 16px">Voici votre code pour confirmer votre adresse e-mail sur la plateforme de l’Amicale LFK :</p>
+<p style="margin:0 0 24px;font-size:30px;font-weight:bold;letter-spacing:6px;color:#B8323A">{{ .Token }}</p>
+<p style="margin:0 0 24px">Entrez-le sur le site : votre demande sera ensuite envoyée aux administrateurs.</p>
+<hr style="border:0;border-top:1px solid #E3E8EF;margin:0 0 20px">
+<p style="margin:0 0 16px;color:#4A5B6E">Hello, here is your code to confirm your e-mail address on the Amicale LFK platform: <strong>{{ .Token }}</strong>. Enter it on the site and your request will be sent to the administrators.</p>
+<p style="margin:0;color:#7A8899;font-size:13px">Vous n’avez rien demandé ? Ignorez cet e-mail. · Didn’t ask for this? Ignore this e-mail.</p>
+</td></tr>
+<tr><td style="padding:16px 28px;background:#F6F8FB;color:#7A8899;font-size:12px" align="center">Amicale des anciens élèves du Lycée Français du Koweït · <a href="https://www.alfk.org" style="color:#7A8899">alfk.org</a></td></tr>
+</table></td></tr></table>

@@ -87,6 +87,7 @@ export type AuthError =
   | 'invalid_code'
   | 'code_taken'
   | 'proof'
+  | 'email_not_confirmed'
   | 'unknown';
 /** `detail`: the server's own message, shown to admins when the error has no translation. */
 export type Result = { ok: true; confirmEmail?: boolean } | { ok: false; error: AuthError; detail?: string };
@@ -143,6 +144,7 @@ function authError(message?: string, code?: string): AuthError {
   if (m.includes('birth_date')) return 'birth_date';
   if (m.includes('phone')) return 'phone';
   if (m.includes('code_taken') || m.includes('bureau_code')) return 'code_taken';
+  if (m.includes('email not confirmed') || m.includes('email_not_confirmed')) return 'email_not_confirmed';
   if (m.includes('invalid login') || m.includes('invalid_credentials')) return 'invalid_credentials';
   if (m.includes('already') || m.includes('email_exists') || m.includes('email_taken')) return 'email_taken';
   if (m.includes('weak') || m.includes('password should')) return 'weak_password';
@@ -393,8 +395,9 @@ function useStoreValue() {
           } catch {
             // The account exists; the pending screen offers to send the proof again.
           }
-          // « Inscription reçue » to the member, alert to the admins (emails; not blocking).
-          await callEmailApi('signup-notify', { userId: data.user.id, email: input.email, locale: input.locale ?? 'fr', marketing: !!input.marketing }, false);
+          // « Inscription reçue » to the member, alert to the admins — only once the address is confirmed
+          // (otherwise after the code, see verifyEmailCode).
+          if (data.session) await callEmailApi('signup-notify', { userId: data.user.id, email: input.email, locale: input.locale ?? 'fr', marketing: !!input.marketing }, false);
           if (data.session) await reload();
           setSendingSignupFiles(false);
         }
@@ -427,6 +430,23 @@ function useStoreValue() {
       }));
       saveSession({ userId: user.id });
       return { ok: true };
+    },
+    /**
+     * The code e-mailed to confirm the address (sign-up, or a sign-in before confirming). Right, it signs
+     * the member in; after a sign-up, the request then goes to the admins.
+     */
+    async verifyEmailCode(email: string, code: string, extras?: { locale?: 'fr' | 'en'; marketing?: boolean }): Promise<Result> {
+      if (!supabase) return { ok: true };
+      const { data, error: e } = await supabase.auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'email' });
+      if (e || !data.user) return { ok: false, error: 'invalid_code', detail: e?.message };
+      await callEmailApi('signup-notify', { userId: data.user.id, email: email.trim(), locale: extras?.locale ?? 'fr', marketing: extras?.marketing ?? true }, false);
+      await reload();
+      return { ok: true };
+    },
+    async resendEmailCode(email: string): Promise<Result> {
+      if (!supabase) return { ok: true };
+      const { error: e } = await supabase.auth.resend({ type: 'signup', email: email.trim() });
+      return e ? { ok: false, error: 'unknown', detail: e.message } : { ok: true };
     },
     signOut() {
       if (supabase) supabase.auth.signOut();

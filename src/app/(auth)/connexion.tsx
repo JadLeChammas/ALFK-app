@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Platform, View, type TextInput } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { VerifyEmailCode } from '@/components/VerifyEmailCode';
 import { CredentialForm, offerToSavePassword, type CredentialFormHandle } from '@/components/ui/CredentialForm';
 import { Button, Divider, Input, Row, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
@@ -132,7 +133,12 @@ export default function SignIn() {
             <Txt variant="smallStrong" color="primary">{d.auth.forgot}</Txt>
           </Link>
         </Row>
-        {error && (
+        {error === 'email_not_confirmed' ? (
+          <View style={{ gap: 10, padding: 14, borderRadius: 14, backgroundColor: colors.surfaceAlt }}>
+            <Txt variant="smallStrong">{d.auth.errors.email_not_confirmed}</Txt>
+            <VerifyEmailCode email={email.trim()} startWait={0} />
+          </View>
+        ) : error && (
           <Row gap={8} style={{ backgroundColor: colors.dangerSoft, padding: 12, borderRadius: 12 }}>
             <Feather name="alert-circle" size={16} color={colors.danger} />
             <Txt variant="smallStrong" color="danger" style={{ flex: 1 }}>{d.auth.errors[error]}</Txt>

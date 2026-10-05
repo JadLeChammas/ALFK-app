@@ -45,6 +45,8 @@ export type User = {
   grade?: Grade;
   /** A former Terminale student just made alumni: fills in their account before using the site. */
   needsCompletion?: boolean;
+  /** The e-mail address was confirmed with the code (migration 034); undefined = unknown, counted as confirmed. */
+  emailVerified?: boolean;
   /** Accepts the Amicale's news by email (sign-up box, Settings; unsubscribe link in each email). */
   marketingOptIn?: boolean;
   /** Language of the emails sent to the member. */

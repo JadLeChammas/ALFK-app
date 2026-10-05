@@ -9,12 +9,13 @@ import { Txt } from '@/components/ui/Txt';
 import { countryByCode } from '@/data/countries';
 import { fullName, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
+import { awaitsApproval } from '@/data/members';
 
 export default function Approvals() {
   const { d, f, relative, country } = useI18n();
   const { db, actions } = useStore();
   const { confirm, toast } = useDialogs();
-  const pending = db.users.filter((u) => !u.approved).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  const pending = db.users.filter(awaitsApproval).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 
   return (
     <Screen>

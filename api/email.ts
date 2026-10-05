@@ -99,8 +99,10 @@ async function signupNotify(admin: SupabaseClient, body: Body) {
   const id = body.userId ?? '';
   const { data: found } = id ? await admin.auth.admin.getUserById(id) : { data: null };
   const u = found?.user;
-  const fresh = !!u && Date.now() - new Date(u.created_at).getTime() < 2 * 3600 * 1000;
+  // Within two days of signing up (time to find the code), and only once the address is confirmed.
+  const fresh = !!u && Date.now() - new Date(u.created_at).getTime() < 48 * 3600 * 1000;
   if (!u || !fresh || (u.email ?? '').toLowerCase() !== (body.email ?? '').trim().toLowerCase()) return json(403, { error: 'forbidden' });
+  if (!u.email_confirmed_at) return json(409, { error: 'not_confirmed' });
   const { data: p } = await admin.from('profiles').select(`${COLUMNS}, signup_notified`).eq('id', id).single();
   if (!p || p.approved || p.signup_notified) return json(200, { ok: true });
   const { data: updated } = await admin
