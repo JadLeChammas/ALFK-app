@@ -1,12 +1,14 @@
 import { Feather } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 
 import type { EventCategory, Publication, PublicationCategory } from '@/data/types';
 import { can } from '@/data/permissions';
-import { fullName, useStore } from '@/data/store';
+import { fullName, isUnavailable, useStore } from '@/data/store';
 import { IMAGES } from '@/data/seed';
 import { useI18n } from '@/i18n';
+import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 import { useDialogs } from './ui/Dialogs';
@@ -35,6 +37,47 @@ export function Sheet({ visible, title, onClose, children }: { visible: boolean;
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
+/**
+ * A cover image: a preview, « Téléverser une image » (from the computer or the phone, stored with the
+ * site's photos) and, for those who have one, the image's web address.
+ */
+export function CoverPicker({ value, onChange, folder, onBusy }: { value: string; onChange: (url: string) => void; folder: string; onBusy?: (busy: boolean) => void }) {
+  const { d } = useI18n();
+  const c = d.cover;
+  const { colors } = useTheme();
+  const { actions } = useStore();
+  const { toast } = useDialogs();
+  const [uploading, setUploading] = useState(false);
+  const [byUrl, setByUrl] = useState(false);
+  const busy = (b: boolean) => {
+    setUploading(b);
+    onBusy?.(b);
+  };
+  const upload = async () => {
+    const [img] = await pickImages(false);
+    if (!img) return;
+    busy(true);
+    try {
+      onChange(await actions.uploadImage(img, folder));
+    } catch (e) {
+      if (!isUnavailable(e)) toast(d.auth.errors.unknown, 'danger');
+    }
+    busy(false);
+  };
+  return (
+    <View style={{ gap: 8 }}>
+      <Txt variant="smallStrong" color="textMuted">{c.label}</Txt>
+      {!!value && <Image source={{ uri: value }} style={{ width: '100%', height: 160, borderRadius: radius.card, backgroundColor: colors.surfaceAlt }} contentFit="cover" />}
+      <Row gap={8} wrap>
+        <Button label={value ? c.change : c.upload} icon="upload" variant="secondary" size="sm" onPress={upload} loading={uploading} />
+        {!byUrl && <Button label={c.orUrl} icon="link" variant="ghost" size="sm" onPress={() => setByUrl(true)} />}
+      </Row>
+      {byUrl && <Input placeholder="https://…" icon="link" value={value} onChangeText={onChange} autoCapitalize="none" keyboardType="url" />}
+      <Txt variant="small" color="textSubtle">{c.hint}</Txt>
+    </View>
+  );
+}
+
 export function EventFormModal({ visible, onClose, onCreated }: { visible: boolean; onClose: () => void; onCreated?: (id: string) => void }) {
   const { d } = useI18n();
   const { actions } = useStore();
@@ -42,9 +85,10 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
   const [soon] = useState(() => new Date(Date.now() + 14 * 86_400_000));
   const blank = { title: '', description: '', date: `${soon.getFullYear()}-${pad(soon.getMonth() + 1)}-${pad(soon.getDate())}`, time: '19:00', location: '', cover: IMAGES.party, category: 'soiree' as EventCategory };
   const [form, setForm] = useState(blank);
+  const [uploading, setUploading] = useState(false);
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const date = new Date(`${form.date}T${form.time}:00`);
-  const valid = form.title && form.location && !Number.isNaN(date.getTime());
+  const valid = form.title && form.location && !Number.isNaN(date.getTime()) && !uploading;
 
   return (
     <Sheet visible={visible} title={d.events.create} onClose={onClose}>
@@ -62,7 +106,7 @@ export function EventFormModal({ visible, onClose, onCreated }: { visible: boole
           ))}
         </Row>
       </View>
-      <Input label={d.events.coverField} icon="image" value={form.cover} onChangeText={set('cover')} autoCapitalize="none" />
+      <CoverPicker value={form.cover} onChange={set('cover')} folder="events" onBusy={setUploading} />
       <Input label={d.events.descriptionField} value={form.description} onChangeText={set('description')} multiline maxLength={10000} />
       <Button
         label={d.common.create}
@@ -93,6 +137,7 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
   const blank = { title: '', excerpt: '', body: '', cover: IMAGES.campus, category: (direct ? 'actualite' : 'annonce') as PublicationCategory };
   const [form, setForm] = useState(editing ? { title: editing.title, excerpt: editing.excerpt, body: editing.body, cover: editing.cover, category: editing.category } : blank);
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const [uploading, setUploading] = useState(false);
   // Admins choose whose name the publication carries (the president, the proviseur…).
   const admin = me?.role === 'admin';
   const [authorId, setAuthorId] = useState(editing?.authorId ?? me?.id ?? '');
@@ -118,14 +163,14 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
           ))}
         </Row>
       )}
-      <Input label={d.events.coverField} icon="image" value={form.cover} onChangeText={set('cover')} autoCapitalize="none" />
+      <CoverPicker value={form.cover} onChange={set('cover')} folder="publications" onBusy={setUploading} />
       <Input label={d.publications.excerptField} value={form.excerpt} onChangeText={set('excerpt')} maxLength={2000} />
       <Input label={d.publications.bodyField} value={form.body} onChangeText={set('body')} multiline maxLength={50000} />
       <Button
         label={editing ? d.common.save : direct ? d.common.create : d.pubReview.submit}
         full
         size="lg"
-        disabled={!form.title || !form.body}
+        disabled={!form.title || !form.body || uploading}
         onPress={() => {
           const data = { ...form, excerpt: form.excerpt || form.body.slice(0, 140) };
           if (editing) {

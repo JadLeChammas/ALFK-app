@@ -914,6 +914,13 @@ const pt: Dict = {
     title: 'Alunos no LFK',
     split: '{alumni} ex-alunos · {pupils} alunos no LFK',
   },
+  cover: {
+    label: 'Imagem de capa',
+    upload: 'Enviar uma imagem',
+    change: 'Trocar a imagem',
+    orUrl: 'ou colar um endereço',
+    hint: 'Uma foto do computador ou do telefone (JPG, PNG…). Uma imagem larga (paisagem) fica melhor.',
+  },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',
     elsewhere: 'Noutro lugar — {country}', none: 'Nenhuma instituição encontrada', notListed: 'A minha instituição não está na lista',

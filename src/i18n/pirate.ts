@@ -915,6 +915,13 @@ const pirate: Dict = {
     title: 'Cabin boys at the LFK',
     split: '{alumni} old hands · {pupils} cabin boys at the LFK',
   },
+  cover: {
+    label: 'Cover picture',
+    upload: 'Hoist a picture',
+    change: 'Change the picture',
+    orUrl: 'or paste an address',
+    hint: 'A picture from yer computer or spyglass-phone (JPG, PNG…). A wide one looks best.',
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

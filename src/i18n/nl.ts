@@ -914,6 +914,13 @@ const nl: Dict = {
     contact: 'Contact opnemen met de ondersteuning',
     recipient: 'Dit lid kan momenteel geen berichten ontvangen.',
   },
+  cover: {
+    label: 'Omslagafbeelding',
+    upload: 'Afbeelding uploaden',
+    change: 'Afbeelding wijzigen',
+    orUrl: 'of een adres plakken',
+    hint: 'Een foto van je computer of telefoon (JPG, PNG…). Een brede afbeelding (liggend) werkt het best.',
+  },
   uni: {
     pick: 'Kies uit de lijst', searchPlaceholder: 'Typ de naam of de afkorting (bijv. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Elders — {country}', none: 'Geen instelling gevonden', notListed: 'Mijn school staat niet in de lijst',

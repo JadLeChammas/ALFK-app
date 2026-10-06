@@ -914,6 +914,13 @@ const de: Dict = {
     title: 'Schüler am LFK',
     split: '{alumni} Ehemalige · {pupils} Schüler am LFK',
   },
+  cover: {
+    label: 'Titelbild',
+    upload: 'Bild hochladen',
+    change: 'Bild ändern',
+    orUrl: 'oder Adresse einfügen',
+    hint: 'Ein Foto von Ihrem Computer oder Handy (JPG, PNG…). Ein breites Bild (Querformat) wirkt am besten.',
+  },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Anderswo — {country}', none: 'Keine Einrichtung gefunden', notListed: 'Meine Hochschule ist nicht in der Liste',

@@ -914,6 +914,13 @@ const zh: Dict = {
     title: 'LFK 在校学生',
     split: '{alumni} 名校友 · {pupils} 名 LFK 在校学生',
   },
+  cover: {
+    label: '封面图片',
+    upload: '上传图片',
+    change: '更换图片',
+    orUrl: '或粘贴图片地址',
+    hint: '来自电脑或手机的照片（JPG、PNG……）。横向宽图效果最佳。',
+  },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',
     elsewhere: '其他地方 — {country}', none: '未找到院校', notListed: '我的学校不在列表中',

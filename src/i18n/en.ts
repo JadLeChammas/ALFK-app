@@ -914,6 +914,13 @@ const en: Dict = {
     title: 'Pupils at the LFK',
     split: '{alumni} alumni · {pupils} pupils at the LFK',
   },
+  cover: {
+    label: 'Cover image',
+    upload: 'Upload an image',
+    change: 'Change the image',
+    orUrl: 'or paste an address',
+    hint: 'A photo from your computer or phone (JPG, PNG…). A wide (landscape) image looks best.',
+  },
   uni: {
     pick: 'Pick from the list', searchPlaceholder: 'Type the name or acronym (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Elsewhere — {country}', none: 'No establishment found', notListed: 'My school isn’t in the list',

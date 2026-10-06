@@ -915,6 +915,13 @@ const la: Dict = {
     contact: 'Auxilium adi',
     recipient: 'Hic sodalis nunc epistulas accipere non potest.',
   },
+  cover: {
+    label: 'Imago frontis',
+    upload: 'Imaginem impone',
+    change: 'Imaginem muta',
+    orUrl: 'aut inscriptionem insere',
+    hint: 'Imago ex computatro aut telephono (JPG, PNG…). Imago lata optime videtur.',
+  },
   uni: {
     pick: 'Ex indice elige', searchPlaceholder: 'Nomen aut compendium scribe (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Alibi — {country}', none: 'Nullum institutum inventum', notListed: 'Schola mea in indice non est',

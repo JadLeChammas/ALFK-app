@@ -914,6 +914,13 @@ const ja: Dict = {
     title: 'LFK の在校生',
     split: '卒業生 {alumni} 人 · LFK 在校生 {pupils} 人',
   },
+  cover: {
+    label: 'カバー画像',
+    upload: '画像をアップロード',
+    change: '画像を変更',
+    orUrl: 'またはアドレスを貼り付け',
+    hint: 'パソコンやスマートフォンの写真（JPG、PNGなど）。横長の画像がきれいに表示されます。',
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

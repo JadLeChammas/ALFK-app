@@ -914,6 +914,13 @@ const ar: Dict = {
     title: 'تلاميذ في LFK',
     split: '{alumni} خريجون · {pupils} تلاميذ في LFK',
   },
+  cover: {
+    label: 'صورة الغلاف',
+    upload: 'رفع صورة',
+    change: 'تغيير الصورة',
+    orUrl: 'أو الصق عنواناً',
+    hint: 'صورة من حاسوبك أو هاتفك (JPG، PNG…). الصورة العريضة (أفقية) تبدو أفضل.',
+  },
   uni: {
     pick: 'اختر من القائمة', searchPlaceholder: 'اكتب الاسم أو الاختصار (مثل I أو ISEP أو Sorbonne)…', inCity: 'في {city}',
     elsewhere: 'في مكان آخر — {country}', none: 'لم يتم العثور على أي مؤسسة', notListed: 'مؤسستي غير موجودة في القائمة',

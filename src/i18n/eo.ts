@@ -914,6 +914,13 @@ const eo: Dict = {
     contact: 'Kontakti la subtenon',
     recipient: 'Ĉi tiu membro nun ne povas ricevi mesaĝojn.',
   },
+  cover: {
+    label: 'Kovrilbildo',
+    upload: 'Alŝuti bildon',
+    change: 'Ŝanĝi la bildon',
+    orUrl: 'aŭ alglui adreson',
+    hint: 'Foto el via komputilo aŭ telefono (JPG, PNG…). Larĝa (horizontala) bildo aspektas plej bone.',
+  },
   uni: {
     pick: 'Elektu el la listo', searchPlaceholder: 'Tajpu la nomon aŭ mallongigon (ekz. I, ISEP, Sorbonne)…', inCity: 'En {city}',
     elsewhere: 'Aliloke — {country}', none: 'Neniu institucio trovita', notListed: 'Mia lernejo ne estas en la listo',
