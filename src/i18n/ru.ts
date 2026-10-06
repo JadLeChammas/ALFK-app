@@ -310,7 +310,7 @@ const ru: Dict = {
       cta1: 'Вступить в Amicale', cta2: 'Создать аккаунт', cta3: 'Подготовить учёбу',
       cta4: 'Узнать об Amicale', studyAt: 'Наши выпускники сейчас учатся в', networkTitle: 'Из Кувейта',
       networkItalic: 'во весь мир.', networkSub: 'Каждая дуга начинается в лицее и ведёт туда, где сегодня учатся наши выпускники.', statAlumni: 'Выпускники',
-      statCountries: 'Страны пребывания', statPromos: 'Выпуски LFK', statUniversities: 'Университеты', statNationalities: 'Гражданства',
+      statCountries: 'Страны пребывания', statPromos: 'Выпуски LFK', statUniversities: 'Университеты', statNationalities: 'Гражданства', statMembers: 'Участники', statSplit: 'из них {a} выпускников и {p} учеников',
       topDestinations: 'Популярные направления', quoteTitle: 'Слово президента', quote: 'Есть места, которые покидаешь, но которые никогда по-настоящему не оставляешь.',
       stepsTitle: 'Вступите в Amicale', stepsItalic: 'в три шага.', step: 'Шаг',
       step1Title: 'Создайте аккаунт', step1Sub: 'Ваши данные и подтверждение учёбы в LFK: табель, справка, свидетельство или просто фото.', step2Title: 'Проверка бюро',

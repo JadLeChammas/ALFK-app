@@ -46,7 +46,8 @@ export default function MemberProfile() {
 
   return (
     <Screen>
-      <BackLink label={d.nav.directory} href="/annuaire" />
+      {/* A profile is reached from many places (Directory, messages, a promo, Orientation…): back to where you were. */}
+      <BackLink fallback="/annuaire" />
       {birthdayToday(user, me) && <Balloons />}
       <Card padded={false}>
         <View style={{ height: isMobile ? 90 : 130, backgroundColor: colors.navy, overflow: 'hidden' }}>

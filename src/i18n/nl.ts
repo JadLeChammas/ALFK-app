@@ -310,7 +310,7 @@ const nl: Dict = {
       cta1: 'Word lid van de Amicale', cta2: 'Mijn account aanmaken', cta3: 'Mijn studie voorbereiden',
       cta4: 'Ontdek de Amicale', studyAt: 'Onze oud-leerlingen studeren nu aan', networkTitle: 'Van Koeweit',
       networkItalic: 'naar de hele wereld.', networkSub: 'Elke boog vertrekt bij het lyceum en leidt naar waar onze oud-leerlingen vandaag studeren.', statAlumni: 'Oud-leerlingen',
-      statCountries: 'Gastlanden', statPromos: 'LFK-jaargangen', statUniversities: 'Universiteiten', statNationalities: 'Nationaliteiten',
+      statCountries: 'Gastlanden', statPromos: 'LFK-jaargangen', statUniversities: 'Universiteiten', statNationalities: 'Nationaliteiten', statMembers: 'Leden', statSplit: 'waarvan {a} oud-leerlingen en {p} leerlingen',
       topDestinations: 'Populairste bestemmingen', quoteTitle: 'Een woord van de voorzitter', quote: 'Er zijn plekken die je verlaat zonder ze ooit echt achter je te laten.',
       stepsTitle: 'Word lid van de Amicale', stepsItalic: 'in drie stappen.', step: 'Stap',
       step1Title: 'Maak je account aan', step1Sub: 'Je gegevens en een bewijs van schoolgang aan het LFK: rapport, verklaring, attest of een eenvoudige foto.', step2Title: 'Controle door het bestuur',

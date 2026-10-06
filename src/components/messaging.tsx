@@ -143,7 +143,7 @@ function Thread({ id }: { id: string }) {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingVertical: 12, paddingTop: isMobile ? insets.top + 10 : 12, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.surface }}>
-        {isMobile && <IconButton icon="arrow-left" variant="ghost" onPress={() => (router.canGoBack() ? router.back() : router.replace('/messages'))} label={d.nav.back} />}
+        {isMobile && <IconButton icon="arrow-left" variant="ghost" onPress={() => router.dismissTo('/messages')} label={d.nav.back} />}
         <Tap onPress={() => router.push(`/membre/${otherId}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
           {moderation ? (
             <Row gap={0}>

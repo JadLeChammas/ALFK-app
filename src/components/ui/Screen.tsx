@@ -48,12 +48,20 @@ export function Screen({ children, scroll = true, maxWidth = MAX_CONTENT, conten
   );
 }
 
-export function BackLink({ label, href }: { label?: string; href?: string }) {
+/**
+ * The « back » pill at the top of a page.
+ *   • `href` (with its `label`): goes UP to that page — the parent the label names (Messages, Annuaire…),
+ *     back down the history if it is there (scroll kept), otherwise opening it. Never « wherever I was
+ *     before »: from a conversation opened in the Directory, « Messages » goes to the messages.
+ *   • no `href`: the previous page in the history (pages reached from many places, like a member's
+ *     profile), or `fallback` when there is none (a link opened directly).
+ */
+export function BackLink({ label, href, fallback = '/' }: { label?: string; href?: string; fallback?: string }) {
   const { colors } = useTheme();
   const { d } = useI18n();
   return (
     <Tap
-      onPress={() => (router.canGoBack() ? router.back() : router.replace((href ?? '/') as never))}
+      onPress={() => (href ? router.dismissTo(href as never) : router.canGoBack() ? router.back() : router.replace(fallback as never))}
       style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 999, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}>
       <Feather name="arrow-left" size={14} color={colors.text} />
       <Txt variant="smallStrong">{label ?? d.nav.back}</Txt>

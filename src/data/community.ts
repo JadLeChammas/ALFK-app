@@ -17,6 +17,8 @@ export function useCommunity() {
       .filter((x): x is { country: Country; n: number } => !!x.country);
     return {
       alumni: o.alumni,
+      members: o.members,
+      pupils: o.pupils ?? 0,
       countries: o.countries,
       promos: o.promos,
       universities: o.universities,

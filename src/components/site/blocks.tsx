@@ -445,14 +445,16 @@ export function EditorialTestimonial({ quotes }: { quotes: Quote[] }) {
 /* ───────────────────────── Globe (interactive-globe demo) ───────────────────────── */
 
 /** Key figures separated by thin vertical rules — as in the Interactive Globe demo; digits roll in. */
-export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v: number; l: string }[]; /** Tighter sizing for compact cards. */ dense?: boolean }) {
-  const { d } = useI18n();
+export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v: number; l: string; sub?: string }[]; /** Tighter sizing for compact cards. */ dense?: boolean }) {
+  const { d, f } = useI18n();
   const t = useTone();
   const { isMobile } = useLayout();
   const c = useCommunity();
   const fg = light ? '#fff' : t.fg;
-  const list = items ?? [
-    { v: c.alumni, l: d.site.home.statAlumni },
+  // The total of members first, « dont X anciens élèves et Y élèves » under it (once migration 044
+  // gives the total; before it, the alumni alone as before).
+  const list: { v: number; l: string; sub?: string }[] = items ?? [
+    c.members ? { v: c.members, l: d.site.home.statMembers, sub: f(d.site.home.statSplit, { a: c.alumni, p: c.pupils }) } : { v: c.alumni, l: d.site.home.statAlumni },
     { v: c.countries, l: d.site.home.statCountries },
     { v: c.promos, l: d.site.home.statPromos },
     { v: c.universities, l: d.site.home.statUniversities },
@@ -460,7 +462,7 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
   ];
   const [w, setW] = useState(0);
   const rule = light ? 'rgba(231, 236, 242,0.2)' : t.rule;
-  const figure = (it: { v: number; l: string }, i: number, size: number) => (
+  const figure = (it: { v: number; l: string; sub?: string }, i: number, size: number) => (
     <>
       <TextRoll style={{ fontFamily: fonts.display, fontSize: size, lineHeight: size + 4, color: fg }} delay={0.1 + i * 0.15}>
         {String(it.v)}
@@ -468,6 +470,7 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
       <Txt numberOfLines={2} style={{ fontFamily: fonts.medium, fontSize: dense || isMobile ? 10 : 11, lineHeight: dense || isMobile ? 13 : 15, letterSpacing: dense || isMobile ? 0.8 : 1.2, textTransform: 'uppercase', textAlign: 'center', color: light ? brand.sky : t.muted }}>
         {it.l}
       </Txt>
+      {!!it.sub && <Txt style={{ fontFamily: fonts.regular, fontSize: dense || isMobile ? 10 : 12, lineHeight: dense || isMobile ? 13 : 16, textAlign: 'center', color: light ? brand.sky : t.muted, opacity: 0.85 }}>{it.sub}</Txt>}
     </>
   );
 

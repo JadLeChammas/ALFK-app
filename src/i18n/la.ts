@@ -311,7 +311,7 @@ const la: Dict = {
       cta1: 'Ad Amicale accede', cta2: 'Rationem meam crea', cta3: 'Studia mea para',
       cta4: 'Amicale cognosce', studyAt: 'Alumni nostri nunc student in', networkTitle: 'A Kuvaito',
       networkItalic: 'ad totum orbem.', networkSub: 'Quisque arcus a lyceo incipit et eo ducit ubi alumni nostri hodie student.', statAlumni: 'Alumni',
-      statCountries: 'Regiones hospitales', statPromos: 'Classes LFK', statUniversities: 'Universitates', statNationalities: 'Nationes',
+      statCountries: 'Regiones hospitales', statPromos: 'Classes LFK', statUniversities: 'Universitates', statNationalities: 'Nationes', statMembers: 'Sodales', statSplit: 'ex quibus {a} alumni et {p} discipuli',
       topDestinations: 'Loca maxime petita', quoteTitle: 'Verbum praesidis', quote: 'Sunt loca quae relinquimus quin umquam vere a nobis discedant.',
       stepsTitle: 'Ad Amicale accede', stepsItalic: 'tribus gradibus.', step: 'Gradus',
       step1Title: 'Rationem tuam crea', step1Sub: 'Data tua et testimonium studiorum in LFK: libellus censurae, testimonium aut simplex imago.', step2Title: 'Examen a Collegio',

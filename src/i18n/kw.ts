@@ -315,7 +315,7 @@ const kw: Dict = {
       cta1: 'Idkhil il Amicale', cta2: 'Sawwi account', cta3: 'Jahhiz diraasti',
       cta4: '3arrif 3al Amicale', studyAt: 'Il alumni maalna ga3dain yidirsoon b', networkTitle: 'Min il Kuwait',
       networkItalic: '7ag il 3aalam killa.', networkSub: 'Kil qaws yibda min il lycée w yiwa99il 7ag ween ga3dain yidirsoon il alumni il youm.', statAlumni: 'Alumni',
-      statCountries: 'Buldaan', statPromos: 'Promos LFK', statUniversities: 'Jaam3aat', statNationalities: 'Jinsiyaat',
+      statCountries: 'Buldaan', statPromos: 'Promos LFK', statUniversities: 'Jaam3aat', statNationalities: 'Jinsiyaat', statMembers: 'A3dha2', statSplit: 'minhum {a} alumni w {p} tilmeeth',
       topDestinations: 'Akthar buldaan raa7aw lhum', quoteTitle: 'Kalimat il president', quote: 'Fee amaakin nitrukha bas 3umrha ma titrukna.',
       stepsTitle: 'Idkhil il Amicale', stepsItalic: 'b thalath khu6waat.', step: 'Khu6wa',
       step1Title: 'Sawwi account', step1Sub: 'Ma3loomaatik w ithbaat inna kint bil LFK: shahaada, certificat, attestation aw bas soora.', step2Title: 'Il bureau yishoof',

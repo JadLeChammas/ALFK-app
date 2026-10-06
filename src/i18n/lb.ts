@@ -315,7 +315,7 @@ const lb: Dict = {
       cta1: 'Fout 3al Amicale', cta2: '3mol compte', cta3: '7adder dirasti',
       cta4: '3arref 3al Amicale', studyAt: 'El alumni taba3na 3am yedrsou b', networkTitle: 'Men el Kwet',
       networkItalic: 'lal 3alam kello.', networkSub: 'Kel 2aws byballech men el lycée w biousal la wen 3am yedrsou el alumni el yom.', statAlumni: 'Alumni',
-      statCountries: 'Blad', statPromos: 'Promos LFK', statUniversities: 'Jem3at', statNationalities: 'Jinsiyet',
+      statCountries: 'Blad', statPromos: 'Promos LFK', statUniversities: 'Jem3at', statNationalities: 'Jinsiyet', statMembers: 'A3da2', statSplit: 'menon {a} alumni w {p} talmiz',
       topDestinations: 'Aktar blad ra7ou 3leya', quoteTitle: 'Kelmet el president', quote: 'Fi amekin mnetrekon bas 3omron ma byetrekouna.',
       stepsTitle: 'Fout 3al Amicale', stepsItalic: 'b tlet khatwet.', step: 'Khatwe',
       step1Title: '3mol compte', step1Sub: 'Ma3loumetak w esbet enno kenet bel LFK: bulletin, certificat, attestation aw soura bas.', step2Title: 'El bureau bychouf',

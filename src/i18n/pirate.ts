@@ -311,7 +311,7 @@ const pirate: Dict = {
       cta1: 'Join the crew', cta2: 'Sign the Articles', cta3: 'Plot me heading',
       cta4: 'Meet the crew', studyAt: 'Our old hands now study at', networkTitle: 'From Kuwait',
       networkItalic: 'to all the seven seas.', networkSub: 'Each arc sails from the lycée to where our old hands study today.', statAlumni: 'Old hands',
-      statCountries: 'Host lands', statPromos: 'LFK crews', statUniversities: 'Universities', statNationalities: 'Flags',
+      statCountries: 'Host lands', statPromos: 'LFK crews', statUniversities: 'Universities', statNationalities: 'Flags', statMembers: 'Crew', statSplit: 'o\' which {a} old hands an\' {p} cabin boys',
       topDestinations: 'Favourite harbours', quoteTitle: 'A word from the captain', quote: 'There be ports ye leave without ever truly leavin’ ’em behind.',
       stepsTitle: 'Join the crew', stepsItalic: 'in three steps.', step: 'Step',
       step1Title: 'Sign the Articles', step1Sub: 'Yer particulars an’ proof ye sailed with the LFK: report card, certificate, attestation or a simple portrait.', step2Title: 'Checked by the officers',

@@ -310,7 +310,7 @@ const ar: Dict = {
       cta1: 'انضم إلى الرابطة', cta2: 'أنشئ حسابي', cta3: 'استعد لدراستك',
       cta4: 'اكتشف الرابطة', studyAt: 'يدرس خريجونا اليوم في', networkTitle: 'من الكويت',
       networkItalic: 'إلى العالم كله.', networkSub: 'كل قوس ينطلق من الثانوية ويصل إلى حيث يدرس خريجونا اليوم.', statAlumni: 'الخريجون',
-      statCountries: 'البلدان المضيفة', statPromos: 'الدفعات', statUniversities: 'الجامعات', statNationalities: 'الجنسيات',
+      statCountries: 'البلدان المضيفة', statPromos: 'الدفعات', statUniversities: 'الجامعات', statNationalities: 'الجنسيات', statMembers: 'الأعضاء', statSplit: 'منهم {a} خريجًا و{p} تلميذًا',
       topDestinations: 'أهم الوجهات', quoteTitle: 'كلمة الرئيس', quote: 'هناك أماكن نغادرها دون أن نتركها خلفنا حقًا.',
       stepsTitle: 'انضم إلى الرابطة', stepsItalic: 'في ثلاث خطوات.', step: 'الخطوة',
       step1Title: 'أنشئ حسابك', step1Sub: 'معلوماتك وإثبات دراستك في الثانوية: كشف درجات أو شهادة أو إفادة أو مجرد صورة.', step2Title: 'موافقة المكتب',

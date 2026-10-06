@@ -308,7 +308,7 @@ const fr = {
       cta1: 'Rejoindre l\'Amicale', cta2: 'Créer mon compte', cta3: 'Préparer son orientation',
       cta4: 'Découvrir l\'Amicale', studyAt: 'Nos anciens étudient aujourd’hui à', networkTitle: 'De Koweït',
       networkItalic: 'vers le monde entier.', networkSub: 'Chaque arc part du lycée et mène là où nos anciens élèves étudient aujourd’hui.', statAlumni: 'Anciens élèves',
-      statCountries: 'Pays hôtes', statPromos: 'Promos LFK', statUniversities: 'Universités', statNationalities: 'Nationalités',
+      statCountries: 'Pays hôtes', statPromos: 'Promos LFK', statUniversities: 'Universités', statNationalities: 'Nationalités', statMembers: 'Membres', statSplit: 'dont {a} anciens élèves et {p} élèves',
       topDestinations: 'Principales destinations', quoteTitle: 'Le mot du président', quote: 'Il y a des lieux qu’on quitte sans jamais vraiment les laisser derrière soi.',
       stepsTitle: 'Rejoindre l\'Amicale', stepsItalic: 'en trois étapes.', step: 'Étape',
       step1Title: 'Créez votre compte', step1Sub: 'Vos informations et un justificatif de scolarité au LFK : bulletin, certificat, attestation ou simple photo.', step2Title: 'Validation par le bureau',

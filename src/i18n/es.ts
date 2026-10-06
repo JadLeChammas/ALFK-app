@@ -310,7 +310,7 @@ const es: Dict = {
       cta1: 'Unirse a la Amicale', cta2: 'Crear mi cuenta', cta3: 'Preparar mis estudios',
       cta4: 'Descubrir la Amicale', studyAt: 'Nuestros antiguos alumnos estudian hoy en', networkTitle: 'De Kuwait',
       networkItalic: 'al mundo entero.', networkSub: 'Cada arco parte del liceo y lleva adonde nuestros antiguos alumnos estudian hoy.', statAlumni: 'Antiguos alumnos',
-      statCountries: 'Países de acogida', statPromos: 'Promos LFK', statUniversities: 'Universidades', statNationalities: 'Nacionalidades',
+      statCountries: 'Países de acogida', statPromos: 'Promos LFK', statUniversities: 'Universidades', statNationalities: 'Nacionalidades', statMembers: 'Miembros', statSplit: 'de ellos {a} antiguos alumnos y {p} alumnos',
       topDestinations: 'Destinos principales', quoteTitle: 'Unas palabras del presidente', quote: 'Hay lugares que dejamos sin dejarlos nunca de verdad atrás.',
       stepsTitle: 'Unirse a la Amicale', stepsItalic: 'en tres pasos.', step: 'Paso',
       step1Title: 'Cree su cuenta', step1Sub: 'Sus datos y un justificante de escolaridad en el LFK: boletín, certificado, constancia o una simple foto.', step2Title: 'Validación por la junta',

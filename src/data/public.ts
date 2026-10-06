@@ -17,6 +17,9 @@ import { studyEntries } from './members';
 export type PublicPerson = { name: string; role: 'admin' | 'honneur'; fonction?: string; avatar?: string };
 export type PublicOverview = {
   alumni: number;
+  /** All approved accounts, and the lycée's pupils among them (migration 044; missing before it). */
+  members?: number;
+  pupils?: number;
   countries: number;
   promos: number;
   universities: number;
@@ -59,6 +62,8 @@ function fromDb(db: Db): PublicOverview {
     .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName.toLocaleUpperCase('fr')}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }));
   return {
     alumni: grads.length,
+    members: db.users.filter((u) => u.approved).length,
+    pupils: db.users.filter((u) => u.approved && u.role === 'eleve').length,
     countries: countries.length,
     promos: new Set(grads.map((u) => u.promo).filter(Boolean)).size,
     universities: schools.length,

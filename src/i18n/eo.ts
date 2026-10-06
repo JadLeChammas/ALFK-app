@@ -310,7 +310,7 @@ const eo: Dict = {
       cta1: 'Aliĝi al la Amicale', cta2: 'Krei mian konton', cta3: 'Prepari miajn studojn',
       cta4: 'Malkovri la Amicale', studyAt: 'Niaj eksaj lernantoj nun studas ĉe', networkTitle: 'De Kuvajto',
       networkItalic: 'al la tuta mondo.', networkSub: 'Ĉiu arko ekiras de la liceo kaj kondukas tien, kie niaj eksaj lernantoj hodiaŭ studas.', statAlumni: 'Eksaj lernantoj',
-      statCountries: 'Gastigantaj landoj', statPromos: 'LFK-promocioj', statUniversities: 'Universitatoj', statNationalities: 'Naciecoj',
+      statCountries: 'Gastigantaj landoj', statPromos: 'LFK-promocioj', statUniversities: 'Universitatoj', statNationalities: 'Naciecoj', statMembers: 'Membroj', statSplit: 'el kiuj {a} eksaj lernantoj kaj {p} lernantoj',
       topDestinations: 'Ĉefaj celoj', quoteTitle: 'Vorto de la prezidanto', quote: 'Estas lokoj, kiujn oni forlasas sen iam vere postlasi ilin.',
       stepsTitle: 'Aliĝu al la Amicale', stepsItalic: 'per tri paŝoj.', step: 'Paŝo',
       step1Title: 'Kreu vian konton', step1Sub: 'Viaj informoj kaj pruvo de lernado ĉe LFK: lerneja raporto, atestilo, atesto aŭ simpla foto.', step2Title: 'Kontrolo de la estraro',
