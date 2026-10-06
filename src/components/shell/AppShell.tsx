@@ -348,13 +348,13 @@ function BottomNav() {
   const { bar, moreMain, community, amicale, adminCircle } = useNav();
   const me = useMe();
   const { db } = useStore();
-  const notif = useUnreadNotifications();
   const { height } = useWindowDimensions();
   const [open, setOpen] = useState(false);
   // Everything the desktop sidebar has, by section: the admin dashboard and the circle for admins,
-  // the statistics for the school leadership, then settings and notifications.
+  // the statistics for the school leadership, then the settings on a full-width row (the
+  // notifications have their bell in the top bar).
   const pending = me.role === 'admin' ? db.users.filter(awaitsApproval).length : 0;
-  const sections: { title?: string; items: NavItem[] }[] = [
+  const sections: { title?: string; items: NavItem[]; wide?: boolean }[] = [
     { items: moreMain },
     { title: d.nav.community, items: [...community, ...amicale] },
     ...(me.role === 'admin'
@@ -362,12 +362,7 @@ function BottomNav() {
       : can(me, 'viewStats')
         ? [{ title: d.nav.leadership, items: [{ href: '/statistiques', icon: 'bar-chart-2' as const, label: d.nav.stats }] }]
         : []),
-    {
-      items: [
-        { href: '/parametres', icon: 'settings', label: d.nav.settings },
-        { href: '/notifications', icon: 'bell', label: d.nav.notifications, badge: notif },
-      ],
-    },
+    { items: [{ href: '/parametres', icon: 'settings', label: d.nav.settings }], wide: true },
   ];
   const more = sections.flatMap((s) => s.items);
   const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href), badge: pending || undefined };
@@ -405,7 +400,10 @@ function BottomNav() {
                             setOpen(false);
                             router.navigate(item.href as never);
                           })}
-                          style={{ flexBasis: '30%', flexGrow: 1, maxWidth: '32%', alignItems: 'center', gap: 8, paddingVertical: 14, paddingHorizontal: 6, borderRadius: 18, backgroundColor: active ? colors.primarySoft : colors.surfaceAlt }}>
+                          style={[
+                            { flexBasis: '30%', flexGrow: 1, maxWidth: '32%', alignItems: 'center', gap: 8, paddingVertical: 14, paddingHorizontal: 6, borderRadius: 18, backgroundColor: active ? colors.primarySoft : colors.surfaceAlt },
+                            section.wide && { flexBasis: '100%', maxWidth: '100%' },
+                          ]}>
                           <View>
                             <ItemIcon item={item} size={22} color={active ? colors.primary : colors.text} />
                             {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -6, right: -12, borderColor: colors.surfaceAlt }} />}
