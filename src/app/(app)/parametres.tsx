@@ -9,7 +9,7 @@ import { Card, ListRow, Row, Switch, Tap, type IconName } from '@/components/ui/
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useMe, useStore } from '@/data/store';
-import { LANGUAGES, useI18n } from '@/i18n';
+import { useI18n, visibleLanguages } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme, type ThemePreference } from '@/theme/ThemeProvider';
 import { brand, palettes, radius } from '@/theme/tokens';
@@ -88,7 +88,7 @@ export default function Settings() {
 
       <Section title={d.settings.language} icon="globe" hint={d.settings.languageMore}>
         <Grid min={isMobile ? 140 : 200} gap={12} max={2}>
-          {LANGUAGES.map((l) => {
+          {visibleLanguages(lang).map((l) => {
             const active = lang === l.code;
             return (
               <Tap

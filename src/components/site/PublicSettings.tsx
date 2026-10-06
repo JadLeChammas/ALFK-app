@@ -5,7 +5,7 @@ import { Modal, Pressable, ScrollView, View } from 'react-native';
 import { Flag } from '@/components/ui/Flag';
 import { IconButton, Segmented, Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
-import { LANGUAGES, useI18n } from '@/i18n';
+import { useI18n, visibleLanguages } from '@/i18n';
 import { useTheme, type ThemePreference } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 
@@ -59,7 +59,7 @@ export function PublicSettings({ visible, onClose }: { visible: boolean; onClose
             <View style={{ gap: 10 }}>
               <Txt variant="caption">{d.settings.language}</Txt>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                {LANGUAGES.map((l) => {
+                {visibleLanguages(lang).map((l) => {
                   const active = lang === l.code;
                   return (
                     <Tap

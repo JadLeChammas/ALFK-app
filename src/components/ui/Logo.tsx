@@ -22,7 +22,17 @@ const LOCKUP_LIGHT_RATIO = 625 / 240;
 export function LogoMark({ size = 40, onDark }: { size?: number; onDark?: boolean }) {
   const { lang } = useI18n();
   if (lang === 'pirate') return <PirateHat size={size} />;
-  return <Image source={onDark ? badge : emblem} style={{ width: size, height: size }} contentFit="contain" accessibilityLabel="ALFK Alumni" />;
+  const mark = <Image source={onDark ? badge : emblem} style={{ width: size, height: size }} contentFit="contain" accessibilityLabel="ALFK Alumni" />;
+  if (lang !== 'lb') return mark;
+  // Lebanese: a little cedar on the emblem.
+  return (
+    <View style={{ width: size, height: size }}>
+      {mark}
+      <View style={{ position: 'absolute', right: -size * 0.1, bottom: -size * 0.06 }}>
+        <Cedar size={size * 0.46} />
+      </View>
+    </View>
+  );
 }
 
 /** Emblem + « ALFK · ALUMNI · LYCÉE FRANÇAIS DE KOWEÏT » side by side; `height` sets its size. */
@@ -37,12 +47,31 @@ export function Logo({ height = 40, onDark }: { height?: number; onDark?: boolea
     );
   }
   const ratio = onDark ? LOCKUP_LIGHT_RATIO : LOCKUP_RATIO;
-  return <Image source={onDark ? lockupLight : lockup} style={{ width: height * ratio, height }} contentFit="contain" accessibilityLabel="ALFK Alumni — Lycée Français de Koweït" />;
+  const lockupImg = <Image source={onDark ? lockupLight : lockup} style={{ width: height * ratio, height }} contentFit="contain" accessibilityLabel="ALFK Alumni — Lycée Français de Koweït" />;
+  if (lang !== 'lb') return lockupImg;
+  // Lebanese: the cedar beside the name.
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: height * 0.08 }}>
+      {lockupImg}
+      <Cedar size={height * 0.62} />
+    </View>
+  );
 }
 
 /** Large emblem for hero spots (404, sign-in on phones). */
 export function LogoFull({ size = 220, onDark }: { size?: number; onDark?: boolean }) {
   return <LogoMark size={size} onDark={onDark} />;
+}
+
+/** The cedar of the Lebanese flag, on a white round (hidden Lebanese language). */
+export function Cedar({ size = 24 }: { size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 100 100" accessibilityLabel="🇱🇧">
+      <Circle cx={50} cy={50} r={48} fill="#FFFFFF" stroke="#ED1C24" strokeWidth={4} />
+      <Path d="M50 14 L62 30 H56 L68 44 H60 L74 58 H64 L80 72 H20 L36 58 H26 L40 44 H32 L44 30 H38 Z" fill="#00A651" />
+      <Rect x={46} y={72} width={8} height={14} rx={1.5} fill="#00A651" />
+    </Svg>
+  );
 }
 
 /** Easter egg: in Pirate, the logo becomes a tricorne with a skull and crossbones. */

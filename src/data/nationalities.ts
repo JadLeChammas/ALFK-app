@@ -85,14 +85,14 @@ function intlName(code: string, lang: string) {
 export function nationalityName(code: string, lang: string) {
   const n = byCode.get(code);
   if (!n) return code;
-  if (lang === 'fr') return n.fr;
+  if (lang === 'fr' || lang === 'lb') return n.fr;
   if (lang === 'en' || lang === 'pirate') return n.en;
   return intlName(code, lang) ?? n.en;
 }
 
 /** Sorted the way readers expect, in their language. */
 export function sortedNationalities(lang: string) {
-  return [...NATIONALITIES].map((n) => ({ code: n.code, name: nationalityName(n.code, lang) })).sort((a, b) => a.name.localeCompare(b.name, lang === 'pirate' ? 'en' : lang));
+  return [...NATIONALITIES].map((n) => ({ code: n.code, name: nationalityName(n.code, lang) })).sort((a, b) => a.name.localeCompare(b.name, lang === 'pirate' ? 'en' : lang === 'lb' ? 'fr' : lang));
 }
 
 /** Counts per nationality among members (a person with two nationalities counts for both). */
