@@ -921,6 +921,12 @@ const nl: Dict = {
     orUrl: 'of een adres plakken',
     hint: 'Een foto van je computer of telefoon (JPG, PNG…). Een brede afbeelding (liggend) werkt het best.',
   },
+  future: {
+    on: 'Futuristische modus aan. Welkom in 2077!',
+    off: 'Terug naar het heden.',
+    exit: '2077 verlaten',
+    hud: 'ALFK · SYSTEEM 2077',
+  },
   uni: {
     pick: 'Kies uit de lijst', searchPlaceholder: 'Typ de naam of de afkorting (bijv. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Elders — {country}', none: 'Geen instelling gevonden', notListed: 'Mijn school staat niet in de lijst',

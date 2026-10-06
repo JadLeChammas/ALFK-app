@@ -921,6 +921,12 @@ const ja: Dict = {
     orUrl: 'またはアドレスを貼り付け',
     hint: 'パソコンやスマートフォンの写真（JPG、PNGなど）。横長の画像がきれいに表示されます。',
   },
+  future: {
+    on: '未来モードがオンになりました。2077年へようこそ！',
+    off: '現在に戻りました。',
+    exit: '2077年を出る',
+    hud: 'ALFK · システム 2077',
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

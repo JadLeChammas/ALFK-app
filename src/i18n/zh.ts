@@ -921,6 +921,12 @@ const zh: Dict = {
     orUrl: '或粘贴图片地址',
     hint: '来自电脑或手机的照片（JPG、PNG……）。横向宽图效果最佳。',
   },
+  future: {
+    on: '未来模式已开启。欢迎来到 2077！',
+    off: '回到现在。',
+    exit: '离开 2077',
+    hud: 'ALFK · 系统 2077',
+  },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',
     elsewhere: '其他地方 — {country}', none: '未找到院校', notListed: '我的学校不在列表中',

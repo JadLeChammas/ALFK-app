@@ -922,6 +922,12 @@ const la: Dict = {
     orUrl: 'aut inscriptionem insere',
     hint: 'Imago ex computatro aut telephono (JPG, PNG…). Imago lata optime videtur.',
   },
+  future: {
+    on: 'Modus futurus accensus. Salve in anno MMLXXVII!',
+    off: 'Ad praesens redimus.',
+    exit: 'Annum MMLXXVII relinque',
+    hud: 'ALFK · SYSTEMA MMLXXVII',
+  },
   uni: {
     pick: 'Ex indice elige', searchPlaceholder: 'Nomen aut compendium scribe (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Alibi — {country}', none: 'Nullum institutum inventum', notListed: 'Schola mea in indice non est',

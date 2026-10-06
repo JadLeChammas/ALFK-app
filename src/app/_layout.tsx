@@ -10,6 +10,7 @@ import { View } from 'react-native';
 
 import { DemoBadge } from '@/components/DemoBadge';
 import { EasterEggs } from '@/components/EasterEggs';
+import { FutureLayer } from '@/components/FutureLayer';
 import { RetroLayer } from '@/components/RetroLayer';
 import { UrgentMessages } from '@/components/UrgentMessages';
 import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
@@ -33,6 +34,7 @@ export default function RootLayout() {
             <UrgentMessages />
             <DemoBadge />
             <RetroLayer />
+            <FutureLayer />
             <EasterEggs />
           </DialogProvider>
         </StoreProvider>

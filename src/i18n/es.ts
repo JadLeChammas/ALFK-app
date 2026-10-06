@@ -921,6 +921,12 @@ const es: Dict = {
     orUrl: 'o pegar una dirección',
     hint: 'Una foto de su ordenador o teléfono (JPG, PNG…). Una imagen ancha (horizontal) queda mejor.',
   },
+  future: {
+    on: 'Modo futurista activado. ¡Bienvenido a 2077!',
+    off: 'De vuelta al presente.',
+    exit: 'Salir de 2077',
+    hud: 'ALFK · SISTEMA 2077',
+  },
   uni: {
     pick: 'Elegir en la lista', searchPlaceholder: 'Escriba el nombre o la sigla (p. ej. I, ISEP, Sorbonne)…', inCity: 'En {city}',
     elsewhere: 'En otro lugar — {country}', none: 'Ningún centro encontrado', notListed: 'Mi centro no está en la lista',

@@ -147,6 +147,43 @@ const retro: typeof light = {
 
 export const palettes = { light, dark };
 export const retroPalette = retro;
+
+/** The futuristic mode's neon cyan (also used by its grid and HUD, components/FutureLayer.tsx). */
+export const FUTURE_NEON = '#00E5FF';
+/** Hidden futuristic mode « ALFK 2077 »: deep space blue, neon cyan and violet. */
+export const futurePalette: typeof light = {
+  ...dark,
+  bg: '#03060F',
+  surface: '#0A1226',
+  surfaceAlt: '#0E1832',
+  surfaceHover: '#12204A',
+  border: '#123A5C',
+  borderStrong: '#1B5C8A',
+  text: '#E6F8FF',
+  textMuted: '#9CC4E4',
+  textSubtle: '#5F84A8',
+  primary: FUTURE_NEON,
+  primaryPressed: '#00B8CC',
+  primarySoft: '#06263A',
+  onPrimary: '#001018',
+  secondary: '#B26BFF',
+  secondaryStrong: '#D2A8FF',
+  secondarySoft: '#1E1238',
+  rail: '#050A1A',
+  accent: FUTURE_NEON,
+  accentPressed: '#00B8CC',
+  accentSoft: '#06263A',
+  onAccent: '#001018',
+  nav: '#050A1A',
+  navText: '#9CC4E4',
+  navActive: 'rgba(0, 229, 255, 0.18)',
+  ink: '#050A1A',
+  onInk: '#E6F8FF',
+  bubbleMine: '#0B4A66',
+  bubbleTheirs: '#0E1832',
+  overlay: 'rgba(0, 4, 16, 0.7)',
+  chart: [FUTURE_NEON, '#B26BFF', '#FF3D9A', '#5F84A8'],
+};
 /** Comic Neue (Comic Sans look-alike that ships on every platform), used by the retro mode. */
 export const retroFonts = { regular: 'ComicNeue_400Regular', bold: 'ComicNeue_700Bold' } as const;
 export type Colors = typeof light;

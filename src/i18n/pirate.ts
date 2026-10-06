@@ -922,6 +922,12 @@ const pirate: Dict = {
     orUrl: 'or paste an address',
     hint: 'A picture from yer computer or spyglass-phone (JPG, PNG…). A wide one looks best.',
   },
+  future: {
+    on: 'Future mode hoisted. Welcome aboard 2077, matey!',
+    off: 'Back to the present seas.',
+    exit: 'Abandon 2077',
+    hud: 'ALFK · STARSHIP 2077',
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

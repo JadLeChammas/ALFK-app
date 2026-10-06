@@ -13,6 +13,7 @@ Des surprises cachées dans le site. Chut, ne le dites pas à tout le monde 🤫
 | 6 bis | **Ambassadeur légendaire** : une fiche spéciale avec un badge 🎖️ | Rechercher le nom complet « **Adriano Sfeir** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 6 ter | **Pirate légendaire** : une fiche spéciale, avec un chapeau de pirate sur sa photo 🏴‍☠️ | Rechercher le nom complet « **Tatiana El Hajj** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 7 | **Tempête de sable** : quelques secondes de vent de sable sur l'écran | Rechercher « **chameau** », « **50°C** » ou « **shamal** » dans la recherche ou l'Annuaire. |
+| 8 | **Mode futuriste « ALFK 2077 »** : couleurs néon (cyan et violet), polices futuristes, grille lumineuse, ligne de balayage et badge « SYSTÈME 2077 » | Au clavier : **↓ ↓ ↑ ↑ → ← → ← Y Z**. Sur téléphone : taper « **2077** » dans la recherche ou l'Annuaire. Même code (ou bouton « Quitter 2077 ») pour revenir. |
 
 ## Pour les développeurs
 

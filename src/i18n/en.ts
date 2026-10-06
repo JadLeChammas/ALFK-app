@@ -921,6 +921,12 @@ const en: Dict = {
     orUrl: 'or paste an address',
     hint: 'A photo from your computer or phone (JPG, PNG…). A wide (landscape) image looks best.',
   },
+  future: {
+    on: 'Futuristic mode on. Welcome to 2077!',
+    off: 'Back to the present.',
+    exit: 'Leave 2077',
+    hud: 'ALFK · SYSTEM 2077',
+  },
   uni: {
     pick: 'Pick from the list', searchPlaceholder: 'Type the name or acronym (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Elsewhere — {country}', none: 'No establishment found', notListed: 'My school isn’t in the list',

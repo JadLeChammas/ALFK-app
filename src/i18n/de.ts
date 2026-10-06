@@ -921,6 +921,12 @@ const de: Dict = {
     orUrl: 'oder Adresse einfügen',
     hint: 'Ein Foto von Ihrem Computer oder Handy (JPG, PNG…). Ein breites Bild (Querformat) wirkt am besten.',
   },
+  future: {
+    on: 'Zukunftsmodus an. Willkommen im Jahr 2077!',
+    off: 'Zurück in die Gegenwart.',
+    exit: '2077 verlassen',
+    hud: 'ALFK · SYSTEM 2077',
+  },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Anderswo — {country}', none: 'Keine Einrichtung gefunden', notListed: 'Meine Hochschule ist nicht in der Liste',

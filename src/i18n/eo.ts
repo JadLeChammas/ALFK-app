@@ -921,6 +921,12 @@ const eo: Dict = {
     orUrl: 'aŭ alglui adreson',
     hint: 'Foto el via komputilo aŭ telefono (JPG, PNG…). Larĝa (horizontala) bildo aspektas plej bone.',
   },
+  future: {
+    on: 'Estonteca reĝimo ŝaltita. Bonvenon en 2077!',
+    off: 'Reen al la nuntempo.',
+    exit: 'Forlasi 2077',
+    hud: 'ALFK · SISTEMO 2077',
+  },
   uni: {
     pick: 'Elektu el la listo', searchPlaceholder: 'Tajpu la nomon aŭ mallongigon (ekz. I, ISEP, Sorbonne)…', inCity: 'En {city}',
     elsewhere: 'Aliloke — {country}', none: 'Neniu institucio trovita', notListed: 'Mia lernejo ne estas en la listo',

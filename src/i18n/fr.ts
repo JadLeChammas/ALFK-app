@@ -919,6 +919,12 @@ const fr = {
     orUrl: 'ou coller une adresse',
     hint: 'Une photo de votre ordinateur ou de votre téléphone (JPG, PNG…). Une image large (paysage) rend le mieux.',
   },
+  future: {
+    on: 'Mode futuriste activé. Bienvenue en 2077 !',
+    off: 'Retour au présent.',
+    exit: 'Quitter 2077',
+    hud: 'ALFK · SYSTÈME 2077',
+  },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',
     elsewhere: 'Ailleurs — {country}', none: 'Aucun établissement trouvé', notListed: 'Mon établissement n’est pas dans la liste',
