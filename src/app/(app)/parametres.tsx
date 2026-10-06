@@ -88,7 +88,7 @@ export default function Settings() {
 
       <Section title={d.settings.language} icon="globe" hint={d.settings.languageMore}>
         <Grid min={isMobile ? 140 : 200} gap={12} max={2}>
-          {visibleLanguages(lang).map((l) => {
+          {visibleLanguages().map((l) => {
             const active = lang === l.code;
             return (
               <Tap

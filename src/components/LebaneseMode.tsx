@@ -11,7 +11,7 @@ export const LEBANESE_CODE = ['ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRigh
 /**
  * Hidden Lebanese language (Arabizi, i18n/lb.ts), with a cedar beside the logo (ui/Logo.tsx).
  * Switched on — and back to the previous language — by the code above on a keyboard, or by typing
- * « yalla » in a search box (phones). It only shows in the Settings language list while it is on.
+ * « yalla » in a search box (phones). It never shows in the Settings language list.
  */
 export function LebaneseMode() {
   const { lang, setLang } = useI18n();

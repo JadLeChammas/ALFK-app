@@ -59,7 +59,7 @@ export function PublicSettings({ visible, onClose }: { visible: boolean; onClose
             <View style={{ gap: 10 }}>
               <Txt variant="caption">{d.settings.language}</Txt>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                {visibleLanguages(lang).map((l) => {
+                {visibleLanguages().map((l) => {
                   const active = lang === l.code;
                   return (
                     <Tap

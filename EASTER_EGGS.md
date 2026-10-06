@@ -14,7 +14,7 @@ Des surprises cachées dans le site. Chut, ne le dites pas à tout le monde 🤫
 | 6 ter | **Pirate légendaire** : une fiche spéciale, avec un chapeau de pirate sur sa photo 🏴‍☠️ | Rechercher le nom complet « **Tatiana El Hajj** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 7 | **Tempête de sable** : quelques secondes de vent de sable sur l'écran | Rechercher « **chameau** », « **50°C** » ou « **shamal** » dans la recherche ou l'Annuaire. |
 | 8 | **Mode futuriste « ALFK 2077 »** : couleurs néon (cyan et violet), polices futuristes, grille lumineuse, ligne de balayage et badge « SYSTÈME 2077 » | Au clavier : **↓ ↓ ↑ ↑ → ← → ← Y Z**. Sur téléphone : taper « **2077** » dans la recherche ou l'Annuaire. Même code (ou bouton « Quitter 2077 ») pour revenir. |
-| 9 | **Le site en libanais** 🇱🇧 : tout le site écrit en libanais en arabizi (3, 7, 2…), un cèdre à côté du logo, les mois libanais (Kenoun el Tene, Chbat…). La langue « Lebnene » n'apparaît dans les Réglages que quand elle est activée. | Au clavier : **← → ← → ↑ ↓ ↑ ↓ L B**. Sur téléphone : taper « **yalla** » dans la recherche ou l'Annuaire. Même code (ou « yalla ») pour revenir à la langue d'avant. |
+| 9 | **Le site en libanais** 🇱🇧 : tout le site écrit en libanais en arabizi (3, 7, 2…), un cèdre à côté du logo, les mois libanais (Kenoun el Tene, Chbat…). La langue « Lebnene » n'apparaît jamais dans les Réglages : seul le code l'active. | Au clavier : **← → ← → ↑ ↓ ↑ ↓ L B**. Sur téléphone : taper « **yalla** » dans la recherche ou l'Annuaire. Même code (ou « yalla ») pour revenir à la langue d'avant. |
 
 ## Pour les développeurs
 

@@ -38,7 +38,7 @@ export const LANGUAGES = [
   // Latin (the Holy See's language: its flag) and Esperanto.
   { code: 'la', label: 'Latina', country: 'VA', locale: 'it-IT', ownDates: true },
   { code: 'eo', label: 'Esperanto', country: 'EO', locale: 'fr-FR', ownDates: true },
-  // Hidden: Lebanese in Arabizi, listed only while it is on (← → ← → ↑ ↓ ↑ ↓ L B, components/LebaneseMode.tsx).
+  // Hidden: Lebanese in Arabizi, never listed in Settings: only ← → ← → ↑ ↓ ↑ ↓ L B (components/LebaneseMode.tsx).
   { code: 'lb', label: 'Lebnene', country: 'LB', locale: 'fr-FR', ownDates: true, hidden: true },
   // For fun: English as spoken aboard. `PIRATE` shows the Jolly Roger instead of a country flag.
   { code: 'pirate', label: 'Pirate', country: 'PIRATE', locale: 'en-GB' },
@@ -47,8 +47,8 @@ export type Lang = (typeof LANGUAGES)[number]['code'];
 
 const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, nl, ru, ar, ja, zh, la, eo, lb: lbDict, pirate };
 
-/** The languages offered in Settings: the hidden ones only while they are on. */
-export const visibleLanguages = (current: string) => LANGUAGES.filter((l) => !('hidden' in l) || l.code === current);
+/** The languages offered in Settings: never the hidden ones (only their secret code switches them). */
+export const visibleLanguages = () => LANGUAGES.filter((l) => !('hidden' in l));
 export const isLang = (v: string | null): v is Lang => !!v && v in dicts;
 export const isRtl = (l: Lang) => l === 'ar';
 
