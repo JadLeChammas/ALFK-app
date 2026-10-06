@@ -74,6 +74,8 @@ function useNav() {
     amicale,
     adminCircle: me.role === 'admin' ? circle : [],
     bar: [home, directory, repere, publications, messages],
+    // The phone's « Plus » sheet: everything else in the sidebar, in the same sections.
+    moreMain: [...events, orientation, guide, questions, calendar],
     more: [...events, orientation, guide, questions, calendar, ...community, ...amicale, ...(me.role === 'admin' ? circle : [])],
   };
 }
@@ -343,9 +345,32 @@ function BottomNav() {
   const { d } = useI18n();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const { bar, more } = useNav();
+  const { bar, moreMain, community, amicale, adminCircle } = useNav();
+  const me = useMe();
+  const { db } = useStore();
+  const notif = useUnreadNotifications();
+  const { height } = useWindowDimensions();
   const [open, setOpen] = useState(false);
-  const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href) };
+  // Everything the desktop sidebar has, by section: the admin dashboard and the circle for admins,
+  // the statistics for the school leadership, then settings and notifications.
+  const pending = me.role === 'admin' ? db.users.filter(awaitsApproval).length : 0;
+  const sections: { title?: string; items: NavItem[] }[] = [
+    { items: moreMain },
+    { title: d.nav.community, items: [...community, ...amicale] },
+    ...(me.role === 'admin'
+      ? [{ title: d.nav.admin, items: [{ href: '/admin', icon: 'shield' as const, label: d.nav.dashboard, badge: pending }, ...adminCircle] }]
+      : can(me, 'viewStats')
+        ? [{ title: d.nav.leadership, items: [{ href: '/statistiques', icon: 'bar-chart-2' as const, label: d.nav.stats }] }]
+        : []),
+    {
+      items: [
+        { href: '/parametres', icon: 'settings', label: d.nav.settings },
+        { href: '/notifications', icon: 'bell', label: d.nav.notifications, badge: notif },
+      ],
+    },
+  ];
+  const more = sections.flatMap((s) => s.items);
+  const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href), badge: pending || undefined };
   const tab = (item: NavItem, active: boolean, onPress: () => void) => (
     <Tap key={item.href} onPress={onPress} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
       <View style={{ width: 44, height: 28, borderRadius: radius.input, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? brand.red : 'transparent' }}>
@@ -361,25 +386,38 @@ function BottomNav() {
       {tab(moreItem, open || more.some((m) => isActive(pathname, m)), () => setOpen(true))}
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
         <Pressable onPress={() => setOpen(false)} style={{ flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' }}>
-          <Pressable onPress={() => {}} style={{ backgroundColor: colors.surface, borderTopLeftRadius: 28, borderTopRightRadius: 28, paddingTop: 10, paddingHorizontal: 16, paddingBottom: Math.max(insets.bottom, 16) + 8, gap: 6 }}>
-            <View style={{ alignSelf: 'center', width: 40, height: 4, borderRadius: 2, backgroundColor: colors.border, marginBottom: 10 }} />
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-              {more.map((item) => {
-                const active = isActive(pathname, item);
-                return (
-                  <Tap
-                    key={item.href}
-                    {...pressFor(item, () => {
-                      setOpen(false);
-                      router.navigate(item.href as never);
+          <Pressable onPress={() => {}} style={{ maxHeight: height * 0.86, backgroundColor: colors.surface, borderTopLeftRadius: 28, borderTopRightRadius: 28, paddingTop: 10 }}>
+            <View style={{ alignSelf: 'center', width: 40, height: 4, borderRadius: 2, backgroundColor: colors.border, marginBottom: 6 }} />
+            {/* Scrolls when it doesn't fit, so nothing is ever cut off at the top. */}
+            <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 6, paddingBottom: Math.max(insets.bottom, 16) + 8, gap: 16 }} showsVerticalScrollIndicator={false}>
+              {sections.map((section, i) => (
+                <View key={i} style={{ gap: 8 }}>
+                  {!!section.title && (
+                    <Txt style={{ fontFamily: fonts.medium, fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: colors.textSubtle, paddingHorizontal: 4 }}>{section.title}</Txt>
+                  )}
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+                    {section.items.map((item) => {
+                      const active = isActive(pathname, item);
+                      return (
+                        <Tap
+                          key={item.href}
+                          {...pressFor(item, () => {
+                            setOpen(false);
+                            router.navigate(item.href as never);
+                          })}
+                          style={{ flexBasis: '30%', flexGrow: 1, maxWidth: '32%', alignItems: 'center', gap: 8, paddingVertical: 14, paddingHorizontal: 6, borderRadius: 18, backgroundColor: active ? colors.primarySoft : colors.surfaceAlt }}>
+                          <View>
+                            <ItemIcon item={item} size={22} color={active ? colors.primary : colors.text} />
+                            {!!item.badge && <CountBadge n={item.badge} style={{ position: 'absolute', top: -6, right: -12, borderColor: colors.surfaceAlt }} />}
+                          </View>
+                          <Txt variant="smallStrong" numberOfLines={1} style={{ color: active ? colors.primary : colors.text }}>{item.label}</Txt>
+                        </Tap>
+                      );
                     })}
-                    style={{ flexBasis: '30%', flexGrow: 1, alignItems: 'center', gap: 8, paddingVertical: 16, borderRadius: 18, backgroundColor: active ? colors.primarySoft : colors.surfaceAlt }}>
-                    <ItemIcon item={item} size={22} color={active ? colors.primary : colors.text} />
-                    <Txt variant="smallStrong" numberOfLines={1} style={{ color: active ? colors.primary : colors.text }}>{item.label}</Txt>
-                  </Tap>
-                );
-              })}
-            </View>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
           </Pressable>
         </Pressable>
       </Modal>
