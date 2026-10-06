@@ -12,6 +12,7 @@ import { Txt } from '@/components/ui/Txt';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
+import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 
 export default function Article() {
@@ -21,6 +22,9 @@ export default function Article() {
   const { db, actions } = useStore();
   const { confirm } = useDialogs();
   const [editing, setEditing] = useState(false);
+  const { colors } = useTheme();
+  // Width ÷ height of the cover, known once it has loaded.
+  const [coverRatio, setCoverRatio] = useState<number | null>(null);
   const users = useUserMap();
   const me = useMe();
   const found = db.publications.find((p) => p.id === id);
@@ -59,8 +63,16 @@ export default function Article() {
           </Row>
         )}
       </View>
-      <View style={{ height: isMobile ? 220 : 420, borderRadius: radius.hero, overflow: 'hidden' }}>
-        <Image source={{ uri: pub.cover }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} />
+      {/* The cover shown whole: the frame takes the image's own shape once it is loaded (a very tall
+          image is fitted inside instead, so it doesn't fill the whole screen). */}
+      <View style={[{ borderRadius: radius.hero, overflow: 'hidden', backgroundColor: colors.surfaceAlt }, coverRatio ? { width: '100%', aspectRatio: Math.max(coverRatio, 0.8) } : { height: isMobile ? 220 : 420 }]}>
+        <Image
+          source={{ uri: pub.cover }}
+          style={{ width: '100%', height: '100%' }}
+          contentFit={coverRatio && coverRatio < 0.8 ? 'contain' : 'cover'}
+          transition={200}
+          onLoad={(e) => e.source.width && e.source.height && setCoverRatio(e.source.width / e.source.height)}
+        />
       </View>
       <View style={{ gap: 18 }}>
         {pub.body.split('\n\n').map((para, i) => (
