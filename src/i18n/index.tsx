@@ -6,15 +6,22 @@ import { countryLabel } from '@/data/countries';
 import ar from './ar';
 import de from './de';
 import en from './en';
+import eo from './eo';
 import es from './es';
 import fr, { type Dict } from './fr';
 import it from './it';
 import ja from './ja';
+import la from './la';
+import nl from './nl';
 import pirate from './pirate';
 import pt from './pt';
+import ru from './ru';
 import zh from './zh';
 
-/** `country` = the flag shown in Settings. `locale` = used for dates and numbers. */
+/**
+ * `country` = the flag shown in Settings (`EO`: the Esperanto flag). `locale` = used for dates and numbers.
+ * `ownDates`: browsers have no month or day names for it — the dictionary's are used instead.
+ */
 export const LANGUAGES = [
   { code: 'fr', label: 'Français', country: 'FR', locale: 'fr-FR' },
   { code: 'en', label: 'English', country: 'GB', locale: 'en-US' },
@@ -22,15 +29,20 @@ export const LANGUAGES = [
   { code: 'es', label: 'Español', country: 'ES', locale: 'es-ES' },
   { code: 'it', label: 'Italiano', country: 'IT', locale: 'it-IT' },
   { code: 'pt', label: 'Português', country: 'PT', locale: 'pt-PT' },
+  { code: 'nl', label: 'Nederlands', country: 'NL', locale: 'nl-NL' },
+  { code: 'ru', label: 'Русский', country: 'RU', locale: 'ru-RU' },
   { code: 'ar', label: 'العربية', country: 'SA', locale: 'ar-u-nu-latn' },
   { code: 'ja', label: '日本語', country: 'JP', locale: 'ja-JP' },
   { code: 'zh', label: '中文', country: 'CN', locale: 'zh-CN' },
+  // Latin (the Holy See's language: its flag) and Esperanto.
+  { code: 'la', label: 'Latina', country: 'VA', locale: 'it-IT', ownDates: true },
+  { code: 'eo', label: 'Esperanto', country: 'EO', locale: 'fr-FR', ownDates: true },
   // For fun: English as spoken aboard. `PIRATE` shows the Jolly Roger instead of a country flag.
   { code: 'pirate', label: 'Pirate', country: 'PIRATE', locale: 'en-GB' },
 ] as const;
 export type Lang = (typeof LANGUAGES)[number]['code'];
 
-const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, ar, ja, zh, pirate };
+const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, nl, ru, ar, ja, zh, la, eo, pirate };
 export const isLang = (v: string | null): v is Lang => !!v && v in dicts;
 export const isRtl = (l: Lang) => l === 'ar';
 
@@ -89,7 +101,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<I18nValue>(() => {
     const d = dicts[lang];
-    const locale = LANGUAGES.find((l) => l.code === lang)!.locale;
+    const entry = LANGUAGES.find((l) => l.code === lang)!;
+    const locale = entry.locale;
+    const ownDates = 'ownDates' in entry && entry.ownDates;
     const f = (template: string, vars?: Vars) =>
       vars ? template.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? `{${k}}`)) : template;
     const pad = (n: number) => String(n).padStart(2, '0');
@@ -107,6 +121,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       const { weekday = false, time = false, year = true } = opts;
       let s: string;
       try {
+        if (ownDates) throw new Error('own month names');
         s = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', ...(year ? { year: 'numeric' } : {}), ...(weekday ? { weekday: 'long' } : {}) }).format(date);
       } catch {
         s = `${date.getDate()} ${d.months[date.getMonth()]}${year ? ` ${date.getFullYear()}` : ''}`;
@@ -138,6 +153,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       const days = Math.floor((now.getTime() - date.getTime()) / 86_400_000);
       if (days < 7) {
         try {
+          if (ownDates) throw new Error('own day names');
           return capitalize(new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date));
         } catch {
           return d.days[date.getDay()];
