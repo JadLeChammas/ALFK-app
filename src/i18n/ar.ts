@@ -187,7 +187,7 @@ const ar: Dict = {
     },
   },
   legal: {
-    title: 'الإشعارات القانونية', sitemap: 'خريطة الموقع', privacy: 'سياسة الخصوصية', privacyUpdated: 'آخر تحديث: 30 سبتمبر 2026', notFound: 'الصفحة غير موجودة', notFoundSub: 'هذه الصفحة غير موجودة أو تم نقلها.',
+    title: 'الإشعارات القانونية', sitemap: 'خريطة الموقع', privacy: 'سياسة الخصوصية', privacyUpdated: 'آخر تحديث: 30 سبتمبر 2026', notFound: 'الصفحة غير موجودة', notFoundSub: 'هذه الصفحة غير موجودة أو تم نقلها.', notFoundJoke: 'حتى الجمل تاه في الصحراء… 🐪',
     goHome: 'العودة إلى الرئيسية', contactTitle: 'اتصل بنا', contactSub: 'لديك سؤال؟ فريق الرابطة يجيبك.',
     subject: 'الموضوع', message: 'الرسالة', name: 'الاسم', sent: 'تم إرسال الرسالة، شكرًا!', contactLead: 'العضوية أو الفعاليات أو الشراكات أو مجرد سؤال: راسلونا وسيرد عليكم أحد أعضاء المكتب.', topic: 'الموضوع', topicMembership: 'العضوية', topicEvents: 'الفعاليات', topicPartnership: 'شراكة', topicOrientation: 'التوجيه', topicOther: 'أخرى', replyTime: 'الرد خلال 48 ساعة', privateNote: 'لا يقرأ رسالتك إلا المكتب', otherWays: 'طرق أخرى للتواصل معنا', wayBoardSub: 'الأعضاء الذين يحيون الجمعية', wayJoinSub: 'انضم إلى شبكة الخريجين', wayAssociationSub: 'تاريخنا ومهامنا', sentTitle: 'تم إرسال الرسالة', sentSub: 'شكرًا! سيرد عليك أحد أعضاء المكتب قريبًا عبر البريد الإلكتروني.', sendAnother: 'إرسال رسالة أخرى', messagePlaceholder: 'أخبرنا ببضع كلمات…', emailInvalid: 'عنوان بريد إلكتروني غير صالح',
   },
@@ -926,6 +926,14 @@ const ar: Dict = {
     off: 'العودة إلى الحاضر.',
     exit: 'مغادرة 2077',
     hud: 'ALFK · نظام 2077',
+  },
+  fun: {
+    minitelOn: 'جارٍ الاتصال بـ 3615 ALFK… مرحباً بك في المينيتل!',
+    minitelOff: 'انقطع الاتصال بالمينيتل.',
+    cinemaOn: 'وقت السينما! 🍿',
+    cinemaOff: 'عادت الأضواء.',
+    cinemaExit: 'النهاية',
+    flip: 'كل شيء مقلوب… كما في أستراليا! 🙃',
   },
   uni: {
     pick: 'اختر من القائمة', searchPlaceholder: 'اكتب الاسم أو الاختصار (مثل I أو ISEP أو Sorbonne)…', inCity: 'في {city}',

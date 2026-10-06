@@ -187,7 +187,7 @@ const en: Dict = {
     },
   },
   legal: {
-    title: 'Legal notice', sitemap: 'Sitemap', privacy: 'Privacy policy', privacyUpdated: 'Last updated: September 30, 2026', notFound: 'Page not found', notFoundSub: "This page doesn't exist or has moved.",
+    title: 'Legal notice', sitemap: 'Sitemap', privacy: 'Privacy policy', privacyUpdated: 'Last updated: September 30, 2026', notFound: 'Page not found', notFoundSub: "This page doesn't exist or has moved.", notFoundJoke: 'Even the camel got lost in the desert… 🐪',
     goHome: 'Back to home', contactTitle: 'Contact us', contactSub: 'A question? The Amicale team will get back to you.',
     subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank you!', contactLead: 'Membership, events, partnerships or a simple question: write to us and a board member will reply.', topic: 'Topic', topicMembership: 'Membership', topicEvents: 'Events', topicPartnership: 'Partnership', topicOrientation: 'Guidance', topicOther: 'Other', replyTime: 'Reply within 48 h', privateNote: 'Only the board reads your message', otherWays: 'Other ways to reach us', wayBoardSub: 'The people who run the Amicale', wayJoinSub: 'Join the alumni network', wayAssociationSub: 'Our story and our mission', sentTitle: 'Message sent', sentSub: 'Thank you! A board member will get back to you soon, by email.', sendAnother: 'Send another message', messagePlaceholder: 'Tell us in a few words…', emailInvalid: 'Invalid email address',
   },
@@ -926,6 +926,14 @@ const en: Dict = {
     off: 'Back to the present.',
     exit: 'Leave 2077',
     hud: 'ALFK · SYSTEM 2077',
+  },
+  fun: {
+    minitelOn: 'Connecting to 3615 ALFK… Welcome to the Minitel!',
+    minitelOff: 'Minitel disconnected.',
+    cinemaOn: 'Movie time! 🍿',
+    cinemaOff: 'Lights back on.',
+    cinemaExit: 'THE END',
+    flip: 'Everything is upside down… like in Australia! 🙃',
   },
   uni: {
     pick: 'Pick from the list', searchPlaceholder: 'Type the name or acronym (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

@@ -12,7 +12,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
-import { eggs, isFutureWord, isLebaneseWord, isRetroWord, isSandWord, legendQuery } from '@/lib/eggs';
+import { eggs, isSandWord, legendQuery, searchEgg } from '@/lib/eggs';
 import { LegendCard, SandstormLayer } from '../EasterEggs';
 import { Avatar, SearchBar, Tap, type IconName } from '../ui/primitives';
 import { Flag } from '../ui/Flag';
@@ -46,9 +46,8 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
   // Easter eggs: sandstorm words, and the creator's card.
   useEffect(() => {
     if (isSandWord(q)) eggs.emit('sandstorm');
-    if (isFutureWord(q)) eggs.emit('future');
-    if (isLebaneseWord(q)) eggs.emit('lebanon');
-    if (isRetroWord(q)) eggs.emit('retro');
+    const egg = searchEgg(q);
+    if (egg) eggs.emit(egg);
   }, [q]);
   const legend = legendQuery(q);
 

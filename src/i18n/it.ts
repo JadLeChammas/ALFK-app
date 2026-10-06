@@ -187,7 +187,7 @@ const it: Dict = {
     },
   },
   legal: {
-    title: 'Note legali', sitemap: 'Mappa del sito', privacy: 'Informativa sulla privacy', privacyUpdated: 'Ultimo aggiornamento: 30 settembre 2026', notFound: 'Pagina non trovata', notFoundSub: 'Questa pagina non esiste o è stata spostata.',
+    title: 'Note legali', sitemap: 'Mappa del sito', privacy: 'Informativa sulla privacy', privacyUpdated: 'Ultimo aggiornamento: 30 settembre 2026', notFound: 'Pagina non trovata', notFoundSub: 'Questa pagina non esiste o è stata spostata.', notFoundJoke: 'Persino il cammello si è perso nel deserto… 🐪',
     goHome: 'Torna alla home', contactTitle: 'Contattaci', contactSub: "Una domanda? Il team dell'Amicale ti risponde.",
     subject: 'Oggetto', message: 'Messaggio', name: 'Nome', sent: 'Messaggio inviato, grazie!', contactLead: 'Iscrizione, eventi, partnership o una semplice domanda: scrivici, un membro del direttivo ti risponderà.', topic: 'Argomento', topicMembership: 'Iscrizione', topicEvents: 'Eventi', topicPartnership: 'Partnership', topicOrientation: 'Orientamento', topicOther: 'Altro', replyTime: 'Risposta entro 48 h', privateNote: 'Solo il direttivo legge il tuo messaggio', otherWays: 'Altri modi per contattarci', wayBoardSub: 'Le persone che animano l’Amicale', wayJoinSub: 'Entra nella rete degli ex alunni', wayAssociationSub: 'La nostra storia e missione', sentTitle: 'Messaggio inviato', sentSub: 'Grazie! Un membro del direttivo ti risponderà presto via e-mail.', sendAnother: 'Invia un altro messaggio', messagePlaceholder: 'Raccontaci in poche parole…', emailInvalid: 'Indirizzo e-mail non valido',
   },
@@ -926,6 +926,14 @@ const it: Dict = {
     off: 'Ritorno al presente.',
     exit: 'Esci dal 2077',
     hud: 'ALFK · SISTEMA 2077',
+  },
+  fun: {
+    minitelOn: 'Connessione al 3615 ALFK… Benvenuto sul Minitel!',
+    minitelOff: 'Minitel disconnesso.',
+    cinemaOn: 'Si va al cinema! 🍿',
+    cinemaOff: 'Luci riaccese.',
+    cinemaExit: 'FINE',
+    flip: 'È tutto sottosopra… come in Australia! 🙃',
   },
   uni: {
     pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',

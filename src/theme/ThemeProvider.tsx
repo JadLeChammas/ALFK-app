@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Platform, useColorScheme } from 'react-native';
 
-import { futurePalette, FUTURE_NEON, palettes, retroFonts, retroPalette, type ColorScheme, type Colors } from './tokens';
+import { futurePalette, FUTURE_NEON, MINITEL_GREEN, minitelPalette, palettes, retroFonts, retroPalette, type ColorScheme, type Colors } from './tokens';
 
 export type ThemePreference = 'light' | 'dark' | 'system';
 
@@ -17,18 +17,23 @@ type ThemeContextValue = {
   /** Hidden futuristic mode « ALFK 2077 » (neon colours and fonts); off when retro is on, and back. */
   future: boolean;
   setFuture: (on: boolean) => void;
+  /** Hidden Minitel mode (« minitel » in a search box): green on black, blocky font. */
+  minitel: boolean;
+  setMinitel: (on: boolean) => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 const STORAGE_KEY = 'lfk.theme';
 const RETRO_KEY = 'lfk.retro';
 const FUTURE_KEY = 'lfk.future';
+const MINITEL_KEY = 'lfk.minitel';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const system = useColorScheme();
   const [preference, setPreferenceState] = useState<ThemePreference>('system');
   const [retro, setRetroState] = useState(false);
   const [future, setFutureState] = useState(false);
+  const [minitel, setMinitelState] = useState(false);
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
@@ -42,11 +47,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     AsyncStorage.getItem(FUTURE_KEY)
       .then((v) => setFutureState(v === '1'))
       .catch(() => {});
+    AsyncStorage.getItem(MINITEL_KEY)
+      .then((v) => setMinitelState(v === '1'))
+      .catch(() => {});
   }, []);
 
   const chosen: ColorScheme = preference === 'system' ? (system === 'dark' ? 'dark' : 'light') : preference;
-  const scheme: ColorScheme = retro ? 'light' : future ? 'dark' : chosen;
-  const colors = retro ? retroPalette : future ? futurePalette : palettes[scheme];
+  const scheme: ColorScheme = retro ? 'light' : future || minitel ? 'dark' : chosen;
+  const colors = retro ? retroPalette : future ? futurePalette : minitel ? minitelPalette : palettes[scheme];
 
   // Web: Comic Sans everywhere (the native side switches fonts in <Txt>).
   useEffect(() => {
@@ -84,6 +92,27 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.head.appendChild(style);
   }, [future]);
 
+  // Web: the Minitel's blocky font (VT323), all in phosphor green, pictures tinted green.
+  useEffect(() => {
+    if (Platform.OS !== 'web' || typeof document === 'undefined') return;
+    const id = 'lfk-minitel-css';
+    document.getElementById(id)?.remove();
+    document.getElementById(`${id}-fonts`)?.remove();
+    if (!minitel) return;
+    const fonts = document.createElement('link');
+    fonts.id = `${id}-fonts`;
+    fonts.rel = 'stylesheet';
+    fonts.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
+    document.head.appendChild(fonts);
+    const style = document.createElement('style');
+    style.id = id;
+    const icons = ':not(svg):not(svg *):not([style*="font-family: feather"]):not([style*="font-family: ionicons"]):not([style*="font-family: material"]):not([style*="font-family: FontAwesome"])';
+    style.textContent = `*${icons} { font-family: 'VT323', 'Courier New', monospace !important; letter-spacing: 0.02em !important; text-shadow: 0 0 6px ${MINITEL_GREEN}66; }
+      img { filter: grayscale(1) sepia(1) hue-rotate(70deg) saturate(3) brightness(0.9); }
+      ::selection { background: ${MINITEL_GREEN}; color: #000; }`;
+    document.head.appendChild(style);
+  }, [minitel]);
+
   useEffect(() => {
     if (Platform.OS !== 'web' || typeof document === 'undefined') return;
     document.documentElement.style.colorScheme = scheme;
@@ -106,6 +135,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         if (on) {
           setFutureState(false);
           AsyncStorage.setItem(FUTURE_KEY, '0').catch(() => {});
+          setMinitelState(false);
+          AsyncStorage.setItem(MINITEL_KEY, '0').catch(() => {});
         }
       },
       future,
@@ -115,10 +146,23 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         if (on) {
           setRetroState(false);
           AsyncStorage.setItem(RETRO_KEY, '0').catch(() => {});
+          setMinitelState(false);
+          AsyncStorage.setItem(MINITEL_KEY, '0').catch(() => {});
+        }
+      },
+      minitel,
+      setMinitel: (on) => {
+        setMinitelState(on);
+        AsyncStorage.setItem(MINITEL_KEY, on ? '1' : '0').catch(() => {});
+        if (on) {
+          setRetroState(false);
+          AsyncStorage.setItem(RETRO_KEY, '0').catch(() => {});
+          setFutureState(false);
+          AsyncStorage.setItem(FUTURE_KEY, '0').catch(() => {});
         }
       },
     }),
-    [scheme, colors, preference, retro, future]
+    [scheme, colors, preference, retro, future, minitel]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

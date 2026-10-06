@@ -187,7 +187,7 @@ const pt: Dict = {
     },
   },
   legal: {
-    title: 'Aviso legal', sitemap: 'Mapa do site', privacy: 'Política de privacidade', privacyUpdated: 'Última atualização: 30 de setembro de 2026', notFound: 'Página não encontrada', notFoundSub: 'Esta página não existe ou foi movida.',
+    title: 'Aviso legal', sitemap: 'Mapa do site', privacy: 'Política de privacidade', privacyUpdated: 'Última atualização: 30 de setembro de 2026', notFound: 'Página não encontrada', notFoundSub: 'Esta página não existe ou foi movida.', notFoundJoke: 'Até o camelo se perdeu no deserto… 🐪',
     goHome: 'Voltar ao início', contactTitle: 'Contacte-nos', contactSub: 'Uma pergunta? A equipa da Amicale responde-lhe.',
     subject: 'Assunto', message: 'Mensagem', name: 'Nome', sent: 'Mensagem enviada, obrigado!', contactLead: 'Adesão, eventos, parcerias ou uma simples pergunta: escreva-nos e um membro da direção responde.', topic: 'Assunto', topicMembership: 'Adesão', topicEvents: 'Eventos', topicPartnership: 'Parceria', topicOrientation: 'Orientação', topicOther: 'Outro', replyTime: 'Resposta em 48 h', privateNote: 'Só a direção lê a sua mensagem', otherWays: 'Outras formas de nos contactar', wayBoardSub: 'Quem dá vida à Amicale', wayJoinSub: 'Juntar-se à rede de antigos alunos', wayAssociationSub: 'A nossa história e missão', sentTitle: 'Mensagem enviada', sentSub: 'Obrigado! Um membro da direção responde em breve, por e-mail.', sendAnother: 'Enviar outra mensagem', messagePlaceholder: 'Diga-nos em poucas palavras…', emailInvalid: 'Endereço de e-mail inválido',
   },
@@ -926,6 +926,14 @@ const pt: Dict = {
     off: 'De volta ao presente.',
     exit: 'Sair de 2077',
     hud: 'ALFK · SISTEMA 2077',
+  },
+  fun: {
+    minitelOn: 'Conectando ao 3615 ALFK… Bem-vindo ao Minitel!',
+    minitelOff: 'Minitel desconectado.',
+    cinemaOn: 'Hora do cinema! 🍿',
+    cinemaOff: 'Luzes acesas.',
+    cinemaExit: 'FIM',
+    flip: 'Está tudo de cabeça para baixo… como na Austrália! 🙃',
   },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',

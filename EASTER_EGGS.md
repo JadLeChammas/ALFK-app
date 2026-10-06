@@ -15,6 +15,11 @@ Des surprises cachées dans le site. Chut, ne le dites pas à tout le monde 🤫
 | 7 | **Tempête de sable** : quelques secondes de vent de sable sur l'écran | Rechercher « **chameau** », « **50°C** » ou « **shamal** » dans la recherche ou l'Annuaire. |
 | 8 | **Mode futuriste « ALFK 2077 »** : couleurs néon (cyan et violet), polices futuristes, grille lumineuse, ligne de balayage et badge « SYSTÈME 2077 » | Au clavier : **↓ ↓ ↑ ↑ → ← → ← Y Z**. Sur téléphone : taper « **2077** » dans la recherche ou l'Annuaire. Même code (ou bouton « Quitter 2077 ») pour revenir. |
 | 9 | **Le site en libanais** 🇱🇧 : tout le site écrit en libanais en arabizi (3, 7, 2…), un cèdre à côté du logo, les mois libanais (Kenoun el Tene, Chbat…). La langue « Lebnene » n'apparaît jamais dans les Réglages : seul le code l'active. | Au clavier : **← → ← → ↑ ↓ ↑ ↓ L B**. Sur téléphone : taper « **yalla** » dans la recherche ou l'Annuaire. Même code (ou « yalla ») pour revenir à la langue d'avant. |
+| 9 bis | **Le site en koweïtien** 🇰🇼 : tout le site écrit en koweïtien en arabizi (chlonak, zain, wayed, il7en…), les Kuwait Towers à côté du logo, les noms de pays en anglais. N'apparaît jamais dans les Réglages. | Au clavier : **→ ← → ← ↓ ↑ ↓ ↑ K W**. Sur téléphone : taper « **chlonak** » dans la recherche ou l'Annuaire. Même code (ou « chlonak ») pour revenir à la langue d'avant. |
+| 10 | **Mode Minitel (bac 1990)** 📟 : tout passe en vert phosphore sur fond noir, police pixelisée, photos teintées en vert, et le bruit d'un modem qui se connecte au « 3615 ALFK » | Taper « **minitel** » dans la recherche ou l'Annuaire. Le retaper pour revenir. |
+| 11 | **Le site à l'envers** 🙃 : tout le site se retourne pendant 10 secondes, « comme en Australie » | Taper « **australie** » dans la recherche ou l'Annuaire. |
+| 12 | **Mode cinéma** 🍿 : bandes noires en haut et en bas, teinte sépia et grain de vieux film | Taper « **popcorn** » dans la recherche ou l'Annuaire. Bouton « FIN » (ou retaper « popcorn ») pour sortir. |
+| 13 | **Page introuvable (404)** 🐪 : un chameau perdu dans le désert, avec une phrase différente selon la langue (« Ma le2ina el page… » en libanais, une blague sur les Avenues en koweïtien) | Aller sur une adresse qui n'existe pas, par exemple alfk.org/chameau |
 
 ## Pour les développeurs
 

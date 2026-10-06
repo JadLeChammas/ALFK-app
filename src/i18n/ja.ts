@@ -187,7 +187,7 @@ const ja: Dict = {
     },
   },
   legal: {
-    title: '法的表示', sitemap: 'サイトマップ', privacy: 'プライバシーポリシー', privacyUpdated: '最終更新日：2026年9月30日', notFound: 'ページが見つかりません', notFoundSub: 'このページは存在しないか、移動しました。',
+    title: '法的表示', sitemap: 'サイトマップ', privacy: 'プライバシーポリシー', privacyUpdated: '最終更新日：2026年9月30日', notFound: 'ページが見つかりません', notFoundSub: 'このページは存在しないか、移動しました。', notFoundJoke: 'ラクダまで砂漠で迷子になりました… 🐪',
     goHome: 'ホームに戻る', contactTitle: 'お問い合わせ', contactSub: 'ご質問がありますか？同窓会のチームがお答えします。',
     subject: '件名', message: 'メッセージ', name: 'お名前', sent: 'メッセージを送信しました。ありがとうございます！', contactLead: '入会、イベント、パートナーシップ、またはちょっとした質問など、お気軽にご連絡ください。役員がお答えします。', topic: '件名', topicMembership: '入会', topicEvents: 'イベント', topicPartnership: 'パートナーシップ', topicOrientation: '進路', topicOther: 'その他', replyTime: '48時間以内に返信', privateNote: 'メッセージは役員のみが読みます', otherWays: 'その他の連絡方法', wayBoardSub: 'アミカルを支えるメンバー', wayJoinSub: '卒業生ネットワークに参加', wayAssociationSub: '私たちの歩みと使命', sentTitle: '送信しました', sentSub: 'ありがとうございます！役員より近日中にメールでご返信します。', sendAnother: '別のメッセージを送る', messagePlaceholder: '簡単にご記入ください…', emailInvalid: 'メールアドレスが無効です',
   },
@@ -926,6 +926,14 @@ const ja: Dict = {
     off: '現在に戻りました。',
     exit: '2077年を出る',
     hud: 'ALFK · システム 2077',
+  },
+  fun: {
+    minitelOn: '3615 ALFK に接続中… ミニテルへようこそ！',
+    minitelOff: 'ミニテルを切断しました。',
+    cinemaOn: '映画の時間です！🍿',
+    cinemaOff: '明かりがつきました。',
+    cinemaExit: '終',
+    flip: 'すべてが逆さま… オーストラリアみたい！🙃',
   },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',

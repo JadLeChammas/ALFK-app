@@ -187,7 +187,7 @@ const zh: Dict = {
     },
   },
   legal: {
-    title: '法律声明', sitemap: '网站地图', privacy: '隐私政策', privacyUpdated: '最后更新：2026 年 9 月 30 日', notFound: '页面未找到', notFoundSub: '该页面不存在或已被移动。',
+    title: '法律声明', sitemap: '网站地图', privacy: '隐私政策', privacyUpdated: '最后更新：2026 年 9 月 30 日', notFound: '页面未找到', notFoundSub: '该页面不存在或已被移动。', notFoundJoke: '连骆驼都在沙漠里迷路了…… 🐪',
     goHome: '返回首页', contactTitle: '联系我们', contactSub: '有问题吗？校友会团队会为你解答。',
     subject: '主题', message: '消息', name: '姓名', sent: '消息已发送，谢谢！', contactLead: '入会、活动、合作或只是一个问题：给我们写信，理事会成员会回复您。', topic: '主题', topicMembership: '入会', topicEvents: '活动', topicPartnership: '合作', topicOrientation: '升学指导', topicOther: '其他', replyTime: '48 小时内回复', privateNote: '只有理事会阅读您的留言', otherWays: '其他联系方式', wayBoardSub: '让校友会运转的成员', wayJoinSub: '加入校友网络', wayAssociationSub: '我们的历史与使命', sentTitle: '留言已发送', sentSub: '谢谢！理事会成员会尽快通过电子邮件回复您。', sendAnother: '再发一条留言', messagePlaceholder: '简单写几句…', emailInvalid: '电子邮件地址无效',
   },
@@ -926,6 +926,14 @@ const zh: Dict = {
     off: '回到现在。',
     exit: '离开 2077',
     hud: 'ALFK · 系统 2077',
+  },
+  fun: {
+    minitelOn: '正在连接 3615 ALFK……欢迎使用 Minitel！',
+    minitelOff: 'Minitel 已断开。',
+    cinemaOn: '电影时间！🍿',
+    cinemaOff: '灯亮了。',
+    cinemaExit: '剧终',
+    flip: '一切都颠倒了……就像在澳大利亚！🙃',
   },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',

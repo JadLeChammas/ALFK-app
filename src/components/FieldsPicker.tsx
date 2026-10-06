@@ -21,7 +21,7 @@ export function FieldsPicker({ value, onChange, label }: { value: string[]; onCh
   const [typing, setTyping] = useState(false);
   const [text, setText] = useState('');
   const options = useMemo(() => {
-    const loc = lang === 'pirate' ? 'en' : lang === 'lb' ? 'fr' : lang;
+    const loc = lang === 'pirate' || lang === 'kw' ? 'en' : lang === 'lb' ? 'fr' : lang;
     const list = FIELDS.filter((k) => k !== 'autre' && !value.includes(k))
       .map((k) => ({ value: k as string, label: d.fields[k] }))
       .sort((a, b) => a.label.localeCompare(b.label, loc));

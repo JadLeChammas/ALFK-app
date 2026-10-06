@@ -148,6 +148,50 @@ const retro: typeof light = {
 export const palettes = { light, dark };
 export const retroPalette = retro;
 
+/** Hidden Minitel mode: phosphor green on black, like a 1990 Minitel screen. */
+export const MINITEL_GREEN = '#39FF6A';
+export const minitelPalette: typeof light = {
+  ...dark,
+  bg: '#000000',
+  surface: '#020A04',
+  surfaceAlt: '#04120A',
+  surfaceHover: '#082012',
+  border: '#1E6B35',
+  borderStrong: '#2FA850',
+  text: MINITEL_GREEN,
+  textMuted: '#2ED158',
+  textSubtle: '#1F9A42',
+  primary: MINITEL_GREEN,
+  primaryPressed: '#2ED158',
+  primarySoft: '#06200F',
+  onPrimary: '#000000',
+  secondary: MINITEL_GREEN,
+  secondaryStrong: MINITEL_GREEN,
+  secondarySoft: '#06200F',
+  rail: '#000000',
+  accent: MINITEL_GREEN,
+  accentPressed: '#2ED158',
+  accentSoft: '#06200F',
+  onAccent: '#000000',
+  nav: '#000000',
+  navText: MINITEL_GREEN,
+  navActive: 'rgba(57, 255, 106, 0.18)',
+  ink: '#000000',
+  onInk: MINITEL_GREEN,
+  success: MINITEL_GREEN,
+  successSoft: '#06200F',
+  warning: MINITEL_GREEN,
+  warningSoft: '#06200F',
+  danger: MINITEL_GREEN,
+  dangerSoft: '#06200F',
+  info: MINITEL_GREEN,
+  infoSoft: '#06200F',
+  bubbleMine: '#06200F',
+  bubbleTheirs: '#020A04',
+  overlay: 'rgba(0, 0, 0, 0.8)',
+  chart: [MINITEL_GREEN, '#2ED158', '#1F9A42', '#156B2E'],
+};
+
 /** The futuristic mode's neon cyan (also used by its grid and HUD, components/FutureLayer.tsx). */
 export const FUTURE_NEON = '#00E5FF';
 /** Hidden futuristic mode « ALFK 2077 »: deep space blue, neon cyan and violet. */

@@ -192,7 +192,7 @@ const lb: Dict = {
     },
   },
   legal: {
-    title: 'Mentions légales', sitemap: 'Plan el site', privacy: 'Khousousiye', privacyUpdated: 'Akher ta3dil: 30 Aylul 2026', notFound: 'Ma le2ina el page', notFoundSub: 'Hal page mich mawjoude aw t8ayyar ma7alla.',
+    title: 'Mentions légales', sitemap: 'Plan el site', privacy: 'Khousousiye', privacyUpdated: 'Akher ta3dil: 30 Aylul 2026', notFound: 'Ma le2ina el page', notFoundSub: 'Hal page mich mawjoude aw t8ayyar ma7alla.', notFoundJoke: 'Ma le2ina el page… w 7atta el jamal deye3 bel sa7ra 🐪',
     goHome: 'Rja3 3al bet', contactTitle: '7kina', contactSub: '3endak sou2al? Fari2 el Amicale byjeweb.',
     subject: 'El mawdou3', message: 'Message', name: 'Esem', sent: 'Anba3at, merci!', contactLead: 'Inkhirat, events, partenariat aw bas sou2al: ktobelna w 7ada men el bureau byjeweb.', topic: 'El mawdou3', topicMembership: 'Inkhirat', topicEvents: 'Events', topicPartnership: 'Partenariat', topicOrientation: 'Orientation', topicOther: 'Ghayro', replyTime: 'Jaweb b 48 se3a', privateNote: 'Bas el bureau bi2ra message-ak', otherWays: 'Torou2 tenye la t7kina', wayBoardSub: 'Yalle 3am yemchou el Amicale', wayJoinSub: 'Fout 3a réseau el alumni', wayAssociationSub: '7ikeyetna w chou 3am na3mol', sentTitle: 'Anba3at', sentSub: 'Merci! 7ada men el bureau byrodd 3lek 3al email 2ariban.', sendAnother: 'B3at message tene', messagePlaceholder: '2elelna bi kam kelme…', emailInvalid: 'El email 8alat',
   },
@@ -931,6 +931,14 @@ const lb: Dict = {
     off: 'Rje3na 3al yom.',
     exit: 'Ta3a men 2077',
     hud: 'ALFK · SYSTÈME 2077',
+  },
+  fun: {
+    minitelOn: '3am nwassel 3al 3615 ALFK… Ahla w sahla 3al Minitel!',
+    minitelOff: 'Ta3et men el Minitel.',
+    cinemaOn: 'Wa2t el cinéma! 🍿',
+    cinemaOff: 'Rje3ou el adwe.',
+    cinemaExit: 'EL NIHAYE',
+    flip: 'Kel chi bel ma2loub… metel b Australia! 🙃',
   },
   uni: {
     pick: 'Na22e men el list', searchPlaceholder: 'Ktob el esem aw el ikhtisar (metlan I, ISEP, Sorbonne)…', inCity: 'B {city}',

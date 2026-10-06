@@ -187,7 +187,7 @@ const nl: Dict = {
     },
   },
   legal: {
-    title: 'Juridische informatie', sitemap: 'Sitemap', privacy: 'Privacybeleid', privacyUpdated: 'Laatst bijgewerkt: 30 september 2026', notFound: 'Pagina niet gevonden', notFoundSub: 'Deze pagina bestaat niet of is verplaatst.',
+    title: 'Juridische informatie', sitemap: 'Sitemap', privacy: 'Privacybeleid', privacyUpdated: 'Laatst bijgewerkt: 30 september 2026', notFound: 'Pagina niet gevonden', notFoundSub: 'Deze pagina bestaat niet of is verplaatst.', notFoundJoke: 'Zelfs de kameel is verdwaald in de woestijn… 🐪',
     goHome: 'Terug naar home', contactTitle: 'Neem contact op', contactSub: 'Een vraag? Het team van de Amicale antwoordt je.',
     subject: 'Onderwerp', message: 'Bericht', name: 'Naam', sent: 'Bericht verstuurd, bedankt!', contactLead: 'Lidmaatschap, evenementen, partnerschappen of gewoon een vraag: schrijf ons en een bestuurslid antwoordt.', topic: 'Onderwerp', topicMembership: 'Lidmaatschap', topicEvents: 'Evenementen', topicPartnership: 'Partnerschap', topicOrientation: 'Studiekeuze', topicOther: 'Overig', replyTime: 'Antwoord binnen 48 uur', privateNote: 'Alleen het bestuur leest je bericht', otherWays: 'Andere manieren om ons te bereiken', wayBoardSub: 'De mensen die de Amicale draaiende houden', wayJoinSub: 'Word lid van het alumninetwerk', wayAssociationSub: 'Ons verhaal en onze missie', sentTitle: 'Bericht verstuurd', sentSub: 'Bedankt! Een bestuurslid antwoordt je binnenkort per e-mail.', sendAnother: 'Nog een bericht sturen', messagePlaceholder: 'Vertel het ons in een paar woorden…', emailInvalid: 'Ongeldig e-mailadres',
   },
@@ -926,6 +926,14 @@ const nl: Dict = {
     off: 'Terug naar het heden.',
     exit: '2077 verlaten',
     hud: 'ALFK · SYSTEEM 2077',
+  },
+  fun: {
+    minitelOn: 'Verbinden met 3615 ALFK… Welkom op de Minitel!',
+    minitelOff: 'Minitel verbroken.',
+    cinemaOn: 'Filmtijd! 🍿',
+    cinemaOff: 'Licht weer aan.',
+    cinemaExit: 'EINDE',
+    flip: 'Alles staat op zijn kop… net als in Australië! 🙃',
   },
   uni: {
     pick: 'Kies uit de lijst', searchPlaceholder: 'Typ de naam of de afkorting (bijv. I, ISEP, Sorbonne)…', inCity: 'In {city}',
