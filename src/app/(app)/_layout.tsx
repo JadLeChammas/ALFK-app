@@ -12,12 +12,14 @@ export default function MemberLayout() {
   const me = useMe();
   const { actions } = useStore();
   const { lang } = useI18n();
-  // Emails go out in French or English: the member's language on the site decides.
+  // Emails go out in French or English: the member's language on the site decides. The hidden
+  // Lebanese mode (an easter egg, on this device only) leaves the emails' language as it was.
   const locale = lang === 'fr' ? 'fr' : 'en';
   useEffect(() => {
+    if (lang === 'lb') return;
     if (me.locale !== locale) actions.setLocale(locale);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale, me.locale]);
+  }, [locale, me.locale, lang]);
   return (
     <AppShell>
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg }, animation: 'fade' }}>
