@@ -20,7 +20,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
-import { eggs, isFutureWord, isLebaneseWord, isSandWord, legendQuery } from '@/lib/eggs';
+import { eggs, isFutureWord, isLebaneseWord, isRetroWord, isSandWord, legendQuery } from '@/lib/eggs';
 import { LegendCard } from '@/components/EasterEggs';
 
 const PREVIEW = 8;
@@ -117,6 +117,7 @@ export default function Directory() {
     if (isSandWord(q)) eggs.emit('sandstorm');
     if (isFutureWord(q)) eggs.emit('future');
     if (isLebaneseWord(q)) eggs.emit('lebanon');
+    if (isRetroWord(q)) eggs.emit('retro');
   }, [q]);
 
   return (

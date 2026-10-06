@@ -6,7 +6,7 @@ import type { User } from '@/data/types';
  * Easter eggs (the full list with how to find them is in EASTER_EGGS.md).
  * A tiny event bus lets a search box or the footer trigger an effect drawn at the root.
  */
-export type EggEvent = 'sandstorm' | 'credits' | 'future' | 'lebanon';
+export type EggEvent = 'sandstorm' | 'credits' | 'future' | 'lebanon' | 'retro';
 
 const listeners = new Map<EggEvent, Set<() => void>>();
 /** Credits shown once instead of the saved ones (admin preview of unsaved changes). */
@@ -44,6 +44,8 @@ export function isSandWord(q: string) {
 
 /** « 2077 » in a search box: the futuristic mode (on phones, which have no arrow keys for the code). */
 export const isFutureWord = (q: string) => norm(q).replace(/\s+/g, '') === '2077';
+/** « 2003 » in a search box: the retro mode (on phones; also 5 taps on the logo, or the Konami code). */
+export const isRetroWord = (q: string) => norm(q).replace(/\s+/g, '') === '2003';
 /** « yalla » in a search box: the hidden Lebanese language (on phones, which have no arrow keys). */
 export const isLebaneseWord = (q: string) => norm(q).replace(/\s+/g, '') === 'yalla';
 

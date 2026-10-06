@@ -6,6 +6,7 @@ import Svg, { Path, Polygon, Rect, Text as SvgText } from 'react-native-svg';
 
 import { countVisit, useVisitCount } from '@/data/counter';
 import { useI18n } from '@/i18n';
+import { eggs } from '@/lib/eggs';
 import { KONAMI, useToggleRetro } from '@/lib/retro';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -23,6 +24,9 @@ export function RetroLayer() {
 
   // Every visit counts, retro or not, so the number means something when it shows.
   useEffect(() => countVisit(), []);
+
+  // « 2003 » typed in a search box (phones have no arrow keys for the Konami code).
+  useEffect(() => eggs.on('retro', () => toggle()), [toggle]);
 
   useEffect(() => {
     if (Platform.OS !== 'web' || typeof window === 'undefined') return;
