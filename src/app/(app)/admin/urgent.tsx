@@ -53,8 +53,9 @@ export default function AdminUrgent() {
     if (!hasContent) return toast(u.needContent, 'danger');
     if (!recipients.length) return toast(u.needRecipients, 'danger');
     if (!(await confirm({ title: u.send, message: f(u.confirmSend, { n: recipients.length }), confirmLabel: u.send }))) return;
-    actions.sendUrgentMessage(recipients, { title: title.trim(), body: body.trim(), reasons });
-    toast(f(u.sent, { n: recipients.length }), 'success');
+    const r = await actions.sendUrgentMessage(recipients, { title: title.trim(), body: body.trim(), reasons });
+    if (r.emailError) toast(f(u.emailFailed, { error: r.emailError }), 'danger');
+    else toast(r.emailed !== undefined ? f(u.sentEmailed, { n: recipients.length, m: r.emailed }) : f(u.sent, { n: recipients.length }), 'success');
     setReasons([]);
     setTitle('');
     setBody('');
@@ -63,7 +64,7 @@ export default function AdminUrgent() {
 
   return (
     <Screen maxWidth={1040}>
-      <PageHeader title={u.title} subtitle={u.subtitle} />
+      <PageHeader title={u.title} subtitle={`${u.subtitle} ${u.emailNote}`} />
       <AdminNav />
 
       {/* 1. What: ready-made reasons and/or a message. */}

@@ -532,6 +532,9 @@ const ja: Dict = {
     ambassadorTitle: '伝説のアンバサダー',
     ambassadorBadge: 'Amicale のアンバサダー',
     ambassadorText: 'どこへ行っても Amicale の旗を高く掲げる。',
+    pirateTitle: '伝説の海賊',
+    pirateBadge: 'Amicale の船長',
+    pirateText: 'Amicale の旗を掲げて七つの海を駆ける。',
     creditsTitle: 'LFK 卒業生会 作品',
     creditsBureau: '役員',
     creditsMade: '制作',
@@ -884,6 +887,11 @@ const ja: Dict = {
     readBy: '既読 {n} / {total}',
     withdraw: '取り消す',
     withdrawConfirm: 'このメッセージをすべての宛先から取り消しますか（まだ読んでいない人も含む）？',
+    emailNote: '同じタイトルと本文のメールも各宛先に送られます。ニュースを拒否している人や、アカウントが制限されている人にも送られます。',
+    sentEmailed: '緊急メッセージを {n} 人に送信し、{m} 人にメールで送りました。',
+    emailFailed: 'メッセージはサイトに表示されていますが、メールを送れませんでした（{error}）。',
+    emailHello: '{{prenom}} さん',
+    emailFooter: 'このメッセージは「了解しました」を押すまでサイトにも表示されます：{{lien}}',
     reasons: {
       invalidPhoto: {
         label: '無効なプロフィール写真',

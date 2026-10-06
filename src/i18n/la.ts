@@ -50,6 +50,7 @@ const la: Dict = {
       proof: 'Testimonium studiorum in LFK necessarium est ut inscribaris.',
       file_type: 'Hoc genus fasciculi non accipitur, aut res fasciculi cum extensione non congruit.',
       file_too_large: 'Fasciculus nimis magnus: summum 10 MB.',
+      unavailable: 'Haec facultas tibi nunc non patet. Si quid quaeris, auxilium adi.',
       email_not_confirmed: 'Inscriptio electronica nondum confirmata est: signum per epistulam acceptum insere.', invalid_credentials: 'Inscriptio aut tessera falsa.', email_taken: 'Ratio cum hac inscriptione iam exstat.',
       weak_password: 'Tessera saltem VIII signa habere debet.', unknown_email: 'Nulla ratio cum hac inscriptione.',
       wrong_password: 'Tessera praesens falsa est.', birth_date: 'Dies natalis non valet: DD/MM/AAAA scribe, diem praeteritum.', phone: 'Numerus telephonicus non valet: signum regionis elige, deinde VI ad XIV cifras.', invalid_code: 'Signum Collegii IV cifras exacte habere debet.', code_taken: 'Hoc signum Collegii iam alii sodali datum est.', unknown: 'Aliquid erravit. Mox iterum tempta.', mismatch: 'Tesserae non congruunt.', missing: 'Omnia necessaria imple.',
@@ -183,7 +184,7 @@ const la: Dict = {
       approve: 'probavit', refuse: 'recusavit', create_user: 'rationem creavit pro', promote_students: 'discipulos in annum proximum promovit', send_email: 'epistulam misit', change_role: 'munus mutavit',
       reset_password: 'tesseram restituit', delete_user: 'rationem delevit', create_event: 'eventum creavit',
       delete_event: 'eventum delevit', delete_photo: 'imaginem delevit ex', create_publication: 'edidit',
-      delete_publication: 'editionem delevit', open_reported_conversation: 'colloquium delatum aperuit', resolve_report: 'delationem curavit',
+      delete_publication: 'editionem delevit', open_reported_conversation: 'colloquium delatum aperuit', resolve_report: 'delationem curavit', restrict_user: 'rationem restrinxit', unrestrict_user: 'restrictionem sustulit',
     },
   },
   legal: {
@@ -532,6 +533,9 @@ const la: Dict = {
     ambassadorTitle: 'Legatus legendarius',
     ambassadorBadge: 'Legatus Amicale',
     ambassadorText: 'Colores Amicale alte fert, quocumque it.',
+    pirateTitle: 'Pirata legendaria',
+    pirateBadge: 'Navarcha Amicale',
+    pirateText: 'Septem maria sub vexillo Amicale percurrit.',
     creditsTitle: 'Fabula a Consociatione alumnorum LFK',
     creditsBureau: 'Collegium',
     creditsMade: 'Fecerunt',
@@ -867,6 +871,11 @@ const la: Dict = {
     readBy: 'Legerunt {n} / {total}',
     withdraw: 'Revoca',
     withdrawConfirm: 'Hunc nuntium omnibus accipientibus revocare (etiam eis qui nondum legerunt)?',
+    emailNote: 'Epistula electronica eodem titulo et textu etiam ad quemque accipientem mittitur, etiam si nuntia recusavit aut ratio eius restricta est.',
+    sentEmailed: 'Nuntius urgens {n} sodalibus missus, et per epistulam {m}.',
+    emailFailed: 'Nuntius in situ apparet, sed epistula mitti non potuit ({error}).',
+    emailHello: 'Salve, {{prenom}},',
+    emailFooter: 'Hic nuntius etiam in situ apparet donec « Intellexi » premas: {{lien}}',
     reasons: {
       invalidPhoto: {
         label: 'Imago paginae non valet',
@@ -879,6 +888,23 @@ const la: Dict = {
   studentStats: {
     title: 'Discipuli in LFK',
     split: '{alumni} alumni · {pupils} discipuli in LFK',
+  },
+  restriction: {
+    restrict: 'Restringe',
+    lift: 'Restrictionem tolle',
+    badge: 'Restrictus',
+    confirmTitle: '{name} restringere?',
+    confirmBody: '{name} adhuc intrare et omnia videre potest, sed nihil iam scribere (epistulas, editiones, imagines, collegia, quaestiones, responsa, paginam), neque quisquam ei scribere potest. Nulla admonitio mittitur: si temptat, « Facultas non patet » videt.',
+    liftTitle: 'Restrictionem {name} tollere?',
+    liftBody: '{name} aditum solitum recuperabit.',
+    done: 'Ratio restricta',
+    lifted: 'Restrictio sublata',
+  },
+  unavailable: {
+    title: 'Facultas non patet',
+    body: 'Haec facultas tibi nunc non patet. Si quid quaeris, auxilium adi.',
+    contact: 'Auxilium adi',
+    recipient: 'Hic sodalis nunc epistulas accipere non potest.',
   },
   uni: {
     pick: 'Ex indice elige', searchPlaceholder: 'Nomen aut compendium scribe (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

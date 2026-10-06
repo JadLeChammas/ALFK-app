@@ -1319,12 +1319,16 @@ function useStoreValue() {
      * Admins: an urgent message to each of `userIds` — ready-made reasons (e.g. an invalid profile photo)
      * and/or the admin's own title and text. It pops up for them until they acknowledge it.
      */
-    sendUrgentMessage(userIds: string[], msg: { title?: string; body?: string; reasons: string[] }) {
-      if (!meId || !userIds.length) return;
+    async sendUrgentMessage(userIds: string[], msg: { title?: string; body?: string; reasons: string[] }): Promise<{ emailed?: number; emailError?: string }> {
+      if (!meId || !userIds.length) return {};
       const createdAt = nowIso();
       const rows: UrgentMessage[] = userIds.map((userId) => ({ id: makeId('urg'), userId, title: msg.title || undefined, body: msg.body || undefined, reasons: msg.reasons, createdBy: meId, createdAt }));
       commit((d) => ({ ...d, urgentMessages: [...(d.urgentMessages ?? []), ...rows] }));
-      if (supabase) send(supabase.from('urgent_messages').insert(rows.map(urgentMessageRow)));
+      if (!supabase) return {};
+      send(supabase.from('urgent_messages').insert(rows.map(urgentMessageRow)));
+      // The same message by email too (restricted members and those who refused the news included).
+      const r = await callEmailApi<{ sent: number }>('urgent', { userIds, title: msg.title ?? '', body: msg.body ?? '', reasons: msg.reasons });
+      return r.ok ? { emailed: r.sent ?? 0 } : { emailError: r.error ?? 'unknown' };
     },
     /** The member read an urgent message (« J'ai compris »): it stops popping up. */
     acknowledgeUrgentMessage(id: string) {

@@ -533,6 +533,9 @@ const pirate: Dict = {
     ambassadorTitle: 'Legendary envoy',
     ambassadorBadge: 'Th\' Amicale\'s envoy',
     ambassadorText: 'Flies th\' Amicale\'s flag high, in every port he sails.',
+    pirateTitle: 'Legendary pirate queen',
+    pirateBadge: 'Cap\'n o\' the Amicale',
+    pirateText: 'Plunders the seven seas under th\' Amicale\'s black flag, arr!',
     creditsTitle: 'A tale from th\' crew o\' th\' LFK',
     creditsBureau: 'Th\' captains',
     creditsMade: 'Shipwrights',
@@ -885,6 +888,11 @@ const pirate: Dict = {
     readBy: 'Read by {n} / {total}',
     withdraw: 'Withdraw',
     withdrawConfirm: 'Withdraw this hail for all its recipients (even those who\'ve not read it)?',
+    emailNote: 'A message-in-a-bottle (email) with th\' same title an\' text also sails to each hand, even if they refused the news or be restricted.',
+    sentEmailed: 'Urgent hail sent to {n} hand(s), an\' by bottle to {m}.',
+    emailFailed: 'The hail shows on the ship, but the bottle couldn\'t sail ({error}).',
+    emailHello: 'Ahoy {{prenom}},',
+    emailFooter: 'This hail also shows aboard till ye click « Aye, understood »: {{lien}}',
     reasons: {
       invalidPhoto: {
         label: 'Invalid portrait',

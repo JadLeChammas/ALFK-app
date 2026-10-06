@@ -532,6 +532,9 @@ const zh: Dict = {
     ambassadorTitle: '传奇大使',
     ambassadorBadge: '校友会大使',
     ambassadorText: '无论走到哪里，都高举校友会的旗帜。',
+    pirateTitle: '传奇海盗',
+    pirateBadge: '校友会船长',
+    pirateText: '扬着校友会的旗帜，驰骋七大洋。',
     creditsTitle: 'LFK 校友会出品',
     creditsBureau: '理事会',
     creditsMade: '制作',
@@ -884,6 +887,11 @@ const zh: Dict = {
     readBy: '已读 {n} / {total}',
     withdraw: '撤回',
     withdrawConfirm: '要对所有收件人撤回此消息吗（包括尚未阅读的人）？',
+    emailNote: '每位收件人还会收到一封标题和正文相同的电子邮件——即使其拒收新闻或账户受到限制。',
+    sentEmailed: '紧急消息已发送给 {n} 位成员，并通过电子邮件发送给 {m} 位。',
+    emailFailed: '消息已显示在网站上，但电子邮件未能发送（{error}）。',
+    emailHello: '{{prenom}}，您好：',
+    emailFooter: '此消息也会显示在网站上，直到您点击「我知道了」：{{lien}}',
     reasons: {
       invalidPhoto: {
         label: '头像无效',

@@ -44,11 +44,12 @@ export function isSandWord(q: string) {
 
 /**
  * Legends: searching one of these full names (any case, accents or spacing) shows their special card —
- * the site's creator, and the Amicale's legendary ambassador. `kind` picks the texts (`eggs.legends`).
+ * the site's creator, the Amicale's legendary ambassador and its legendary pirate (a pirate hat on her photo). `kind` picks the texts (`eggs.legends`).
  */
 export const LEGENDS = [
   { name: 'Jad El Chammas', kind: 'developer', emoji: '🏆' },
   { name: 'Adriano Sfeir', kind: 'ambassador', emoji: '🎖️' },
+  { name: 'Tatiana El Hajj', kind: 'pirate', emoji: '🏴‍☠️' },
 ] as const;
 export type Legend = (typeof LEGENDS)[number];
 export const CREATOR = LEGENDS[0].name;

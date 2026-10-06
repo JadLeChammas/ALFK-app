@@ -14,6 +14,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
 import { Avatar, Badge, Tap } from './ui/primitives';
 import { Txt } from './ui/Txt';
+import { PirateHat } from '@/components/ui/Logo';
 
 /** Root layer: credits, sandstorm, baccalaureate banner. */
 export function EasterEggs() {
@@ -223,7 +224,11 @@ export function SparkleName({ name }: { name: string }) {
 /** A legend's full name in a search box: their card (the legendary developer, the legendary ambassador). */
 export function LegendCard({ legend, onOpen }: { legend: Legend; onOpen: (href: string) => void }) {
   const { d } = useI18n();
-  const t = legend.kind === 'developer' ? { title: d.eggs.legendTitle, text: d.eggs.legendText, badge: d.eggs.legendBadge } : { title: d.eggs.ambassadorTitle, text: d.eggs.ambassadorText, badge: d.eggs.ambassadorBadge };
+  const t = {
+    developer: { title: d.eggs.legendTitle, text: d.eggs.legendText, badge: d.eggs.legendBadge },
+    ambassador: { title: d.eggs.ambassadorTitle, text: d.eggs.ambassadorText, badge: d.eggs.ambassadorBadge },
+    pirate: { title: d.eggs.pirateTitle, text: d.eggs.pirateText, badge: d.eggs.pirateBadge },
+  }[legend.kind];
   const { colors } = useTheme();
   const members = useApprovedMembers();
   const jad = useMemo(() => members.find((u) => fullName(u).toLowerCase() === legend.name.toLowerCase()), [members, legend.name]);
@@ -238,6 +243,12 @@ export function LegendCard({ legend, onOpen }: { legend: Legend; onOpen: (href: 
       <Animated.View style={[{ margin: 6, padding: 16, borderRadius: 18, borderWidth: 2, backgroundColor: colors.navy, flexDirection: 'row', alignItems: 'center', gap: 14 }, ring]}>
         <View>
           <Avatar uri={jad?.avatar} name={legend.name} size={56} />
+          {/* The legendary pirate wears her hat, tilted on the photo. */}
+          {legend.kind === 'pirate' && (
+            <View pointerEvents="none" style={{ position: 'absolute', top: -32, left: -1, transform: [{ rotate: '-14deg' }] }}>
+              <PirateHat size={60} />
+            </View>
+          )}
           <View style={{ position: 'absolute', right: -6, bottom: -6, width: 26, height: 26, borderRadius: 13, backgroundColor: '#E8B820', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.navy }}>
             <Txt style={{ fontSize: 13 }}>{legend.emoji}</Txt>
           </View>

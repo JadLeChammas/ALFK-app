@@ -532,6 +532,9 @@ const it: Dict = {
     ambassadorTitle: 'Ambasciatore leggendario',
     ambassadorBadge: 'Ambasciatore dell’Amicale',
     ambassadorText: 'Porta in alto i colori dell’Amicale, ovunque vada.',
+    pirateTitle: 'Piratessa leggendaria',
+    pirateBadge: 'Capitana dell’Amicale',
+    pirateText: 'Solca i sette mari con la bandiera dell’Amicale.',
     creditsTitle: 'Un film dell’Amicale degli ex alunni del LFK',
     creditsBureau: 'Il direttivo',
     creditsMade: 'Regia',
@@ -884,6 +887,11 @@ const it: Dict = {
     readBy: 'Letto da {n} / {total}',
     withdraw: 'Ritira',
     withdrawConfirm: 'Ritirare questo messaggio per tutti i destinatari (anche chi non l’ha ancora letto)?',
+    emailNote: 'Un’e-mail con lo stesso titolo e testo parte anche a ogni destinatario, anche se ha rifiutato le novità o il suo account è limitato.',
+    sentEmailed: 'Messaggio urgente inviato a {n} membro/i, e per e-mail a {m}.',
+    emailFailed: 'Il messaggio appare sul sito, ma l’e-mail non è potuta partire ({error}).',
+    emailHello: 'Ciao {{prenom}},',
+    emailFooter: 'Questo messaggio appare anche sul sito finché non clicchi « Ho capito »: {{lien}}',
     reasons: {
       invalidPhoto: {
         label: 'Foto profilo non valida',

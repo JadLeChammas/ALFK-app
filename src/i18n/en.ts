@@ -532,6 +532,9 @@ const en: Dict = {
     ambassadorTitle: 'Legendary ambassador',
     ambassadorBadge: 'Amicale ambassador',
     ambassadorText: 'Flies the Amicale’s colours high, wherever he goes.',
+    pirateTitle: 'Legendary pirate',
+    pirateBadge: 'Captain of the Amicale',
+    pirateText: 'Sails the seven seas under the Amicale’s flag.',
     creditsTitle: 'A film by the LFK Alumni Association',
     creditsBureau: 'The board',
     creditsMade: 'Made by',
@@ -884,6 +887,11 @@ const en: Dict = {
     readBy: 'Read by {n} / {total}',
     withdraw: 'Withdraw',
     withdrawConfirm: 'Withdraw this message for all its recipients (even those who haven’t read it yet)?',
+    emailNote: 'An email with the same title and text also goes to each recipient, even if they refused the news or their account is restricted.',
+    sentEmailed: 'Urgent message sent to {n} member(s), and by email to {m}.',
+    emailFailed: 'The message shows on the site, but the email could not be sent ({error}).',
+    emailHello: 'Hello {{prenom}},',
+    emailFooter: 'This message also shows on the site until you click « Got it »: {{lien}}',
     reasons: {
       invalidPhoto: {
         label: 'Invalid profile photo',

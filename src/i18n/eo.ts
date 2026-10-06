@@ -49,6 +49,7 @@ const eo: Dict = {
       proof: 'Pruvo de lernado ĉe LFK estas necesa por aliĝi.',
       file_type: 'Ĉi tiu dosiertipo ne estas akceptata, aŭ la enhavo de la dosiero ne kongruas kun ĝia sufikso.',
       file_too_large: 'Tro granda dosiero: maksimume 10 MB.',
+      unavailable: 'Ĉi tiu funkcio nun ne estas disponebla por vi. Se vi havas demandojn, kontaktu la subtenon.',
       email_not_confirmed: 'Via retpoŝtadreso ankoraŭ ne estas konfirmita: enigu la kodon ricevitan retpoŝte.', invalid_credentials: 'Malĝusta retpoŝto aŭ pasvorto.', email_taken: 'Konto kun ĉi tiu retpoŝto jam ekzistas.',
       weak_password: 'La pasvorto devas havi almenaŭ 8 signojn.', unknown_email: 'Neniu konto kun ĉi tiu retpoŝto.',
       wrong_password: 'La nuna pasvorto estas malĝusta.', birth_date: 'Nevalida naskiĝdato: uzu TT/MM/JJJJ, pasintan daton.', phone: 'Nevalida telefonnumero: elektu la landokodon, poste 6 ĝis 14 ciferojn.', invalid_code: 'La estrara kodo devas havi ekzakte 4 ciferojn.', code_taken: 'Ĉi tiu estrara kodo jam estas donita al alia membro.', unknown: 'Io misfunkciis. Reprovu post momento.', mismatch: 'La pasvortoj ne kongruas.', missing: 'Plenigu ĉiujn devigajn kampojn.',
@@ -182,7 +183,7 @@ const eo: Dict = {
       approve: 'aprobis', refuse: 'rifuzis', create_user: 'kreis la konton de', promote_students: 'transirigis la lernantojn al la sekva jaro', send_email: 'sendis la retmesaĝon', change_role: 'ŝanĝis la rolon de',
       reset_password: 'restarigis la pasvorton de', delete_user: 'forigis la konton de', create_event: 'kreis la eventon',
       delete_event: 'forigis la eventon', delete_photo: 'forigis foton el', create_publication: 'publikigis',
-      delete_publication: 'forigis la publikaĵon', open_reported_conversation: 'malfermis la raportitan konversacion', resolve_report: 'traktis la raporton',
+      delete_publication: 'forigis la publikaĵon', open_reported_conversation: 'malfermis la raportitan konversacion', resolve_report: 'traktis la raporton', restrict_user: 'limigis la konton de', unrestrict_user: 'nuligis la limigon de',
     },
   },
   legal: {
@@ -531,6 +532,9 @@ const eo: Dict = {
     ambassadorTitle: 'Legenda ambasadoro',
     ambassadorBadge: 'Ambasadoro de la Amicale',
     ambassadorText: 'Alte portas la kolorojn de la Amicale, kien ajn li iras.',
+    pirateTitle: 'Legenda pirato',
+    pirateBadge: 'Kapitano de la Amicale',
+    pirateText: 'Trairas la sep marojn sub la flago de la Amicale.',
     creditsTitle: 'Filmo de la Asocio de eksaj lernantoj de LFK',
     creditsBureau: 'La estraro',
     creditsMade: 'Farita de',
@@ -866,6 +870,11 @@ const eo: Dict = {
     readBy: 'Legita de {n} / {total}',
     withdraw: 'Retiri',
     withdrawConfirm: 'Ĉu retiri ĉi tiun mesaĝon por ĉiuj ĝiaj ricevantoj (eĉ tiuj, kiuj ankoraŭ ne legis ĝin)?',
+    emailNote: 'Retmesaĝo kun la sama titolo kaj teksto ankaŭ iras al ĉiu ricevanto, eĉ se li rifuzis la novaĵojn aŭ lia konto estas limigita.',
+    sentEmailed: 'Urĝa mesaĝo sendita al {n} membro(j), kaj retpoŝte al {m}.',
+    emailFailed: 'La mesaĝo aperas en la retejo, sed la retmesaĝo ne povis esti sendita ({error}).',
+    emailHello: 'Saluton, {{prenom}},',
+    emailFooter: 'Ĉi tiu mesaĝo ankaŭ aperas en la retejo ĝis vi alklakos « Mi komprenis »: {{lien}}',
     reasons: {
       invalidPhoto: {
         label: 'Nevalida profilfoto',
@@ -878,6 +887,23 @@ const eo: Dict = {
   studentStats: {
     title: 'Lernantoj ĉe LFK',
     split: '{alumni} eksaj lernantoj · {pupils} lernantoj ĉe LFK',
+  },
+  restriction: {
+    restrict: 'Limigi',
+    lift: 'Nuligi la limigon',
+    badge: 'Limigita',
+    confirmTitle: 'Ĉu limigi {name}?',
+    confirmBody: '{name} ankoraŭ povas ensaluti kaj foliumi ĉion, sed ne plu povas skribi ion ajn (mesaĝojn, publikaĵojn, fotojn, klubojn, demandojn, respondojn, profilon), kaj neniu povas skribi al ri. Neniu sciigo estas sendata: se ri provas, ri vidas « Funkcio ne disponebla ».',
+    liftTitle: 'Ĉu nuligi la limigon de {name}?',
+    liftBody: '{name} rericevos normalan aliron.',
+    done: 'Konto limigita',
+    lifted: 'Limigo nuligita',
+  },
+  unavailable: {
+    title: 'Funkcio ne disponebla',
+    body: 'Ĉi tiu funkcio nun ne estas disponebla por vi. Se vi havas demandojn, kontaktu la subtenon.',
+    contact: 'Kontakti la subtenon',
+    recipient: 'Ĉi tiu membro nun ne povas ricevi mesaĝojn.',
   },
   uni: {
     pick: 'Elektu el la listo', searchPlaceholder: 'Tajpu la nomon aŭ mallongigon (ekz. I, ISEP, Sorbonne)…', inCity: 'En {city}',

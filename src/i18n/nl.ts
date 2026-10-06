@@ -49,6 +49,7 @@ const nl: Dict = {
       proof: 'Een bewijs van schoolgang aan het LFK is verplicht om je in te schrijven.',
       file_type: 'Dit bestandstype wordt niet geaccepteerd, of de inhoud past niet bij de extensie.',
       file_too_large: 'Bestand te groot: maximaal 10 MB.',
+      unavailable: 'Deze functie is momenteel niet voor je beschikbaar. Heb je vragen, neem dan contact op met de ondersteuning.',
       email_not_confirmed: 'Je e-mailadres is nog niet bevestigd: voer de code in die je per e-mail hebt ontvangen.', invalid_credentials: 'Onjuist e-mailadres of wachtwoord.', email_taken: 'Er bestaat al een account met dit e-mailadres.',
       weak_password: 'Het wachtwoord moet minstens 8 tekens hebben.', unknown_email: 'Geen account met dit e-mailadres.',
       wrong_password: 'Het huidige wachtwoord is onjuist.', birth_date: 'Ongeldige geboortedatum: gebruik DD/MM/JJJJ, een datum in het verleden.', phone: 'Ongeldig telefoonnummer: kies de landcode en daarna 6 tot 14 cijfers.', invalid_code: 'De bestuurscode moet precies 4 cijfers hebben.', code_taken: 'Deze bestuurscode is al aan een ander lid toegewezen.', unknown: 'Er is iets misgegaan. Probeer het zo meteen opnieuw.', mismatch: 'De wachtwoorden komen niet overeen.', missing: 'Vul alle verplichte velden in.',
@@ -182,7 +183,7 @@ const nl: Dict = {
       approve: 'keurde goed', refuse: 'weigerde', create_user: 'maakte het account aan van', promote_students: 'liet de leerlingen overgaan', send_email: 'verstuurde de e-mail', change_role: 'wijzigde de rol van',
       reset_password: 'stelde het wachtwoord opnieuw in van', delete_user: 'verwijderde het account van', create_event: 'maakte het evenement aan',
       delete_event: 'verwijderde het evenement', delete_photo: 'verwijderde een foto uit', create_publication: 'publiceerde',
-      delete_publication: 'verwijderde de publicatie', open_reported_conversation: 'opende het gemelde gesprek', resolve_report: 'handelde de melding af',
+      delete_publication: 'verwijderde de publicatie', open_reported_conversation: 'opende het gemelde gesprek', resolve_report: 'handelde de melding af', restrict_user: 'beperkte het account van', unrestrict_user: 'hief de beperking op van',
     },
   },
   legal: {
@@ -531,6 +532,9 @@ const nl: Dict = {
     ambassadorTitle: 'Legendarische ambassadeur',
     ambassadorBadge: 'Ambassadeur van de Amicale',
     ambassadorText: 'Draagt de kleuren van de Amicale hoog, waar hij ook komt.',
+    pirateTitle: 'Legendarische piraat',
+    pirateBadge: 'Kapitein van de Amicale',
+    pirateText: 'Bevaart de zeven zeeën onder de vlag van de Amicale.',
     creditsTitle: 'Een film van de Vereniging van oud-leerlingen van het LFK',
     creditsBureau: 'Het bestuur',
     creditsMade: 'Gemaakt door',
@@ -866,6 +870,11 @@ const nl: Dict = {
     readBy: 'Gelezen door {n} / {total}',
     withdraw: 'Intrekken',
     withdrawConfirm: 'Dit bericht intrekken voor al zijn ontvangers (ook wie het nog niet heeft gelezen)?',
+    emailNote: 'Er gaat ook een e-mail met dezelfde titel en tekst naar elke ontvanger, ook als die het nieuws heeft geweigerd of het account beperkt is.',
+    sentEmailed: 'Dringend bericht verstuurd naar {n} lid/leden, en per e-mail naar {m}.',
+    emailFailed: 'Het bericht verschijnt op de site, maar de e-mail kon niet worden verstuurd ({error}).',
+    emailHello: 'Hallo {{prenom}},',
+    emailFooter: 'Dit bericht verschijnt ook op de site tot je op « Begrepen » klikt: {{lien}}',
     reasons: {
       invalidPhoto: {
         label: 'Ongeldige profielfoto',
@@ -878,6 +887,23 @@ const nl: Dict = {
   studentStats: {
     title: 'Leerlingen op het LFK',
     split: '{alumni} oud-leerlingen · {pupils} leerlingen op het LFK',
+  },
+  restriction: {
+    restrict: 'Beperken',
+    lift: 'Beperking opheffen',
+    badge: 'Beperkt',
+    confirmTitle: '{name} beperken?',
+    confirmBody: '{name} kan nog inloggen en alles bekijken, maar kan niets meer schrijven (berichten, publicaties, foto’s, clubs, vragen, antwoorden, profiel), en niemand kan diegene schrijven. Er wordt geen melding verstuurd: bij een poging verschijnt « Functie niet beschikbaar ».',
+    liftTitle: 'De beperking van {name} opheffen?',
+    liftBody: '{name} krijgt weer normale toegang.',
+    done: 'Account beperkt',
+    lifted: 'Beperking opgeheven',
+  },
+  unavailable: {
+    title: 'Functie niet beschikbaar',
+    body: 'Deze functie is momenteel niet voor je beschikbaar. Heb je vragen, neem dan contact op met de ondersteuning.',
+    contact: 'Contact opnemen met de ondersteuning',
+    recipient: 'Dit lid kan momenteel geen berichten ontvangen.',
   },
   uni: {
     pick: 'Kies uit de lijst', searchPlaceholder: 'Typ de naam of de afkorting (bijv. I, ISEP, Sorbonne)…', inCity: 'In {city}',

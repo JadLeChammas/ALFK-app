@@ -530,6 +530,9 @@ const fr = {
     ambassadorTitle: 'Ambassadeur légendaire',
     ambassadorBadge: 'Ambassadeur de l’Amicale',
     ambassadorText: 'Porte haut les couleurs de l’Amicale, partout où il passe.',
+    pirateTitle: 'Pirate légendaire',
+    pirateBadge: 'Capitaine de l’Amicale',
+    pirateText: 'Écume les sept mers avec le drapeau de l’Amicale.',
     creditsTitle: 'Un film de l’Amicale des anciens du LFK',
     creditsBureau: 'Le bureau',
     creditsMade: 'Réalisation',
@@ -882,6 +885,11 @@ const fr = {
     readBy: 'Lu par {n} / {total}',
     withdraw: 'Retirer',
     withdrawConfirm: 'Retirer ce message pour tous ses destinataires (même ceux qui ne l’ont pas encore lu) ?',
+    emailNote: 'Un e-mail avec le même titre et le même texte part aussi à chaque destinataire, même s’il a refusé les actualités ou si son compte est restreint.',
+    sentEmailed: 'Message urgent envoyé à {n} membre(s), et par e-mail à {m}.',
+    emailFailed: 'Le message s’affiche bien sur le site, mais l’e-mail n’a pas pu partir ({error}).',
+    emailHello: 'Bonjour {{prenom}},',
+    emailFooter: 'Ce message s’affiche aussi sur le site, jusqu’à ce que vous cliquiez « J’ai compris » : {{lien}}',
     reasons: {
       invalidPhoto: {
         label: 'Photo de profil invalide',

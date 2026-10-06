@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
+import { urgentEmail } from '../src/data/urgentEmail';
 import { checkUnsubscribe, emailSettings, emailStatus, ROLE_NAMES, sendEvent, sendMessage, syncAllContacts, syncContact, toBase64, type Attachment, type Recipient } from './_email';
 
 /**
@@ -9,6 +10,7 @@ import { checkUnsubscribe, emailSettings, emailStatus, ROLE_NAMES, sendEvent, se
  *   marketing       a member turns the news on or off (their own account)
  *   approved        an admin approved an account: « compte validé »
  *   send            an admin's email (Admin → Emails) to a group, or a test to themself
+ *   urgent          the email that goes with an urgent message (Admin → Messages urgents)
  *   sync-contacts   admins: every member who accepts the news → Brevo lists
  *   status          admins: is Brevo set up?
  */
@@ -34,6 +36,9 @@ type Body = {
   body?: string;
   attachments?: { path: string; name: string }[];
   test?: boolean;
+  userIds?: string[];
+  title?: string;
+  reasons?: string[];
 };
 
 export async function POST(request: Request) {
@@ -84,6 +89,8 @@ export async function POST(request: Request) {
       }
       case 'send':
         return await sendFromAdmin(admin, me as Recipient, body);
+      case 'urgent':
+        return await sendUrgent(admin, me as Recipient, body);
       case 'sync-contacts':
         return json(200, { ok: true, ...(await syncAllContacts(admin)) });
       default:
@@ -117,6 +124,27 @@ async function signupNotify(admin: SupabaseClient, body: Body) {
   const name = [member.first_name, (member.last_name ?? '').toLocaleUpperCase('fr')].filter(Boolean).join(' ');
   await sendEvent(admin, 'adminPending', (admins ?? []) as Recipient[], (locale) => ({ membre: name, role: ROLE_NAMES[locale][member.role ?? 'alumni'] ?? '' }));
   return json(200, { ok: true });
+}
+
+/**
+ * The email of an urgent message: to every chosen member — even those who turned the news off or whose
+ * account is restricted (it is not news, it is about their account).
+ */
+async function sendUrgent(admin: SupabaseClient, me: Recipient, body: Body) {
+  const ids = [...new Set((body.userIds ?? []).filter((x) => typeof x === 'string'))].slice(0, 5000);
+  const reasons = (body.reasons ?? []).filter((x) => typeof x === 'string').slice(0, 10);
+  if (!ids.length || (!reasons.length && !(body.body ?? '').trim())) return json(400, { error: 'missing' });
+  if (!emailStatus().configured) return json(400, { error: 'email_not_configured' });
+  const recipients: Recipient[] = [];
+  for (let i = 0; i < ids.length; i += 200) {
+    const { data } = await admin.from('profiles').select(COLUMNS).eq('approved', true).in('id', ids.slice(i, i + 200));
+    recipients.push(...((data ?? []) as Recipient[]));
+  }
+  const { signature } = await emailSettings(admin);
+  const msg = { title: (body.title ?? '').slice(0, 120), body: (body.body ?? '').slice(0, 2000), reasons };
+  const sent = await sendMessage({ recipients, text: (locale) => urgentEmail(locale, msg), signature });
+  await admin.from('admin_logs').insert({ actor_id: me.id, action: 'send_email', target: urgentEmail('fr', msg).subject.slice(0, 200), meta: { count: sent } });
+  return json(200, { ok: true, sent });
 }
 
 /** An admin's email: to the chosen groups (members who accept the news; admins always), or a test. */
