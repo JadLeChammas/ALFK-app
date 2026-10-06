@@ -8,7 +8,6 @@ import { globeDots, mapDots } from '@/data/worldDots';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
-import { animFps, LITE, userBusy } from '@/lib/perf';
 import { useOnScreen } from './useOnScreen';
 
 /**
@@ -88,8 +87,7 @@ export function Globe({
   const { lang, d } = useI18n();
   const [box, onScreen] = useOnScreen();
 
-  // Phones: every other dot (the globe is small there, it still reads as land).
-  const land = useMemo(() => globeDots().filter((_, i) => !LITE || i % 2 === 0).map(([la, lo]) => toVec(la, lo)), []);
+  const land = useMemo(() => globeDots().map(([la, lo]) => toVec(la, lo)), []);
   const origin = useMemo(() => toVec(LFK_LL[0], LFK_LL[1]), []);
   const targets = useMemo(() => markers.map((m) => ({ ...m, v: toVec(m.ll[0], m.ll[1]) })), [markers]);
 
@@ -132,7 +130,7 @@ export function Globe({
         s.phi += dt * 0.14;
         s.theta += (0.38 - s.theta) * (1 - Math.exp(-dt));
       }
-      if (now - lastPaint >= 1000 / animFps(FPS) && (g.active || !userBusy())) {
+      if (now - lastPaint >= 1000 / FPS) {
         lastPaint = now;
         const t = reduced ? 0.8 : s.t;
         // Nothing moved (reduced motion, no drag): skip the render.

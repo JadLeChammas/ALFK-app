@@ -4,7 +4,6 @@ import { Platform, View } from 'react-native';
 import Animated, { useAnimatedProps, useFrameCallback, useReducedMotion, useSharedValue } from 'react-native-reanimated';
 import Svg, { Path } from 'react-native-svg';
 
-import { LITE } from '@/lib/perf';
 import { useOnScreen } from './useOnScreen';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -76,9 +75,7 @@ export function FloatingPaths({
 }) {
   const reduced = useReducedMotion();
   const [box, onScreen] = useOnScreen();
-  // Phones: half the lines (each one is redrawn many times a second).
-  const lines = LITE ? Math.ceil(count / 2) : count;
-  const paths = useMemo(() => [...buildPaths(1, lines), ...buildPaths(-1, lines)], [lines]);
+  const paths = useMemo(() => [...buildPaths(1, count), ...buildPaths(-1, count)], [count]);
   const clock = useSharedValue(0);
   const pending = useSharedValue(0);
   // The motion is very slow (20–30 s cycles): 24 updates a second are plenty and keep the page light.
