@@ -876,6 +876,15 @@ const la: Dict = {
     emailFailed: 'Nuntius in situ apparet, sed epistula mitti non potuit ({error}).',
     emailHello: 'Salve, {{prenom}},',
     emailFooter: 'Hic nuntius etiam in situ apparet donec « Intellexi » premas: {{lien}}',
+    validate: 'Proba',
+    unvalidate: 'Probationem revoca',
+    validated: 'Probatum',
+    validatedCount: 'Probata: {n} / {total}',
+    newPhoto: 'Nova imago',
+    read: 'Lectum',
+    unread: 'Nondum lectum',
+    untilValidated: 'Nuntius in quoque adventu sodalis redit donec emendationem probes.',
+    waitingValidation: 'Gratias! Nova imago tua probationem Collegii exspectat. Hic nuntius evanescet cum probata erit.',
     reasons: {
       invalidPhoto: {
         label: 'Imago paginae non valet',

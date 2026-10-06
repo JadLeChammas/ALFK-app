@@ -875,6 +875,15 @@ const eo: Dict = {
     emailFailed: 'La mesaĝo aperas en la retejo, sed la retmesaĝo ne povis esti sendita ({error}).',
     emailHello: 'Saluton, {{prenom}},',
     emailFooter: 'Ĉi tiu mesaĝo ankaŭ aperas en la retejo ĝis vi alklakos « Mi komprenis »: {{lien}}',
+    validate: 'Validigi',
+    unvalidate: 'Nuligi la validigon',
+    validated: 'Validigita',
+    validatedCount: 'Validigitaj: {n} / {total}',
+    newPhoto: 'Nova foto',
+    read: 'Legita',
+    unread: 'Ankoraŭ ne legita',
+    untilValidated: 'La mesaĝo revenas ĉe ĉiu vizito de la membro ĝis vi validigos la korekton.',
+    waitingValidation: 'Dankon! Via nova foto atendas la validigon de la estraro. Ĉi tiu mesaĝo malaperos post la validigo.',
     reasons: {
       invalidPhoto: {
         label: 'Nevalida profilfoto',

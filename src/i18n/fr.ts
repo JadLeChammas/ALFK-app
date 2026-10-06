@@ -890,6 +890,15 @@ const fr = {
     emailFailed: 'Le message s’affiche bien sur le site, mais l’e-mail n’a pas pu partir ({error}).',
     emailHello: 'Bonjour {{prenom}},',
     emailFooter: 'Ce message s’affiche aussi sur le site, jusqu’à ce que vous cliquiez « J’ai compris » : {{lien}}',
+    validate: 'Valider',
+    unvalidate: 'Annuler la validation',
+    validated: 'Validé',
+    validatedCount: 'Validé : {n} / {total}',
+    newPhoto: 'Nouvelle photo',
+    read: 'Lu',
+    unread: 'Pas encore lu',
+    untilValidated: 'Le message revient à chaque visite du membre tant que vous n’avez pas validé sa correction.',
+    waitingValidation: 'Merci ! Votre nouvelle photo est en attente de validation par le bureau. Ce message disparaîtra une fois qu’elle sera validée.',
     reasons: {
       invalidPhoto: {
         label: 'Photo de profil invalide',

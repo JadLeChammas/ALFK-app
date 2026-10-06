@@ -892,6 +892,15 @@ const zh: Dict = {
     emailFailed: '消息已显示在网站上，但电子邮件未能发送（{error}）。',
     emailHello: '{{prenom}}，您好：',
     emailFooter: '此消息也会显示在网站上，直到您点击「我知道了」：{{lien}}',
+    validate: '确认',
+    unvalidate: '撤销确认',
+    validated: '已确认',
+    validatedCount: '已确认：{n} / {total}',
+    newPhoto: '新照片',
+    read: '已读',
+    unread: '尚未阅读',
+    untilValidated: '在您确认其修改之前，该成员每次访问时都会再次看到此消息。',
+    waitingValidation: '谢谢！您的新照片正在等待理事会确认。确认后此消息将消失。',
     reasons: {
       invalidPhoto: {
         label: '头像无效',

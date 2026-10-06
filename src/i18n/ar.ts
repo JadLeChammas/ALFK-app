@@ -892,6 +892,15 @@ const ar: Dict = {
     emailFailed: 'تظهر الرسالة على الموقع، لكن تعذّر إرسال البريد الإلكتروني ({error}).',
     emailHello: 'مرحباً {{prenom}}،',
     emailFooter: 'تظهر هذه الرسالة أيضاً على الموقع حتى تضغط « فهمت »: {{lien}}',
+    validate: 'تأكيد',
+    unvalidate: 'إلغاء التأكيد',
+    validated: 'تم التأكيد',
+    validatedCount: 'تم التأكيد: {n} / {total}',
+    newPhoto: 'صورة جديدة',
+    read: 'مقروءة',
+    unread: 'لم تُقرأ بعد',
+    untilValidated: 'تعود الرسالة في كل زيارة للعضو إلى أن تؤكد التصحيح.',
+    waitingValidation: 'شكراً! صورتك الجديدة بانتظار تأكيد المكتب. ستختفي هذه الرسالة بعد تأكيدها.',
     reasons: {
       invalidPhoto: {
         label: 'صورة ملف شخصي غير صالحة',

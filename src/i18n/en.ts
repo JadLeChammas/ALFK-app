@@ -892,6 +892,15 @@ const en: Dict = {
     emailFailed: 'The message shows on the site, but the email could not be sent ({error}).',
     emailHello: 'Hello {{prenom}},',
     emailFooter: 'This message also shows on the site until you click « Got it »: {{lien}}',
+    validate: 'Validate',
+    unvalidate: 'Undo validation',
+    validated: 'Validated',
+    validatedCount: 'Validated: {n} / {total}',
+    newPhoto: 'New photo',
+    read: 'Read',
+    unread: 'Not read yet',
+    untilValidated: 'The message comes back at each of the member’s visits until you validate their fix.',
+    waitingValidation: 'Thank you! Your new photo is waiting for the board’s validation. This message will disappear once it is validated.',
     reasons: {
       invalidPhoto: {
         label: 'Invalid profile photo',

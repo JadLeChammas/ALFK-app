@@ -892,6 +892,15 @@ const pt: Dict = {
     emailFailed: 'A mensagem aparece no site, mas o e-mail não pôde ser enviado ({error}).',
     emailHello: 'Olá, {{prenom}},',
     emailFooter: 'Esta mensagem também aparece no site até você clicar em « Entendi »: {{lien}}',
+    validate: 'Validar',
+    unvalidate: 'Anular a validação',
+    validated: 'Validado',
+    validatedCount: 'Validados: {n} / {total}',
+    newPhoto: 'Nova foto',
+    read: 'Lido',
+    unread: 'Ainda não lido',
+    untilValidated: 'A mensagem volta a cada visita do membro até você validar a correção.',
+    waitingValidation: 'Obrigado! Sua nova foto aguarda a validação da diretoria. Esta mensagem desaparecerá quando for validada.',
     reasons: {
       invalidPhoto: {
         label: 'Foto de perfil inválida',

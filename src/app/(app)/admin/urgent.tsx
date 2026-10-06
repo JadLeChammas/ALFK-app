@@ -9,7 +9,7 @@ import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { UrgentMessage } from '@/data/types';
-import { URGENT_REASONS } from '@/data/urgentReasons';
+import { needsValidation, URGENT_REASONS } from '@/data/urgentReasons';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -155,6 +155,8 @@ function History() {
       {batches.map(([at, list]) => {
         const first = list[0];
         const read = list.filter((m) => m.acknowledgedAt).length;
+        const toValidate = needsValidation(first.reasons);
+        const validated = list.filter((m) => m.resolvedAt).length;
         const labels = first.reasons.map((k) => u.reasons[k as keyof typeof u.reasons]?.label).filter(Boolean) as string[];
         return (
           <Card key={at} style={{ gap: 10 }}>
@@ -165,7 +167,9 @@ function History() {
                 <Row gap={6} wrap>
                   {labels.map((l) => <Badge key={l} label={l} tone="primary" />)}
                   <Badge label={f(u.readBy, { n: read, total: list.length })} tone={read === list.length ? 'success' : 'neutral'} icon="eye" />
+                  {toValidate && <Badge label={f(u.validatedCount, { n: validated, total: list.length })} tone={validated === list.length ? 'success' : 'warning'} icon="check-square" />}
                 </Row>
+                {toValidate && validated < list.length && <Txt variant="small" color="textSubtle">{u.untilValidated}</Txt>}
                 {!!first.body && <Txt variant="small" color="textMuted" numberOfLines={3}>{first.body}</Txt>}
               </View>
               <IconButton
@@ -180,12 +184,34 @@ function History() {
             <Row gap={6} wrap>
               {list.map((m) => {
                 const x = users.get(m.userId);
+                if (!toValidate) {
+                  return (
+                    <Row key={m.id} gap={6} style={{ paddingVertical: 4, paddingLeft: 4, paddingRight: 10, borderRadius: 999, backgroundColor: colors.surfaceAlt }}>
+                      <Avatar uri={x?.avatar} name={x ? fullName(x) : '?'} size={22} />
+                      <Txt variant="small">{x ? fullName(x) : '—'}</Txt>
+                      <Feather name={m.acknowledgedAt ? 'check-circle' : 'circle'} size={13} color={m.acknowledgedAt ? colors.success : colors.textSubtle} />
+                    </Row>
+                  );
+                }
+                // To validate: the member's current photo, big enough to judge, and the Validate button.
+                const newPhoto = !!m.photoBefore && (x?.avatar ?? 'none') !== m.photoBefore;
                 return (
-                  <Row key={m.id} gap={6} style={{ paddingVertical: 4, paddingLeft: 4, paddingRight: 10, borderRadius: 999, backgroundColor: colors.surfaceAlt }}>
-                    <Avatar uri={x?.avatar} name={x ? fullName(x) : '?'} size={22} />
-                    <Txt variant="small">{x ? fullName(x) : '—'}</Txt>
-                    <Feather name={m.acknowledgedAt ? 'check-circle' : 'circle'} size={13} color={m.acknowledgedAt ? colors.success : colors.textSubtle} />
-                  </Row>
+                  <View key={m.id} style={{ alignItems: 'center', gap: 6, padding: 10, width: 150, borderRadius: 16, borderWidth: 1, borderColor: m.resolvedAt ? colors.success : newPhoto ? colors.warning : colors.border, backgroundColor: colors.surfaceAlt }}>
+                    <Avatar uri={x?.avatar} name={x ? fullName(x) : '?'} size={64} />
+                    <Txt variant="smallStrong" align="center" numberOfLines={2}>{x ? fullName(x) : '—'}</Txt>
+                    {m.resolvedAt ? (
+                      <Badge label={u.validated} tone="success" icon="check" />
+                    ) : newPhoto ? (
+                      <Badge label={u.newPhoto} tone="warning" icon="camera" />
+                    ) : (
+                      <Badge label={m.acknowledgedAt ? u.read : u.unread} tone="neutral" icon={m.acknowledgedAt ? 'eye' : 'eye-off'} />
+                    )}
+                    {m.resolvedAt ? (
+                      <Button label={u.unvalidate} size="sm" variant="ghost" onPress={() => actions.resolveUrgentMessage(m.id, false)} />
+                    ) : (
+                      <Button label={u.validate} size="sm" icon="check" variant={newPhoto ? 'primary' : 'secondary'} onPress={() => actions.resolveUrgentMessage(m.id, true)} />
+                    )}
+                  </View>
                 );
               })}
             </Row>

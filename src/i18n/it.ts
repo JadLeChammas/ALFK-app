@@ -892,6 +892,15 @@ const it: Dict = {
     emailFailed: 'Il messaggio appare sul sito, ma l’e-mail non è potuta partire ({error}).',
     emailHello: 'Ciao {{prenom}},',
     emailFooter: 'Questo messaggio appare anche sul sito finché non clicchi « Ho capito »: {{lien}}',
+    validate: 'Convalida',
+    unvalidate: 'Annulla la convalida',
+    validated: 'Convalidato',
+    validatedCount: 'Convalidati: {n} / {total}',
+    newPhoto: 'Nuova foto',
+    read: 'Letto',
+    unread: 'Non ancora letto',
+    untilValidated: 'Il messaggio ricompare a ogni visita del membro finché non convalidi la correzione.',
+    waitingValidation: 'Grazie! La tua nuova foto è in attesa di convalida da parte del direttivo. Questo messaggio sparirà una volta convalidata.',
     reasons: {
       invalidPhoto: {
         label: 'Foto profilo non valida',

@@ -892,6 +892,15 @@ const de: Dict = {
     emailFailed: 'Die Nachricht erscheint auf der Website, aber die E-Mail konnte nicht gesendet werden ({error}).',
     emailHello: 'Hallo {{prenom}},',
     emailFooter: 'Diese Nachricht erscheint auch auf der Website, bis Sie « Verstanden » klicken: {{lien}}',
+    validate: 'Bestätigen',
+    unvalidate: 'Bestätigung aufheben',
+    validated: 'Bestätigt',
+    validatedCount: 'Bestätigt: {n} / {total}',
+    newPhoto: 'Neues Foto',
+    read: 'Gelesen',
+    unread: 'Noch nicht gelesen',
+    untilValidated: 'Die Nachricht erscheint bei jedem Besuch des Mitglieds erneut, bis Sie die Korrektur bestätigen.',
+    waitingValidation: 'Danke! Ihr neues Foto wartet auf die Bestätigung durch den Vorstand. Diese Nachricht verschwindet, sobald es bestätigt ist.',
     reasons: {
       invalidPhoto: {
         label: 'Ungültiges Profilfoto',

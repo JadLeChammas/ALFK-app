@@ -136,8 +136,9 @@ export const toClub = (r: Row): Club => ({ id: r.id, name: r.name, description: 
 export const toClubMember = (r: Row): ClubMember => ({ clubId: r.club_id, userId: r.user_id, role: r.role, status: r.status, createdAt: r.created_at });
 export const toClubPost = (r: Row): ClubPost => ({ id: r.id, clubId: r.club_id, authorId: opt(r.author_id), kind: r.kind, text: r.text, createdAt: r.created_at });
 export const toCircleMessage = (r: Row): CircleMessage => ({ id: r.id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
-export const toUrgentMessage = (r: Row): UrgentMessage => ({ id: r.id, userId: r.user_id, title: opt(r.title), body: opt(r.body), reasons: r.reasons ?? [], createdBy: opt(r.created_by), createdAt: r.created_at, acknowledgedAt: opt(r.acknowledged_at) });
-export const urgentMessageRow = (m: UrgentMessage) => ({ id: m.id, user_id: m.userId, title: m.title ?? null, body: m.body ?? null, reasons: m.reasons, created_by: m.createdBy ?? null, created_at: m.createdAt });
+export const toUrgentMessage = (r: Row): UrgentMessage => ({ id: r.id, userId: r.user_id, title: opt(r.title), body: opt(r.body), reasons: r.reasons ?? [], createdBy: opt(r.created_by), createdAt: r.created_at, acknowledgedAt: opt(r.acknowledged_at), resolvedAt: opt(r.resolved_at), photoBefore: opt(r.photo_before) });
+// photo_before (migration 043) only when there is one, so plain messages still save without it.
+export const urgentMessageRow = (m: UrgentMessage) => ({ id: m.id, user_id: m.userId, title: m.title ?? null, body: m.body ?? null, reasons: m.reasons, created_by: m.createdBy ?? null, created_at: m.createdAt, ...(m.photoBefore ? { photo_before: m.photoBefore } : {}) });
 const toAnswer = (r: Row): Answer => ({ id: r.id, questionId: r.question_id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
 const toKeyDate = (r: Row): KeyDate => ({ id: r.id, title: r.title, month: r.month, day: r.day, year: opt(r.year), category: r.category, endMonth: opt(r.end_month), endDay: opt(r.end_day), url: opt(r.url) });
 export const toConversation = (r: Row): Conversation => ({ id: r.id, members: [r.members[0], r.members[1]], lastRead: r.last_read ?? {}, report: opt(r.report) });

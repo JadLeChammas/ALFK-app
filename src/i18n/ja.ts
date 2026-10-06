@@ -892,6 +892,15 @@ const ja: Dict = {
     emailFailed: 'メッセージはサイトに表示されていますが、メールを送れませんでした（{error}）。',
     emailHello: '{{prenom}} さん',
     emailFooter: 'このメッセージは「了解しました」を押すまでサイトにも表示されます：{{lien}}',
+    validate: '承認する',
+    unvalidate: '承認を取り消す',
+    validated: '承認済み',
+    validatedCount: '承認済み：{n} / {total}',
+    newPhoto: '新しい写真',
+    read: '既読',
+    unread: '未読',
+    untilValidated: 'あなたが修正を承認するまで、このメッセージはメンバーが訪れるたびに再表示されます。',
+    waitingValidation: 'ありがとうございます！新しい写真は役員会の承認待ちです。承認されるとこのメッセージは消えます。',
     reasons: {
       invalidPhoto: {
         label: '無効なプロフィール写真',

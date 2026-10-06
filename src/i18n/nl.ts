@@ -875,6 +875,15 @@ const nl: Dict = {
     emailFailed: 'Het bericht verschijnt op de site, maar de e-mail kon niet worden verstuurd ({error}).',
     emailHello: 'Hallo {{prenom}},',
     emailFooter: 'Dit bericht verschijnt ook op de site tot je op « Begrepen » klikt: {{lien}}',
+    validate: 'Goedkeuren',
+    unvalidate: 'Goedkeuring intrekken',
+    validated: 'Goedgekeurd',
+    validatedCount: 'Goedgekeurd: {n} / {total}',
+    newPhoto: 'Nieuwe foto',
+    read: 'Gelezen',
+    unread: 'Nog niet gelezen',
+    untilValidated: 'Het bericht komt bij elk bezoek van het lid terug tot je de correctie goedkeurt.',
+    waitingValidation: 'Bedankt! Je nieuwe foto wacht op goedkeuring door het bestuur. Dit bericht verdwijnt zodra die is goedgekeurd.',
     reasons: {
       invalidPhoto: {
         label: 'Ongeldige profielfoto',

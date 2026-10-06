@@ -893,6 +893,15 @@ const pirate: Dict = {
     emailFailed: 'The hail shows on the ship, but the bottle couldn\'t sail ({error}).',
     emailHello: 'Ahoy {{prenom}},',
     emailFooter: 'This hail also shows aboard till ye click « Aye, understood »: {{lien}}',
+    validate: 'Approve',
+    unvalidate: 'Undo approval',
+    validated: 'Approved',
+    validatedCount: 'Approved: {n} / {total}',
+    newPhoto: 'New portrait',
+    read: 'Read',
+    unread: 'Not read yet',
+    untilValidated: 'The hail comes back each time the sailor boards till ye approve their fix.',
+    waitingValidation: 'Thank ye! Yer new portrait awaits the cap\'ns\' approval. This hail will vanish once it\'s approved.',
     reasons: {
       invalidPhoto: {
         label: 'Invalid portrait',

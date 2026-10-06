@@ -227,7 +227,13 @@ export type CircleMessage = { id: string; authorId?: string; text: string; creat
  * shown in the member's language; `title` / `body`: the admin's own words. A send to several members
  * makes one row each, with the same `createdAt`.
  */
-export type UrgentMessage = { id: string; userId: string; title?: string; body?: string; reasons: string[]; createdBy?: string; createdAt: string; acknowledgedAt?: string };
+export type UrgentMessage = {
+  id: string; userId: string; title?: string; body?: string; reasons: string[]; createdBy?: string; createdAt: string; acknowledgedAt?: string;
+  /** Migration 043: an admin validated the fix (e.g. the new photo) — only then does a « to validate » message stop. */
+  resolvedAt?: string;
+  /** The member's photo when it was sent, to spot a new one. */
+  photoBefore?: string;
+};
 
 /** Clubs (migration 033): proposed by an alumnus, approved by an admin, run by its managers. */
 export type ClubStatus = 'pending' | 'approved' | 'rejected';

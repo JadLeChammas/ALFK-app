@@ -7,6 +7,7 @@ import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, L
 import { can, canMessage, isRestricted, SELF_SIGNUP_ROLES } from './permissions';
 import { parseAliases } from './places';
 import { sortPartners } from './partners';
+import { needsValidation } from './urgentReasons';
 import {
   callAdminApi,
   EMPTY_DB,
@@ -1322,7 +1323,12 @@ function useStoreValue() {
     async sendUrgentMessage(userIds: string[], msg: { title?: string; body?: string; reasons: string[] }): Promise<{ emailed?: number; emailError?: string }> {
       if (!meId || !userIds.length) return {};
       const createdAt = nowIso();
-      const rows: UrgentMessage[] = userIds.map((userId) => ({ id: makeId('urg'), userId, title: msg.title || undefined, body: msg.body || undefined, reasons: msg.reasons, createdBy: meId, createdAt }));
+      const users = dbRef.current?.users ?? [];
+      const rows: UrgentMessage[] = userIds.map((userId) => ({
+        id: makeId('urg'), userId, title: msg.title || undefined, body: msg.body || undefined, reasons: msg.reasons, createdBy: meId, createdAt,
+        // The photo at sending time: the admins then see when the member has put a new one.
+        photoBefore: needsValidation(msg.reasons) ? users.find((u) => u.id === userId)?.avatar ?? 'none' : undefined,
+      }));
       commit((d) => ({ ...d, urgentMessages: [...(d.urgentMessages ?? []), ...rows] }));
       if (!supabase) return {};
       send(supabase.from('urgent_messages').insert(rows.map(urgentMessageRow)));
@@ -1335,6 +1341,12 @@ function useStoreValue() {
       const at = nowIso();
       commit((d) => ({ ...d, urgentMessages: (d.urgentMessages ?? []).map((m) => (m.id === id ? { ...m, acknowledgedAt: at } : m)) }));
       if (supabase) send(supabase.from('urgent_messages').update({ acknowledged_at: at }).eq('id', id));
+    },
+    /** Admins: validate the fix (e.g. the new photo) — the message stops coming back — or undo it. */
+    resolveUrgentMessage(id: string, resolved: boolean) {
+      const at = resolved ? nowIso() : undefined;
+      commit((d) => ({ ...d, urgentMessages: (d.urgentMessages ?? []).map((m) => (m.id === id ? { ...m, resolvedAt: at } : m)) }));
+      if (supabase) send(supabase.rpc('resolve_urgent_message', { p_id: id, p_resolved: resolved }));
     },
     /** Admins: withdraw an urgent message (one recipient), read or not. */
     deleteUrgentMessage(id: string) {
