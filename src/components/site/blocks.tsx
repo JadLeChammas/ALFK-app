@@ -355,7 +355,7 @@ export type Quote = { quote: string; author: string; role: string; org: string; 
 
 /**
  * Port of 21st.dev "Editorial Testimonial": oversized index numeral, the quote, author with a
- * grayscale portrait, and a line selector with "01 / 03" and prev/next controls.
+ * large colour portrait in a ring, and a line selector with "01 / 03" and prev/next controls.
  */
 const QUOTE_MS = 8000;
 
@@ -389,13 +389,22 @@ export function EditorialTestimonial({ quotes }: { quotes: Quote[] }) {
           <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 26 : 36, lineHeight: isMobile ? 33 : 45, letterSpacing: -0.3, color: t.fg }}>“{q.quote}”</Txt>
           <Hoverable style={{ marginTop: 32 }}>
             {(hovered) => (
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-                <View style={{ width: 48, height: 48, borderRadius: 24, overflow: 'hidden', borderWidth: 2, borderColor: hovered ? t.fg : t.rule, backgroundColor: t.rule }}>
-                  {q.image && <Image source={{ uri: q.image }} style={[{ width: '100%', height: '100%' }, webFilter(hovered ? 'grayscale(0)' : 'grayscale(1)')]} contentFit="cover" />}
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: isMobile ? 16 : 22 }}>
+                {/* The author's portrait: large, in colour, ringed in the band's ink colour (grows a little on hover). */}
+                <View
+                  style={[
+                    { width: isMobile ? 76 : 104, height: isMobile ? 76 : 104, borderRadius: 999, padding: 3, backgroundColor: t.fg, transform: [{ scale: hovered ? 1.04 : 1 }] },
+                    webFilter('drop-shadow(0 10px 24px rgba(0,0,0,0.22))'),
+                  ]}>
+                  <View style={{ flex: 1, borderRadius: 999, padding: 3, backgroundColor: '#fff' }}>
+                    <View style={{ flex: 1, borderRadius: 999, overflow: 'hidden', backgroundColor: t.rule }}>
+                      {q.image && <Image source={{ uri: q.image }} style={{ width: '100%', height: '100%' }} contentFit="cover" contentPosition="top" />}
+                    </View>
+                  </View>
                 </View>
-                <View>
-                  <Txt style={{ fontFamily: fonts.semibold, fontSize: 15, color: t.fg }}>{q.author}</Txt>
-                  <Txt style={{ fontFamily: fonts.regular, fontSize: 13, color: t.muted }}>
+                <View style={{ flexShrink: 1 }}>
+                  <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 22 : 26, lineHeight: isMobile ? 26 : 30, color: t.fg }}>{q.author}</Txt>
+                  <Txt style={{ fontFamily: fonts.regular, fontSize: 13, color: t.muted, marginTop: 4 }}>
                     {q.role}
                     {'  /  '}
                     {q.org}
