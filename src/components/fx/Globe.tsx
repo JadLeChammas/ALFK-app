@@ -11,8 +11,10 @@ import { brand, fonts } from '@/theme/tokens';
 import { useOnScreen } from './useOnScreen';
 
 /**
- * React Native port of 21st.dev "Interactive Globe" (dev.yadhakim) — the original draws on a
- * <canvas>; here the same projection runs per frame into a handful of SVG paths.
+ * React Native port of 21st.dev "Interactive Globe" (dev.yadhakim).
+ * Web: drawn on a <canvas> straight from the animation loop, like the original — no React render per
+ * frame (the SVG version rebuilt thousands of dot paths 30 times a second, which made phones lag).
+ * Native: the same projection runs per frame into a handful of SVG paths.
  *  · perspective projection, depth-faded dots (real land from `dotted-map` instead of a plain sphere)
  *  · arcs through a raised midpoint, each with a travelling light particle
  *  · pulsing rings + labels on markers, drag to rotate, auto-rotate when idle
@@ -53,6 +55,168 @@ const shortest = (from: number, to: number) => {
   if (d < -Math.PI) d += 2 * Math.PI;
   return d;
 };
+
+const TAU = Math.PI * 2;
+
+/** What the canvas painter needs from the latest render (kept in a ref, read by the loop). */
+type Paint = {
+  size: number;
+  land: Vec[];
+  origin: Vec;
+  targets: (GlobeMarker & { v: Vec })[];
+  onDark: boolean;
+  arcs: boolean;
+  labels: boolean;
+  originLabel: string;
+  reduced: boolean;
+};
+
+/** Web: one frame of the globe on a canvas — same geometry, colours and layers as the SVG version. */
+function paintCanvas(cv: HTMLCanvasElement, p: Paint, phi: number, theta: number, t: number) {
+  const { size } = p;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const px = Math.round(size * dpr);
+  if (cv.width !== px) {
+    cv.width = px;
+    cv.height = px;
+  }
+  const ctx = cv.getContext('2d');
+  if (!ctx) return;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, size, size);
+
+  const c = size / 2;
+  const R = size * 0.38;
+  const fov = R * 3.4;
+  const limb = R / fov;
+  const rim = R / Math.sqrt(1 - limb * limb);
+  const k = Math.max(0.6, size / 460);
+  const lk = Math.min(1.4, k);
+  const cp = Math.cos(phi);
+  const sp = Math.sin(phi);
+  const ct = Math.cos(theta);
+  const st = Math.sin(theta);
+  const project = (v: Vec, h = 1) => {
+    const x1 = v[0] * cp + v[2] * sp;
+    const z1 = -v[0] * sp + v[2] * cp;
+    const y = v[1] * ct - z1 * st;
+    const z = z1 * ct + v[1] * st;
+    const s = fov / (fov - z * R * h);
+    return { x: c + x1 * R * h * s, y: c - y * R * h * s, z };
+  };
+  const dotFill = p.onDark ? brand.sky : brand.blue;
+  const red = p.onDark ? '#E05A5D' : brand.red;
+  const labelFill = p.onDark ? 'rgba(231, 236, 242,0.75)' : 'rgba(14, 42, 71,0.7)';
+
+  // rim
+  ctx.globalAlpha = 1;
+  ctx.beginPath();
+  ctx.arc(c, c, rim, 0, TAU);
+  ctx.strokeStyle = p.onDark ? 'rgba(231, 236, 242,0.14)' : 'rgba(14, 42, 71,0.1)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // land dots: one path per depth band, filled back to front
+  const bands = BANDS.map(() => new Path2D());
+  const radii = BANDS.map(({ depth }) => (1 + depth * 0.8) * 0.72 * k);
+  for (const v of p.land) {
+    const x1 = v[0] * cp + v[2] * sp;
+    const z1 = -v[0] * sp + v[2] * cp;
+    const z = z1 * ct + v[1] * st;
+    if (z <= limb) continue;
+    const y = v[1] * ct - z1 * st;
+    const s = fov / (fov - z * R);
+    const depth = (z - limb) / (1 - limb);
+    let b = 0;
+    while (b < BANDS.length - 1 && depth <= BANDS[b].from) b++;
+    const x = c + x1 * R * s;
+    const yy = c - y * R * s;
+    bands[b].moveTo(x + radii[b], yy);
+    bands[b].arc(x, yy, radii[b], 0, TAU);
+  }
+  ctx.fillStyle = dotFill;
+  for (let b = BANDS.length - 1; b >= 0; b--) {
+    ctx.globalAlpha = b === 0 && p.onDark ? 0.9 : BANDS[b].opacity;
+    ctx.fill(bands[b]);
+  }
+
+  // arcs from the LFK, each with its travelling light
+  if (p.arcs) {
+    const a = project(p.origin);
+    p.targets.forEach((m, i) => {
+      const b = project(m.v);
+      if (a.z < limb - 0.3 && b.z < limb - 0.3) return;
+      const mid: Vec = [(p.origin[0] + m.v[0]) / 2, (p.origin[1] + m.v[1]) / 2, (p.origin[2] + m.v[2]) / 2];
+      const len = Math.hypot(...mid) || 1;
+      const ctrl = project([mid[0] / len, mid[1] / len, mid[2] / len], 1.25);
+      const group = a.z < limb && b.z < limb ? 0.35 : 1;
+      ctx.globalAlpha = group * (m.active ? 0.9 : 0.45);
+      ctx.strokeStyle = red;
+      ctx.lineWidth = (m.active ? 1.8 : 1.2) * lk;
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.quadraticCurveTo(ctrl.x, ctrl.y, b.x, b.y);
+      ctx.stroke();
+      if (!p.reduced) {
+        const u = (Math.sin(t * 1.2 + i * 0.9) + 1) / 2;
+        const qx = (1 - u) * (1 - u) * a.x + 2 * (1 - u) * u * ctrl.x + u * u * b.x;
+        const qy = (1 - u) * (1 - u) * a.y + 2 * (1 - u) * u * ctrl.y + u * u * b.y;
+        ctx.globalAlpha = group;
+        ctx.fillStyle = red;
+        ctx.beginPath();
+        ctx.arc(qx, qy, 2 * lk, 0, TAU);
+        ctx.fill();
+      }
+    });
+  }
+
+  // markers: pulsing ring, dot, label for the biggest ones
+  const ranked = [...p.targets].sort((x, y) => (y.weight ?? 0) - (x.weight ?? 0));
+  const labelled = new Set(ranked.slice(0, size >= 380 ? 6 : 3).map((m) => m.key));
+  p.targets.forEach((m, i) => {
+    const q = project(m.v);
+    if (q.z < limb) return;
+    const group = Math.min(1, 0.3 + (q.z - limb) * 3);
+    const pulse = Math.sin(t * 2 + i) * 0.5 + 0.5;
+    const r0 = 2.5 * lk * (m.active ? 1.5 : 1);
+    ctx.globalAlpha = group * (0.25 + pulse * 0.25);
+    ctx.strokeStyle = red;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(q.x, q.y, r0 + 1.5 + pulse * 4 * lk, 0, TAU);
+    ctx.stroke();
+    ctx.globalAlpha = group;
+    ctx.fillStyle = red;
+    ctx.beginPath();
+    ctx.arc(q.x, q.y, r0, 0, TAU);
+    ctx.fill();
+    if (p.labels && m.label && (m.active || labelled.has(m.key))) {
+      ctx.fillStyle = m.active ? (p.onDark ? '#fff' : brand.navy) : labelFill;
+      ctx.font = `${10 * Math.min(1.25, k)}px ${fonts.medium}`;
+      ctx.fillText(m.label, q.x + 8, q.y + 3.5);
+    }
+  });
+
+  // the LFK
+  const o = project(p.origin);
+  if (o.z > limb) {
+    ctx.globalAlpha = Math.min(1, 0.3 + (o.z - limb) * 3);
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, 4 * lk, 0, TAU);
+    ctx.fillStyle = p.onDark ? '#fff' : brand.navy;
+    ctx.fill();
+    ctx.strokeStyle = red;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    if (p.labels) {
+      ctx.font = `${11 * Math.min(1.25, k)}px ${fonts.semibold}`;
+      ctx.fillText(p.originLabel, o.x + 9, o.y + 4);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+const WEB = Platform.OS === 'web';
 
 export function Globe({
   size: fixedSize,
@@ -95,12 +259,18 @@ export function Globe({
   const focusKey = focus ? `${focus[0]},${focus[1]}` : '';
   const live = useRef({ phi: -35 * DEG, theta: 0.38, t: 0, focus: focus ?? null, focusKey, ignoredFocus: '', autoRotate, idleUntil: 0 });
   const drag = useRef({ active: false, dx: 0, dy: 0, phi0: 0, theta0: 0 });
+  const canvas = useRef<HTMLCanvasElement | null>(null);
+  const paint = useRef<Paint | null>(null);
+  const paintVersion = useRef(0);
   const start = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     live.current.focus = focus ?? null;
     live.current.focusKey = focusKey;
     live.current.autoRotate = autoRotate;
+    // Web: what the canvas loop draws (a new version repaints even when the globe is still).
+    paint.current = { size, land, origin, targets, onDark, arcs, labels, originLabel, reduced };
+    paintVersion.current += 1;
   });
 
   // The animation loop only runs while the globe is on screen (and the tab visible): off screen it
@@ -111,6 +281,7 @@ export function Globe({
     let last = performance.now();
     let lastPaint = 0;
     let painted = '';
+    let paintedVersion = -1;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const dt = Math.min(0.05, (now - last) / 1000);
@@ -129,6 +300,19 @@ export function Globe({
       } else if (s.autoRotate && !reduced && Date.now() > s.idleUntil) {
         s.phi += dt * 0.14;
         s.theta += (0.38 - s.theta) * (1 - Math.exp(-dt));
+      }
+      if (WEB) {
+        // Canvas: drawn every frame (about a millisecond for all the dots), no React render at all.
+        const p = paint.current;
+        const cv = canvas.current;
+        if (!p || !cv || p.size <= 0) return;
+        const t = reduced ? 0.8 : s.t;
+        const key = `${s.phi.toFixed(4)}|${s.theta.toFixed(4)}|${t.toFixed(2)}`;
+        if (key === painted && paintedVersion === paintVersion.current) return;
+        painted = key;
+        paintedVersion = paintVersion.current;
+        paintCanvas(cv, p, s.phi, s.theta, t);
+        return;
       }
       if (now - lastPaint >= 1000 / FPS) {
         lastPaint = now;
@@ -187,7 +371,7 @@ export function Globe({
   // Dots — depth bands (the canvas version sets alpha per dot); each band has one dot size, so the
   // circle arcs are written once per band and every dot only adds its position.
   const bands = BANDS.map(() => '');
-  if (size > 0) {
+  if (size > 0 && !WEB) {
     const tails = BANDS.map(({ depth }) => {
       const r = (1 + depth * 0.8) * 0.72 * k;
       return { r, tail: `a${r.toFixed(2)},${r.toFixed(2)} 0 1,0 ${(2 * r).toFixed(2)},0a${r.toFixed(2)},${r.toFixed(2)} 0 1,0 ${(-2 * r).toFixed(2)},0` };
@@ -212,7 +396,7 @@ export function Globe({
   const lk = Math.min(1.4, k);
 
   const arcEls: React.ReactNode[] = [];
-  if (arcs && size > 0) {
+  if (arcs && size > 0 && !WEB) {
     const a = project(origin);
     targets.forEach((m, i) => {
       const b = project(m.v);
@@ -236,7 +420,7 @@ export function Globe({
 
   const ranked = [...targets].sort((x, y) => (y.weight ?? 0) - (x.weight ?? 0));
   const labelled = new Set(ranked.slice(0, size >= 380 ? 6 : 3).map((m) => m.key));
-  const markerEls = targets.map((m, i) => {
+  const markerEls = WEB ? [] : targets.map((m, i) => {
     const q = project(m.v);
     if (q.z < limb) return null;
     const pulse = Math.sin(t * 2 + i) * 0.5 + 0.5;
@@ -296,7 +480,8 @@ export function Globe({
       onResponderMove={onMove}
       onResponderRelease={onRelease}
       onResponderTerminate={onRelease}>
-      {size > 0 && (
+      {size > 0 && WEB && <canvas ref={canvas} aria-hidden style={{ width: size, height: size, display: 'block' }} />}
+      {size > 0 && !WEB && (
         <Svg width={size} height={size}>
           <Circle cx={c} cy={c} r={rim} fill="none" stroke={onDark ? 'rgba(231, 236, 242,0.14)' : 'rgba(14, 42, 71,0.1)'} strokeWidth={1} />
           {BANDS.map((band, b) => (

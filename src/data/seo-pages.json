@@ -1,0 +1,151 @@
+[
+  {
+    "path": "/",
+    "file": "index.html",
+    "title": "Amicale LFK — Alumni du Lycée Français du Koweït (ALFK)",
+    "description": "Amicale LFK (ALFK) : le réseau des anciens élèves du Lycée Français du Koweït. Annuaire des alumni LFK, universités, orientation, événements et entraide, du Koweït au monde entier.",
+    "h1": "Amicale LFK — le réseau des alumni du Lycée Français du Koweït",
+    "body": [
+      "Un réseau, une mémoire, une communauté internationale. Anciens élèves, élèves et direction du LFK : retrouvez-vous, partagez vos parcours et gardez le lien, où que la vie vous mène.",
+      "Retrouvez vos camarades de Promo LFK, où qu’ils soient : un annuaire de toute la communauté, par Promo LFK, pays ou université, et une messagerie privée.",
+      "Découvrez où sont partis les anciens : les universités et les pays des alumni LFK, et un espace Orientation pour préparer ses études.",
+      "Des rendez-vous toute l’année : soirées, tournois, dîner de gala, à Koweït et à l’étranger, avec leurs galeries photo.",
+      "Rejoindre l’Amicale en trois étapes : créez votre compte avec un justificatif de scolarité au LFK, le bureau valide votre inscription, et le réseau vous est ouvert."
+    ]
+  },
+  {
+    "path": "/bienvenue",
+    "file": "bienvenue.html",
+    "canonical": "/",
+    "same": "/"
+  },
+  {
+    "path": "/association",
+    "file": "association.html",
+    "title": "L’Amicale des anciens élèves du LFK · Amicale LFK (ALFK)",
+    "description": "L’Amicale LFK relie les générations d’élèves du Lycée Français de Koweït : rassembler les alumni, transmettre, accompagner les lycéens et faire rayonner le LFK partout dans le monde.",
+    "h1": "L’Amicale LFK : l’association qui relie les générations d’élèves du LFK",
+    "body": [
+      "Réunir les anciens élèves du Lycée Français de Koweït, faciliter les échanges et le partage d’opportunités, et préserver les liens entre les générations — à Koweït comme partout dans le monde.",
+      "Nos valeurs : rassembler toutes les Promos LFK et tous les pays en une seule communauté ; transmettre l’expérience des anciens aux élèves ; accompagner les plus jeunes (orientation, conseils, mentorat) ; rayonner partout où nos alumni vivent.",
+      "Nos actions : des événements toute l’année (soirée de rentrée, tournoi inter-promos, dîner de gala), un forum d’orientation où les anciens présentent leurs universités aux élèves de 2nde, 1re et Terminale, du mentorat et un réseau professionnel entre anciens élèves."
+    ]
+  },
+  {
+    "path": "/histoire",
+    "file": "histoire.html",
+    "title": "Le Lycée Français du Koweït (LFK) : son histoire · Amicale LFK (ALFK)",
+    "description": "L’histoire du Lycée Français de Koweït, fondé en 1989 à Salmiya : un établissement homologué du réseau AEFE, ouvert sur le monde, avec plus de trente nationalités.",
+    "h1": "Notre lycée : le Lycée Français du Koweït, une histoire",
+    "body": [
+      "Tout commence en 1989, à Koweït : le Lycée Français de Koweït est fondé par Mme Mona Al Khaled, avec une idée simple — offrir aux enfants du pays, comme à ceux des familles venues d’ailleurs, une école qui parle français, mais qui regarde le monde.",
+      "À Salmiya, sur Hamad Al-Mubarak Street, le lycée a grandi de la toute petite section jusqu’à la Terminale. Une première convention est signée avec l’AEFE en 2002, remplacée en 2010 par un accord de partenariat. Homologué par l’Éducation nationale, le LFK prépare au baccalauréat.",
+      "Une école ouverte sur le monde : plus d’une trentaine de nationalités, un enseignement multilingue et multiculturel, et 100 % de réussite au bac."
+    ]
+  },
+  {
+    "path": "/bureau",
+    "file": "bureau.html",
+    "title": "Le bureau de l’Amicale LFK · Amicale LFK (ALFK)",
+    "description": "Le bureau de l’Amicale des anciens élèves du Lycée Français du Koweït : les bénévoles qui font vivre l’Amicale LFK, et l’historique de direction du lycée.",
+    "h1": "Le bureau de l’Amicale LFK",
+    "body": [
+      "Les bénévoles qui font vivre l’Amicale des anciens élèves du Lycée Français de Koweït.",
+      "Envie de vous investir ? Le bureau s’ouvre régulièrement à de nouveaux bénévoles : écrivez-nous pour proposer votre candidature."
+    ]
+  },
+  {
+    "path": "/partenaires",
+    "file": "partenaires.html",
+    "title": "Partenaires de l’Amicale LFK · Amicale LFK (ALFK)",
+    "description": "Les institutions qui accompagnent l’Amicale des anciens élèves du Lycée Français du Koweït, dont le Lycée Français du Koweït. Devenez partenaire de l’Amicale LFK.",
+    "h1": "Les partenaires de l’Amicale LFK",
+    "body": [
+      "Les institutions qui accompagnent l’Amicale des anciens élèves du LFK.",
+      "Entreprise, institution ou association : soutenez les projets de l’Amicale et rencontrez un réseau international d’alumni."
+    ]
+  },
+  {
+    "path": "/actualites",
+    "file": "actualites.html",
+    "title": "Actualités de l’Amicale LFK · Amicale LFK (ALFK)",
+    "description": "Les dernières nouvelles de l’Amicale des anciens élèves du Lycée Français du Koweït et du LFK.",
+    "h1": "Actualités de l’Amicale LFK",
+    "body": [
+      "Les dernières nouvelles de l’Amicale et du Lycée Français du Koweït."
+    ]
+  },
+  {
+    "path": "/adherer",
+    "file": "adherer.html",
+    "title": "Adhérer à l’Amicale LFK · Amicale LFK (ALFK)",
+    "description": "Rejoindre l’Amicale LFK : anciens élèves et élèves du Lycée Français du Koweït, créez votre compte. Chaque inscription est vérifiée par le bureau.",
+    "h1": "Adhérer à l’Amicale LFK : l’Amicale est ouverte à toute la communauté du LFK",
+    "body": [
+      "Qui peut rejoindre ? Les anciens élèves du LFK, où qu’ils vivent aujourd’hui ; les élèves du lycée, pour échanger avec les anciens et préparer leur orientation ; les membres d’honneur, sur invitation du bureau.",
+      "Rejoindre l’Amicale en trois étapes : 1. Créez votre compte avec un justificatif de scolarité au LFK (bulletin, certificat, attestation ou simple photo). 2. Un administrateur du bureau vérifie que vous faites partie de la communauté. 3. Bienvenue dans le réseau : annuaire, Repère, Orientation, calendrier, groupes WhatsApp et messagerie vous sont ouverts."
+    ]
+  },
+  {
+    "path": "/contact",
+    "file": "contact.html",
+    "title": "Contacter l’Amicale LFK · Amicale LFK (ALFK)",
+    "description": "Contacter le bureau de l’Amicale des anciens élèves du Lycée Français du Koweït : questions, partenariats, adhésion. Instagram @amicalelfk.",
+    "h1": "Contacter l’Amicale LFK",
+    "body": [
+      "Une question, un partenariat, une idée ? Écrivez au bureau de l’Amicale des anciens élèves du LFK. Suivez-nous aussi sur Instagram : @amicalelfk."
+    ]
+  },
+  {
+    "path": "/inscription",
+    "file": "inscription.html",
+    "title": "Créer un compte · Amicale LFK (ALFK)",
+    "description": "Créez votre compte sur la plateforme de l’Amicale LFK : alumni et élèves du Lycée Français du Koweït.",
+    "h1": "Rejoindre l’Amicale LFK",
+    "body": [
+      "Quelques informations pour que la communauté puisse vous retrouver, et un justificatif de scolarité au LFK."
+    ]
+  },
+  {
+    "path": "/connexion",
+    "file": "connexion.html",
+    "title": "Se connecter · Amicale LFK (ALFK)",
+    "description": "Connexion à l’espace membres de l’Amicale LFK, le réseau des anciens élèves du Lycée Français du Koweït.",
+    "h1": "Espace membres de l’Amicale LFK",
+    "body": [
+      "Connectez-vous pour retrouver l’annuaire, la messagerie et les événements de la communauté du LFK."
+    ]
+  },
+  {
+    "path": "/mentions-legales",
+    "file": "mentions-legales.html",
+    "title": "Mentions légales · Amicale LFK (ALFK)",
+    "description": "Mentions légales du site de l’Amicale des anciens élèves du Lycée Français du Koweït (alfk.org).",
+    "h1": "Mentions légales",
+    "body": []
+  },
+  {
+    "path": "/confidentialite",
+    "file": "confidentialite.html",
+    "title": "Politique de confidentialité · Amicale LFK (ALFK)",
+    "description": "Politique de confidentialité de l’Amicale LFK : quelles données, pourquoi, et vos droits.",
+    "h1": "Politique de confidentialité",
+    "body": []
+  },
+  {
+    "path": "/cgu",
+    "file": "cgu.html",
+    "title": "Conditions d’utilisation · Amicale LFK (ALFK)",
+    "description": "Conditions générales d’utilisation de la plateforme de l’Amicale LFK.",
+    "h1": "Conditions d’utilisation",
+    "body": []
+  },
+  {
+    "path": "/plan-du-site",
+    "file": "plan-du-site.html",
+    "title": "Plan du site · Amicale LFK (ALFK)",
+    "description": "Toutes les pages du site de l’Amicale des anciens élèves du Lycée Français du Koweït.",
+    "h1": "Plan du site",
+    "body": []
+  }
+]
