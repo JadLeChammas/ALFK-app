@@ -93,6 +93,8 @@ function RootNavigator() {
         <Stack.Screen name="histoire" />
         <Stack.Screen name="bureau" />
         <Stack.Screen name="partenaires" />
+        <Stack.Screen name="actualites/index" />
+        <Stack.Screen name="actualites/[id]" />
         <Stack.Screen name="adherer" />
         <Stack.Screen name="mentions-legales" />
         <Stack.Screen name="confidentialite" />

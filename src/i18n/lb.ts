@@ -125,11 +125,12 @@ const lb: Dict = {
     title: 'Akhbar', subtitle: 'Akhbar, articles w i3lenet el Amicale.', read: 'E2ra',
     categories: { actualite: 'Akhbar', article: 'Articles', annonce: 'I3lenet' }, create: 'Khabar jdid',
     excerptField: 'Mlakhkhas', bodyField: 'El nass', by: 'Katabo {name}', readMore: 'E2ra aktar', notFound: 'Ma le2ina el khabar', more: 'Kammel e2ra',
+    visibilityLabel: 'Min bychoufa', visibilityMembers: 'Bas el a3da2', visibilityPublic: 'El kel (alfk.org)', visibilityMembersHint: 'Bas el a3da2 el mfaywatin bychoufoha.', visibilityPublicHint: 'Kamen btban la kel el nes 3a page « Akhbar » b alfk.org.', publicBadge: 'Public',
   },
   messages: {
     title: 'Messages', searchPlaceholder: 'Fatech 3a 7ake…', empty: 'Ma fi 7ake',
     emptySub: 'Balach 7ake men el annuaire aw men page promo.', placeholder: 'Ktob message…',
-    pick: 'Na22e 7ake', privateNote: '7ake private baynetkon entou el tnen.', online: 'Online',
+    pick: 'Na22e 7ake', privateNote: 'Messages msakkara (chiffrés) · 7ake private baynetkon entou el tnen.', online: 'Online',
     lastSeen: 'Ken hon {when}', report: 'Ballegh 3an el 7ake', reportReason: 'Lech 3am tballegh', reported: 'El 7ake nballagh 3anno lal admins',
     newConversation: 'Message jdid', you: 'Enta: ', moderation: 'Mode modération — 7ake mballagh 3anno',
   },
@@ -322,6 +323,7 @@ const lb: Dict = {
       step2Sub: 'Admin byet2akkad enno enta 3an jad men jame3et el LFK.', step3Title: 'Ahla w sahla bel réseau', step3Sub: 'Annuaire, kharita, orientation, calendrier, groupes WhatsApp w messages, kello mfatta7lak.',
       ctaTitle: 'El promo taba3ak', ctaItalic: '3am testannak.', ctaSub: 'Fout ma3 wled el LFK bel Kwet w bkel el 3alam.',
     },
+    news: { title: 'Akhbar', sub: 'Akher akhbar el Amicale w el LFK.', empty: 'Ba3d ma fi akhbar public.' },
     association: {
       eyebrow: 'Wled el Lycée Français bi Kwet', title: 'El jam3iye yalle bt2allef', italic: 'ajyel talamiz el LFK.',
       sub: 'Nlemm wled el Lycée Français de Koweït, nsahhel el tabedul w el forass, w nkhalle el rabta bayn el ajyel — bel Kwet w bkel el 3alam.', valuesTitle: '2iyamna', v1: 'Nlemm',

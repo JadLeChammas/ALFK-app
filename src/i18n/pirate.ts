@@ -121,11 +121,12 @@ const pirate: Dict = {
     title: 'Ship’s Log', subtitle: 'News, tales an’ proclamations from the Amicale.', read: 'Read',
     categories: { actualite: 'News', article: 'Tales', annonce: 'Proclamations' }, create: 'New log entry',
     excerptField: 'Excerpt', bodyField: 'The tale', by: 'Penned by {name}', readMore: 'Read on', notFound: 'Log entry not found', more: 'More from the log',
+    visibilityLabel: 'Seen by', visibilityMembers: 'Crew only', visibilityPublic: 'All the seven seas (alfk.org)', visibilityMembersHint: 'Only crew aboard can see it.', visibilityPublicHint: 'Also seen by every passer-by, on alfk.org\'s « Ship news » page.', publicBadge: 'Public',
   },
   messages: {
     title: 'Bottles', searchPlaceholder: 'Spy a conversation…', empty: 'No bottles yet',
     emptySub: 'Send a bottle from the Crew Roster or an LFK crew page.', placeholder: 'Write yer message…',
-    pick: 'Pick a conversation', privateNote: 'Private parley between the two o’ ye.', online: 'On deck',
+    pick: 'Pick a conversation', privateNote: 'Coded messages · A private parley between ye two.', online: 'On deck',
     lastSeen: 'Seen {when}', report: 'Report this parley', reportReason: 'Why be ye reportin’ it', reported: 'Parley reported to the captains',
     newConversation: 'New bottle', you: 'Ye: ', moderation: 'Captain’s watch — reported parley',
   },
@@ -318,6 +319,7 @@ const pirate: Dict = {
       step2Sub: 'A captain checks ye truly belong to the LFK crew.', step3Title: 'Welcome aboard', step3Sub: 'Crew Roster, Crew Chart, Charts & Heading, almanac, WhatsApp crews an’ bottles be yours.',
       ctaTitle: 'Yer LFK crew', ctaItalic: 'awaits ye.', ctaSub: 'Join the LFK old hands in Kuwait an’ across all the seas.',
     },
+    news: { title: 'Ship news', sub: 'The latest news from th\' Amicale an\' the LFK.', empty: 'No public news yet.' },
     association: {
       eyebrow: 'Crew o’ the French Lycée o’ Kuwait', title: 'The crew that binds', italic: 'every generation o’ LFK sailors.',
       sub: 'Gatherin’ the old hands o’ the Lycée Français de Koweït, sharin’ fortunes an’ opportunities, an’ keepin’ the bond between generations — in Kuwait an’ across the seas.', valuesTitle: 'Our code', v1: 'Gather',

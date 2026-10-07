@@ -120,11 +120,12 @@ const ja: Dict = {
     title: 'お知らせ', subtitle: '同窓会のニュース、記事、お知らせ。', read: '読む',
     categories: { actualite: 'ニュース', article: '記事', annonce: 'お知らせ' }, create: '新しい投稿',
     excerptField: '抜粋', bodyField: '本文', by: '{name}', readMore: '続きを読む', notFound: '投稿が見つかりません', more: 'こちらもどうぞ',
+    visibilityLabel: '公開範囲', visibilityMembers: 'メンバーのみ', visibilityPublic: '全員（alfk.org）', visibilityMembersHint: 'ログインしたメンバーだけが見られます。', visibilityPublicHint: 'alfk.org の「ニュース」ページで、すべての訪問者にも表示されます。', publicBadge: '公開',
   },
   messages: {
     title: 'メッセージ', searchPlaceholder: '会話を検索…', empty: '会話はありません',
     emptySub: '名簿またはLFK学年のページから会話を始めましょう。', placeholder: 'メッセージを入力…',
-    pick: '会話を選択してください', privateNote: 'お二人だけのプライベートな会話です。', online: 'オンライン',
+    pick: '会話を選択してください', privateNote: 'メッセージは暗号化されています · お二人だけの非公開の会話です。', online: 'オンライン',
     lastSeen: '{when}にアクティブ', report: '会話を報告', reportReason: '報告の理由', reported: '会話を管理者に報告しました',
     newConversation: '新しいメッセージ', you: 'あなた：', moderation: 'モデレーションモード — 報告された会話',
   },
@@ -317,6 +318,7 @@ const ja: Dict = {
       step2Sub: '管理者があなたが LFK のコミュニティの一員であることを確認します。', step3Title: 'ネットワークへようこそ', step3Sub: '名簿、卒業生マップ、進路相談、カレンダー、WhatsApp グループ、メッセージが利用できます。',
       ctaTitle: 'あなたの Promo LFK が', ctaItalic: '待っています。', ctaSub: 'クウェートと世界中の LFK 卒業生とつながりましょう。',
     },
+    news: { title: 'ニュース', sub: 'Amicale と LFK の最新ニュース。', empty: '公開ニュースはまだありません。' },
     association: {
       eyebrow: 'クウェート・フランス人学校 Amicale', title: 'LFK の世代を', italic: 'つなぐ同窓会。',
       sub: 'クウェート・フランス人学校の卒業生を集め、交流と機会の共有を促し、世代を超えたつながりを守ります。クウェートでも世界中でも。', valuesTitle: '私たちの価値観', v1: '集う',

@@ -18,6 +18,7 @@ export default function Sitemap() {
         ['heart', d.site.nav.association, '/association'],
         ['book', d.site.nav.lfk, '/histoire'],
         ['users', d.site.nav.bureau, '/bureau'],
+        ['book-open', d.site.news.title, '/actualites'],
         ['briefcase', d.site.nav.partners, '/partenaires'],
         ['user-plus', d.site.nav.join, '/adherer'],
       ],

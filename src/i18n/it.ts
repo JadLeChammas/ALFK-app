@@ -120,11 +120,12 @@ const it: Dict = {
     title: 'Pubblicazioni', subtitle: "Notizie, articoli e comunicati dell'Amicale.", read: 'Leggi',
     categories: { actualite: 'Notizie', article: 'Articoli', annonce: 'Annunci' }, create: 'Nuova pubblicazione',
     excerptField: 'Estratto', bodyField: 'Testo', by: 'Di {name}', readMore: 'Continua a leggere', notFound: 'Pubblicazione non trovata', more: 'Da leggere anche',
+    visibilityLabel: 'Visibile a', visibilityMembers: 'Solo membri', visibilityPublic: 'Tutti (alfk.org)', visibilityMembersHint: 'La vedono solo i membri connessi.', visibilityPublicHint: 'Visibile anche a tutti i visitatori, nella pagina « Notizie » di alfk.org.', publicBadge: 'Pubblica',
   },
   messages: {
     title: 'Messaggi', searchPlaceholder: 'Cerca una conversazione…', empty: 'Nessuna conversazione',
     emptySub: "Inizia una conversazione dall'Annuario o dalla pagina di una Classe LFK.", placeholder: 'Scrivi un messaggio…',
-    pick: 'Seleziona una conversazione', privateNote: 'Conversazione privata tra voi due.', online: 'Online',
+    pick: 'Seleziona una conversazione', privateNote: 'Messaggi crittografati · Conversazione privata tra voi due.', online: 'Online',
     lastSeen: 'Attivo {when}', report: 'Segnala la conversazione', reportReason: 'Motivo della segnalazione', reported: 'Conversazione segnalata agli amministratori',
     newConversation: 'Nuovo messaggio', you: 'Tu: ', moderation: 'Modalità moderazione — conversazione segnalata',
   },
@@ -317,6 +318,7 @@ const it: Dict = {
       step2Sub: 'Un amministratore verifica che tu faccia parte della comunità del LFK.', step3Title: 'Benvenuto nella rete', step3Sub: 'Annuario, Mappa degli ex alunni, Orientamento, calendario, gruppi WhatsApp e messaggistica ti sono aperti.',
       ctaTitle: 'La tua Promo LFK', ctaItalic: 'ti aspetta.', ctaSub: 'Unisciti agli ex allievi del LFK, in Kuwait e in tutto il mondo.',
     },
+    news: { title: 'Notizie', sub: 'Le ultime notizie dell’Amicale e del LFK.', empty: 'Ancora nessuna notizia pubblica.' },
     association: {
       eyebrow: 'Amicale del Lycée Français de Koweït', title: 'L’associazione che unisce', italic: 'le generazioni di allievi del LFK.',
       sub: 'Riunire gli ex allievi del Lycée Français de Koweït, favorire gli scambi e la condivisione di opportunità e preservare i legami tra le generazioni, in Kuwait e nel mondo.', valuesTitle: 'I nostri valori', v1: 'Riunire',

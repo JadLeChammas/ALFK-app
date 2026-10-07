@@ -136,6 +136,8 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
   const direct = can(me, 'publish');
   const blank = { title: '', excerpt: '', body: '', cover: IMAGES.campus, category: (direct ? 'actualite' : 'annonce') as PublicationCategory };
   const [form, setForm] = useState(editing ? { title: editing.title, excerpt: editing.excerpt, body: editing.body, cover: editing.cover, category: editing.category } : blank);
+  // Members only (default) or also public on alfk.org — chosen by the admins.
+  const [visibility, setVisibility] = useState<'members' | 'public'>(editing?.visibility ?? 'members');
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const [uploading, setUploading] = useState(false);
   // Admins choose whose name the publication carries (the president, the proviseur…).
@@ -163,6 +165,16 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
           ))}
         </Row>
       )}
+      {admin && (
+        <View style={{ gap: 8 }}>
+          <Txt variant="smallStrong" color="textMuted">{d.publications.visibilityLabel}</Txt>
+          <Row gap={8} wrap>
+            <Chip label={d.publications.visibilityMembers} icon="lock" active={visibility === 'members'} onPress={() => setVisibility('members')} />
+            <Chip label={d.publications.visibilityPublic} icon="globe" active={visibility === 'public'} onPress={() => setVisibility('public')} />
+          </Row>
+          <Txt variant="small" color="textSubtle">{visibility === 'public' ? d.publications.visibilityPublicHint : d.publications.visibilityMembersHint}</Txt>
+        </View>
+      )}
       <CoverPicker value={form.cover} onChange={set('cover')} folder="publications" onBusy={setUploading} />
       <Input label={d.publications.excerptField} value={form.excerpt} onChangeText={set('excerpt')} maxLength={2000} />
       <Input label={d.publications.bodyField} value={form.body} onChangeText={set('body')} multiline maxLength={50000} />
@@ -174,13 +186,13 @@ export function PublicationFormModal({ visible, onClose, editing }: { visible: b
         onPress={() => {
           const data = { ...form, excerpt: form.excerpt || form.body.slice(0, 140) };
           if (editing) {
-            const r = actions.updatePublication(editing.id, { ...data, authorId: admin ? authorId : undefined });
+            const r = actions.updatePublication(editing.id, { ...data, authorId: admin ? authorId : undefined, visibility: admin ? visibility : undefined });
             if ('blocked' in r) return;
             toast(r.pending ? d.publications.editPending : d.common.saved);
             onClose();
             return;
           }
-          const r = actions.createPublication(data, admin ? authorId : undefined);
+          const r = actions.createPublication({ ...data, visibility: admin ? visibility : 'members' }, admin ? authorId : undefined);
           if ('blocked' in r) return;
           toast(r.pending ? d.pubReview.submitted : d.common.saved);
           setForm(blank);

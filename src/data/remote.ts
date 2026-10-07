@@ -129,7 +129,7 @@ export function profilePatchToRow(patch: Partial<User>): Row {
 const toPromo = (r: Row): Promo => ({ year: r.year, whatsapp: opt(r.whatsapp), groupPhoto: opt(r.group_photo) });
 const toEvent = (r: Row): LfkEvent => ({ id: r.id, title: r.title, date: r.date, location: r.location, category: r.category, description: r.description, cover: r.cover, createdBy: r.created_by ?? '' });
 const toPhoto = (r: Row): EventPhoto => ({ id: r.id, eventId: r.event_id, uri: r.uri, uploadedBy: r.uploaded_by ?? '', createdAt: r.created_at });
-const toPublication = (r: Row): Publication => ({ id: r.id, title: r.title, category: r.category, date: r.date, cover: r.cover, excerpt: r.excerpt, body: r.body, authorId: r.author_id ?? '', status: r.status ?? 'published' });
+const toPublication = (r: Row): Publication => ({ id: r.id, title: r.title, category: r.category, date: r.date, cover: r.cover, excerpt: r.excerpt, body: r.body, authorId: r.author_id ?? '', status: r.status ?? 'published', visibility: r.visibility === 'public' ? 'public' : 'members' });
 const toInstitution = (r: Row): Institution => ({ id: r.id, name: r.name, description: r.description ?? '', logo: opt(r.logo), website: opt(r.website), order: r.sort_order ?? 0, hidden: !!r.hidden });
 const toQuestion = (r: Row): Question => ({ id: r.id, text: r.text, topic: r.topic, status: r.status, createdAt: r.created_at, publishedAt: opt(r.published_at) });
 export const toClub = (r: Row): Club => ({ id: r.id, name: r.name, description: r.description ?? '', cover: opt(r.cover), status: r.status, createdBy: opt(r.created_by), createdAt: r.created_at });
@@ -254,7 +254,8 @@ export async function loadDb(): Promise<Db> {
 // ——— Row builders for inserts ———
 
 export const eventRow = (e: LfkEvent) => ({ id: e.id, title: e.title, date: e.date, location: e.location, category: e.category, description: e.description, cover: e.cover, created_by: e.createdBy });
-export const publicationRow = (p: Publication) => ({ id: p.id, title: p.title, category: p.category, date: p.date, cover: p.cover, excerpt: p.excerpt, body: p.body, author_id: p.authorId, status: p.status });
+// visibility (migration 045) only when public, so members-only posts still save before it.
+export const publicationRow = (p: Publication) => ({ id: p.id, title: p.title, category: p.category, date: p.date, cover: p.cover, excerpt: p.excerpt, body: p.body, author_id: p.authorId, status: p.status, ...(p.visibility === 'public' ? { visibility: 'public' } : {}) });
 export const institutionRow = (i: Institution) => ({ id: i.id, name: i.name, description: i.description, logo: i.logo ?? null, website: i.website ?? null, sort_order: i.order });
 // Period and link columns only when used, so plain dates still save before migration 008.
 export const keyDateRow = (k: KeyDate) => ({

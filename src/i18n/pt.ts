@@ -120,11 +120,12 @@ const pt: Dict = {
     title: 'Publicações', subtitle: 'Notícias, artigos e comunicados da Amicale.', read: 'Ler',
     categories: { actualite: 'Notícias', article: 'Artigos', annonce: 'Anúncios' }, create: 'Nova publicação',
     excerptField: 'Excerto', bodyField: 'Texto', by: 'Por {name}', readMore: 'Ler mais', notFound: 'Publicação não encontrada', more: 'Para ler também',
+    visibilityLabel: 'Visível para', visibilityMembers: 'Só membros', visibilityPublic: 'Todos (alfk.org)', visibilityMembersHint: 'Só os membros conectados a veem.', visibilityPublicHint: 'Também visível para todos os visitantes, na página « Notícias » do alfk.org.', publicBadge: 'Pública',
   },
   messages: {
     title: 'Mensagens', searchPlaceholder: 'Pesquisar uma conversa…', empty: 'Nenhuma conversa',
     emptySub: 'Inicie uma conversa a partir do Diretório ou da página de uma Turma LFK.', placeholder: 'Escreva uma mensagem…',
-    pick: 'Selecione uma conversa', privateNote: 'Conversa privada entre os dois.', online: 'Online',
+    pick: 'Selecione uma conversa', privateNote: 'Mensagens criptografadas · Conversa privada entre vocês dois.', online: 'Online',
     lastSeen: 'Ativo {when}', report: 'Denunciar a conversa', reportReason: 'Motivo da denúncia', reported: 'Conversa denunciada aos administradores',
     newConversation: 'Nova mensagem', you: 'Você: ', moderation: 'Modo de moderação — conversa denunciada',
   },
@@ -317,6 +318,7 @@ const pt: Dict = {
       step2Sub: 'Um administrador verifica que faz parte da comunidade do LFK.', step3Title: 'Bem-vindo à rede', step3Sub: 'Diretório, Mapa dos ex-alunos, Orientação, calendário, grupos de WhatsApp e mensagens ficam ao seu dispor.',
       ctaTitle: 'A sua Promo LFK', ctaItalic: 'está à sua espera.', ctaSub: 'Junte-se aos antigos alunos do LFK, no Kuwait e em todo o mundo.',
     },
+    news: { title: 'Notícias', sub: 'As últimas notícias da Amicale e do LFK.', empty: 'Ainda não há notícias públicas.' },
     association: {
       eyebrow: 'Amicale do Lycée Français de Koweït', title: 'A associação que une', italic: 'as gerações de alunos do LFK.',
       sub: 'Reunir os antigos alunos do Lycée Français de Koweït, facilitar as trocas e a partilha de oportunidades e preservar os laços entre gerações, no Kuwait e em todo o mundo.', valuesTitle: 'Os nossos valores', v1: 'Reunir',

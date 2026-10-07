@@ -773,7 +773,7 @@ function useStoreValue() {
      * Admins and the author edit a publication. A member who cannot publish directly sends it back to
      * the admins (pending again); returns whether it is pending.
      */
-    updatePublication(id: string, patch: Pick<Publication, 'title' | 'excerpt' | 'body' | 'cover' | 'category'> & { authorId?: string }) {
+    updatePublication(id: string, patch: Pick<Publication, 'title' | 'excerpt' | 'body' | 'cover' | 'category'> & { authorId?: string; visibility?: Publication['visibility'] }) {
       const p = dbRef.current?.publications.find((x) => x.id === id);
       if (!p) return { pending: false };
       if (readOnly) {
@@ -784,8 +784,14 @@ function useStoreValue() {
       const status = reviewAgain ? 'pending' : p.status;
       // Only admins change who the publication is signed by.
       const authorId = me?.role === 'admin' && patch.authorId ? patch.authorId : p.authorId;
-      commit((d) => ({ ...d, publications: d.publications.map((x) => (x.id === id ? { ...x, ...patch, authorId, status } : x)) }));
-      if (supabase) send(supabase.from('publications').update({ title: patch.title, excerpt: patch.excerpt, body: patch.body, cover: patch.cover, category: patch.category, status, author_id: authorId }).eq('id', id));
+      // Only admins choose who sees it (members only, or everyone on alfk.org).
+      const visibility = me?.role === 'admin' && patch.visibility ? patch.visibility : p.visibility;
+      commit((d) => ({ ...d, publications: d.publications.map((x) => (x.id === id ? { ...x, ...patch, authorId, status, visibility } : x)) }));
+      if (supabase) {
+        const row: Record<string, unknown> = { title: patch.title, excerpt: patch.excerpt, body: patch.body, cover: patch.cover, category: patch.category, status, author_id: authorId };
+        if (visibility !== p.visibility) row.visibility = visibility;
+        send(supabase.from('publications').update(row).eq('id', id));
+      }
       return { pending: status === 'pending' };
     },
     deletePublication(id: string) {

@@ -121,11 +121,12 @@ const la: Dict = {
     title: 'Editiones', subtitle: 'Nuntii, commentarii et praeconia Amicale.', read: 'Lege',
     categories: { actualite: 'Nuntii', article: 'Commentarii', annonce: 'Praeconia' }, create: 'Nova editio',
     excerptField: 'Summarium', bodyField: 'Textus', by: 'Auctore {name}', readMore: 'Plura lege', notFound: 'Editio non inventa', more: 'Perge legere',
+    visibilityLabel: 'Visibile', visibilityMembers: 'Solis sodalibus', visibilityPublic: 'Omnibus (alfk.org)', visibilityMembersHint: 'Soli sodales qui intraverunt eam vident.', visibilityPublicHint: 'Omnibus quoque visitatoribus visibilis, in pagina « Nuntii » situs alfk.org.', publicBadge: 'Publica',
   },
   messages: {
     title: 'Epistulae', searchPlaceholder: 'Colloquium quaere…', empty: 'Nulla colloquia',
     emptySub: 'Colloquium ex indice sodalium aut pagina classis incipe.', placeholder: 'Epistulam scribe…',
-    pick: 'Colloquium elige', privateNote: 'Colloquium privatum inter vos duos.', online: 'Adest',
+    pick: 'Colloquium elige', privateNote: 'Epistulae cryptographicae · Colloquium privatum inter vos duos.', online: 'Adest',
     lastSeen: 'Actuosus {when}', report: 'Colloquium defer', reportReason: 'Causa delationis', reported: 'Colloquium moderatoribus delatum',
     newConversation: 'Nova epistula', you: 'Tu: ', moderation: 'Modus moderationis — colloquium delatum',
   },
@@ -318,6 +319,7 @@ const la: Dict = {
       step2Sub: 'Moderator probat te vere ad communitatem LFK pertinere.', step3Title: 'Salve in societate', step3Sub: 'Index sodalium, tabula alumnorum, consilium studiorum, calendarium, coetus WhatsApp et epistulae tibi patent.',
       ctaTitle: 'Classis tua', ctaItalic: 'te exspectat.', ctaSub: 'Alumnis LFK in Kuvaito et toto orbe terrarum te adiunge.',
     },
+    news: { title: 'Nuntii', sub: 'Novissima Amicale et LFK.', empty: 'Nondum nuntii publici.' },
     association: {
       eyebrow: 'Alumni Lycei Francogallici Kuvaitensis', title: 'Consociatio quae coniungit', italic: 'generationes discipulorum LFK.',
       sub: 'Alumnos Lycei Francogallici Kuvaitensis congregare, commercium et occasiones communicandas faciliora reddere, vinculum inter generationes servare — in Kuvaito et toto orbe.', valuesTitle: 'Nostra principia', v1: 'Coniungere',

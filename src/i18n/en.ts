@@ -120,11 +120,12 @@ const en: Dict = {
     title: 'Publications', subtitle: 'News, articles and announcements from the Amicale.', read: 'Read',
     categories: { actualite: 'News', article: 'Articles', annonce: 'Announcements' }, create: 'New publication',
     excerptField: 'Excerpt', bodyField: 'Body', by: 'By {name}', readMore: 'Read more', notFound: 'Publication not found', more: 'Keep reading',
+    visibilityLabel: 'Visible to', visibilityMembers: 'Members only', visibilityPublic: 'Everyone (alfk.org)', visibilityMembersHint: 'Only signed-in members see it.', visibilityPublicHint: 'Also visible to every visitor, on alfk.org’s « News » page.', publicBadge: 'Public',
   },
   messages: {
     title: 'Messages', searchPlaceholder: 'Search a conversation…', empty: 'No conversations',
     emptySub: 'Start a conversation from the Directory or an LFK Class page.', placeholder: 'Write a message…',
-    pick: 'Select a conversation', privateNote: 'Private conversation between the two of you.', online: 'Online',
+    pick: 'Select a conversation', privateNote: 'Encrypted messages · Private conversation between the two of you.', online: 'Online',
     lastSeen: 'Active {when}', report: 'Report conversation', reportReason: 'Reason for reporting', reported: 'Conversation reported to administrators',
     newConversation: 'New message', you: 'You: ', moderation: 'Moderation mode — reported conversation',
   },
@@ -317,6 +318,7 @@ const en: Dict = {
       step2Sub: 'An administrator checks that you really belong to the LFK community.', step3Title: 'Welcome to the network', step3Sub: 'Directory, Alumni Map, Guidance, calendar, WhatsApp groups and messaging are open to you.',
       ctaTitle: 'Your LFK Class', ctaItalic: 'is waiting for you.', ctaSub: 'Join LFK alumni in Kuwait and all over the world.',
     },
+    news: { title: 'News', sub: 'The latest news from the Amicale and the LFK.', empty: 'No public news yet.' },
     association: {
       eyebrow: 'Alumni of the French Lycée of Kuwait', title: 'The association that connects', italic: 'generations of LFK students.',
       sub: 'Bringing together the alumni of the Lycée Français de Koweït, making it easier to exchange and share opportunities, and keeping the bond between generations — in Kuwait and all over the world.', valuesTitle: 'Our values', v1: 'Unite',

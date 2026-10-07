@@ -120,11 +120,12 @@ const nl: Dict = {
     title: 'Publicaties', subtitle: 'Nieuws, artikelen en aankondigingen van de Amicale.', read: 'Lezen',
     categories: { actualite: 'Nieuws', article: 'Artikelen', annonce: 'Aankondigingen' }, create: 'Nieuwe publicatie',
     excerptField: 'Samenvatting', bodyField: 'Tekst', by: 'Door {name}', readMore: 'Lees meer', notFound: 'Publicatie niet gevonden', more: 'Verder lezen',
+    visibilityLabel: 'Zichtbaar voor', visibilityMembers: 'Alleen leden', visibilityPublic: 'Iedereen (alfk.org)', visibilityMembersHint: 'Alleen ingelogde leden zien het.', visibilityPublicHint: 'Ook zichtbaar voor alle bezoekers, op de pagina « Nieuws » van alfk.org.', publicBadge: 'Openbaar',
   },
   messages: {
     title: 'Berichten', searchPlaceholder: 'Zoek een gesprek…', empty: 'Geen gesprekken',
     emptySub: 'Begin een gesprek vanuit de ledenlijst of de pagina van een jaargang.', placeholder: 'Schrijf een bericht…',
-    pick: 'Kies een gesprek', privateNote: 'Privégesprek tussen jullie twee.', online: 'Online',
+    pick: 'Kies een gesprek', privateNote: 'Versleutelde berichten · Privégesprek tussen jullie twee.', online: 'Online',
     lastSeen: 'Actief {when}', report: 'Gesprek melden', reportReason: 'Reden van de melding', reported: 'Gesprek gemeld aan de beheerders',
     newConversation: 'Nieuw bericht', you: 'Jij: ', moderation: 'Moderatiemodus — gemeld gesprek',
   },
@@ -317,6 +318,7 @@ const nl: Dict = {
       step2Sub: 'Een beheerder controleert of je echt bij de LFK-gemeenschap hoort.', step3Title: 'Welkom in het netwerk', step3Sub: 'Ledenlijst, alumnikaart, studiekeuze, agenda, WhatsApp-groepen en berichten staan voor je open.',
       ctaTitle: 'Je jaargang', ctaItalic: 'wacht op je.', ctaSub: 'Sluit je aan bij de oud-leerlingen van het LFK in Koeweit en over de hele wereld.',
     },
+    news: { title: 'Nieuws', sub: 'Het laatste nieuws van de Amicale en het LFK.', empty: 'Nog geen openbaar nieuws.' },
     association: {
       eyebrow: 'Oud-leerlingen van het Franse Lyceum van Koeweit', title: 'De vereniging die', italic: 'generaties LFK-leerlingen verbindt.',
       sub: 'De oud-leerlingen van het Lycée Français de Koweït samenbrengen, uitwisseling en het delen van kansen vergemakkelijken, en de band tussen generaties bewaren — in Koeweit en over de hele wereld.', valuesTitle: 'Onze waarden', v1: 'Verbinden',

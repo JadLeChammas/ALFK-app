@@ -108,6 +108,8 @@ export type Publication = {
   authorId: string;
   /** Members' submissions wait for an admin before being published. */
   status: PublicationStatus;
+  /** « public »: also on alfk.org for everyone (/actualites); otherwise members only (migration 045). */
+  visibility?: 'members' | 'public';
 };
 
 export type PublicationStatus = 'pending' | 'published' | 'rejected';

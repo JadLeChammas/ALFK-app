@@ -125,11 +125,12 @@ const kw: Dict = {
     title: 'Akhbaar', subtitle: 'Akhbaar, articles w i3laanaat il Amicale.', read: 'Igra',
     categories: { actualite: 'Akhbaar', article: 'Articles', annonce: 'I3laanaat' }, create: 'Khabar jdeed',
     excerptField: 'Mulakhkha9', bodyField: 'Il na9', by: 'Kitaba {name}', readMore: 'Igra akthar', notFound: 'Ma ligaina il khabar', more: 'Kammil igra',
+    visibilityLabel: 'Minu yishoofha', visibilityMembers: 'Bas il a3dha2', visibilityPublic: 'Il kil (alfk.org)', visibilityMembersHint: 'Bas il a3dha2 il daakhleen yishoofoonha.', visibilityPublicHint: 'Bardo titbayyin 7ag kil il naas 3ala page « Akhbaar » b alfk.org.', publicBadge: 'Public',
   },
   messages: {
     title: 'Messages', searchPlaceholder: 'Dawwir 3ala sawaaleef…', empty: 'Ma fee sawaaleef',
     emptySub: 'Ibda sawaaleef min il directory aw min page il promo.', placeholder: 'Iktib message…',
-    pick: 'Ikhtaar sawaaleef', privateNote: 'Sawaaleef khaa9a bainkum intum il ithnain.', online: 'Online',
+    pick: 'Ikhtaar sawaaleef', privateNote: 'Messages mshaffara · Sawaaleef khaa9a bainkum intum il ithnain.', online: 'Online',
     lastSeen: 'Kaan hni {when}', report: 'Ballig 3an il sawaaleef', reportReason: 'Laish ga3d tballig', reported: 'Ballagna il admins',
     newConversation: 'Message jdeed', you: 'Inta: ', moderation: 'Moderation — sawaaleef mballag 3anha',
   },
@@ -322,6 +323,7 @@ const kw: Dict = {
       step2Sub: 'Admin yit2akkad inna inta 9ij min jam3at il LFK.', step3Title: 'Hala w ghala bil network', step3Sub: 'Directory, khare6a, orientation, calendar, groups WhatsApp w messages, kilha maftoo7a lik.',
       ctaTitle: 'Il promo maalik', ctaItalic: 'ga3d yintathrik.', ctaSub: 'Idkhil ma3a ri9jeel il LFK bil Kuwait w b kil il 3aalam.',
     },
+    news: { title: 'Akhbaar', sub: 'Aakhir akhbaar il Amicale w il LFK.', empty: 'Ba3ad ma fee akhbaar public.' },
     association: {
       eyebrow: 'Ri9jeel il Lycée Français bil Kuwait', title: 'Il jam3iya illi tjamma3', italic: 'ajyaal talaameeth il LFK.',
       sub: 'Njamma3 ri9jeel il Lycée Français de Koweït, nsahhil il tabaadul w il fura9, w nkhalli il 3alaaqa bain il ajyaal — bil Kuwait w b kil il 3aalam.', valuesTitle: 'Qiyamna', v1: 'Njamma3',

@@ -120,11 +120,12 @@ const zh: Dict = {
     title: '发布', subtitle: '校友会的资讯、文章与公告。', read: '阅读',
     categories: { actualite: '资讯', article: '文章', annonce: '公告' }, create: '新发布',
     excerptField: '摘要', bodyField: '正文', by: '作者：{name}', readMore: '阅读全文', notFound: '未找到该发布', more: '推荐阅读',
+    visibilityLabel: '可见范围', visibilityMembers: '仅成员', visibilityPublic: '所有人（alfk.org）', visibilityMembersHint: '只有已登录的成员可以看到。', visibilityPublicHint: '所有访客也能在 alfk.org 的「新闻」页面看到。', publicBadge: '公开',
   },
   messages: {
     title: '消息', searchPlaceholder: '搜索对话…', empty: '暂无对话',
     emptySub: '从通讯录或 LFK 年级页面开始对话。', placeholder: '输入消息…',
-    pick: '选择一个对话', privateNote: '你们两人之间的私密对话。', online: '在线',
+    pick: '选择一个对话', privateNote: '消息已加密 · 你们两人之间的私密对话。', online: '在线',
     lastSeen: '{when}活跃', report: '举报对话', reportReason: '举报原因', reported: '已向管理员举报该对话',
     newConversation: '新消息', you: '你：', moderation: '审核模式 — 被举报的对话',
   },
@@ -317,6 +318,7 @@ const zh: Dict = {
       step2Sub: '管理员核实你确实属于 LFK 社区。', step3Title: '欢迎加入', step3Sub: '通讯录、校友地图、升学指导、日历、WhatsApp 群组和私信都向你开放。',
       ctaTitle: '你的 Promo LFK', ctaItalic: '在等你。', ctaSub: '加入科威特及世界各地的 LFK 校友。',
     },
+    news: { title: '新闻', sub: '校友会和 LFK 的最新消息。', empty: '暂无公开新闻。' },
     association: {
       eyebrow: '科威特法国高中校友会', title: '连接 LFK', italic: '一代代学子的协会。',
       sub: '团结科威特法国高中的校友，促进交流与机会分享，守护代际之间的联系——在科威特，也在世界各地。', valuesTitle: '我们的价值观', v1: '团结',

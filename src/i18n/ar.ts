@@ -120,11 +120,12 @@ const ar: Dict = {
     title: 'المنشورات', subtitle: 'أخبار ومقالات وبيانات الرابطة.', read: 'قراءة',
     categories: { actualite: 'أخبار', article: 'مقالات', annonce: 'إعلانات' }, create: 'منشور جديد',
     excerptField: 'مقتطف', bodyField: 'النص', by: 'بقلم {name}', readMore: 'اقرأ المزيد', notFound: 'المنشور غير موجود', more: 'اقرأ أيضًا',
+    visibilityLabel: 'مرئية لـ', visibilityMembers: 'الأعضاء فقط', visibilityPublic: 'الجميع (alfk.org)', visibilityMembersHint: 'لا يراها إلا الأعضاء المسجّلون.', visibilityPublicHint: 'مرئية أيضاً لكل الزوار، في صفحة « الأخبار » على alfk.org.', publicBadge: 'عامة',
   },
   messages: {
     title: 'الرسائل', searchPlaceholder: 'ابحث عن محادثة…', empty: 'لا توجد محادثات',
     emptySub: 'ابدأ محادثة من الدليل أو من صفحة دفعة LFK.', placeholder: 'اكتب رسالة…',
-    pick: 'اختر محادثة', privateNote: 'محادثة خاصة بينكما.', online: 'متصل الآن',
+    pick: 'اختر محادثة', privateNote: 'رسائل مشفّرة · محادثة خاصة بينكما.', online: 'متصل الآن',
     lastSeen: 'نشط {when}', report: 'الإبلاغ عن المحادثة', reportReason: 'سبب الإبلاغ', reported: 'تم إبلاغ المسؤولين عن المحادثة',
     newConversation: 'رسالة جديدة', you: 'أنت: ', moderation: 'وضع الإشراف — محادثة مُبلّغ عنها',
   },
@@ -317,6 +318,7 @@ const ar: Dict = {
       step2Sub: 'يتحقق أحد المشرفين من انتمائك إلى مجتمع الثانوية الفرنسية.', step3Title: 'أهلًا بك في الشبكة', step3Sub: 'الدليل وخريطة الخريجين والتوجيه والتقويم ومجموعات واتساب والمراسلة متاحة لك.',
       ctaTitle: 'دفعتك', ctaItalic: 'بانتظارك.', ctaSub: 'انضم إلى خريجي الثانوية الفرنسية في الكويت وفي كل أنحاء العالم.',
     },
+    news: { title: 'الأخبار', sub: 'آخر أخبار الجمعية وLFK.', empty: 'لا توجد أخبار عامة بعد.' },
     association: {
       eyebrow: 'رابطة الثانوية الفرنسية في الكويت', title: 'الجمعية التي تربط', italic: 'أجيال طلاب الثانوية الفرنسية.',
       sub: 'جمع خريجي الثانوية الفرنسية في الكويت، وتسهيل التواصل وتبادل الفرص، والحفاظ على الروابط بين الأجيال، في الكويت وفي كل أنحاء العالم.', valuesTitle: 'قيمنا', v1: 'التجمّع',

@@ -467,10 +467,12 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
       <TextRoll style={{ fontFamily: fonts.display, fontSize: size, lineHeight: size + 4, color: fg }} delay={0.1 + i * 0.15}>
         {String(it.v)}
       </TextRoll>
-      <Txt numberOfLines={2} style={{ fontFamily: fonts.medium, fontSize: dense || isMobile ? 10 : 11, lineHeight: dense || isMobile ? 13 : 15, letterSpacing: dense || isMobile ? 0.8 : 1.2, textTransform: 'uppercase', textAlign: 'center', color: light ? brand.sky : t.muted }}>
-        {it.l}
-      </Txt>
-      {!!it.sub && <Txt style={{ fontFamily: fonts.regular, fontSize: dense || isMobile ? 10 : 12, lineHeight: dense || isMobile ? 13 : 16, textAlign: 'center', color: light ? brand.sky : t.muted, opacity: 0.85 }}>{it.sub}</Txt>}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+        <Txt numberOfLines={2} style={{ fontFamily: fonts.medium, fontSize: dense || isMobile ? 10 : 11, lineHeight: dense || isMobile ? 13 : 15, letterSpacing: dense || isMobile ? 0.8 : 1.2, textTransform: 'uppercase', textAlign: 'center', color: light ? brand.sky : t.muted }}>
+          {it.l}
+        </Txt>
+        {!!it.sub && <InfoTip text={it.sub} color={light ? brand.sky : t.muted} />}
+      </View>
     </>
   );
 
@@ -493,17 +495,33 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
   return (
     <View onLayout={(e) => setW(e.nativeEvent.layout.width)} style={{ opacity: w ? 1 : 0, borderTopWidth: fitsOneRow ? 0 : 1, borderBottomWidth: fitsOneRow ? 0 : 1, borderColor: rule }}>
       {rows.map((row, r) => (
-        <View key={r} style={{ flexDirection: 'row', borderTopWidth: r ? 1 : 0, borderTopColor: rule }}>
+        // Earlier rows above later ones, so the « i » bubble is never hidden behind the next row's figures.
+        <View key={r} style={{ flexDirection: 'row', borderTopWidth: r ? 1 : 0, borderTopColor: rule, zIndex: rows.length - r }}>
           {row.map((it, k) => (
             <View
               key={it.l}
-              style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4, paddingVertical: fitsOneRow ? 4 : 14, paddingHorizontal: 4, borderLeftWidth: k ? 1 : 0, borderLeftColor: rule }}>
+              style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4, paddingVertical: fitsOneRow ? 4 : 14, paddingHorizontal: 4, borderLeftWidth: k ? 1 : 0, borderLeftColor: rule, zIndex: it.sub ? 2 : 1 }}>
               {figure(it, n++, size)}
             </View>
           ))}
         </View>
       ))}
     </View>
+  );
+}
+
+/** A small « i » in a circle: tap (or hover) shows the detail in a bubble under it. */
+function InfoTip({ text, color }: { text: string; color: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Pressable onPress={() => setOpen((o) => !o)} onHoverIn={() => setOpen(true)} onHoverOut={() => setOpen(false)} hitSlop={10} accessibilityRole="button" accessibilityLabel={text} style={{ zIndex: 20 }}>
+      <Feather name="info" size={12} color={color} />
+      {open && (
+        <View pointerEvents="none" style={{ position: 'absolute', top: 18, left: -96, width: 204, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10, backgroundColor: '#FFFFFF', zIndex: 30, ...(Platform.OS === 'web' ? ({ boxShadow: '0 8px 24px rgba(0,0,0,0.25)' } as object) : {}) }}>
+          <Txt style={{ fontSize: 12, lineHeight: 16, textAlign: 'center', color: brand.navy }}>{text}</Txt>
+        </View>
+      )}
+    </Pressable>
   );
 }
 

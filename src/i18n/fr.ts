@@ -118,11 +118,12 @@ const fr = {
     title: 'Publications', subtitle: "Actualités, articles et communiqués de l'Amicale.", read: 'Lire',
     categories: { actualite: 'Actualités', article: 'Articles', annonce: 'Annonces' }, create: 'Nouvelle publication',
     excerptField: 'Extrait', bodyField: 'Texte', by: 'Par {name}', readMore: 'Lire la suite', notFound: 'Publication introuvable', more: 'À lire aussi',
+    visibilityLabel: 'Visible par', visibilityMembers: 'Membres seulement', visibilityPublic: 'Tout le monde (alfk.org)', visibilityMembersHint: 'Seuls les membres connectés la voient.', visibilityPublicHint: 'Aussi visible par tous les visiteurs, sur la page « Actualités » d’alfk.org.', publicBadge: 'Public',
   },
   messages: {
     title: 'Messages', searchPlaceholder: 'Rechercher une conversation…', empty: 'Aucune conversation',
     emptySub: "Démarrez une conversation depuis l'Annuaire ou la page d'une Promo LFK.", placeholder: 'Écrire un message…',
-    pick: 'Sélectionnez une conversation', privateNote: 'Conversation privée entre vous deux.', online: 'En ligne',
+    pick: 'Sélectionnez une conversation', privateNote: 'Messages chiffrés · Conversation privée entre vous deux.', online: 'En ligne',
     lastSeen: 'Actif {when}', report: 'Signaler la conversation', reportReason: 'Raison du signalement', reported: 'Conversation signalée aux administrateurs',
     newConversation: 'Nouveau message', you: 'Vous : ', moderation: 'Mode modération — conversation signalée',
   },
@@ -315,6 +316,7 @@ const fr = {
       step2Sub: 'Un administrateur vérifie que vous faites bien partie de la communauté du LFK.', step3Title: 'Bienvenue dans le réseau', step3Sub: 'Annuaire, Repère, Orientation, calendrier, groupes WhatsApp et messagerie vous sont ouverts.',
       ctaTitle: 'Votre Promo LFK', ctaItalic: 'vous attend.', ctaSub: 'Rejoignez les anciens élèves du LFK, à Koweït et partout dans le monde.',
     },
+    news: { title: 'Actualités', sub: 'Les dernières nouvelles de l’Amicale et du LFK.', empty: 'Pas encore d’actualités publiques.' },
     association: {
       eyebrow: 'Amicale du Lycée Français de Koweït', title: 'L\'association qui relie', italic: 'les générations d’élèves du LFK.',
       sub: 'Réunir les anciens élèves du Lycée Français de Koweït, faciliter les échanges et le partage d’opportunités, et préserver les liens entre les générations — à Koweït comme partout dans le monde.', valuesTitle: 'Nos valeurs', v1: 'Rassembler',

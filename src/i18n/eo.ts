@@ -120,11 +120,12 @@ const eo: Dict = {
     title: 'Publikaĵoj', subtitle: 'Novaĵoj, artikoloj kaj anoncoj de la Amicale.', read: 'Legi',
     categories: { actualite: 'Novaĵoj', article: 'Artikoloj', annonce: 'Anoncoj' }, create: 'Nova publikaĵo',
     excerptField: 'Resumo', bodyField: 'Teksto', by: 'De {name}', readMore: 'Legi pli', notFound: 'Publikaĵo ne trovita', more: 'Daŭrigi la legadon',
+    visibilityLabel: 'Videbla por', visibilityMembers: 'Nur membroj', visibilityPublic: 'Ĉiuj (alfk.org)', visibilityMembersHint: 'Nur ensalutintaj membroj vidas ĝin.', visibilityPublicHint: 'Ankaŭ videbla por ĉiuj vizitantoj, en la paĝo « Novaĵoj » de alfk.org.', publicBadge: 'Publika',
   },
   messages: {
     title: 'Mesaĝoj', searchPlaceholder: 'Serĉi konversacion…', empty: 'Neniu konversacio',
     emptySub: 'Komencu konversacion el la membrolisto aŭ la paĝo de promocio.', placeholder: 'Skribu mesaĝon…',
-    pick: 'Elektu konversacion', privateNote: 'Privata konversacio inter vi du.', online: 'Konektita',
+    pick: 'Elektu konversacion', privateNote: 'Ĉifritaj mesaĝoj · Privata konversacio inter vi du.', online: 'Konektita',
     lastSeen: 'Aktiva {when}', report: 'Raporti la konversacion', reportReason: 'Kialo de la raporto', reported: 'Konversacio raportita al la administrantoj',
     newConversation: 'Nova mesaĝo', you: 'Vi: ', moderation: 'Moderiga reĝimo — raportita konversacio',
   },
@@ -317,6 +318,7 @@ const eo: Dict = {
       step2Sub: 'Administranto kontrolas, ke vi vere apartenas al la komunumo de LFK.', step3Title: 'Bonvenon en la reto', step3Sub: 'Membrolisto, mapo, studorientiĝo, kalendaro, WhatsApp-grupoj kaj mesaĝoj estas malfermitaj al vi.',
       ctaTitle: 'Via promocio', ctaItalic: 'atendas vin.', ctaSub: 'Aliĝu al la eksaj lernantoj de LFK en Kuvajto kaj en la tuta mondo.',
     },
+    news: { title: 'Novaĵoj', sub: 'La lastaj novaĵoj de la Amicale kaj de LFK.', empty: 'Ankoraŭ neniu publika novaĵo.' },
     association: {
       eyebrow: 'Eksaj lernantoj de la Franca Liceo de Kuvajto', title: 'La asocio, kiu ligas', italic: 'generaciojn de lernantoj de LFK.',
       sub: 'Kunigi la eksajn lernantojn de la Lycée Français de Koweït, faciligi interŝanĝojn kaj la kunhavigon de ŝancoj, kaj konservi la ligon inter generacioj — en Kuvajto kaj en la tuta mondo.', valuesTitle: 'Niaj valoroj', v1: 'Kunigi',
