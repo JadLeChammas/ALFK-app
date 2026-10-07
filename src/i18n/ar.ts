@@ -26,7 +26,7 @@ const ar: Dict = {
   },
   time: { justNow: 'الآن', minutesAgo: 'منذ {n} د' },
   errors: { saveFailed: 'تعذّر حفظ التعديل: {msg}' },
-  common: { typeToConfirm: 'للتأكيد، اكتب الاسم الكامل أدناه:',
+  common: { englishHint: "النسخة الإنجليزية (اختيارية): تظهر في كل اللغات ما عدا الفرنسية. إذا تُركت فارغة يظهر النص الفرنسي.", typeToConfirm: 'للتأكيد، اكتب الاسم الكامل أدناه:',
     search: 'بحث', seeAll: 'عرض الكل', see: 'عرض', save: 'حفظ', cancel: 'إلغاء', delete: 'حذف',
     confirm: 'تأكيد', edit: 'تعديل', close: 'إغلاق', send: 'إرسال', add: 'إضافة', create: 'إنشاء', done: 'تم',
     members: '{n} عضو', member: '{n} عضو', promo: 'دفعة LFK {year}', today: 'اليوم', tomorrow: 'غدًا',

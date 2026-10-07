@@ -7,9 +7,10 @@ import { usePublicSetting } from './publicSettings';
  * dashboard and saved as JSON in app_settings (`lfkStory`), readable by visitors (migration 013).
  * It starts empty: the content comes from the admins, not from the code.
  */
-export type StoryEvent = { id: string; year: string; title: string; text?: string };
-export type FunFact = { id: string; emoji?: string; title?: string; text: string };
-export type LfkStory = { intro?: string; timeline: StoryEvent[]; facts: FunFact[] };
+/** `…En`: the English version, read in every language but French (see `bi` in i18n). */
+export type StoryEvent = { id: string; year: string; title: string; text?: string; titleEn?: string; textEn?: string };
+export type FunFact = { id: string; emoji?: string; title?: string; text: string; titleEn?: string; textEn?: string };
+export type LfkStory = { intro?: string; introEn?: string; timeline: StoryEvent[]; facts: FunFact[] };
 
 export const EMPTY_STORY: LfkStory = { timeline: [], facts: [] };
 
@@ -52,6 +53,15 @@ export function parseStoryText(text: string): { title?: string; sections: StoryS
 export function foundingYear(story: LfkStory): string | undefined {
   const inText = story.intro?.match(/\b(1[89]\d{2}|20\d{2})\b/)?.[1];
   return inText ?? story.timeline.find((e) => /^\d{4}$/.test(e.year.trim()))?.year.trim();
+}
+
+/** The page in the reader's language: the English texts outside French when the admins wrote them. */
+export function localizeStory(story: LfkStory, bi: (fr?: string, en?: string) => string): LfkStory {
+  return {
+    intro: bi(story.intro, story.introEn) || undefined,
+    facts: story.facts.map((f) => ({ ...f, title: bi(f.title, f.titleEn) || undefined, text: bi(f.text, f.textEn) })),
+    timeline: story.timeline.map((e) => ({ ...e, title: bi(e.title, e.titleEn), text: bi(e.text, e.textEn) || undefined })),
+  };
 }
 
 /** The saved page; years in order on the timeline. */

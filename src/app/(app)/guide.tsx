@@ -17,7 +17,7 @@ const doneKey = (userId: string) => `lfk.guide.done.${userId}`;
 
 /** Country guides: what to do before leaving and after arriving. Admins edit them in the dashboard. */
 export default function Guides() {
-  const { d, f, country } = useI18n();
+  const { d, f, bi, country } = useI18n();
   const { colors } = useTheme();
   const me = useMe();
   const admin = me.role === 'admin';
@@ -53,7 +53,7 @@ export default function Guides() {
   return (
     <Screen maxWidth={900}>
       <BackLink label={d.guide.allCountries} href="/guide" />
-      <PageHeader title={titleOf(guide)} subtitle={guide.intro?.trim() || d.guide.subtitle} right={manage} />
+      <PageHeader title={titleOf(guide)} subtitle={bi(guide.intro, guide.introEn) || d.guide.subtitle} right={manage} />
 
       {visible.length > 1 && (
         <View style={{ gap: 8 }}>

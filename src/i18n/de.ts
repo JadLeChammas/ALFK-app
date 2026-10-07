@@ -26,7 +26,7 @@ const de: Dict = {
   },
   time: { justNow: 'gerade eben', minutesAgo: 'vor {n} Min.' },
   errors: { saveFailed: 'Die Änderung konnte nicht gespeichert werden: {msg}' },
-  common: { typeToConfirm: 'Zur Bestätigung den vollständigen Namen unten eingeben:',
+  common: { englishHint: "Englische Fassung (optional): wird in allen Sprachen außer Französisch angezeigt. Bleibt sie leer, erscheint der französische Text.", typeToConfirm: 'Zur Bestätigung den vollständigen Namen unten eingeben:',
     search: 'Suchen', seeAll: 'Alle anzeigen', see: 'Ansehen', save: 'Speichern', cancel: 'Abbrechen', delete: 'Löschen',
     confirm: 'Bestätigen', edit: 'Bearbeiten', close: 'Schließen', send: 'Senden', add: 'Hinzufügen', create: 'Erstellen', done: 'Fertig',
     members: '{n} Mitglieder', member: '{n} Mitglied', promo: 'LFK-Jahrgang {year}', today: 'Heute', tomorrow: 'Morgen',

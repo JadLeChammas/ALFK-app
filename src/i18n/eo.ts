@@ -26,7 +26,7 @@ const eo: Dict = {
   },
   time: { justNow: 'ĵus', minutesAgo: 'antaŭ {n} min' },
   errors: { saveFailed: 'Via ŝanĝo ne povis esti konservita: {msg}' },
-  common: { typeToConfirm: 'Por konfirmi, tajpu la plenan nomon sube:',
+  common: { englishHint: "Angla versio (nedeviga): montrata en ĉiuj lingvoj krom la franca. Se malplena, la franca teksto montriĝas.", typeToConfirm: 'Por konfirmi, tajpu la plenan nomon sube:',
     search: 'Serĉi', seeAll: 'Vidi ĉion', see: 'Vidi', save: 'Konservi', cancel: 'Nuligi', delete: 'Forigi',
     confirm: 'Konfirmi', edit: 'Redakti', close: 'Fermi', send: 'Sendi', add: 'Aldoni', create: 'Krei', done: 'Farite',
     members: '{n} membroj', member: '{n} membro', promo: 'LFK-promocio {year}', today: 'Hodiaŭ', tomorrow: 'Morgaŭ',

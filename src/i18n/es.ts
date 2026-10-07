@@ -26,7 +26,7 @@ const es: Dict = {
   },
   time: { justNow: 'ahora mismo', minutesAgo: 'hace {n} min' },
   errors: { saveFailed: 'No se pudo guardar el cambio: {msg}' },
-  common: { typeToConfirm: 'Para confirmar, escribe el nombre completo a continuación:',
+  common: { englishHint: "Versión en inglés (opcional): se muestra en todos los idiomas salvo el francés. Si se deja vacía, se muestra el texto en francés.", typeToConfirm: 'Para confirmar, escribe el nombre completo a continuación:',
     search: 'Buscar', seeAll: 'Ver todo', see: 'Ver', save: 'Guardar', cancel: 'Cancelar', delete: 'Eliminar',
     confirm: 'Confirmar', edit: 'Editar', close: 'Cerrar', send: 'Enviar', add: 'Añadir', create: 'Crear', done: 'Hecho',
     members: '{n} miembros', member: '{n} miembro', promo: 'Promoción LFK {year}', today: 'Hoy', tomorrow: 'Mañana',

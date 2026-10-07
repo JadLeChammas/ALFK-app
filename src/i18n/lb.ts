@@ -31,7 +31,7 @@ const lb: Dict = {
   },
   time: { justNow: 'hala2', minutesAgo: 'men {n} d2ii2a' },
   errors: { saveFailed: 'Ma zabat nsayyev el ta3dil: {msg}' },
-  common: { typeToConfirm: 'Krmel t2akked, ktob el esem kello hon ta7et:',
+  common: { englishHint: "Version english (optionnel): btotla3 bi kel l lughat ella l français. Iza fadye, byotla3 l texte bil français.", typeToConfirm: 'Krmel t2akked, ktob el esem kello hon ta7et:',
     search: 'Fatech', seeAll: 'Chouf kello', see: 'Chouf', save: 'Sayyev', cancel: 'Laghe', delete: 'Emse7',
     confirm: 'Akked', edit: '3addel', close: 'Sakker', send: 'B3at', add: 'Zid', create: '3mel', done: 'Khalas',
     members: '{n} a3da2', member: '{n} 3odo', promo: 'Promo LFK {year}', today: 'El yom', tomorrow: 'Bokra',

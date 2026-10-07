@@ -24,7 +24,7 @@ const fr = {
   },
   time: { justNow: 'à l’instant', minutesAgo: 'il y a {n} min' },
   errors: { saveFailed: 'La modification n’a pas pu être enregistrée : {msg}' },
-  common: { typeToConfirm: 'Pour confirmer, écrivez le nom complet ci-dessous :',
+  common: { englishHint: "Version anglaise (facultative) : elle s'affiche dans toutes les langues sauf le français. Laissée vide, c'est le texte français qui s'affiche.", typeToConfirm: 'Pour confirmer, écrivez le nom complet ci-dessous :',
     search: 'Rechercher', seeAll: 'Voir tout', see: 'Voir', save: 'Enregistrer', cancel: 'Annuler', delete: 'Supprimer',
     confirm: 'Confirmer', edit: 'Modifier', close: 'Fermer', send: 'Envoyer', add: 'Ajouter', create: 'Créer', done: 'Terminé',
     members: '{n} membres', member: '{n} membre', promo: 'Promo LFK {year}', today: "Aujourd'hui", tomorrow: 'Demain',

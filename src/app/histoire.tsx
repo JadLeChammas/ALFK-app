@@ -10,7 +10,7 @@ import { Reveal } from '@/components/site/Reveal';
 import { Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Button } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
-import { foundingYear, parseStoryText, useLfkStory, type FunFact, type StoryEvent } from '@/data/lfkStory';
+import { foundingYear, localizeStory, parseStoryText, useLfkStory, type FunFact, type StoryEvent } from '@/data/lfkStory';
 import { LFK_LOGO } from '@/data/partners';
 import { useSchoolLeaders } from '@/data/schoolLeaders';
 import { LeadersTimeline } from '@/components/LeadersTimeline';
@@ -27,9 +27,10 @@ const CAMPUS = require('@/assets/images/lfk-campus.png');
 const STUDENTS_LOGO = require('@/assets/images/lfk-students-logo.png');
 
 export default function LfkStoryPage() {
-  const { d } = useI18n();
+  const { d, bi } = useI18n();
   const { me } = useStore();
-  const { story } = useLfkStory();
+  const { story: saved } = useLfkStory();
+  const story = localizeStory(saved, bi);
   const h = d.lfk;
   const admin = me?.role === 'admin';
   const leaderAdmin = admin && !!me?.approved;

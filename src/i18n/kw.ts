@@ -31,7 +31,7 @@ const kw: Dict = {
   },
   time: { justNow: 'tawwa', minutesAgo: 'gabil {n} dageega' },
   errors: { saveFailed: 'Ma gidarna n7fa6 il ta3deel: {msg}' },
-  common: { typeToConfirm: '3ashan t2akkid, iktib il isim kaamil hni ta7t:',
+  common: { englishHint: "English version (optional): tetla3 b kil il lughat ella il French. Itha fadya, yetla3 il French text.", typeToConfirm: '3ashan t2akkid, iktib il isim kaamil hni ta7t:',
     search: 'Dawwir', seeAll: 'Shoof il kil', see: 'Shoof', save: '7fa6', cancel: 'Kanssil', delete: 'Imsa7',
     confirm: 'Akkid', edit: '3addil', close: 'Sakkir', send: 'Dizz', add: 'Zeed', create: 'Sawwi', done: 'Khala9',
     members: '{n} a3dha2', member: '{n} 3odo', promo: 'Promo LFK {year}', today: 'Il youm', tomorrow: 'Baachir',

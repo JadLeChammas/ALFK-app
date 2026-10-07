@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { Sheet } from '@/components/forms';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Button, Card, Chip, IconButton, Input, Row, Tap, type IconName } from '@/components/ui/primitives';
+import { EnglishHint } from '@/components/ui/EnglishHint';
 import { Txt } from '@/components/ui/Txt';
 import { PHASES, type CountryGuide, type GuidePhase, type GuideStep } from '@/data/guide';
 import { useI18n } from '@/i18n';
@@ -28,7 +29,7 @@ export function GuideSteps({
   onToggle?: (id: string) => void;
   onChange?: (steps: GuideStep[]) => void;
 }) {
-  const { d } = useI18n();
+  const { d, bi } = useI18n();
   const { colors } = useTheme();
   const { confirm } = useDialogs();
   const [editing, setEditing] = useState<GuideStep | null>(null);
@@ -79,11 +80,11 @@ export function GuideSteps({
                       </Tap>
                     )}
                     <View style={{ flex: 1, gap: 6 }}>
-                      <Txt variant="h3" style={{ textDecorationLine: checked && !editable ? 'line-through' : 'none' }}>{`${i + 1}. ${s.title}`}</Txt>
-                      <Txt color="textMuted">{s.body}</Txt>
+                      <Txt variant="h3" style={{ textDecorationLine: checked && !editable ? 'line-through' : 'none' }}>{`${i + 1}. ${bi(s.title, s.titleEn)}`}</Txt>
+                      <Txt color="textMuted">{bi(s.body, s.bodyEn)}</Txt>
                       {!!s.url && (
                         <Row>
-                          <Button label={s.urlLabel || d.guide.openLink} icon="external-link" size="sm" variant="secondary" onPress={() => openExternal(s.url!)} />
+                          <Button label={bi(s.urlLabel, s.urlLabelEn) || d.guide.openLink} icon="external-link" size="sm" variant="secondary" onPress={() => openExternal(s.url!)} />
                         </Row>
                       )}
                     </View>
@@ -118,8 +119,8 @@ export function GuideSteps({
 
 function StepSheet({ step, onClose, onSave }: { step: GuideStep; onClose: () => void; onSave: (s: GuideStep) => void }) {
   const { d } = useI18n();
-  const [form, setForm] = useState({ ...step, url: step.url ?? '', urlLabel: step.urlLabel ?? '' });
-  const set = (k: 'title' | 'body' | 'url' | 'urlLabel') => (v: string) => setForm((x) => ({ ...x, [k]: v }));
+  const [form, setForm] = useState({ ...step, url: step.url ?? '', urlLabel: step.urlLabel ?? '', titleEn: step.titleEn ?? '', bodyEn: step.bodyEn ?? '', urlLabelEn: step.urlLabelEn ?? '' });
+  const set = (k: 'title' | 'body' | 'url' | 'urlLabel' | 'titleEn' | 'bodyEn' | 'urlLabelEn') => (v: string) => setForm((x) => ({ ...x, [k]: v }));
   const url = form.url.trim() && !/^https?:\/\//i.test(form.url.trim()) ? `https://${form.url.trim()}` : form.url.trim();
   return (
     <Sheet visible title={step.title ? d.guide.editStep : d.guide.newStep} onClose={onClose}>
@@ -131,15 +132,19 @@ function StepSheet({ step, onClose, onSave }: { step: GuideStep; onClose: () => 
       </View>
       <Input label={d.guide.stepTitle} value={form.title} onChangeText={set('title')} maxLength={120} />
       <Input label={d.guide.stepBody} value={form.body} onChangeText={set('body')} multiline maxLength={2000} />
+      <EnglishHint />
+      <Input label={`${d.guide.stepTitle} · English`} value={form.titleEn} onChangeText={set('titleEn')} maxLength={120} />
+      <Input label={`${d.guide.stepBody} · English`} value={form.bodyEn} onChangeText={set('bodyEn')} multiline maxLength={2000} />
       <Input label={d.guide.stepUrl} icon="link" value={form.url} onChangeText={set('url')} autoCapitalize="none" keyboardType="url" placeholder="https://…" />
       {!!form.url.trim() && <Input label={d.guide.stepUrlLabel} value={form.urlLabel} onChangeText={set('urlLabel')} maxLength={60} />}
+      {!!form.url.trim() && <Input label={`${d.guide.stepUrlLabel} · English`} value={form.urlLabelEn} onChangeText={set('urlLabelEn')} maxLength={60} />}
       <Button
         label={d.common.save}
         icon="check"
         full
         size="lg"
         disabled={!form.title.trim() || !form.body.trim()}
-        onPress={() => onSave({ id: form.id, phase: form.phase, title: form.title.trim(), body: form.body.trim(), url: url || undefined, urlLabel: url ? form.urlLabel.trim() || undefined : undefined })}
+        onPress={() => onSave({ id: form.id, phase: form.phase, title: form.title.trim(), body: form.body.trim(), url: url || undefined, urlLabel: url ? form.urlLabel.trim() || undefined : undefined, titleEn: form.titleEn.trim() || undefined, bodyEn: form.bodyEn.trim() || undefined, urlLabelEn: url ? form.urlLabelEn.trim() || undefined : undefined })}
       />
     </Sheet>
   );
@@ -147,6 +152,6 @@ function StepSheet({ step, onClose, onSave }: { step: GuideStep; onClose: () => 
 
 /** A guide's title: the admins' one, or « Guide — {country} » in the reader's language. */
 export function useGuideTitle() {
-  const { d, f, country } = useI18n();
-  return (g: CountryGuide) => g.title?.trim() || f(d.guide.titleFor, { country: country(g.country) });
+  const { d, f, bi, country } = useI18n();
+  return (g: CountryGuide) => bi(g.title, g.titleEn) || f(d.guide.titleFor, { country: country(g.country) });
 }

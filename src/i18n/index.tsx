@@ -71,6 +71,12 @@ type I18nValue = {
   relative: (iso: string) => string;
   /** Country name in the current language from its ISO code. */
   country: (code?: string) => string;
+  /**
+   * Text the admins wrote in French with an optional English version (guides, « Le LFK », partners):
+   * French (and Lebanese, which mixes French in) reads the French; every other language reads the
+   * English when it was written, otherwise the French.
+   */
+  bi: (fr?: string, en?: string) => string;
   rtl: boolean;
 };
 
@@ -171,7 +177,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       return formatDate(date, { year: date.getFullYear() !== now.getFullYear() });
     };
     const country = (code?: string) => countryLabel(code, lang);
-    return { lang, setLang, d, f, formatDate, formatTime, formatNumber, relative, country, rtl: isRtl(lang) };
+    const bi = (fr?: string, en?: string) => ((lang === 'fr' || lang === 'lb' ? fr?.trim() || en?.trim() : en?.trim() || fr?.trim()) ?? '');
+    return { lang, setLang, d, f, formatDate, formatTime, formatNumber, relative, country, bi, rtl: isRtl(lang) };
   }, [lang, setLang]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;

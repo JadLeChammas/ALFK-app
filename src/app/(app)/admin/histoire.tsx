@@ -6,6 +6,7 @@ import { AdminNav } from '@/components/AdminNav';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Button, Card, IconButton, Input, Row, SectionHeader } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
+import { EnglishHint } from '@/components/ui/EnglishHint';
 import { Txt } from '@/components/ui/Txt';
 import { useLfkStory, type FunFact, type LfkStory, type StoryEvent } from '@/data/lfkStory';
 import { useStore } from '@/data/store';
@@ -37,8 +38,9 @@ export default function AdminLfkStory() {
   const save = () => {
     const clean: LfkStory = {
       intro: draft.intro?.trim() || undefined,
-      facts: draft.facts.filter((f) => f.text.trim()).map((f) => ({ ...f, emoji: f.emoji?.trim() || undefined, title: f.title?.trim() || undefined, text: f.text.trim() })),
-      timeline: draft.timeline.filter((e) => e.year.trim() && e.title.trim()).map((e) => ({ ...e, year: e.year.trim(), title: e.title.trim(), text: e.text?.trim() || undefined })),
+      introEn: draft.introEn?.trim() || undefined,
+      facts: draft.facts.filter((f) => f.text.trim()).map((f) => ({ ...f, emoji: f.emoji?.trim() || undefined, title: f.title?.trim() || undefined, text: f.text.trim(), titleEn: f.titleEn?.trim() || undefined, textEn: f.textEn?.trim() || undefined })),
+      timeline: draft.timeline.filter((e) => e.year.trim() && e.title.trim()).map((e) => ({ ...e, year: e.year.trim(), title: e.title.trim(), text: e.text?.trim() || undefined, titleEn: e.titleEn?.trim() || undefined, textEn: e.textEn?.trim() || undefined })),
     };
     setDraft(clean);
     actions.saveLfkStory(clean);
@@ -62,10 +64,13 @@ export default function AdminLfkStory() {
       <Card style={{ gap: 12 }}>
         <SectionHeader title={h.introTitle} icon="align-left" />
         <Input label={h.intro} value={draft.intro ?? ''} onChangeText={(v) => setDraft((s) => ({ ...s, intro: v }))} placeholder={h.sub} hint={h.introHint} multiline maxLength={8000} style={{ minHeight: 220, textAlignVertical: 'top' }} />
+        <EnglishHint />
+        <Input label={`${h.intro} · English`} value={draft.introEn ?? ''} onChangeText={(v) => setDraft((s) => ({ ...s, introEn: v }))} multiline maxLength={8000} style={{ minHeight: 220, textAlignVertical: 'top' }} />
       </Card>
 
       <Card style={{ gap: 12 }}>
         <SectionHeader title={h.factsTitle} icon="zap" />
+        <EnglishHint />
         {draft.facts.length === 0 && <Txt variant="small" color="textSubtle">{h.factsEmpty}</Txt>}
         {draft.facts.map((f, i) => (
           <View key={f.id} style={{ gap: 8, paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.border }}>
@@ -84,6 +89,8 @@ export default function AdminLfkStory() {
               />
             </Row>
             <Input label={h.factText} value={f.text} onChangeText={(v) => setFact(f.id, { text: v })} multiline maxLength={400} />
+            <Input label={`${h.factTitle} · English`} value={f.titleEn ?? ''} onChangeText={(v) => setFact(f.id, { titleEn: v })} maxLength={80} />
+            <Input label={`${h.factText} · English`} value={f.textEn ?? ''} onChangeText={(v) => setFact(f.id, { textEn: v })} multiline maxLength={400} />
           </View>
         ))}
         <Row>
@@ -94,6 +101,7 @@ export default function AdminLfkStory() {
       <Card style={{ gap: 12 }}>
         <SectionHeader title={h.timelineTitle} icon="clock" />
         <Txt variant="small" color="textSubtle">{h.timelineHint}</Txt>
+        <EnglishHint />
         {draft.timeline.map((e) => (
           <View key={e.id} style={{ gap: 8, paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.border }}>
             <Row gap={8} style={{ alignItems: 'flex-end' }}>
@@ -109,6 +117,8 @@ export default function AdminLfkStory() {
               />
             </Row>
             <Input label={h.eventText} value={e.text ?? ''} onChangeText={(v) => setEvent(e.id, { text: v })} multiline maxLength={800} />
+            <Input label={`${h.eventTitle} · English`} value={e.titleEn ?? ''} onChangeText={(v) => setEvent(e.id, { titleEn: v })} maxLength={100} />
+            <Input label={`${h.eventText} · English`} value={e.textEn ?? ''} onChangeText={(v) => setEvent(e.id, { textEn: v })} multiline maxLength={800} />
           </View>
         ))}
         <Row>

@@ -26,7 +26,7 @@ const pt: Dict = {
   },
   time: { justNow: 'agora mesmo', minutesAgo: 'há {n} min' },
   errors: { saveFailed: 'Não foi possível guardar a alteração: {msg}' },
-  common: { typeToConfirm: 'Para confirmar, escreva o nome completo abaixo:',
+  common: { englishHint: "Versão em inglês (opcional): aparece em todas as línguas exceto o francês. Se ficar vazia, aparece o texto em francês.", typeToConfirm: 'Para confirmar, escreva o nome completo abaixo:',
     search: 'Pesquisar', seeAll: 'Ver tudo', see: 'Ver', save: 'Guardar', cancel: 'Cancelar', delete: 'Eliminar',
     confirm: 'Confirmar', edit: 'Editar', close: 'Fechar', send: 'Enviar', add: 'Adicionar', create: 'Criar', done: 'Concluído',
     members: '{n} membros', member: '{n} membro', promo: 'Turma LFK {year}', today: 'Hoje', tomorrow: 'Amanhã',

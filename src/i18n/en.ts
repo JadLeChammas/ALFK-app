@@ -26,7 +26,7 @@ const en: Dict = {
   },
   time: { justNow: 'just now', minutesAgo: '{n} min ago' },
   errors: { saveFailed: 'Your change could not be saved: {msg}' },
-  common: { typeToConfirm: 'To confirm, type the full name below:',
+  common: { englishHint: "English version (optional): shown in every language except French. Left empty, the French text is shown.", typeToConfirm: 'To confirm, type the full name below:',
     search: 'Search', seeAll: 'See all', see: 'View', save: 'Save', cancel: 'Cancel', delete: 'Delete',
     confirm: 'Confirm', edit: 'Edit', close: 'Close', send: 'Send', add: 'Add', create: 'Create', done: 'Done',
     members: '{n} members', member: '{n} member', promo: 'LFK Class of {year}', today: 'Today', tomorrow: 'Tomorrow',

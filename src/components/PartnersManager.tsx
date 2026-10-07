@@ -12,6 +12,7 @@ import { FramedPhoto } from '@/components/FramedPhoto';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, Card, EmptyState, IconButton, Input, Row, SectionHeader } from '@/components/ui/primitives';
 import { Grid, Screen } from '@/components/ui/Screen';
+import { EnglishHint } from '@/components/ui/EnglishHint';
 import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
@@ -30,7 +31,7 @@ import { openExternal } from '@/lib/links';
 
 /** Members' Partners page: institutions (admins add or remove them) and the school's leadership. */
 export function PartnersManager() {
-  const { d } = useI18n();
+  const { d, bi } = useI18n();
   const { colors, scheme } = useTheme();
   const { db, actions } = useStore();
   const { confirm } = useDialogs();
@@ -103,7 +104,7 @@ export function PartnersManager() {
                   <Txt variant="h3" align="center">{x.name}</Txt>
                   <Txt variant="small" color="textMuted" align="center">{d.leaders.kinds[x.kind]}</Txt>
                   {!!x.from && <Txt variant="small" color="textSubtle" align="center">{`${d.leaders.since} ${x.from}`}</Txt>}
-                  {!!x.description && <Txt variant="small" color="primary" align="center">{x.description}</Txt>}
+                  {!!x.description && <Txt variant="small" color="primary" align="center">{bi(x.description, x.descriptionEn)}</Txt>}
                 </View>
               </Card>
             ))}
@@ -134,7 +135,7 @@ export function PartnersManager() {
 }
 
 function InstitutionCard({ inst, onDelete, onEdit, onUp, onDown, onToggleHidden }: { inst: Institution; onDelete?: () => void; onEdit?: () => void; onUp?: () => void; onDown?: () => void; onToggleHidden?: () => void }) {
-  const { d } = useI18n();
+  const { d, bi } = useI18n();
   const { colors } = useTheme();
   const logo = partnerLogo(inst);
   return (
@@ -157,7 +158,7 @@ function InstitutionCard({ inst, onDelete, onEdit, onUp, onDown, onToggleHidden 
           {onDown && <IconButton icon="arrow-down" size={32} onPress={onDown} label={d.guide.down} />}
         </Row>
       )}
-      <Txt color="textMuted" style={{ flex: 1 }}>{inst.description}</Txt>
+      <Txt color="textMuted" style={{ flex: 1 }}>{bi(inst.description, inst.descriptionEn)}</Txt>
       {inst.website && <Button label={d.honorary.website} icon="external-link" size="sm" variant="secondary" style={{ alignSelf: 'flex-start' }} onPress={() => openExternal(inst.website!)} />}
     </Card>
   );
@@ -167,8 +168,8 @@ function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onCl
   const { d } = useI18n();
   const { actions } = useStore();
   const { toast } = useDialogs();
-  const blank = { name: '', description: '', website: '', logo: '' };
-  const [form, setForm] = useState(editing ? { name: editing.name, description: editing.description, website: editing.website ?? '', logo: editing.logo ?? '' } : blank);
+  const blank = { name: '', description: '', descriptionEn: '', website: '', logo: '' };
+  const [form, setForm] = useState(editing ? { name: editing.name, description: editing.description, descriptionEn: editing.descriptionEn ?? '', website: editing.website ?? '', logo: editing.logo ?? '' } : blank);
   const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const website = form.website.trim();
   const validSite = !website || /^https?:\/\/\S+$/i.test(website);
@@ -194,6 +195,8 @@ function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onCl
       <Txt variant="small" color="textMuted">{d.honorary.permissionNote}</Txt>
       <Input label={d.honorary.name} value={form.name} onChangeText={set('name')} />
       <Input label={d.honorary.description} value={form.description} onChangeText={set('description')} multiline />
+      <EnglishHint />
+      <Input label={`${d.honorary.description} · English`} value={form.descriptionEn} onChangeText={set('descriptionEn')} multiline />
       <Input label={d.honorary.websiteField} icon="link" value={form.website} onChangeText={set('website')} autoCapitalize="none" placeholder="https://" error={validSite ? undefined : d.honorary.invalidUrl} />
       <Input label={d.honorary.logoField} icon="image" value={form.logo} onChangeText={set('logo')} autoCapitalize="none" placeholder="https://" />
       <Row gap={10}>
@@ -208,7 +211,9 @@ function InstitutionForm({ visible, onClose, editing }: { visible: boolean; onCl
         size="lg"
         disabled={!form.name.trim() || !form.description.trim() || !validSite || uploading}
         onPress={() => {
-          const values = { name: form.name.trim(), description: form.description.trim(), website: website || undefined, logo: form.logo.trim() || undefined };
+          // Cleared English text: '' so that it is erased; never written: left out (works before migration 047).
+          const en = form.descriptionEn.trim();
+          const values = { name: form.name.trim(), description: form.description.trim(), descriptionEn: en || (editing?.descriptionEn ? '' : undefined), website: website || undefined, logo: form.logo.trim() || undefined };
           if (editing) actions.updateInstitution(editing.id, values);
           else actions.addInstitution(values);
           toast(d.common.saved);

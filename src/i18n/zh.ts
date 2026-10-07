@@ -26,7 +26,7 @@ const zh: Dict = {
   },
   time: { justNow: '刚刚', minutesAgo: '{n} 分钟前' },
   errors: { saveFailed: '无法保存修改：{msg}' },
-  common: { typeToConfirm: '请在下方输入全名以确认：',
+  common: { englishHint: "英文版本（可选）：除法语外的所有语言都显示英文版本。留空则显示法语文本。", typeToConfirm: '请在下方输入全名以确认：',
     search: '搜索', seeAll: '查看全部', see: '查看', save: '保存', cancel: '取消', delete: '删除',
     confirm: '确认', edit: '编辑', close: '关闭', send: '发送', add: '添加', create: '创建', done: '完成',
     members: '{n} 名成员', member: '{n} 名成员', promo: 'LFK {year} 届', today: '今天', tomorrow: '明天',

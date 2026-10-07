@@ -26,7 +26,7 @@ const ja: Dict = {
   },
   time: { justNow: 'たった今', minutesAgo: '{n}分前' },
   errors: { saveFailed: '変更を保存できませんでした：{msg}' },
-  common: { typeToConfirm: '確認のため、下に氏名を入力してください:',
+  common: { englishHint: "英語版（任意）：フランス語以外のすべての言語で表示されます。空欄の場合はフランス語の文章が表示されます。", typeToConfirm: '確認のため、下に氏名を入力してください:',
     search: '検索', seeAll: 'すべて表示', see: '表示', save: '保存', cancel: 'キャンセル', delete: '削除',
     confirm: '確認', edit: '編集', close: '閉じる', send: '送信', add: '追加', create: '作成', done: '完了',
     members: 'メンバー{n}人', member: 'メンバー{n}人', promo: 'LFK {year}年卒', today: '今日', tomorrow: '明日',

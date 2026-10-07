@@ -26,7 +26,7 @@ const nl: Dict = {
   },
   time: { justNow: 'zojuist', minutesAgo: '{n} min geleden' },
   errors: { saveFailed: 'Je wijziging kon niet worden opgeslagen: {msg}' },
-  common: { typeToConfirm: 'Typ ter bevestiging hieronder de volledige naam:',
+  common: { englishHint: "Engelse versie (optioneel): verschijnt in alle talen behalve het Frans. Leeg gelaten verschijnt de Franse tekst.", typeToConfirm: 'Typ ter bevestiging hieronder de volledige naam:',
     search: 'Zoeken', seeAll: 'Alles bekijken', see: 'Bekijken', save: 'Opslaan', cancel: 'Annuleren', delete: 'Verwijderen',
     confirm: 'Bevestigen', edit: 'Bewerken', close: 'Sluiten', send: 'Versturen', add: 'Toevoegen', create: 'Aanmaken', done: 'Klaar',
     members: '{n} leden', member: '{n} lid', promo: 'LFK-jaargang {year}', today: 'Vandaag', tomorrow: 'Morgen',

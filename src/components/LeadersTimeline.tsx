@@ -20,7 +20,7 @@ import { isFileRejected } from '@/lib/fileSafety';
  * the first to the one in office, like a gallery of former heads. Admins add, edit and delete people.
  */
 export function LeadersTimeline({ kind, editable, title }: { kind: LeaderKind; editable?: boolean; title?: string }) {
-  const { d } = useI18n();
+  const { d, bi } = useI18n();
   const l = d.leaders;
   const { colors } = useTheme();
   const { isMobile } = useLayout();
@@ -56,7 +56,7 @@ export function LeadersTimeline({ kind, editable, title }: { kind: LeaderKind; e
                     </View>
                     <Txt variant="small" color="textSubtle" style={{ fontVariant: ['tabular-nums'] }}>{years(x)}</Txt>
                     <Txt variant="bodyStrong" align="center" numberOfLines={2}>{x.name}</Txt>
-                    {!!x.description && <Txt variant="small" color="primary" align="center">{x.description}</Txt>}
+                    {!!x.description && <Txt variant="small" color="primary" align="center">{bi(x.description, x.descriptionEn)}</Txt>}
                     {current && <Badge label={l.current} tone="secondary" />}
                     {editable && (
                       <Row gap={4}>
@@ -155,11 +155,12 @@ function LeaderForm({ initial, onClose, onSave }: { initial: SchoolLeader; onClo
           <Segmented value={x.kind} onChange={(kind) => setX((v) => ({ ...v, kind }))} options={LEADER_KINDS.map((k) => ({ value: k, label: l.kinds[k] }))} />
           <Input label={l.name} value={x.name} onChangeText={(name) => setX((v) => ({ ...v, name }))} />
           <Input label={`${l.description} (${d.common.optional})`} value={x.description ?? ''} onChangeText={(description) => setX((v) => ({ ...v, description }))} multiline maxLength={400} placeholder={l.descriptionPlaceholder} />
+          {!!x.description?.trim() && <Input label={`${l.description} · English`} value={x.descriptionEn ?? ''} onChangeText={(descriptionEn) => setX((v) => ({ ...v, descriptionEn }))} multiline maxLength={400} hint={d.common.englishHint} />}
           <FieldRow>
             <Input label={l.from} value={from} onChangeText={setFrom} keyboardType="number-pad" maxLength={4} placeholder="1990" containerStyle={{ flex: 1 }} />
             <Input label={l.to} value={to} onChangeText={setTo} keyboardType="number-pad" maxLength={4} placeholder={l.toPlaceholder} containerStyle={{ flex: 1 }} />
           </FieldRow>
-          <Button label={d.common.save} icon="check" full disabled={!x.name.trim() || uploading} onPress={() => onSave({ ...x, name: x.name.trim(), description: x.description?.trim() || undefined, from: year(from), to: year(to) })} />
+          <Button label={d.common.save} icon="check" full disabled={!x.name.trim() || uploading} onPress={() => onSave({ ...x, name: x.name.trim(), description: x.description?.trim() || undefined, descriptionEn: (x.description?.trim() && x.descriptionEn?.trim()) || undefined, from: year(from), to: year(to) })} />
         </Pressable>
       </Pressable>
     </Modal>

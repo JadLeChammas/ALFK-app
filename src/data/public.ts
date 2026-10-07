@@ -100,7 +100,7 @@ function readStored(): { data: PublicOverview; at: number } | null {
 function fromRpc(data: unknown): PublicOverview {
   const o = data as Omit<PublicOverview, 'institutions' | 'bureau'> & {
     bureau: { name: string; role: 'admin' | 'honneur'; fonction: string | null; avatar: string | null }[];
-    institutions: { id: string; name: string; description: string; logo: string | null; website: string | null; sort_order: number }[];
+    institutions: { id: string; name: string; description: string; description_en?: string | null; logo: string | null; website: string | null; sort_order: number }[];
   };
   return {
     ...EMPTY,
@@ -108,7 +108,7 @@ function fromRpc(data: unknown): PublicOverview {
     destinations: o.destinations ?? [],
     schools: o.schools ?? [],
     bureau: (o.bureau ?? []).map((p) => ({ ...p, fonction: p.fonction ?? undefined, avatar: p.avatar ?? undefined })).sort((a, b) => rank(a) - rank(b)),
-    institutions: sortPartners((o.institutions ?? []).map((i) => ({ id: i.id, name: i.name, description: i.description, logo: i.logo ?? undefined, website: i.website ?? undefined, order: i.sort_order }))),
+    institutions: sortPartners((o.institutions ?? []).map((i) => ({ id: i.id, name: i.name, description: i.description, descriptionEn: i.description_en ?? undefined, logo: i.logo ?? undefined, website: i.website ?? undefined, order: i.sort_order }))),
   };
 }
 

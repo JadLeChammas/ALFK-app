@@ -82,7 +82,7 @@ function PublicPartners() {
  */
 function CurrentLeadership() {
   const t = useTone();
-  const { d } = useI18n();
+  const { d, bi } = useI18n();
   const { isMobile } = useLayout();
   const { byKind } = useSchoolLeaders();
   const leaders = LEADER_KINDS.flatMap((k) => byKind(k).filter((x) => !x.to));
@@ -99,7 +99,7 @@ function CurrentLeadership() {
             <Txt style={{ fontFamily: fonts.semibold, fontSize: 17, textAlign: 'center', color: t.fg, marginTop: 4 }}>{x.name}</Txt>
             <Txt style={{ fontFamily: fonts.medium, fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', textAlign: 'center', color: t.muted }}>{d.leaders.kinds[x.kind]}</Txt>
             {!!x.from && <Txt style={{ fontSize: 13, color: t.muted }}>{`${d.leaders.since} ${x.from}`}</Txt>}
-            {!!x.description && <Txt style={{ fontSize: 13, textAlign: 'center', color: brand.red }}>{x.description}</Txt>}
+            {!!x.description && <Txt style={{ fontSize: 13, textAlign: 'center', color: brand.red }}>{bi(x.description, x.descriptionEn)}</Txt>}
           </Reveal>
         ))}
       </View>
@@ -109,7 +109,7 @@ function CurrentLeadership() {
 
 function PartnerList({ partners, empty }: { partners: Institution[]; empty: string }) {
   const t = useTone();
-  const { d } = useI18n();
+  const { d, bi } = useI18n();
   const { isMobile, isDesktop } = useLayout();
   if (!partners.length) return <Txt style={{ fontFamily: fonts.regular, fontSize: 15, color: t.muted }}>{empty}</Txt>;
   return (
@@ -125,7 +125,7 @@ function PartnerList({ partners, empty }: { partners: Institution[]; empty: stri
               </View>
               <View style={{ flex: 1, gap: 8 }}>
                 <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 30 : 40, lineHeight: isMobile ? 34 : 44, color: t.fg }}>{x.name}</Txt>
-                <Txt style={{ fontFamily: fonts.regular, fontSize: 15, lineHeight: 24, color: t.muted, maxWidth: 560 }}>{x.description}</Txt>
+                <Txt style={{ fontFamily: fonts.regular, fontSize: 15, lineHeight: 24, color: t.muted, maxWidth: 560 }}>{bi(x.description, x.descriptionEn)}</Txt>
                 {x.website && <LinkCta label={d.honorary.website} onPress={() => openExternal(x.website!)} />}
               </View>
             </View>

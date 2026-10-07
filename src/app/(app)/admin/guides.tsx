@@ -6,6 +6,7 @@ import { AdminNav } from '@/components/AdminNav';
 import { Sheet } from '@/components/forms';
 import { GuideSteps, useGuideTitle } from '@/components/guide/GuideSteps';
 import { useDialogs } from '@/components/ui/Dialogs';
+import { EnglishHint } from '@/components/ui/EnglishHint';
 import { Flag } from '@/components/ui/Flag';
 import { Badge, Button, Card, Chip, EmptyState, Input, Row, SectionHeader } from '@/components/ui/primitives';
 import { Select } from '@/components/ui/Select';
@@ -127,7 +128,9 @@ function GuideSettings({
   const g = d.guide;
   const [title, setTitle] = useState(guide.title ?? '');
   const [intro, setIntro] = useState(guide.intro ?? '');
-  const changed = title !== (guide.title ?? '') || intro !== (guide.intro ?? '');
+  const [titleEn, setTitleEn] = useState(guide.titleEn ?? '');
+  const [introEn, setIntroEn] = useState(guide.introEn ?? '');
+  const changed = title !== (guide.title ?? '') || intro !== (guide.intro ?? '') || titleEn !== (guide.titleEn ?? '') || introEn !== (guide.introEn ?? '');
   return (
     <Card style={{ gap: 14 }}>
       <Row wrap style={{ justifyContent: 'space-between', gap: 10 }}>
@@ -145,8 +148,11 @@ function GuideSettings({
       <SectionHeader title={g.settings} icon="sliders" />
       <Input label={g.guideTitle} value={title} onChangeText={setTitle} placeholder={defaultTitle} maxLength={100} />
       <Input label={g.intro} value={intro} onChangeText={setIntro} placeholder={g.subtitle} multiline maxLength={400} />
+      <EnglishHint />
+      <Input label={`${g.guideTitle} · English`} value={titleEn} onChangeText={setTitleEn} maxLength={100} />
+      <Input label={`${g.intro} · English`} value={introEn} onChangeText={setIntroEn} multiline maxLength={400} />
       <Row>
-        <Button label={d.common.save} icon="check" disabled={!changed} onPress={() => onSave({ title: title.trim() || undefined, intro: intro.trim() || undefined })} />
+        <Button label={d.common.save} icon="check" disabled={!changed} onPress={() => onSave({ title: title.trim() || undefined, intro: intro.trim() || undefined, titleEn: titleEn.trim() || undefined, introEn: introEn.trim() || undefined })} />
       </Row>
       <Txt variant="small" color="textSubtle">{g.stepsHint}</Txt>
     </Card>

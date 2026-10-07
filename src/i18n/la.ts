@@ -27,7 +27,7 @@ const la: Dict = {
   },
   time: { justNow: 'modo', minutesAgo: 'abhinc {n} min.' },
   errors: { saveFailed: 'Mutatio servari non potuit: {msg}' },
-  common: { typeToConfirm: 'Ut confirmes, nomen integrum infra scribe:',
+  common: { englishHint: "Versio Anglica (ad libitum): in omnibus linguis praeter Gallicam ostenditur. Si vacua relinquitur, textus Gallicus ostenditur.", typeToConfirm: 'Ut confirmes, nomen integrum infra scribe:',
     search: 'Quaerere', seeAll: 'Omnia vide', see: 'Vide', save: 'Serva', cancel: 'Omitte', delete: 'Dele',
     confirm: 'Confirma', edit: 'Muta', close: 'Claude', send: 'Mitte', add: 'Adde', create: 'Crea', done: 'Factum',
     members: '{n} sodales', member: '{n} sodalis', promo: 'Classis LFK anni {year}', today: 'Hodie', tomorrow: 'Cras',

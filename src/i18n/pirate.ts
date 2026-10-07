@@ -27,7 +27,7 @@ const pirate: Dict = {
   },
   time: { justNow: 'this very moment', minutesAgo: '{n} min ago' },
   errors: { saveFailed: 'Blimey, yer change be lost at sea: {msg}' },
-  common: { typeToConfirm: 'T’ confirm, write the full name below:',
+  common: { englishHint: "Th' English version (if ye please): shown in every tongue but French. Leave it bare an' th' French be shown.", typeToConfirm: 'T’ confirm, write the full name below:',
     search: 'Spy', seeAll: 'See the lot', see: 'Have a look', save: 'Stow it', cancel: 'Belay that', delete: 'Feed to the sharks',
     confirm: 'Aye', edit: 'Mend', close: 'Batten down', send: 'Send', add: 'Add', create: 'Forge', done: 'Done',
     members: '{n} hands', member: '{n} hand', promo: 'LFK Crew o’ {year}', today: 'This day', tomorrow: 'Morrow',

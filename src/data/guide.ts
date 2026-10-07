@@ -10,7 +10,8 @@ import { useStore } from './store';
  * France-only guide saved earlier under `guideFrance`).
  */
 export type GuidePhase = 'before' | 'arrival' | 'months' | 'year';
-export type GuideStep = { id: string; phase: GuidePhase; title: string; body: string; url?: string; urlLabel?: string };
+/** `…En`: the English version, read in every language but French (see `bi` in i18n). */
+export type GuideStep = { id: string; phase: GuidePhase; title: string; body: string; url?: string; urlLabel?: string; titleEn?: string; bodyEn?: string; urlLabelEn?: string };
 export type CountryGuide = {
   id: string;
   /** ISO code, see countries.ts */
@@ -18,6 +19,8 @@ export type CountryGuide = {
   /** Written by the admins; empty = « Guide — {country} » in the reader's language. */
   title?: string;
   intro?: string;
+  titleEn?: string;
+  introEn?: string;
   /** Drafts are only visible to admins. */
   published: boolean;
   steps: GuideStep[];
