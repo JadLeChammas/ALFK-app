@@ -8,8 +8,11 @@ import { radius, space } from '@/theme/tokens';
 import { Button, Input } from './primitives';
 import { Txt } from './Txt';
 
-/** `typeToConfirm`: the confirm button stays disabled until this text (e.g. a full name) is typed. */
-type ConfirmOpts = { title: string; message?: string; confirmLabel?: string; danger?: boolean; typeToConfirm?: string };
+/**
+ * `typeToConfirm`: the confirm button stays disabled until this text (e.g. a full name) is typed;
+ * `typeHint` replaces the « type the full name » line above it.
+ */
+type ConfirmOpts = { title: string; message?: string; confirmLabel?: string; danger?: boolean; typeToConfirm?: string; typeHint?: string };
 
 /** Case-, accent- and spacing-insensitive comparison for the type-to-confirm field. */
 const loose = (v: string) => v.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
@@ -93,7 +96,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             </View>
             {dialog?.kind === 'confirm' && dialog.typeToConfirm && (
               <View style={{ gap: 10 }}>
-                <Txt variant="small" color="textMuted">{d.common.typeToConfirm}</Txt>
+                <Txt variant="small" color="textMuted">{dialog.typeHint ?? d.common.typeToConfirm}</Txt>
                 <View style={{ alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.input, backgroundColor: colors.dangerSoft, borderWidth: 1, borderColor: colors.danger }}>
                   <Txt selectable variant="bodyStrong" style={{ color: colors.danger }}>{dialog.typeToConfirm}</Txt>
                 </View>
@@ -104,7 +107,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                   placeholder={dialog.typeToConfirm}
                   autoCapitalize="words"
                   autoCorrect={false}
-                  accessibilityLabel={d.common.typeToConfirm}
+                  accessibilityLabel={dialog.typeHint ?? d.common.typeToConfirm}
                   onSubmitEditing={() => loose(value) === loose(dialog.typeToConfirm ?? '') && close(true)}
                 />
               </View>

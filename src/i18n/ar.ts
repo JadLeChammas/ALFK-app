@@ -188,6 +188,7 @@ const ar: Dict = {
     },
   },
   legal: {
+    cgu: "شروط الاستخدام", cguSoon: "يجري إعداد شروط الاستخدام وستُنشر هنا قريبًا جدًا.", updatedOn: "آخر تحديث: {date}",
     title: 'الإشعارات القانونية', sitemap: 'خريطة الموقع', privacy: 'سياسة الخصوصية', privacyUpdated: 'آخر تحديث: 30 سبتمبر 2026', notFound: 'الصفحة غير موجودة', notFoundSub: 'هذه الصفحة غير موجودة أو تم نقلها.', notFoundJoke: 'حتى الجمل تاه في الصحراء… 🐪',
     goHome: 'العودة إلى الرئيسية', contactTitle: 'اتصل بنا', contactSub: 'لديك سؤال؟ فريق الرابطة يجيبك.',
     subject: 'الموضوع', message: 'الرسالة', name: 'الاسم', sent: 'تم إرسال الرسالة، شكرًا!', contactLead: 'العضوية أو الفعاليات أو الشراكات أو مجرد سؤال: راسلونا وسيرد عليكم أحد أعضاء المكتب.', topic: 'الموضوع', topicMembership: 'العضوية', topicEvents: 'الفعاليات', topicPartnership: 'شراكة', topicOrientation: 'التوجيه', topicOther: 'أخرى', replyTime: 'الرد خلال 48 ساعة', privateNote: 'لا يقرأ رسالتك إلا المكتب', otherWays: 'طرق أخرى للتواصل معنا', wayBoardSub: 'الأعضاء الذين يحيون الجمعية', wayJoinSub: 'انضم إلى شبكة الخريجين', wayAssociationSub: 'تاريخنا ومهامنا', sentTitle: 'تم إرسال الرسالة', sentSub: 'شكرًا! سيرد عليك أحد أعضاء المكتب قريبًا عبر البريد الإلكتروني.', sendAnother: 'إرسال رسالة أخرى', messagePlaceholder: 'أخبرنا ببضع كلمات…', emailInvalid: 'عنوان بريد إلكتروني غير صالح',
@@ -702,6 +703,7 @@ const ar: Dict = {
     none: 'الصف غير محدد',
   },
   promote: {
+    typeWord: "للتأكيد، اكتب كلمة « dictionnaire » أدناه",
     title: 'الانتقال إلى السنة التالية',
     sub: 'بداية العام: طلاب النهائي يصبحون خريجين (يكملون حسابهم قبل الدخول)، وPremière ينتقل إلى النهائي، وSeconde إلى Première.',
     button: 'نقل الطلاب',
@@ -936,6 +938,9 @@ const ar: Dict = {
     cinemaOff: 'عادت الأضواء.',
     cinemaExit: 'النهاية',
     flip: 'كل شيء مقلوب… كما في أستراليا! 🙃',
+  },
+  legalAdmin: {
+    nav: "النصوص القانونية", title: "النصوص القانونية", subtitle: "شروط الاستخدام وسياسة الخصوصية والإشعار القانوني: اكتبها، عاينها، انشرها.", cardSub: "{n} من {total} منشورة · لا يتغير شيء في الموقع قبل النقر على « نشر »", open: "تعديل", live: "منشور", liveSince: "منشور · {date}", notLive: "غير منشور · يعرض الموقع نصه الحالي", hintLive: "هذا النص منشور. تبقى تعديلاتك مسودة حتى تعيد نشره.", hintDraft: "لم يُنشر شيء بعد: يحتفظ الموقع بصفحته الحالية حتى تنقر على « نشر ».", empty: "لا شيء للمعاينة.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "معاينة", edit: "تعديل", publish: "نشر", publishConfirm: "نشر هذا النص في الموقع بعنوان « {name} »؟ سيتمكن الجميع من قراءته.", published: "نُشر في الموقع", withdraw: "سحب", withdrawConfirm: "سحب « {name} » من الموقع؟ تعود الصفحة إلى نصها الأصلي.", withdrawn: "سُحب: يعرض الموقع نصه الأصلي", discard: "تجاهل التعديلات", seePage: "عرض الصفحة",
   },
   uni: {
     pick: 'اختر من القائمة', searchPlaceholder: 'اكتب الاسم أو الاختصار (مثل I أو ISEP أو Sorbonne)…', inCity: 'في {city}',

@@ -186,6 +186,7 @@ const fr = {
     },
   },
   legal: {
+    cgu: "Conditions d'utilisation", cguSoon: "Les conditions générales d'utilisation sont en cours de rédaction et seront publiées ici très bientôt.", updatedOn: "Dernière mise à jour : {date}",
     title: 'Mentions légales', sitemap: 'Plan du site', privacy: 'Politique de confidentialité', privacyUpdated: 'Dernière mise à jour : 30 septembre 2026', notFound: 'Page introuvable', notFoundSub: "Cette page n'existe pas ou a été déplacée.", notFoundJoke: 'Même le chameau s’est perdu dans le désert… 🐪',
     goHome: "Retour à l'accueil", contactTitle: 'Nous contacter', contactSub: "Une question ? L'équipe de l'Amicale vous répond.",
     subject: 'Objet', message: 'Message', name: 'Nom', sent: 'Message envoyé, merci !', contactLead: 'Adhésion, événements, partenariat ou simple question : écrivez-nous, un membre du bureau vous répond.', topic: 'Sujet', topicMembership: 'Adhésion', topicEvents: 'Événements', topicPartnership: 'Partenariat', topicOrientation: 'Orientation', topicOther: 'Autre', replyTime: 'Réponse sous 48 h', privateNote: 'Seul le bureau lit votre message', otherWays: 'Autres façons de nous joindre', wayBoardSub: 'Les membres qui font vivre l’Amicale', wayJoinSub: 'Rejoindre le réseau des anciens', wayAssociationSub: 'Notre histoire et nos missions', sentTitle: 'Message envoyé', sentSub: 'Merci ! Un membre du bureau vous répond très vite, par e-mail.', sendAnother: 'Envoyer un autre message', messagePlaceholder: 'Dites-nous en quelques mots…', emailInvalid: 'Adresse e-mail invalide',
@@ -700,6 +701,7 @@ const fr = {
     none: 'Classe à indiquer',
   },
   promote: {
+    typeWord: "Pour confirmer, tapez le mot « dictionnaire » ci-dessous",
     title: 'Passage à l’année supérieure',
     sub: 'À la rentrée : les Terminales deviennent alumni (ils complètent leur compte avant d’accéder au site), les Premières passent en Terminale et les Secondes en Première.',
     button: 'Faire passer les élèves',
@@ -934,6 +936,9 @@ const fr = {
     cinemaOff: 'Lumières rallumées.',
     cinemaExit: 'FIN',
     flip: 'Tout est à l’envers… comme en Australie ! 🙃',
+  },
+  legalAdmin: {
+    nav: "Textes légaux", title: "Textes légaux", subtitle: "Conditions d'utilisation, politique de confidentialité et mentions légales : rédigez, prévisualisez, publiez.", cardSub: "{n} sur {total} publiés · rien ne change sur le site tant que vous n'avez pas cliqué sur « Publier »", open: "Modifier", live: "Publié", liveSince: "Publié · {date}", notLive: "Non publié · le site affiche son texte actuel", hintLive: "Ce texte est en ligne. Vos modifications restent un brouillon jusqu'à ce que vous le publiiez à nouveau.", hintDraft: "Rien n'est encore publié : le site garde sa page actuelle tant que vous n'avez pas cliqué sur « Publier ».", empty: "Rien à prévisualiser.", placeholder: "## 1. Titre\n\nUn paragraphe…\n\n- Un élément de liste", format: "Mise en forme : « ## Titre », « ### Sous-titre », « - » pour les listes, **gras**, « | a | b | » pour les tableaux, une ligne vide entre les paragraphes.", preview: "Aperçu", edit: "Modifier", publish: "Publier", publishConfirm: "Publier ce texte sur le site comme « {name} » ? Tout le monde pourra le lire.", published: "Publié sur le site", withdraw: "Retirer", withdrawConfirm: "Retirer « {name} » du site ? La page reprend son texte d’origine.", withdrawn: "Retiré : le site affiche son texte d’origine", discard: "Annuler les modifications", seePage: "Voir la page",
   },
   uni: {
     pick: 'Choisir dans la liste', searchPlaceholder: 'Tapez le nom ou le sigle (ex. I, ISEP, Sorbonne)…', inCity: 'À {city}',

@@ -193,6 +193,7 @@ const kw: Dict = {
     },
   },
   legal: {
+    cgu: "Shroot il esti5dam", cguSoon: "Il shroot 3ala il ta7reer w bt7otaha hni gareeb wayed.", updatedOn: "A5er ta7deeth: {date}",
     title: 'Mentions légales', sitemap: 'Map il site', privacy: 'Il khu9oo9iya', privacyUpdated: 'Aakhir ta3deel: 30 September 2026', notFound: 'Ma ligaina il page', notFoundSub: 'Haadi il page mu mawjooda aw tghayyar makaanha.', notFoundJoke: 'Wallah ma ligaina il page… il ba3eer bu nafsa ga3d ydawwir 3ala il Avenues 🐪',
     goHome: 'Rid 7ag il bait', contactTitle: 'Kallimna', contactSub: '3indik su2aal? Fareeq il Amicale yirid 3alaik.',
     subject: 'Il maw9oo3', message: 'Message', name: 'Isim', sent: 'In9adar, mashkoor!', contactLead: 'Inkhiraa6, events, partnership aw bas su2aal: iktib lana w wa7id min il bureau yirid.', topic: 'Il maw9oo3', topicMembership: 'Inkhiraa6', topicEvents: 'Events', topicPartnership: 'Partnership', topicOrientation: 'Orientation', topicOther: 'Ghair', replyTime: 'Nrid khilaal 48 saa3a', privateNote: 'Bas il bureau yigra il message maalik', otherWays: '6uroq thanya 7ag tkallimna', wayBoardSub: 'Illi ga3dain yimshoon il Amicale', wayJoinSub: 'Idkhil network il alumni', wayAssociationSub: '9i9atna w shnu nsawwi', sentTitle: 'In9adar', sentSub: 'Mashkoor! Wa7id min il bureau yirid 3alaik bil email garreeb.', sendAnother: 'Dizz message thaani', messagePlaceholder: 'Gool lana b kam kilma…', emailInvalid: 'Il email ghala6',
@@ -707,6 +708,7 @@ const kw: Dict = {
     none: 'Laazim tiktib il 9aff',
   },
   promote: {
+    typeWord: "3shan t2akked, iktib kilmat « dictionnaire » ta7t",
     title: 'Targiyat il talaameeth',
     sub: 'Awwal il sana: talaameeth il Terminale y9eeroon alumni (ykammloon accounthum gabil la yidkhiloon), il Première titla3 Terminale w il Seconde Première.',
     button: 'Ragg il talaameeth',
@@ -941,6 +943,9 @@ const kw: Dict = {
     cinemaOff: 'Rij3at il adhwa.',
     cinemaExit: 'IL NIHAAYA',
     flip: 'Kil shay bil magloob… mithil Australia! 🙃',
+  },
+  legalAdmin: {
+    nav: "Legal texts", title: "Legal texts", subtitle: "Terms of use, privacy policy and legal notice: write them, preview them, publish them.", cardSub: "{n} of {total} published · nothing changes on the site until you click « Publish »", open: "Edit", live: "Published", liveSince: "Published · {date}", notLive: "Not published · the site shows its current text", hintLive: "This text is on the site. Your changes stay a draft until you publish them again.", hintDraft: "Nothing is published yet: the site keeps its current page until you click « Publish ».", empty: "Nothing to preview.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "Preview", edit: "Edit", publish: "Publish", publishConfirm: "Publish this text on the site as « {name} »? Everyone will see it.", published: "Published on the site", withdraw: "Withdraw", withdrawConfirm: "Withdraw « {name} » from the site? The page goes back to its built-in text.", withdrawn: "Withdrawn: the site shows its built-in text", discard: "Discard changes", seePage: "See the page",
   },
   uni: {
     pick: 'Ikhtaar min il list', searchPlaceholder: 'Iktib il isim aw il ikhti9aar (mithil I, ISEP, Sorbonne)…', inCity: 'B {city}',

@@ -312,6 +312,7 @@ function SiteFooter() {
   const legal = [
     { label: d.nav.legal, href: '/mentions-legales' },
     { label: d.legal.privacy, href: '/confidentialite' },
+    { label: d.legal.cgu, href: '/cgu' },
     { label: d.nav.sitemap, href: '/plan-du-site' },
   ];
   const muted = 'rgba(231, 236, 242,0.68)';

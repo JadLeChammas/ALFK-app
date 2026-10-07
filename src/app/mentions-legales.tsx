@@ -1,9 +1,11 @@
 import { router } from 'expo-router';
 import { Linking, View } from 'react-native';
 
+import { LegalText } from '@/components/LegalText';
 import { PublicPage } from '@/components/PublicPage';
 import { Button, Card } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
+import { useLegalText } from '@/data/legal';
 import { PHOTOS } from '@/data/photos';
 import { useI18n } from '@/i18n';
 
@@ -26,16 +28,22 @@ const SECTIONS_EN: [string, string][] = [
 export default function Legal() {
   const { d, lang } = useI18n();
   const sections = lang === 'fr' ? SECTIONS_FR : SECTIONS_EN;
+  // The text published from Admin → Textes légaux replaces the built-in one (photo credits stay).
+  const published = useLegalText('mentions', lang);
   return (
     <PublicPage title={d.legal.title}>
-      <Card style={{ gap: 24 }}>
-        {sections.map(([h, p]) => (
-          <View key={h} style={{ gap: 6 }}>
-            <Txt variant="h3">{h}</Txt>
-            <Txt color="textMuted">{p}</Txt>
-          </View>
-        ))}
-      </Card>
+      {published.text ? (
+        <LegalText text={published.text} />
+      ) : (
+        <Card style={{ gap: 24 }}>
+          {sections.map(([h, p]) => (
+            <View key={h} style={{ gap: 6 }}>
+              <Txt variant="h3">{h}</Txt>
+              <Txt color="textMuted">{p}</Txt>
+            </View>
+          ))}
+        </Card>
+      )}
       {/* Wikimedia Commons photos used on the public pages: author, licence and source, as the licences require. */}
       {Object.keys(PHOTOS).length > 0 && (
       <Card style={{ gap: 12 }}>

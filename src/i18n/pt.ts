@@ -188,6 +188,7 @@ const pt: Dict = {
     },
   },
   legal: {
+    cgu: "Termos de utilização", cguSoon: "Os termos de utilização estão a ser redigidos e serão publicados aqui em breve.", updatedOn: "Última atualização: {date}",
     title: 'Aviso legal', sitemap: 'Mapa do site', privacy: 'Política de privacidade', privacyUpdated: 'Última atualização: 30 de setembro de 2026', notFound: 'Página não encontrada', notFoundSub: 'Esta página não existe ou foi movida.', notFoundJoke: 'Até o camelo se perdeu no deserto… 🐪',
     goHome: 'Voltar ao início', contactTitle: 'Contacte-nos', contactSub: 'Uma pergunta? A equipa da Amicale responde-lhe.',
     subject: 'Assunto', message: 'Mensagem', name: 'Nome', sent: 'Mensagem enviada, obrigado!', contactLead: 'Adesão, eventos, parcerias ou uma simples pergunta: escreva-nos e um membro da direção responde.', topic: 'Assunto', topicMembership: 'Adesão', topicEvents: 'Eventos', topicPartnership: 'Parceria', topicOrientation: 'Orientação', topicOther: 'Outro', replyTime: 'Resposta em 48 h', privateNote: 'Só a direção lê a sua mensagem', otherWays: 'Outras formas de nos contactar', wayBoardSub: 'Quem dá vida à Amicale', wayJoinSub: 'Juntar-se à rede de antigos alunos', wayAssociationSub: 'A nossa história e missão', sentTitle: 'Mensagem enviada', sentSub: 'Obrigado! Um membro da direção responde em breve, por e-mail.', sendAnother: 'Enviar outra mensagem', messagePlaceholder: 'Diga-nos em poucas palavras…', emailInvalid: 'Endereço de e-mail inválido',
@@ -702,6 +703,7 @@ const pt: Dict = {
     none: 'Turma a indicar',
   },
   promote: {
+    typeWord: "Para confirmar, escreva a palavra « dictionnaire » abaixo",
     title: 'Passagem de ano',
     sub: 'Novo ano letivo: os de Terminale viram alumni (completam a conta antes de acessar o site), Première passa a Terminale e Seconde a Première.',
     button: 'Passar os alunos',
@@ -936,6 +938,9 @@ const pt: Dict = {
     cinemaOff: 'Luzes acesas.',
     cinemaExit: 'FIM',
     flip: 'Está tudo de cabeça para baixo… como na Austrália! 🙃',
+  },
+  legalAdmin: {
+    nav: "Textos legais", title: "Textos legais", subtitle: "Termos de utilização, política de privacidade e aviso legal: redija, pré-visualize, publique.", cardSub: "{n} de {total} publicados · nada muda no site até clicar em « Publicar »", open: "Editar", live: "Publicado", liveSince: "Publicado · {date}", notLive: "Não publicado · o site mostra o texto atual", hintLive: "Este texto está online. As alterações ficam em rascunho até voltar a publicar.", hintDraft: "Ainda nada publicado: o site mantém a página atual até clicar em « Publicar ».", empty: "Nada para pré-visualizar.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "Pré-visualizar", edit: "Editar", publish: "Publicar", publishConfirm: "Publicar este texto no site como « {name} »? Todos poderão lê-lo.", published: "Publicado no site", withdraw: "Retirar", withdrawConfirm: "Retirar « {name} » do site? A página volta ao texto original.", withdrawn: "Retirado: o site mostra o texto original", discard: "Descartar alterações", seePage: "Ver a página",
   },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',

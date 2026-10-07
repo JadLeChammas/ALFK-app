@@ -188,6 +188,7 @@ const nl: Dict = {
     },
   },
   legal: {
+    cgu: "Gebruiksvoorwaarden", cguSoon: "De gebruiksvoorwaarden worden opgesteld en verschijnen hier binnenkort.", updatedOn: "Laatst bijgewerkt: {date}",
     title: 'Juridische informatie', sitemap: 'Sitemap', privacy: 'Privacybeleid', privacyUpdated: 'Laatst bijgewerkt: 30 september 2026', notFound: 'Pagina niet gevonden', notFoundSub: 'Deze pagina bestaat niet of is verplaatst.', notFoundJoke: 'Zelfs de kameel is verdwaald in de woestijn… 🐪',
     goHome: 'Terug naar home', contactTitle: 'Neem contact op', contactSub: 'Een vraag? Het team van de Amicale antwoordt je.',
     subject: 'Onderwerp', message: 'Bericht', name: 'Naam', sent: 'Bericht verstuurd, bedankt!', contactLead: 'Lidmaatschap, evenementen, partnerschappen of gewoon een vraag: schrijf ons en een bestuurslid antwoordt.', topic: 'Onderwerp', topicMembership: 'Lidmaatschap', topicEvents: 'Evenementen', topicPartnership: 'Partnerschap', topicOrientation: 'Studiekeuze', topicOther: 'Overig', replyTime: 'Antwoord binnen 48 uur', privateNote: 'Alleen het bestuur leest je bericht', otherWays: 'Andere manieren om ons te bereiken', wayBoardSub: 'De mensen die de Amicale draaiende houden', wayJoinSub: 'Word lid van het alumninetwerk', wayAssociationSub: 'Ons verhaal en onze missie', sentTitle: 'Bericht verstuurd', sentSub: 'Bedankt! Een bestuurslid antwoordt je binnenkort per e-mail.', sendAnother: 'Nog een bericht sturen', messagePlaceholder: 'Vertel het ons in een paar woorden…', emailInvalid: 'Ongeldig e-mailadres',
@@ -685,6 +686,7 @@ const nl: Dict = {
     none: 'Klas in te vullen',
   },
   promote: {
+    typeWord: "Typ ter bevestiging hieronder het woord « dictionnaire »",
     title: 'Overgang naar het volgende jaar',
     sub: 'Nieuw schooljaar: leerlingen van de Terminale worden alumni (ze vullen hun account aan voordat ze de site gebruiken), de Première gaat naar de Terminale en de Seconde naar de Première.',
     button: 'Leerlingen laten overgaan',
@@ -936,6 +938,9 @@ const nl: Dict = {
     cinemaOff: 'Licht weer aan.',
     cinemaExit: 'EINDE',
     flip: 'Alles staat op zijn kop… net als in Australië! 🙃',
+  },
+  legalAdmin: {
+    nav: "Juridische teksten", title: "Juridische teksten", subtitle: "Gebruiksvoorwaarden, privacybeleid en colofon: schrijven, bekijken, publiceren.", cardSub: "{n} van {total} gepubliceerd · er verandert niets op de site tot u op « Publiceren » klikt", open: "Bewerken", live: "Gepubliceerd", liveSince: "Gepubliceerd · {date}", notLive: "Niet gepubliceerd · de site toont de huidige tekst", hintLive: "Deze tekst staat online. Wijzigingen blijven een concept tot u opnieuw publiceert.", hintDraft: "Nog niets gepubliceerd: de site houdt de huidige pagina tot u op « Publiceren » klikt.", empty: "Niets om te bekijken.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "Voorbeeld", edit: "Bewerken", publish: "Publiceren", publishConfirm: "Deze tekst op de site publiceren als « {name} »? Iedereen kan hem lezen.", published: "Gepubliceerd op de site", withdraw: "Intrekken", withdrawConfirm: "« {name} » van de site halen? De pagina toont weer de oorspronkelijke tekst.", withdrawn: "Ingetrokken: de site toont de oorspronkelijke tekst", discard: "Wijzigingen verwerpen", seePage: "Pagina bekijken",
   },
   uni: {
     pick: 'Kies uit de lijst', searchPlaceholder: 'Typ de naam of de afkorting (bijv. I, ISEP, Sorbonne)…', inCity: 'In {city}',

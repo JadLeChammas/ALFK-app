@@ -22,6 +22,7 @@ export function AdminNav() {
   const unread = db.contacts.filter((c) => !c.read).length;
   const tabs: { href: string; label: string; icon: IconName; count?: number }[] = [
     { href: '/admin', label: d.nav.dashboard, icon: 'bar-chart-2' },
+    { href: '/admin/textes-legaux', label: d.legalAdmin.nav, icon: 'file-text' },
     { href: '/admin/approbations', label: d.nav.approvals, icon: 'user-check', count: pending || undefined },
     { href: '/admin/membres', label: d.nav.members, icon: 'users' },
     { href: '/admin/honneur', label: d.honoraryAdmin.nav, icon: 'award' },

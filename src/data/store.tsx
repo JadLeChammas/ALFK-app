@@ -1105,6 +1105,11 @@ function useStoreValue() {
       commit((d) => ({ ...d, settings: { ...d.settings, schoolLeaders: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'schoolLeaders', value: value ?? null }));
     },
+    /** Admins: the published legal texts (data/legal.ts), JSON. */
+    setLegalTexts(value: string) {
+      commit((d) => ({ ...d, settings: { ...d.settings, legalTexts: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'legalTexts', value }));
+    },
     saveEmailSignature(text: string) {
       const value = text.trim() || undefined;
       commit((d) => ({ ...d, settings: { ...d.settings, emailSignature: value } }));

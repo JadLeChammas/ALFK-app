@@ -16,6 +16,7 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
 import { awaitsApproval } from '@/data/members';
+import { LEGAL_DOCS, parseLegalTexts } from '@/data/legal';
 
 export default function AdminDashboard() {
   const { toast } = useDialogs();
@@ -43,6 +44,8 @@ export default function AdminDashboard() {
     <Screen>
       <PageHeader title={d.admin.title} subtitle={d.admin.subtitle} icon={<View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' }}><Feather name="shield" size={20} color={colors.onInk} /></View>} />
       <AdminNav />
+
+      <LegalTextsCard />
 
       <Grid min={isMobile ? 150 : 220} gap={16}>
         {kpis.map((k) => {
@@ -106,6 +109,27 @@ export default function AdminDashboard() {
   );
 }
 
+/** First on the dashboard: how many legal texts are published, and the way to write them. */
+function LegalTextsCard() {
+  const { d, f } = useI18n();
+  const { colors } = useTheme();
+  const { db } = useStore();
+  const texts = parseLegalTexts(db.settings.legalTexts);
+  const live = LEGAL_DOCS.filter((k) => texts[k]?.fr?.trim() || texts[k]?.en?.trim()).length;
+  return (
+    <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+      <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' }}>
+        <Feather name="file-text" size={18} color={colors.primary} />
+      </View>
+      <View style={{ flex: 1, minWidth: 200, gap: 2 }}>
+        <Txt variant="bodyStrong">{d.legalAdmin.title}</Txt>
+        <Txt variant="small" color="textMuted">{f(d.legalAdmin.cardSub, { n: live, total: LEGAL_DOCS.length })}</Txt>
+      </View>
+      <Button label={d.legalAdmin.open} icon="edit-2" size="sm" variant="secondary" onPress={() => router.push('/admin/textes-legaux')} />
+    </Card>
+  );
+}
+
 /**
  * New school year: Terminale → Alumni (they complete their account before using the site),
  * Première → Terminale, Seconde → Première.
@@ -123,7 +147,7 @@ function PromoteStudentsCard() {
   const total = count('Tle') + count('1ere') + count('2nde');
 
   const run = async () => {
-    const ok = await confirm({ title: p.title, message: f(p.confirm, { tle: count('Tle'), first: count('1ere'), second: count('2nde') }), confirmLabel: p.button });
+    const ok = await confirm({ title: p.title, message: f(p.confirm, { tle: count('Tle'), first: count('1ere'), second: count('2nde') }), confirmLabel: p.button, typeToConfirm: 'dictionnaire', typeHint: p.typeWord });
     if (!ok) return;
     setBusy(true);
     const r = await actions.promoteStudents();

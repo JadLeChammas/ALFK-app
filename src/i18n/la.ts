@@ -189,6 +189,7 @@ const la: Dict = {
     },
   },
   legal: {
+    cgu: "Condiciones usus", cguSoon: "Condiciones usus scribuntur et mox hic edentur.", updatedOn: "Novissime renovatum: {date}",
     title: 'Notitia legalis', sitemap: 'Tabula situs', privacy: 'Ratio secreti', privacyUpdated: 'Ultima mutatio: XXX Septembris MMXXVI', notFound: 'Pagina non inventa', notFoundSub: 'Haec pagina non exstat aut alio translata est.', notFoundJoke: 'Etiam camelus in deserto erravit… 🐪',
     goHome: 'Ad domum redi', contactTitle: 'Nobis scribe', contactSub: 'Quaestio? Turma Amicale tibi respondebit.',
     subject: 'Res', message: 'Nuntius', name: 'Nomen', sent: 'Nuntius missus, gratias!', contactLead: 'Sodalitas, eventus, societas aut simplex quaestio: nobis scribe et sodalis Collegii respondebit.', topic: 'Res', topicMembership: 'Sodalitas', topicEvents: 'Eventus', topicPartnership: 'Societas', topicOrientation: 'Consilium studiorum', topicOther: 'Aliud', replyTime: 'Responsum intra XLVIII horas', privateNote: 'Solum Collegium nuntium tuum legit', otherWays: 'Aliae viae ad nos', wayBoardSub: 'Ei qui Amicale regunt', wayJoinSub: 'Ad societatem alumnorum accede', wayAssociationSub: 'Historia et propositum nostrum', sentTitle: 'Nuntius missus', sentSub: 'Gratias! Sodalis Collegii mox tibi per epistulam respondebit.', sendAnother: 'Alium nuntium mitte', messagePlaceholder: 'Paucis verbis narra…', emailInvalid: 'Inscriptio electronica non valet',
@@ -686,6 +687,7 @@ const la: Dict = {
     none: 'Classis indicanda',
   },
   promote: {
+    typeWord: "Ad confirmandum, verbum « dictionnaire » infra scribe",
     title: 'Transitus in annum proximum',
     sub: 'Initio anni scholastici: discipuli Terminalis alumni fiunt (rationem suam complent antequam situ utantur), Première in Terminale transit et Seconde in Première.',
     button: 'Discipulos promove',
@@ -937,6 +939,9 @@ const la: Dict = {
     cinemaOff: 'Lumina iterum accensa.',
     cinemaExit: 'FINIS',
     flip: 'Omnia inversa sunt… ut in Australia! 🙃',
+  },
+  legalAdmin: {
+    nav: "Textus legales", title: "Textus legales", subtitle: "Terms of use, privacy policy and legal notice: write them, preview them, publish them.", cardSub: "{n} of {total} published · nothing changes on the site until you click « Publish »", open: "Mutare", live: "Editum", liveSince: "Editum · {date}", notLive: "Not published · the site shows its current text", hintLive: "This text is on the site. Your changes stay a draft until you publish them again.", hintDraft: "Nothing is published yet: the site keeps its current page until you click « Publish ».", empty: "Nothing to preview.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "Praevidere", edit: "Mutare", publish: "Edere", publishConfirm: "Publish this text on the site as « {name} »? Everyone will see it.", published: "Published on the site", withdraw: "Removere", withdrawConfirm: "Withdraw « {name} » from the site? The page goes back to its built-in text.", withdrawn: "Withdrawn: the site shows its built-in text", discard: "Discard changes", seePage: "Paginam videre",
   },
   uni: {
     pick: 'Ex indice elige', searchPlaceholder: 'Nomen aut compendium scribe (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

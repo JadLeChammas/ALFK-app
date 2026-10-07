@@ -193,6 +193,7 @@ const lb: Dict = {
     },
   },
   legal: {
+    cgu: "Chouroot l esti3mel", cguSoon: "L chouroot 3am ninkatabo w ra7 yenzalo hon 2arib ktir.", updatedOn: "Akher update: {date}",
     title: 'Mentions légales', sitemap: 'Plan el site', privacy: 'Khousousiye', privacyUpdated: 'Akher ta3dil: 30 Aylul 2026', notFound: 'Ma le2ina el page', notFoundSub: 'Hal page mich mawjoude aw t8ayyar ma7alla.', notFoundJoke: 'Ma le2ina el page… w 7atta el jamal deye3 bel sa7ra 🐪',
     goHome: 'Rja3 3al bet', contactTitle: '7kina', contactSub: '3endak sou2al? Fari2 el Amicale byjeweb.',
     subject: 'El mawdou3', message: 'Message', name: 'Esem', sent: 'Anba3at, merci!', contactLead: 'Inkhirat, events, partenariat aw bas sou2al: ktobelna w 7ada men el bureau byjeweb.', topic: 'El mawdou3', topicMembership: 'Inkhirat', topicEvents: 'Events', topicPartnership: 'Partenariat', topicOrientation: 'Orientation', topicOther: 'Ghayro', replyTime: 'Jaweb b 48 se3a', privateNote: 'Bas el bureau bi2ra message-ak', otherWays: 'Torou2 tenye la t7kina', wayBoardSub: 'Yalle 3am yemchou el Amicale', wayJoinSub: 'Fout 3a réseau el alumni', wayAssociationSub: '7ikeyetna w chou 3am na3mol', sentTitle: 'Anba3at', sentSub: 'Merci! 7ada men el bureau byrodd 3lek 3al email 2ariban.', sendAnother: 'B3at message tene', messagePlaceholder: '2elelna bi kam kelme…', emailInvalid: 'El email 8alat',
@@ -707,6 +708,7 @@ const lb: Dict = {
     none: 'Lezem tektob el saff',
   },
   promote: {
+    typeWord: "La t2akked, ktob kelmet « dictionnaire » ta7t",
     title: 'Tarfi3 el talamiz',
     sub: 'Awwal el sene: talamiz el Terminale bisirou alumni (bikammlou compteton 2abel ma yfoutou), el Première btetla3 Terminale w el Seconde Première.',
     button: 'Talle3 el talamiz',
@@ -941,6 +943,9 @@ const lb: Dict = {
     cinemaOff: 'Rje3ou el adwe.',
     cinemaExit: 'EL NIHAYE',
     flip: 'Kel chi bel ma2loub… metel b Australia! 🙃',
+  },
+  legalAdmin: {
+    nav: "Textes légaux", title: "Textes légaux", subtitle: "Conditions d'utilisation, politique de confidentialité et mentions légales : rédigez, prévisualisez, publiez.", cardSub: "{n} sur {total} publiés · rien ne change sur le site tant que vous n'avez pas cliqué sur « Publier »", open: "Modifier", live: "Publié", liveSince: "Publié · {date}", notLive: "Non publié · le site affiche son texte actuel", hintLive: "Ce texte est en ligne. Vos modifications restent un brouillon jusqu'à ce que vous le publiiez à nouveau.", hintDraft: "Rien n'est encore publié : le site garde sa page actuelle tant que vous n'avez pas cliqué sur « Publier ».", empty: "Rien à prévisualiser.", placeholder: "## 1. Titre\n\nUn paragraphe…\n\n- Un élément de liste", format: "Mise en forme : « ## Titre », « ### Sous-titre », « - » pour les listes, **gras**, « | a | b | » pour les tableaux, une ligne vide entre les paragraphes.", preview: "Aperçu", edit: "Modifier", publish: "Publier", publishConfirm: "Publier ce texte sur le site comme « {name} » ? Tout le monde pourra le lire.", published: "Publié sur le site", withdraw: "Retirer", withdrawConfirm: "Retirer « {name} » du site ? La page reprend son texte d’origine.", withdrawn: "Retiré : le site affiche son texte d’origine", discard: "Annuler les modifications", seePage: "Voir la page",
   },
   uni: {
     pick: 'Na22e men el list', searchPlaceholder: 'Ktob el esem aw el ikhtisar (metlan I, ISEP, Sorbonne)…', inCity: 'B {city}',

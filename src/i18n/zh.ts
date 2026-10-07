@@ -188,6 +188,7 @@ const zh: Dict = {
     },
   },
   legal: {
+    cgu: "使用条款", cguSoon: "使用条款正在撰写中，很快将在此发布。", updatedOn: "最后更新：{date}",
     title: '法律声明', sitemap: '网站地图', privacy: '隐私政策', privacyUpdated: '最后更新：2026 年 9 月 30 日', notFound: '页面未找到', notFoundSub: '该页面不存在或已被移动。', notFoundJoke: '连骆驼都在沙漠里迷路了…… 🐪',
     goHome: '返回首页', contactTitle: '联系我们', contactSub: '有问题吗？校友会团队会为你解答。',
     subject: '主题', message: '消息', name: '姓名', sent: '消息已发送，谢谢！', contactLead: '入会、活动、合作或只是一个问题：给我们写信，理事会成员会回复您。', topic: '主题', topicMembership: '入会', topicEvents: '活动', topicPartnership: '合作', topicOrientation: '升学指导', topicOther: '其他', replyTime: '48 小时内回复', privateNote: '只有理事会阅读您的留言', otherWays: '其他联系方式', wayBoardSub: '让校友会运转的成员', wayJoinSub: '加入校友网络', wayAssociationSub: '我们的历史与使命', sentTitle: '留言已发送', sentSub: '谢谢！理事会成员会尽快通过电子邮件回复您。', sendAnother: '再发一条留言', messagePlaceholder: '简单写几句…', emailInvalid: '电子邮件地址无效',
@@ -702,6 +703,7 @@ const zh: Dict = {
     none: '未设置年级',
   },
   promote: {
+    typeWord: "请在下方输入单词 « dictionnaire » 以确认",
     title: '升入下一年级',
     sub: '新学年：高三学生成为校友（需先完善账户才能访问网站），高二升高三，高一升高二。',
     button: '让学生升级',
@@ -936,6 +938,9 @@ const zh: Dict = {
     cinemaOff: '灯亮了。',
     cinemaExit: '剧终',
     flip: '一切都颠倒了……就像在澳大利亚！🙃',
+  },
+  legalAdmin: {
+    nav: "法律文本", title: "法律文本", subtitle: "使用条款、隐私政策和法律声明：撰写、预览、发布。", cardSub: "已发布 {n}/{total} · 点击「发布」之前网站不会有任何变化", open: "编辑", live: "已发布", liveSince: "已发布 · {date}", notLive: "未发布 · 网站显示当前文本", hintLive: "此文本已上线。您的修改在重新发布前只是草稿。", hintDraft: "尚未发布任何内容：点击「发布」之前，网站保留当前页面。", empty: "没有可预览的内容。", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "预览", edit: "编辑", publish: "发布", publishConfirm: "将此文本作为「{name}」发布到网站？所有人都能看到。", published: "已发布到网站", withdraw: "撤下", withdrawConfirm: "从网站撤下「{name}」？页面将恢复原始文本。", withdrawn: "已撤下：网站显示原始文本", discard: "放弃修改", seePage: "查看页面",
   },
   uni: {
     pick: '从列表中选择', searchPlaceholder: '输入名称或缩写（例如 I、ISEP、Sorbonne）…', inCity: '在 {city}',

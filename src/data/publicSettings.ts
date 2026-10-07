@@ -5,9 +5,9 @@ import { useStore } from './store';
 
 /**
  * Settings that visitors may also read (the end credits, the « Le LFK » page): members already have
- * every setting; visitors fetch the one row (policy in migrations 011, 013 and 028).
+ * every setting; visitors fetch the one row (policy in migrations 011, 013, 028 and 046).
  */
-export function usePublicSetting(key: 'credits' | 'lfkStory' | 'schoolLeaders', enabled = true) {
+export function usePublicSetting(key: 'credits' | 'lfkStory' | 'schoolLeaders' | 'legalTexts', enabled = true) {
   const { db, me } = useStore();
   const raw = db.settings[key];
   const [publicRaw, setPublicRaw] = useState<string | null>(null);

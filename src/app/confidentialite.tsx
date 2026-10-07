@@ -1,9 +1,11 @@
 import { router } from 'expo-router';
 import { View } from 'react-native';
 
+import { LegalText } from '@/components/LegalText';
 import { PublicPage } from '@/components/PublicPage';
 import { Button, Card } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
+import { useLegalText } from '@/data/legal';
 import { useI18n } from '@/i18n';
 
 /**
@@ -38,18 +40,24 @@ const EN: Section[] = [
 ];
 
 export default function Privacy() {
-  const { d, lang } = useI18n();
+  const { d, f, lang, formatDate } = useI18n();
   const sections = lang === 'fr' ? FR : EN;
+  // The text published from Admin → Textes légaux replaces the built-in one.
+  const published = useLegalText('privacy', lang);
   return (
-    <PublicPage title={d.legal.privacy} subtitle={d.legal.privacyUpdated}>
-      <Card style={{ gap: 24 }}>
-        {sections.map(([h, p]) => (
-          <View key={h} style={{ gap: 6 }}>
-            <Txt variant="h3">{h}</Txt>
-            <Txt color="textMuted">{p}</Txt>
-          </View>
-        ))}
-      </Card>
+    <PublicPage title={d.legal.privacy} subtitle={published.updatedAt ? f(d.legal.updatedOn, { date: formatDate(published.updatedAt, { year: true }) }) : d.legal.privacyUpdated}>
+      {published.text ? (
+        <LegalText text={published.text} />
+      ) : (
+        <Card style={{ gap: 24 }}>
+          {sections.map(([h, p]) => (
+            <View key={h} style={{ gap: 6 }}>
+              <Txt variant="h3">{h}</Txt>
+              <Txt color="textMuted">{p}</Txt>
+            </View>
+          ))}
+        </Card>
+      )}
       <Button label={d.nav.contact} icon="mail" variant="secondary" onPress={() => router.push('/contact')} />
     </PublicPage>
   );

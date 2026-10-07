@@ -188,6 +188,7 @@ const de: Dict = {
     },
   },
   legal: {
+    cgu: "Nutzungsbedingungen", cguSoon: "Die Nutzungsbedingungen werden gerade verfasst und hier in Kürze veröffentlicht.", updatedOn: "Zuletzt aktualisiert: {date}",
     title: 'Impressum', sitemap: 'Sitemap', privacy: 'Datenschutzerklärung', privacyUpdated: 'Zuletzt aktualisiert: 30. September 2026', notFound: 'Seite nicht gefunden', notFoundSub: 'Diese Seite existiert nicht oder wurde verschoben.', notFoundJoke: 'Sogar das Kamel hat sich in der Wüste verirrt… 🐪',
     goHome: 'Zur Startseite', contactTitle: 'Kontakt', contactSub: 'Eine Frage? Das Team der Amicale antwortet Ihnen.',
     subject: 'Betreff', message: 'Nachricht', name: 'Name', sent: 'Nachricht gesendet, danke!', contactLead: 'Mitgliedschaft, Veranstaltungen, Partnerschaften oder einfach eine Frage: Schreiben Sie uns, ein Vorstandsmitglied antwortet Ihnen.', topic: 'Thema', topicMembership: 'Mitgliedschaft', topicEvents: 'Veranstaltungen', topicPartnership: 'Partnerschaft', topicOrientation: 'Orientierung', topicOther: 'Sonstiges', replyTime: 'Antwort innerhalb von 48 Std.', privateNote: 'Nur der Vorstand liest Ihre Nachricht', otherWays: 'Weitere Kontaktwege', wayBoardSub: 'Die Menschen hinter der Amicale', wayJoinSub: 'Dem Alumni-Netzwerk beitreten', wayAssociationSub: 'Unsere Geschichte und Aufgaben', sentTitle: 'Nachricht gesendet', sentSub: 'Danke! Ein Vorstandsmitglied antwortet Ihnen bald per E-Mail.', sendAnother: 'Weitere Nachricht senden', messagePlaceholder: 'Schreiben Sie uns in wenigen Worten…', emailInvalid: 'Ungültige E-Mail-Adresse',
@@ -702,6 +703,7 @@ const de: Dict = {
     none: 'Klasse fehlt',
   },
   promote: {
+    typeWord: "Zur Bestätigung unten das Wort « dictionnaire » eingeben",
     title: 'Versetzung ins nächste Schuljahr',
     sub: 'Neues Schuljahr: Terminale wird Alumni (sie vervollständigen ihr Konto vor dem Zugang), Première wird Terminale, Seconde wird Première.',
     button: 'Schüler versetzen',
@@ -936,6 +938,9 @@ const de: Dict = {
     cinemaOff: 'Licht wieder an.',
     cinemaExit: 'ENDE',
     flip: 'Alles steht kopf… wie in Australien! 🙃',
+  },
+  legalAdmin: {
+    nav: "Rechtstexte", title: "Rechtstexte", subtitle: "Nutzungsbedingungen, Datenschutzerklärung und Impressum: verfassen, ansehen, veröffentlichen.", cardSub: "{n} von {total} veröffentlicht · auf der Website ändert sich nichts, bevor Sie « Veröffentlichen » klicken", open: "Bearbeiten", live: "Veröffentlicht", liveSince: "Veröffentlicht · {date}", notLive: "Nicht veröffentlicht · die Website zeigt ihren aktuellen Text", hintLive: "Dieser Text ist online. Ihre Änderungen bleiben ein Entwurf, bis Sie erneut veröffentlichen.", hintDraft: "Noch nichts veröffentlicht: die Website behält ihre aktuelle Seite, bis Sie « Veröffentlichen » klicken.", empty: "Nichts anzuzeigen.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "Vorschau", edit: "Bearbeiten", publish: "Veröffentlichen", publishConfirm: "Diesen Text als « {name} » auf der Website veröffentlichen? Alle können ihn lesen.", published: "Auf der Website veröffentlicht", withdraw: "Zurückziehen", withdrawConfirm: "« {name} » von der Website zurückziehen? Die Seite zeigt wieder ihren ursprünglichen Text.", withdrawn: "Zurückgezogen: die Website zeigt ihren ursprünglichen Text", discard: "Änderungen verwerfen", seePage: "Seite ansehen",
   },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',

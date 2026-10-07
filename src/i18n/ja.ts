@@ -188,6 +188,7 @@ const ja: Dict = {
     },
   },
   legal: {
+    cgu: "利用規約", cguSoon: "利用規約は現在作成中で、まもなくここに掲載されます。", updatedOn: "最終更新：{date}",
     title: '法的表示', sitemap: 'サイトマップ', privacy: 'プライバシーポリシー', privacyUpdated: '最終更新日：2026年9月30日', notFound: 'ページが見つかりません', notFoundSub: 'このページは存在しないか、移動しました。', notFoundJoke: 'ラクダまで砂漠で迷子になりました… 🐪',
     goHome: 'ホームに戻る', contactTitle: 'お問い合わせ', contactSub: 'ご質問がありますか？同窓会のチームがお答えします。',
     subject: '件名', message: 'メッセージ', name: 'お名前', sent: 'メッセージを送信しました。ありがとうございます！', contactLead: '入会、イベント、パートナーシップ、またはちょっとした質問など、お気軽にご連絡ください。役員がお答えします。', topic: '件名', topicMembership: '入会', topicEvents: 'イベント', topicPartnership: 'パートナーシップ', topicOrientation: '進路', topicOther: 'その他', replyTime: '48時間以内に返信', privateNote: 'メッセージは役員のみが読みます', otherWays: 'その他の連絡方法', wayBoardSub: 'アミカルを支えるメンバー', wayJoinSub: '卒業生ネットワークに参加', wayAssociationSub: '私たちの歩みと使命', sentTitle: '送信しました', sentSub: 'ありがとうございます！役員より近日中にメールでご返信します。', sendAnother: '別のメッセージを送る', messagePlaceholder: '簡単にご記入ください…', emailInvalid: 'メールアドレスが無効です',
@@ -702,6 +703,7 @@ const ja: Dict = {
     none: '学年未設定',
   },
   promote: {
+    typeWord: "確認のため、下に « dictionnaire » と入力してください",
     title: '進級',
     sub: '新学期：Terminale の生徒は卒業生になり（サイト利用前にアカウントを完成）、Première は Terminale へ、Seconde は Première へ進級します。',
     button: '生徒を進級させる',
@@ -936,6 +938,9 @@ const ja: Dict = {
     cinemaOff: '明かりがつきました。',
     cinemaExit: '終',
     flip: 'すべてが逆さま… オーストラリアみたい！🙃',
+  },
+  legalAdmin: {
+    nav: "法的文書", title: "法的文書", subtitle: "利用規約、プライバシーポリシー、法的表示：作成・プレビュー・公開。", cardSub: "{total}件中{n}件公開 · 「公開」を押すまでサイトは変わりません", open: "編集", live: "公開中", liveSince: "公開中 · {date}", notLive: "未公開 · サイトは現在の文章を表示", hintLive: "この文章は公開中です。再公開するまで変更は下書きのままです。", hintDraft: "まだ何も公開されていません：「公開」を押すまでサイトは現在のページのままです。", empty: "プレビューする内容がありません。", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "プレビュー", edit: "編集", publish: "公開", publishConfirm: "この文章を「{name}」としてサイトに公開しますか？誰でも読めるようになります。", published: "サイトに公開しました", withdraw: "取り下げ", withdrawConfirm: "「{name}」をサイトから取り下げますか？ページは元の文章に戻ります。", withdrawn: "取り下げました：サイトは元の文章を表示します", discard: "変更を破棄", seePage: "ページを見る",
   },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',

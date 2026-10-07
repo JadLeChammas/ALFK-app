@@ -189,6 +189,7 @@ const pirate: Dict = {
     },
   },
   legal: {
+    cgu: "Th' Ship's Articles", cguSoon: "Th' ship's articles be bein' inked an' will be nailed up here right soon.", updatedOn: "Last scrawled: {date}",
     title: 'Articles o’ Agreement', sitemap: 'Map o’ the Ship', privacy: 'Code o’ Secrecy', privacyUpdated: 'Last amended: September 30, 2026', notFound: 'This page be lost at sea', notFoundSub: 'This page don’t exist or has sailed off.', notFoundJoke: 'Even the ship\'s camel be lost in the desert, arr… 🐪',
     goHome: 'Back to home port', contactTitle: 'Hail us', contactSub: 'A question? The Amicale crew will answer ye.',
     subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank ye kindly!', contactLead: 'Joinin’, shindigs, alliances or just a question: send word, an’ an officer o’ the crew will answer ye.', topic: 'Matter', topicMembership: 'Joinin’', topicEvents: 'Shindigs', topicPartnership: 'Alliance', topicOrientation: 'Headin’', topicOther: 'Other', replyTime: 'Answer within 48 bells', privateNote: 'Only the officers read yer message', otherWays: 'Other ways t’ hail us', wayBoardSub: 'The hands that sail the Amicale', wayJoinSub: 'Join the crew o’ old hands', wayAssociationSub: 'Our tale an’ our quest', sentTitle: 'Message sent', sentSub: 'Thankee! An officer will answer ye soon, by letter.', sendAnother: 'Send another message', messagePlaceholder: 'Tell us in a few words…', emailInvalid: 'That email be no good',
@@ -703,6 +704,7 @@ const pirate: Dict = {
     none: 'Class not set',
   },
   promote: {
+    typeWord: "To swear to it, write th' word « dictionnaire » below",
     title: 'Up a deck',
     sub: 'New school year: Terminale hands become alumni (they fill in their papers afore boardin\'), Première moves to Terminale an\' Seconde to Première.',
     button: 'Move th\' crew up',
@@ -937,6 +939,9 @@ const pirate: Dict = {
     cinemaOff: 'Lanterns back on.',
     cinemaExit: 'THE END',
     flip: 'All hands upside down… like down under! 🙃',
+  },
+  legalAdmin: {
+    nav: "Ship's articles", title: "Ship's articles", subtitle: "Terms of use, privacy policy and legal notice: write them, preview them, publish them.", cardSub: "{n} of {total} published · nothing changes on the site until you click « Publish »", open: "Edit", live: "Published", liveSince: "Published · {date}", notLive: "Not published · the site shows its current text", hintLive: "This text is on the site. Your changes stay a draft until you publish them again.", hintDraft: "Nothing is published yet: the site keeps its current page until you click « Publish ».", empty: "Nothing to preview.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "Preview", edit: "Edit", publish: "Nail it up", publishConfirm: "Publish this text on the site as « {name} »? Everyone will see it.", published: "Published on the site", withdraw: "Tear it down", withdrawConfirm: "Withdraw « {name} » from the site? The page goes back to its built-in text.", withdrawn: "Withdrawn: the site shows its built-in text", discard: "Discard changes", seePage: "See the page",
   },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',

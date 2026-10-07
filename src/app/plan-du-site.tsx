@@ -51,6 +51,7 @@ export default function Sitemap() {
         ['user-plus', d.auth.signUp, '/inscription'],
         ['file-text', d.nav.legal, '/mentions-legales'],
         ['shield', d.legal.privacy, '/confidentialite'],
+        ['book', d.legal.cgu, '/cgu'],
         ['mail', d.nav.contact, '/contact'],
       ],
     },

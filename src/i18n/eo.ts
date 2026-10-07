@@ -188,6 +188,7 @@ const eo: Dict = {
     },
   },
   legal: {
+    cgu: "Uzokondiĉoj", cguSoon: "La uzokondiĉoj estas verkataj kaj baldaŭ aperos ĉi tie.", updatedOn: "Laste ĝisdatigita: {date}",
     title: 'Juraj informoj', sitemap: 'Retejmapo', privacy: 'Privateca politiko', privacyUpdated: 'Laste ĝisdatigita: 30 septembro 2026', notFound: 'Paĝo ne trovita', notFoundSub: 'Ĉi tiu paĝo ne ekzistas aŭ estis movita.', notFoundJoke: 'Eĉ la kamelo perdiĝis en la dezerto… 🐪',
     goHome: 'Reen al la hejmo', contactTitle: 'Kontaktu nin', contactSub: 'Ĉu demando? La teamo de la Amicale respondos al vi.',
     subject: 'Temo', message: 'Mesaĝo', name: 'Nomo', sent: 'Mesaĝo sendita, dankon!', contactLead: 'Membreco, eventoj, partnereco aŭ simpla demando: skribu al ni kaj estrarano respondos.', topic: 'Temo', topicMembership: 'Membreco', topicEvents: 'Eventoj', topicPartnership: 'Partnereco', topicOrientation: 'Studorientiĝo', topicOther: 'Alia', replyTime: 'Respondo ene de 48 h', privateNote: 'Nur la estraro legas vian mesaĝon', otherWays: 'Aliaj manieroj kontakti nin', wayBoardSub: 'La homoj, kiuj gvidas la Amicale', wayJoinSub: 'Aliĝu al la reto de eksaj lernantoj', wayAssociationSub: 'Nia historio kaj nia misio', sentTitle: 'Mesaĝo sendita', sentSub: 'Dankon! Estrarano baldaŭ respondos al vi retpoŝte.', sendAnother: 'Sendi alian mesaĝon', messagePlaceholder: 'Rakontu al ni per kelkaj vortoj…', emailInvalid: 'Nevalida retpoŝtadreso',
@@ -685,6 +686,7 @@ const eo: Dict = {
     none: 'Klaso indikenda',
   },
   promote: {
+    typeWord: "Por konfirmi, tajpu sube la vorton « dictionnaire »",
     title: 'Transiro al la sekva jaro',
     sub: 'Komenco de la lerneja jaro: la lernantoj de Terminale fariĝas eksaj lernantoj (ili kompletigas sian konton antaŭ ol uzi la retejon), Première transiras al Terminale kaj Seconde al Première.',
     button: 'Transirigi la lernantojn',
@@ -936,6 +938,9 @@ const eo: Dict = {
     cinemaOff: 'La lumoj reŝaltiĝis.',
     cinemaExit: 'FINO',
     flip: 'Ĉio estas renversita… kiel en Aŭstralio! 🙃',
+  },
+  legalAdmin: {
+    nav: "Juraj tekstoj", title: "Juraj tekstoj", subtitle: "Terms of use, privacy policy and legal notice: write them, preview them, publish them.", cardSub: "{n} of {total} published · nothing changes on the site until you click « Publish »", open: "Redakti", live: "Publikigita", liveSince: "Publikigita · {date}", notLive: "Not published · the site shows its current text", hintLive: "This text is on the site. Your changes stay a draft until you publish them again.", hintDraft: "Nothing is published yet: the site keeps its current page until you click « Publish ».", empty: "Nothing to preview.", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "Antaŭrigardo", edit: "Redakti", publish: "Publikigi", publishConfirm: "Publish this text on the site as « {name} »? Everyone will see it.", published: "Published on the site", withdraw: "Retiri", withdrawConfirm: "Withdraw « {name} » from the site? The page goes back to its built-in text.", withdrawn: "Withdrawn: the site shows its built-in text", discard: "Discard changes", seePage: "Vidi la paĝon",
   },
   uni: {
     pick: 'Elektu el la listo', searchPlaceholder: 'Tajpu la nomon aŭ mallongigon (ekz. I, ISEP, Sorbonne)…', inCity: 'En {city}',

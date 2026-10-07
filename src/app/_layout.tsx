@@ -98,6 +98,7 @@ function RootNavigator() {
         <Stack.Screen name="adherer" />
         <Stack.Screen name="mentions-legales" />
         <Stack.Screen name="confidentialite" />
+        <Stack.Screen name="cgu" />
         <Stack.Screen name="plan-du-site" />
         <Stack.Screen name="contact" />
         <Stack.Screen name="desinscription" />
