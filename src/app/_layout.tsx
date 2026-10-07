@@ -54,7 +54,19 @@ function RootNavigator() {
   const loaded = ready && fontsLoaded;
 
   useEffect(() => {
-    if (loaded) SplashScreen.hideAsync().catch(() => {});
+    if (!loaded) return;
+    SplashScreen.hideAsync().catch(() => {});
+    // Web: the navy logo screen written into the HTML (scripts/seo-pages.mjs) covers the page until
+    // the app can paint; it fades out once the first screen is drawn.
+    if (typeof document !== 'undefined') {
+      const boot = document.getElementById('boot-splash');
+      if (boot) {
+        requestAnimationFrame(() => {
+          boot.style.opacity = '0';
+          setTimeout(() => boot.remove(), 250);
+        });
+      }
+    }
   }, [loaded]);
 
   if (!loaded) return null;

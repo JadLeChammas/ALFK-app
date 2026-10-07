@@ -73,12 +73,17 @@ function render(page) {
     `<div id="root"><main class="seo-static"><header><a href="/">Amicale LFK — ALFK Alumni</a></header>` +
     `<h1>${esc(src.h1)}</h1>` +
     src.body.map((p) => `<p>${esc(p)}</p>`).join('') +
-    `<nav aria-label="Pages">${links}</nav></main></div>`;
+    `<nav aria-label="Pages">${links}</nav></main></div>` +
+    // outside #root: stays until the app has drawn its first screen, then fades out (app/_layout.tsx)
+    `<div id="boot-splash" aria-hidden="true"><img src="/apple-touch-icon.png" alt="" width="72" height="72" /></div>`;
   return html.replace('<div id="root"></div>', content);
 }
 
-// a calm look for the split second before the app starts (same colours as the site)
-const STYLE = `<style id="seo-static">.seo-static{max-width:760px;margin:0 auto;padding:96px 24px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0E2A47;line-height:1.6}.seo-static h1{font-family:Georgia,serif;font-weight:400;font-size:34px;line-height:1.15;margin:16px 0 20px}.seo-static p{color:#4A5B70}.seo-static a{color:#C53B3E;text-decoration:none}.seo-static nav{margin-top:28px;font-size:14px}</style>`;
+// Visitors never see that text: for the split second before the app starts they get a navy screen
+// with the logo (the site's opening animation starts on the same navy and logo, so it hands over
+// seamlessly). The text stays in the page for search engines and screen readers (visually hidden,
+// the standard accessible pattern) and is replaced by the app's own content when it starts.
+const STYLE = `<style id="seo-static">#boot-splash{position:fixed;inset:0;background:#0E2A47;display:flex;align-items:center;justify-content:center;z-index:2147483647;transition:opacity .25s ease}#boot-splash img{border-radius:50%}.seo-static{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}</style>`;
 
 let written = 0;
 for (const page of PAGES) {
