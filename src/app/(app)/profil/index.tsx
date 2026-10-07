@@ -45,6 +45,7 @@ export default function MyProfile() {
     ['briefcase', d.site.nav.partners, '/partenaires'],
     ['file-text', d.nav.legal, '/mentions-legales'],
     ['shield', d.legal.privacy, '/confidentialite'],
+    ['book', d.legal.cgu, '/cgu'],
     ['map', d.nav.sitemap, '/plan-du-site'],
     ['mail', d.nav.contact, '/contact'],
   ];
