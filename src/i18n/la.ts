@@ -48,6 +48,8 @@ const la: Dict = {
     step1: 'Persona', step2: 'Iter', continue: 'Perge', passwordHint: 'Saltem VIII signa',
     errors: {
       proof: 'Testimonium studiorum in LFK necessarium est ut inscribaris.',
+      photo: 'Imago necessaria est.',
+      photo_upload: 'Imago tua mitti non potuit. Conexionem inspice et iterum conare: inscriptio tua tum perficietur.',
       file_type: 'Hoc genus fasciculi non accipitur, aut res fasciculi cum extensione non congruit.',
       file_too_large: 'Fasciculus nimis magnus: summum 10 MB.',
       unavailable: 'Haec facultas tibi nunc non patet. Si quid quaeris, auxilium adi.',
@@ -65,7 +67,7 @@ const la: Dict = {
     pendingSub: 'Gratias, {name}! Inscriptionem tuam accepimus. Moderator Amicale data tua examinabit — cum probata erit, omnia tibi patebunt.',
     pendingStep1: 'Inscriptio missa', pendingStep2: 'Examen a moderatore', pendingStep3: 'Aditus ad communitatem',
     demoAccounts: 'Rationes exempli', demoAdmin: 'Moderator', demoMember: 'Alumnus', demoEleve: 'Discipulus', demoPending: 'Exspectans', demoDirection: 'Rectores',
-    photo: 'Imago paginae', addPhoto: 'Imaginem adde', photoRequired: 'Imaginem adde ut rationem crees.', requiredLegend: '* Necessaria',
+    photo: 'Imago paginae', addPhoto: 'Imaginem adde', photoRequired: 'Imaginem adde ut rationem crees.', missingPhotoTitle: 'Imaginem tuam adde', missingPhotoSub: 'Imago tua non advenit (conexio interrupta): adde eam ut communitas te agnoscat.', noPhoto: 'Sine imagine', retryUpload: 'Iterum mitte', requiredLegend: '* Necessaria',
   },
   home: {
     hello: 'Salve, {name}', heroTitle: 'Una communitas,\nmilia historiarum.',

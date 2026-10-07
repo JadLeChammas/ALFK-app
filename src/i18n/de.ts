@@ -47,6 +47,8 @@ const de: Dict = {
     step1: 'Identität', step2: 'Werdegang', continue: 'Weiter', passwordHint: 'Mindestens 8 Zeichen',
     errors: {
       proof: 'Für die Anmeldung ist ein Schulnachweis des LFK erforderlich.',
+      photo: 'Ein Profilfoto ist erforderlich.',
+      photo_upload: 'Ihr Foto konnte nicht gesendet werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut: Danach ist Ihre Anmeldung abgeschlossen.',
       file_type: 'Dieser Dateityp wird nicht akzeptiert, oder der Inhalt passt nicht zur Dateiendung.',
       file_too_large: 'Datei zu groß: maximal 10 MB.',
       unavailable: 'Diese Funktion steht Ihnen derzeit nicht zur Verfügung. Bei Fragen wenden Sie sich an den Support.',
@@ -64,7 +66,7 @@ const de: Dict = {
     pendingSub: 'Danke, {name}! Ihre Registrierung ist eingegangen. Ein Administrator der Amicale prüft Ihre Angaben — nach der Freigabe haben Sie Zugriff auf die ganze Plattform.',
     pendingStep1: 'Registrierung gesendet', pendingStep2: 'Prüfung durch einen Administrator', pendingStep3: 'Zugang zur Gemeinschaft',
     demoAccounts: 'Demo-Konten', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Schüler', demoPending: 'Ausstehend', demoDirection: 'Schulleitung',
-    photo: 'Profilfoto', addPhoto: 'Foto hinzufügen', photoRequired: 'Fügen Sie ein Profilfoto hinzu, um Ihr Konto zu erstellen.', requiredLegend: '* Pflichtfelder',
+    photo: 'Profilfoto', addPhoto: 'Foto hinzufügen', photoRequired: 'Fügen Sie ein Profilfoto hinzu, um Ihr Konto zu erstellen.', retryUpload: 'Erneut senden', missingPhotoTitle: 'Profilfoto hinzufügen', missingPhotoSub: 'Ihr Foto ist nicht angekommen (Verbindung unterbrochen): Fügen Sie es hinzu, damit die Community Sie erkennt.', noPhoto: 'Kein Foto', requiredLegend: '* Pflichtfelder',
   },
   home: {
     hello: 'Hallo {name}', heroTitle: 'Eine Gemeinschaft,\ntausende Geschichten.',

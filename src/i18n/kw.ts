@@ -52,6 +52,8 @@ const kw: Dict = {
     step1: 'Minu inta', step2: 'Masaarik', continue: 'Kammil', passwordHint: '3al agal 8 7roof',
     errors: {
       proof: 'Laazim ithbaat inna kint bil LFK 3ashan titsajjal.',
+      photo: 'Laazim soora maalik.',
+      photo_upload: 'Sooratik ma inrisilat. Shoof il internet w jarrib mara thanya 3ashan yikhlas tasjeelik.',
       file_type: 'Haadha il no3 mu magbool, aw il file mu mithil ma yigool isma.',
       file_too_large: 'Il file kibeer wayed: 10 Mo max.',
       unavailable: 'Haadi il khidma mu mitwaffra lik il7en. Ithaa 3indik su2aal, kallim il support.',
@@ -69,7 +71,7 @@ const kw: Dict = {
     pendingSub: 'Mashkoor {name}! Wa9alna tasjeelik. Admin min il Amicale biyshoof ma3loomaatik — w awwal ma ywaafig, tidkhil 3ala kil shay.',
     pendingStep1: 'Il tasjeel in9adar', pendingStep2: 'Admin ga3d yishoof', pendingStep3: 'Tidkhil il jam3a',
     demoAccounts: 'Demo accounts', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Tilmeeth', demoPending: 'Yintathir', demoDirection: 'Idara',
-    photo: 'Sooratik', addPhoto: 'Zeed soora', photoRequired: 'Zeed soora maalik 3ashan tsawwi account.', requiredLegend: '* Khaanaat laazma',
+    photo: 'Sooratik', addPhoto: 'Zeed soora', photoRequired: 'Zeed soora maalik 3ashan tsawwi account.', missingPhotoTitle: 'Zeed soora maalik', missingPhotoSub: 'Sooratik ma wuslat (il internet ingita3): zeedha 3ashan il jama3a ti3arfik.', noPhoto: 'Ma fee soora', retryUpload: 'Jarrib mara thanya', requiredLegend: '* Khaanaat laazma',
   },
   home: {
     hello: 'Chlonak {name}', heroTitle: 'Jam3a wa7da,\nalf 9i9a.',

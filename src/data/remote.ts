@@ -278,6 +278,20 @@ function base64ToBytes(b64: string) {
 }
 
 /** Uploads a picked image to the public "media" bucket under the user's folder; returns its URL. */
+/** Runs `run` up to `tries` times (phones lose the network for a second when switching apps). */
+async function retry<T>(run: () => Promise<T>, tries = 3): Promise<T> {
+  let last: unknown;
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await run();
+    } catch (e) {
+      last = e;
+      if (i < tries - 1) await new Promise((r) => setTimeout(r, 700 * (i + 1)));
+    }
+  }
+  throw last;
+}
+
 export async function uploadImage(userId: string, img: PickedImage, folder: string): Promise<string> {
   const sb = supabase!;
   let body: Uint8Array | Blob;
@@ -285,8 +299,10 @@ export async function uploadImage(userId: string, img: PickedImage, folder: stri
   else body = await (await fetch(img.uri)).blob();
   const type = await checkUpload(body, img.uri, img.mimeType, IMAGE_TYPES);
   const path = `${userId}/${folder}/${newId()}.${extensionFor(type)}`;
-  const { error } = await sb.storage.from('media').upload(path, body, { contentType: type, upsert: false });
-  if (error) throw error;
+  await retry(async () => {
+    const { error } = await sb.storage.from('media').upload(path, body, { contentType: type, upsert: false });
+    if (error && !/exist|duplicate/i.test(error.message)) throw error;
+  });
   return sb.storage.from('media').getPublicUrl(path).data.publicUrl;
 }
 
@@ -320,14 +336,30 @@ export async function uploadProof(userId: string, doc: PickedDoc): Promise<{ pat
  * server (api/admin.ts, signup-upload / signup-finish): right after signing up there is often no
  * session yet, and a pending member cannot write to the photo bucket. Throws when it fails.
  */
+/** Thrown when the photo could not be sent after every retry (the account itself exists). */
+export class PhotoUploadError extends Error {
+  constructor() {
+    super('photo_upload');
+  }
+}
+
 export async function uploadSignupFiles(userId: string, email: string, proof: PickedDoc | null, photo?: PickedImage | null) {
   const sb = supabase!;
-  const post = async (payload: Record<string, unknown>) => {
-    const res = await fetch(`${apiBase}/api/admin`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, email, ...payload }) });
-    const json = (await res.json().catch(() => ({}))) as { error?: string; proof?: { path: string; token: string }; photo?: { path: string; token: string } };
-    if (!res.ok) throw new Error(json.error ?? `http_${res.status}`);
-    return json;
-  };
+  // Signed in (a pending member adding a missing file): the server also accepts the session, so the
+  // files can be sent at any time, not only in the minutes after signing up.
+  const { data: auth } = await sb.auth.getSession();
+  const token = auth.session?.user.id === userId ? auth.session.access_token : undefined;
+  const post = (payload: Record<string, unknown>) =>
+    retry(async () => {
+      const res = await fetch(`${apiBase}/api/admin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        body: JSON.stringify({ userId, email, ...payload }),
+      });
+      const json = (await res.json().catch(() => ({}))) as { error?: string; proof?: { path: string; token: string }; photo?: { path: string; token: string } };
+      if (!res.ok) throw new Error(json.error ?? `http_${res.status}`);
+      return json;
+    });
   // Both files are checked before anything is sent.
   const proofBody = proof ? (proof.file ?? (proof.base64 ? base64ToBytes(proof.base64) : await (await fetch(proof.uri)).arrayBuffer())) : null;
   const proofType = proof && proofBody ? await checkUpload(proofBody, proof.name, proof.mimeType, PROOF_TYPES) : null;
@@ -335,16 +367,33 @@ export async function uploadSignupFiles(userId: string, email: string, proof: Pi
   const photoType = photo && photoBody ? await checkUpload(photoBody, photo.uri, photo.mimeType, IMAGE_TYPES) : null;
   const links = await post({ action: 'signup-upload', proofExt: proofType ? extensionFor(proofType) : undefined, photoExt: photoType ? extensionFor(photoType) : undefined });
   const done: Record<string, unknown> = {};
+  // A file the storage already has (an earlier try that went through) counts as sent.
+  const send = (bucket: string, link: { path: string; token: string }, body: Blob | ArrayBuffer | Uint8Array, contentType: string) =>
+    retry(async () => {
+      const { error } = await sb.storage.from(bucket).uploadToSignedUrl(link.path, link.token, body, { contentType });
+      if (error && !/exist|duplicate/i.test(error.message)) throw error;
+    });
+  let photoFailed = false;
   if (proof && proofBody && proofType && links.proof) {
-    const { error } = await sb.storage.from('proofs').uploadToSignedUrl(links.proof.path, links.proof.token, proofBody, { contentType: proofType });
-    if (error) throw error;
-    done.proof = { path: links.proof.path, name: proof.name, mime: proofType };
+    try {
+      await send('proofs', links.proof, proofBody, proofType);
+      done.proof = { path: links.proof.path, name: proof.name, mime: proofType };
+    } catch {
+      // the pending screen asks for the proof again
+    }
   }
   if (photoBody && photoType && links.photo) {
-    const { error } = await sb.storage.from('media').uploadToSignedUrl(links.photo.path, links.photo.token, photoBody, { contentType: photoType });
-    if (!error) done.photo = { path: links.photo.path };
+    try {
+      await send('media', links.photo, photoBody, photoType);
+      done.photo = { path: links.photo.path };
+    } catch {
+      photoFailed = true;
+    }
   }
   if (done.proof || done.photo) await post({ action: 'signup-finish', ...done });
+  if (photoFailed) throw new PhotoUploadError();
+  // Photo in place, only the proof missing: the pending screen asks for it again.
+  if (proof && !done.proof) throw new Error('proof_only');
 }
 
 /** A link valid 10 minutes, for an admin reviewing a sign-up. */

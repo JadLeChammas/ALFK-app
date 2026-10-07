@@ -47,6 +47,8 @@ const en: Dict = {
     step1: 'Identity', step2: 'Background', continue: 'Continue', passwordHint: 'At least 8 characters',
     errors: {
       proof: 'Proof of schooling at the LFK is required to sign up.',
+      photo: 'A profile photo is required.',
+      photo_upload: 'Your photo couldn’t be sent. Check your connection and try again: your sign-up will then be completed.',
       file_type: 'This file type is not accepted, or the file’s contents do not match its extension.',
       file_too_large: 'File too large: 10 MB max.',
       unavailable: 'This feature isn’t available to you right now. If you have any questions, contact support.',
@@ -64,7 +66,7 @@ const en: Dict = {
     pendingSub: "Thanks {name}! We've received your sign-up. An Amicale administrator will review your details — you'll get full access as soon as it's approved.",
     pendingStep1: 'Sign-up sent', pendingStep2: 'Review by an administrator', pendingStep3: 'Access to the community',
     demoAccounts: 'Demo accounts', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Student', demoPending: 'Pending', demoDirection: 'Leadership',
-    photo: 'Profile photo', addPhoto: 'Add a photo', photoRequired: 'Add a profile photo to create your account.', requiredLegend: '* Required fields',
+    photo: 'Profile photo', addPhoto: 'Add a photo', photoRequired: 'Add a profile photo to create your account.', retryUpload: 'Try sending again', missingPhotoTitle: 'Add your profile photo', missingPhotoSub: 'Your photo didn’t arrive (connection lost): add it so the community can recognise you.', noPhoto: 'No photo', requiredLegend: '* Required fields',
   },
   home: {
     hello: 'Hello {name}', heroTitle: 'One community,\nthousands of stories.',

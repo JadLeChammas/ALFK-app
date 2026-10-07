@@ -47,6 +47,8 @@ const nl: Dict = {
     step1: 'Identiteit', step2: 'Achtergrond', continue: 'Doorgaan', passwordHint: 'Minstens 8 tekens',
     errors: {
       proof: 'Een bewijs van schoolgang aan het LFK is verplicht om je in te schrijven.',
+      photo: 'Een profielfoto is verplicht.',
+      photo_upload: 'Je foto kon niet worden verzonden. Controleer je verbinding en probeer het opnieuw: dan is je aanmelding voltooid.',
       file_type: 'Dit bestandstype wordt niet geaccepteerd, of de inhoud past niet bij de extensie.',
       file_too_large: 'Bestand te groot: maximaal 10 MB.',
       unavailable: 'Deze functie is momenteel niet voor je beschikbaar. Heb je vragen, neem dan contact op met de ondersteuning.',
@@ -64,7 +66,7 @@ const nl: Dict = {
     pendingSub: 'Bedankt {name}! We hebben je inschrijving ontvangen. Een beheerder van de Amicale controleert je gegevens — je krijgt volledige toegang zodra die is goedgekeurd.',
     pendingStep1: 'Inschrijving verstuurd', pendingStep2: 'Controle door een beheerder', pendingStep3: 'Toegang tot de gemeenschap',
     demoAccounts: 'Demo-accounts', demoAdmin: 'Beheerder', demoMember: 'Alumni', demoEleve: 'Leerling', demoPending: 'In afwachting', demoDirection: 'Schoolleiding',
-    photo: 'Profielfoto', addPhoto: 'Foto toevoegen', photoRequired: 'Voeg een profielfoto toe om je account aan te maken.', requiredLegend: '* Verplichte velden',
+    photo: 'Profielfoto', addPhoto: 'Foto toevoegen', photoRequired: 'Voeg een profielfoto toe om je account aan te maken.', missingPhotoTitle: 'Voeg je profielfoto toe', missingPhotoSub: 'Je foto is niet aangekomen (verbinding verbroken): voeg hem toe zodat de community je herkent.', noPhoto: 'Geen foto', retryUpload: 'Opnieuw verzenden', requiredLegend: '* Verplichte velden',
   },
   home: {
     hello: 'Hallo {name}', heroTitle: 'Eén gemeenschap,\nduizenden verhalen.',

@@ -47,6 +47,8 @@ const zh: Dict = {
     step1: '身份', step2: '经历', continue: '继续', passwordHint: '至少 8 个字符',
     errors: {
       proof: '注册必须提供在 LFK 就读的证明。',
+      photo: '必须上传头像照片。',
+      photo_upload: '照片未能发送。请检查网络后重试，即可完成注册。',
       file_type: '不接受此文件类型，或文件内容与扩展名不符。',
       file_too_large: '文件过大：最大 10 MB。',
       unavailable: '此功能目前对您不可用。如有疑问，请联系支持。',
@@ -64,7 +66,7 @@ const zh: Dict = {
     pendingSub: '谢谢你，{name}！我们已收到你的注册。校友会管理员将核实你的信息 — 审核通过后即可使用全部功能。',
     pendingStep1: '已提交注册', pendingStep2: '管理员审核', pendingStep3: '进入社区',
     demoAccounts: '演示账号', demoAdmin: '管理员', demoMember: '校友', demoEleve: '在校生', demoPending: '待审核', demoDirection: '学校领导',
-    photo: '头像', addPhoto: '添加照片', photoRequired: '请添加头像以创建账户。', requiredLegend: '* 为必填项',
+    photo: '头像', addPhoto: '添加照片', photoRequired: '请添加头像以创建账户。', retryUpload: '重新发送', missingPhotoTitle: '添加头像照片', missingPhotoSub: '您的照片未上传成功（连接中断）：请重新添加，方便大家认出您。', noPhoto: '无照片', requiredLegend: '* 为必填项',
   },
   home: {
     hello: '你好，{name}', heroTitle: '一个社区，\n千万个故事。',

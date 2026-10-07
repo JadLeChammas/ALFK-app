@@ -51,6 +51,7 @@ export default function Approvals() {
                   <MetaLine icon="user" text={d.gender[u.gender]} />
                 </View>
                 <Row gap={8} wrap>
+                  {!u.avatar && <Badge label={d.auth.noPhoto} tone="warning" icon="camera-off" />}
                   {u.proof ? (
                     <>
                       <Badge label={d.proof.received} tone="success" icon="file-text" />

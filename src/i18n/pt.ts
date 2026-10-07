@@ -47,6 +47,8 @@ const pt: Dict = {
     step1: 'Identidade', step2: 'Percurso', continue: 'Continuar', passwordHint: 'Mínimo de 8 caracteres',
     errors: {
       proof: 'É obrigatório um comprovativo de escolaridade no LFK para se inscrever.',
+      photo: 'A foto de perfil é obrigatória.',
+      photo_upload: 'Não foi possível enviar a sua foto. Verifique a ligação e tente de novo: a inscrição ficará concluída.',
       file_type: 'Este tipo de ficheiro não é aceite, ou o conteúdo não corresponde à extensão.',
       file_too_large: 'Ficheiro demasiado pesado: 10 MB no máximo.',
       unavailable: 'Esta funcionalidade não está disponível para si de momento. Para qualquer questão, contacte o suporte.',
@@ -64,7 +66,7 @@ const pt: Dict = {
     pendingSub: 'Obrigado, {name}! Recebemos a sua inscrição. Um administrador da Amicale vai verificar os seus dados — terá acesso a toda a plataforma assim que for aprovada.',
     pendingStep1: 'Inscrição enviada', pendingStep2: 'Verificação por um administrador', pendingStep3: 'Acesso à comunidade',
     demoAccounts: 'Contas de demonstração', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Aluno', demoPending: 'Pendente', demoDirection: 'Direção',
-    photo: 'Foto de perfil', addPhoto: 'Adicionar uma foto', photoRequired: 'Adicione uma foto de perfil para criar sua conta.', requiredLegend: '* Campos obrigatórios',
+    photo: 'Foto de perfil', addPhoto: 'Adicionar uma foto', photoRequired: 'Adicione uma foto de perfil para criar sua conta.', retryUpload: 'Tentar enviar de novo', missingPhotoTitle: 'Adicione a sua foto de perfil', missingPhotoSub: 'A sua foto não chegou (ligação interrompida): adicione-a para que a comunidade o reconheça.', noPhoto: 'Sem foto', requiredLegend: '* Campos obrigatórios',
   },
   home: {
     hello: 'Olá, {name}', heroTitle: 'Uma só comunidade,\nmilhares de histórias.',

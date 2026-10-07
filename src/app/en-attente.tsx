@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
+import { AvatarCropper } from '@/components/AvatarCropper';
 import { ProofPicker } from '@/components/ProofPicker';
 import { useDialogs } from '@/components/ui/Dialogs';
-import { Badge, Button, Row } from '@/components/ui/primitives';
+import { Avatar, Badge, Button, Row } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
-import type { PickedDoc } from '@/data/remote';
+import type { PickedDoc, PickedImage } from '@/data/remote';
+import { pickImages } from '@/lib/media';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -19,6 +21,19 @@ export default function Pending() {
   const { toast } = useDialogs();
   const [doc, setDoc] = useState<PickedDoc | null>(null);
   const [busy, setBusy] = useState(false);
+  const [cropping, setCropping] = useState<PickedImage | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const choosePhoto = async () => {
+    const [img] = await pickImages(false);
+    if (img) setCropping(img);
+  };
+  const savePhoto = async (img: PickedImage) => {
+    setCropping(null);
+    setPhotoBusy(true);
+    const r = await actions.addMissingPhoto(img);
+    setPhotoBusy(false);
+    toast(r.ok ? d.crop.saved : d.auth.errors.unknown, r.ok ? 'success' : 'danger');
+  };
   const hasProof = !!me?.proof || !!me?.createdByAdmin;
   const send = async () => {
     if (!doc) return;
@@ -75,6 +90,18 @@ export default function Pending() {
           <Button label={d.proof.send} icon="send" full size="lg" onPress={send} disabled={!doc} loading={busy} />
         </View>
       )}
+      {/* The photo chosen at sign-up never arrived (bad connection): ask for it again. */}
+      {!!me && !me.avatar && !sendingSignupFiles && (
+        <Row gap={14} style={{ padding: 14, borderRadius: 16, backgroundColor: colors.warningSoft, borderWidth: 1, borderColor: colors.warning }}>
+          <Avatar name={`${me.firstName} ${me.lastName}`} size={52} />
+          <View style={{ flex: 1, gap: 6 }}>
+            <Txt variant="bodyStrong">{d.auth.missingPhotoTitle}</Txt>
+            <Txt variant="small" color="textMuted">{d.auth.missingPhotoSub}</Txt>
+            <Button label={d.auth.addPhoto} icon="image" size="sm" onPress={choosePhoto} loading={photoBusy} style={{ alignSelf: 'flex-start' }} />
+          </View>
+        </Row>
+      )}
+      {cropping && <AvatarCropper image={cropping} onCancel={() => setCropping(null)} onDone={savePhoto} />}
       <Button label={d.common.signOut} variant="secondary" icon="log-out" full size="lg" onPress={actions.signOut} />
     </AuthFrame>
   );

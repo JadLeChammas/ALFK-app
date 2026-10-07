@@ -48,6 +48,8 @@ const pirate: Dict = {
     step1: 'Who ye be', step2: 'Yer voyage', continue: 'Onward', passwordHint: 'At least 8 characters',
     errors: {
       proof: 'Ye must show proof ye sailed with the LFK to sign the Articles.',
+      photo: 'A picture be required to come aboard.',
+      photo_upload: 'Yer picture got lost at sea. Check yer connection an’ try again to finish signin’ aboard.',
       file_type: 'That cargo be not allowed aboard, or its insides don’t match its label, matey.',
       file_too_large: 'Too heavy fer the hold: 10 MB at most.',
       unavailable: 'This be not available to ye right now, sailor. Any questions, send word to support.',
@@ -65,7 +67,7 @@ const pirate: Dict = {
     pendingSub: 'Thank ye {name}! Yer papers be received. A captain o’ the Amicale will look ’em over — ye’ll have the run o’ the ship once approved.',
     pendingStep1: 'Papers sent', pendingStep2: 'Checked by a captain', pendingStep3: 'Welcome aboard',
     demoAccounts: 'Demo sailors', demoAdmin: 'Captain', demoMember: 'Old Hand', demoEleve: 'Cabin Boy', demoPending: 'Waitin’', demoDirection: 'Admiralty',
-    photo: 'Yer portrait', addPhoto: 'Add a portrait', photoRequired: 'Add a portrait to sign aboard.', requiredLegend: '* Ye must fill these, sailor',
+    photo: 'Yer portrait', addPhoto: 'Add a portrait', photoRequired: 'Add a portrait to sign aboard.', retryUpload: 'Send it again', missingPhotoTitle: 'Show yer face, sailor', missingPhotoSub: 'Yer picture got lost at sea (bad connection): add it so the crew knows ye.', noPhoto: 'No picture', requiredLegend: '* Ye must fill these, sailor',
   },
   home: {
     hello: 'Ahoy {name}', heroTitle: 'One crew,\na thousand tall tales.',

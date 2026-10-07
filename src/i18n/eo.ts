@@ -47,6 +47,8 @@ const eo: Dict = {
     step1: 'Identeco', step2: 'Vojo', continue: 'Daŭrigi', passwordHint: 'Almenaŭ 8 signoj',
     errors: {
       proof: 'Pruvo de lernado ĉe LFK estas necesa por aliĝi.',
+      photo: 'Profilfoto estas deviga.',
+      photo_upload: 'Via foto ne povis esti sendita. Kontrolu vian konekton kaj reprovu: via aliĝo tiam finiĝos.',
       file_type: 'Ĉi tiu dosiertipo ne estas akceptata, aŭ la enhavo de la dosiero ne kongruas kun ĝia sufikso.',
       file_too_large: 'Tro granda dosiero: maksimume 10 MB.',
       unavailable: 'Ĉi tiu funkcio nun ne estas disponebla por vi. Se vi havas demandojn, kontaktu la subtenon.',
@@ -64,7 +66,7 @@ const eo: Dict = {
     pendingSub: 'Dankon, {name}! Ni ricevis vian aliĝon. Administranto de la Amicale kontrolos viajn informojn — vi ricevos plenan aliron tuj post la aprobo.',
     pendingStep1: 'Aliĝo sendita', pendingStep2: 'Kontrolo de administranto', pendingStep3: 'Aliro al la komunumo',
     demoAccounts: 'Demonstraj kontoj', demoAdmin: 'Administranto', demoMember: 'Eksa lernanto', demoEleve: 'Lernanto', demoPending: 'Atendanta', demoDirection: 'Lernejestraro',
-    photo: 'Profilfoto', addPhoto: 'Aldoni foton', photoRequired: 'Aldonu profilfoton por krei vian konton.', requiredLegend: '* Devigaj kampoj',
+    photo: 'Profilfoto', addPhoto: 'Aldoni foton', photoRequired: 'Aldonu profilfoton por krei vian konton.', missingPhotoTitle: 'Aldonu vian profilfoton', missingPhotoSub: 'Via foto ne alvenis (konekto interrompita): aldonu ĝin por ke la komunumo rekonu vin.', noPhoto: 'Sen foto', retryUpload: 'Resendi', requiredLegend: '* Devigaj kampoj',
   },
   home: {
     hello: 'Saluton, {name}', heroTitle: 'Unu komunumo,\nmiloj da rakontoj.',

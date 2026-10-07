@@ -67,6 +67,16 @@ export default function Home() {
       </GlobeCard>
 
       {/* Accounts created before birth date and phone became mandatory */}
+      {!me.avatar && (
+        <Row gap={14} wrap style={{ padding: 16, borderRadius: radius.card, backgroundColor: colors.warningSoft, borderWidth: 1, borderColor: colors.warning }}>
+          <Feather name="camera" size={20} color={colors.warning} />
+          <View style={{ flex: 1, minWidth: 200, gap: 2 }}>
+            <Txt variant="bodyStrong">{d.auth.missingPhotoTitle}</Txt>
+            <Txt variant="small" color="textMuted">{d.auth.missingPhotoSub}</Txt>
+          </View>
+          <Button label={d.auth.addPhoto} size="sm" icon="image" onPress={() => router.push('/profil/modifier')} />
+        </Row>
+      )}
       {contactError(me.role, me.birthDate, me.phone) && (
         <Row gap={14} wrap style={{ padding: 16, borderRadius: radius.card, backgroundColor: colors.warningSoft, borderWidth: 1, borderColor: colors.warning }}>
           <Feather name="alert-circle" size={20} color={colors.warning} />

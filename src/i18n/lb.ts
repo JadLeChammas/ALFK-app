@@ -52,6 +52,8 @@ const lb: Dict = {
     step1: 'Mn enta', step2: 'Massirtak', continue: 'Kammel', passwordHint: 'Ma2al chi 8 7rouf',
     errors: {
       proof: 'Lezem esbet enno kenet bel LFK ta tsajjel.',
+      photo: 'Lezem soura la 7alak.',
+      photo_upload: 'Sourtak ma nb3atit. Chouf el internet w jarreb marra tenye ta ykhlas tasjilak.',
       file_type: 'Hal no3 file mich ma2boul, aw el file mich metl ma byi2oul esmo.',
       file_too_large: 'El file kbir ktir: 10 Mo max.',
       unavailable: 'Hal chi mich mta7lak hala2. Iza 3endak sou2al, 7ke el support.',
@@ -69,7 +71,7 @@ const lb: Dict = {
     pendingSub: 'Merci {name}! Wesselna tasjilak. Admin men el Amicale ra7 ychouf ma3loumetak — w awwal ma ywefe2, btfout 3a kel chi.',
     pendingStep1: 'Tasjil anba3at', pendingStep2: 'Admin 3am ychouf', pendingStep3: 'Btfout 3al jame3a',
     demoAccounts: 'Comptes démo', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Talmiz', demoPending: '3am yestanna', demoDirection: 'Idara',
-    photo: 'Sourtak', addPhoto: 'Zid soura', photoRequired: 'Zid soura la 7alak ta ta3mol compte.', requiredLegend: '* Chaghlet darouriye',
+    photo: 'Sourtak', addPhoto: 'Zid soura', photoRequired: 'Zid soura la 7alak ta ta3mol compte.', missingPhotoTitle: 'Zid soura la 7alak', missingPhotoSub: 'Sourtak ma wislit (el internet n2ata3): zida ta ya3rfak el jame3a.', noPhoto: 'Ma fi soura', retryUpload: 'Jarreb marra tenye', requiredLegend: '* Chaghlet darouriye',
   },
   home: {
     hello: 'Kifak {name}', heroTitle: 'Jame3a we7de,\nalf 7ikeye.',

@@ -47,6 +47,8 @@ const it: Dict = {
     step1: 'Identità', step2: 'Percorso', continue: 'Continua', passwordHint: 'Almeno 8 caratteri',
     errors: {
       proof: 'Per iscriversi è obbligatorio un documento che attesti la frequenza al LFK.',
+      photo: 'La foto profilo è obbligatoria.',
+      photo_upload: 'Non è stato possibile inviare la tua foto. Controlla la connessione e riprova: la tua iscrizione sarà completata.',
       file_type: 'Questo tipo di file non è accettato, oppure il contenuto non corrisponde all’estensione.',
       file_too_large: 'File troppo pesante: massimo 10 MB.',
       unavailable: 'Questa funzione non è al momento disponibile per te. Per qualsiasi domanda, contatta l’assistenza.',
@@ -64,7 +66,7 @@ const it: Dict = {
     pendingSub: "Grazie, {name}! Abbiamo ricevuto la tua iscrizione. Un amministratore dell'Amicale verificherà i tuoi dati — avrai accesso a tutta la piattaforma appena approvata.",
     pendingStep1: 'Iscrizione inviata', pendingStep2: 'Verifica da parte di un amministratore', pendingStep3: 'Accesso alla comunità',
     demoAccounts: 'Account demo', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Studente', demoPending: 'In attesa', demoDirection: 'Direzione',
-    photo: 'Foto del profilo', addPhoto: 'Aggiungi una foto', photoRequired: 'Aggiungi una foto profilo per creare il tuo account.', requiredLegend: '* Campi obbligatori',
+    photo: 'Foto del profilo', addPhoto: 'Aggiungi una foto', photoRequired: 'Aggiungi una foto profilo per creare il tuo account.', retryUpload: 'Riprova l’invio', missingPhotoTitle: 'Aggiungi la tua foto profilo', missingPhotoSub: 'La tua foto non è arrivata (connessione interrotta): aggiungila perché la comunità ti riconosca.', noPhoto: 'Nessuna foto', requiredLegend: '* Campi obbligatori',
   },
   home: {
     hello: 'Ciao {name}', heroTitle: 'Una sola comunità,\nmigliaia di storie.',

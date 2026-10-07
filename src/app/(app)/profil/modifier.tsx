@@ -131,7 +131,14 @@ export default function EditProfile() {
       setForm((f) => ({ ...f, avatar: url }));
       // Saved on the profile right away: no need to press « Enregistrer » for the photo.
       const r = actions.updateProfile({ avatar: url });
-      toast(r.ok ? d.crop.saved : d.auth.errors.unknown, r.ok ? 'success' : 'danger');
+      if (!r.ok) {
+        // not saved: back to the previous photo
+        setForm((f) => ({ ...f, avatar: previous }));
+        if (previous) actions.previewAvatar(previous);
+        if (r.error !== 'unavailable') toast(d.auth.errors[r.error] ?? d.auth.errors.unknown, 'danger');
+        return;
+      }
+      toast(d.crop.saved, 'success');
     } catch (e) {
       setForm((f) => ({ ...f, avatar: previous }));
       if (previous) actions.previewAvatar(previous);

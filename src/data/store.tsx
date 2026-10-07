@@ -92,6 +92,8 @@ const STORAGE_KEY = 'lfk.demo.db.v13';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
+  | 'photo'
+  | 'photo_upload'
   | 'unavailable'
   | 'invalid_credentials'
   | 'email_taken'
@@ -172,6 +174,8 @@ function useStoreValue() {
   const [session, setSession] = useState<Session>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
+  /** A sign-up whose photo could not be sent yet (same account, files sent again by retrySignupFiles). */
+  const pendingSignup = useRef<{ userId: string; input: SignUpInput; hasSession: boolean } | null>(null);
   // The sign-up proof and photo are still being sent: the pending screen says so instead of « not received ».
   const [sendingSignupFiles, setSendingSignupFiles] = useState(false);
   const dbRef = useRef<Db | null>(null);
@@ -390,6 +394,8 @@ function useStoreValue() {
     async signUp(input: SignUpInput, proof: PickedDoc | null, photo?: PickedImage | null): Promise<Result> {
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
       if (!proof) return { ok: false, error: 'proof' };
+      // No account without a profile photo.
+      if (!photo) return { ok: false, error: 'photo' };
       if (!SELF_SIGNUP_ROLES.includes(input.role)) return { ok: false, error: 'unknown' };
       const contact = contactError(input.role, input.birthDate, input.phone);
       if (contact) return { ok: false, error: contact };
@@ -432,8 +438,15 @@ function useStoreValue() {
           setSendingSignupFiles(true);
           try {
             await uploadSignupFiles(data.user.id, input.email, proof, photo);
-          } catch {
-            // The account exists; the pending screen offers to send the proof again.
+          } catch (err) {
+            // The photo is mandatory: if it did not arrive (bad connection, even after the retries), the
+            // sign-up stops here and the form offers to send it again (retrySignupFiles) — never an
+            // account without a photo. A lost proof only is asked for again on the pending screen.
+            if (!(err instanceof Error) || err.message !== 'proof_only') {
+              pendingSignup.current = { userId: data.user.id, input, hasSession: !!data.session };
+              setSendingSignupFiles(false);
+              return { ok: false, error: 'photo_upload' };
+            }
           }
           // « Inscription reçue » to the member, alert to the admins — only once the address is confirmed
           // (otherwise after the code, see verifyEmailCode).
@@ -475,6 +488,25 @@ function useStoreValue() {
      * The code e-mailed to confirm the address (sign-up, or a sign-in before confirming). Right, it signs
      * the member in; after a sign-up, the request then goes to the admins.
      */
+    /** Sign-up stopped because the photo could not be sent: sends the files again for the same account. */
+    async retrySignupFiles(photo: PickedImage, proof: PickedDoc | null): Promise<Result> {
+      const p = pendingSignup.current;
+      if (!p || !supabase) return { ok: false, error: 'unknown' };
+      setSendingSignupFiles(true);
+      try {
+        await uploadSignupFiles(p.userId, p.input.email, proof, photo);
+      } catch {
+        setSendingSignupFiles(false);
+        return { ok: false, error: 'photo_upload' };
+      }
+      pendingSignup.current = null;
+      if (p.hasSession) {
+        await callEmailApi('signup-notify', { userId: p.userId, email: p.input.email, locale: p.input.locale ?? 'fr', marketing: !!p.input.marketing }, false);
+        await reload();
+      }
+      setSendingSignupFiles(false);
+      return p.hasSession ? { ok: true } : { ok: true, confirmEmail: true };
+    },
     async verifyEmailCode(email: string, code: string, extras?: { locale?: 'fr' | 'en'; marketing?: boolean }): Promise<Result> {
       if (!supabase) return { ok: true };
       const { data, error: e } = await supabase.auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'email' });
@@ -542,9 +574,13 @@ function useStoreValue() {
         deny();
         return { ok: false, error: 'unavailable' };
       }
-      const merged = { ...me, ...patch };
-      const contact = contactError(me.role, merged.birthDate, merged.phone);
-      if (contact) return { ok: false, error: contact };
+      // Phone and birth date are checked when they are being changed (same rule as the database):
+      // a member whose old account lacks them can still change their photo, CV, bio…
+      if ('phone' in patch || 'birthDate' in patch) {
+        const merged = { ...me, ...patch };
+        const contact = contactError(me.role, merged.birthDate, merged.phone);
+        if (contact) return { ok: false, error: contact };
+      }
       const safe: ProfilePatch = me.role === 'eleve' ? { ...patch, school: LFK_SCHOOL } : patch;
       commit((d) => ({ ...d, users: d.users.map((u) => (u.id === me.id ? { ...u, ...safe } : u)) }));
       if (supabase) send(supabase.from('profiles').update(profilePatchToRow(safe)).eq('id', me.id));
@@ -586,6 +622,25 @@ function useStoreValue() {
       return supabase ? cvFileUrl(path) : path;
     },
     /** Uploads a picked image (Supabase) and returns the URL to store; the demo keeps the local URI. */
+    /**
+     * A profile photo that never arrived (sign-up upload lost on a bad connection): pending members send
+     * it through the server (they cannot write to the photo bucket yet), approved members directly.
+     */
+    async addMissingPhoto(img: PickedImage): Promise<Result> {
+      if (!me) return { ok: false, error: 'unknown' };
+      if (!supabase) {
+        commit((d) => ({ ...d, users: d.users.map((u) => (u.id === me.id ? { ...u, avatar: img.uri } : u)) }));
+        return { ok: true };
+      }
+      try {
+        if (me.approved) return actions.updateProfile({ avatar: await uploadImage(me.id, img, 'avatars') });
+        await uploadSignupFiles(me.id, me.email, null, img);
+        await actions.refreshUser(me.id);
+        return { ok: true };
+      } catch {
+        return { ok: false, error: 'unknown' };
+      }
+    },
     async uploadImage(img: PickedImage, folder: string): Promise<string> {
       if (readOnly) {
         deny();

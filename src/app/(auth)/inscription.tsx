@@ -79,6 +79,17 @@ export default function SignUp() {
     setPhotoMissing(!photo);
     if (!proof) setError('proof');
     if (!photo || !proof) return;
+    // The account was created but its photo could not be sent: send the files again (same account).
+    if (error === 'photo_upload') {
+      setBusy(true);
+      const again = await actions.retrySignupFiles(photo, proof);
+      setBusy(false);
+      if (!again.ok) return setError(again.error);
+      setError(null);
+      void offerToSavePassword(form.email.trim(), form.password, `${form.firstName} ${form.lastName}`.trim());
+      if (again.confirmEmail) setConfirmEmail(true);
+      return;
+    }
     const promo = parseInt(form.promo, 10);
     setBusy(true);
     const { birth, dial, phoneNumber, fieldOfStudy, situation, employer, jobTitle, grade, ...rest } = form;
@@ -110,7 +121,7 @@ export default function SignUp() {
     if (r.ok) void offerToSavePassword(form.email.trim(), form.password, `${form.firstName} ${form.lastName}`.trim());
     if (!r.ok) {
       setError(r.error);
-      if (r.error !== 'weak_password' && r.error !== 'unknown' && r.error !== 'proof') setStep(1);
+      if (r.error !== 'weak_password' && r.error !== 'unknown' && r.error !== 'proof' && r.error !== 'photo' && r.error !== 'photo_upload') setStep(1);
     } else if (r.confirmEmail) {
       setConfirmEmail(true);
     }
@@ -323,10 +334,19 @@ export default function SignUp() {
               <Txt variant="small" style={{ flex: 1 }}>{d.emails.optInSignup}</Txt>
             </Row>
           </Tap>
-          {error && error !== 'proof' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>}
+          {error === 'photo_upload' ? (
+            // The account is created but its photo did not arrive: a clear box, and the button below
+            // sends the photo again for the same account.
+            <Row gap={12} style={{ alignItems: 'flex-start', padding: 14, borderRadius: 14, backgroundColor: colors.dangerSoft, borderWidth: 1, borderColor: colors.danger }}>
+              <Feather name="wifi-off" size={18} color={colors.danger} style={{ marginTop: 2 }} />
+              <Txt variant="smallStrong" color="danger" style={{ flex: 1, lineHeight: 20 }}>{d.auth.errors.photo_upload}</Txt>
+            </Row>
+          ) : (
+            error && error !== 'proof' && error !== 'photo' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}</Txt>
+          )}
           <Row gap={10}>
             <Button label={d.nav.back} variant="secondary" icon="arrow-left" size="lg" onPress={() => setStep(2)} />
-            <Button label={d.auth.signUp} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} />
+            <Button label={error === 'photo_upload' ? d.auth.retryUpload : d.auth.signUp} icon={error === 'photo_upload' ? 'refresh-cw' : undefined} size="lg" onPress={submit} style={{ flex: 1 }} loading={busy} />
           </Row>
         </View>
       )}

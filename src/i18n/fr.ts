@@ -45,6 +45,8 @@ const fr = {
     step1: 'Identité', step2: 'Parcours', continue: 'Continuer', passwordHint: '8 caractères minimum',
     errors: {
       proof: 'Le justificatif de scolarité au LFK est obligatoire pour s’inscrire.',
+      photo: 'Une photo de profil est obligatoire.',
+      photo_upload: 'Votre photo n’a pas pu être envoyée. Vérifiez votre connexion et réessayez : votre inscription sera finalisée.',
       file_type: 'Ce type de fichier n’est pas accepté, ou son contenu ne correspond pas à son extension.',
       file_too_large: 'Fichier trop lourd : 10 Mo maximum.',
       unavailable: 'Cette fonctionnalité n’est pas disponible pour vous pour le moment. Pour toute question, contactez le support.',
@@ -62,7 +64,7 @@ const fr = {
     pendingSub: "Merci {name} ! Votre inscription a bien été reçue. Un administrateur de l'Amicale va vérifier vos informations — vous aurez accès à toute la plateforme dès son approbation.",
     pendingStep1: 'Inscription envoyée', pendingStep2: 'Vérification par un administrateur', pendingStep3: 'Accès à la communauté',
     demoAccounts: 'Comptes de démonstration', demoAdmin: 'Admin', demoMember: 'Alumni', demoEleve: 'Élève', demoPending: 'En attente', demoDirection: 'Direction',
-    photo: 'Photo de profil', addPhoto: 'Ajouter une photo', photoRequired: 'Ajoutez une photo de profil pour créer votre compte.', requiredLegend: '* Champs obligatoires',
+    photo: 'Photo de profil', addPhoto: 'Ajouter une photo', photoRequired: 'Ajoutez une photo de profil pour créer votre compte.', retryUpload: 'Réessayer l’envoi', missingPhotoTitle: 'Ajoutez votre photo de profil', missingPhotoSub: 'Votre photo n’a pas été reçue (connexion interrompue) : ajoutez-la pour que la communauté vous reconnaisse.', noPhoto: 'Pas de photo', requiredLegend: '* Champs obligatoires',
   },
   home: {
     hello: 'Bonjour {name}', heroTitle: "Une seule communauté,\ndes milliers d'histoires.",

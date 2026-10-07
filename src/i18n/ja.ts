@@ -47,6 +47,8 @@ const ja: Dict = {
     step1: '本人情報', step2: '経歴', continue: '次へ', passwordHint: '8文字以上',
     errors: {
       proof: '登録には LFK の在籍証明書類が必要です。',
+      photo: 'プロフィール写真は必須です。',
+      photo_upload: '写真を送信できませんでした。接続を確認してもう一度お試しください。登録が完了します。',
       file_type: 'このファイル形式は受け付けられないか、内容が拡張子と一致しません。',
       file_too_large: 'ファイルが大きすぎます（最大10MB）。',
       unavailable: 'この機能は現在ご利用いただけません。ご不明な点はサポートまでお問い合わせください。',
@@ -64,7 +66,7 @@ const ja: Dict = {
     pendingSub: '{name}さん、ありがとうございます！登録を受け付けました。同窓会の管理者が内容を確認します。承認後、すべての機能をご利用いただけます。',
     pendingStep1: '登録を送信', pendingStep2: '管理者による確認', pendingStep3: 'コミュニティへのアクセス',
     demoAccounts: 'デモアカウント', demoAdmin: '管理者', demoMember: '卒業生', demoEleve: '在校生', demoPending: '承認待ち', demoDirection: '学校管理職',
-    photo: 'プロフィール写真', addPhoto: '写真を追加', photoRequired: 'アカウント作成にはプロフィール写真が必要です。', requiredLegend: '* は必須項目です',
+    photo: 'プロフィール写真', addPhoto: '写真を追加', photoRequired: 'アカウント作成にはプロフィール写真が必要です。', retryUpload: 'もう一度送信', missingPhotoTitle: 'プロフィール写真を追加', missingPhotoSub: '写真が届きませんでした（接続が切れました）。コミュニティがあなたを見つけられるよう追加してください。', noPhoto: '写真なし', requiredLegend: '* は必須項目です',
   },
   home: {
     hello: 'こんにちは、{name}さん', heroTitle: 'ひとつのコミュニティ、\n無数のストーリー。',

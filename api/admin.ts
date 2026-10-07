@@ -78,7 +78,11 @@ export async function POST(request: Request) {
     const { data: found } = userId ? await admin.auth.admin.getUserById(userId) : { data: null };
     const u = found?.user;
     const fresh = !!u && Date.now() - new Date(u.created_at).getTime() < 2 * 3600 * 1000;
-    if (!u || !fresh || (u.email ?? '').toLowerCase() !== (body.email ?? '').trim().toLowerCase()) return json(403, { error: 'forbidden' });
+    const sameEmail = !!u && (u.email ?? '').toLowerCase() === (body.email ?? '').trim().toLowerCase();
+    // Or the member themselves, signed in (pending screen: a photo or proof that never arrived).
+    const bearer = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+    const self = !!u && !!bearer && (await admin.auth.getUser(bearer)).data.user?.id === u.id;
+    if (!u || !(self || (fresh && sameEmail))) return json(403, { error: 'forbidden' });
     const { data: p } = await admin.from('profiles').select('approved, proof_path, avatar').eq('id', userId).single();
     if (!p || p.approved) return json(403, { error: 'forbidden' });
 
