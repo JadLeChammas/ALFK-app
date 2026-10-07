@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { withEnglish } from './guidesEn';
 import { WORLD_GUIDES } from './guidesWorld';
 import { useStore } from './store';
 
@@ -123,10 +124,8 @@ const parse = <T,>(raw?: string): T | null => {
   }
 };
 
-export const defaultGuides = (franceSteps?: GuideStep[] | null): CountryGuide[] => [
-  { id: 'guide-fr', country: 'FR', title: 'Arriver en France', published: true, steps: franceSteps ?? DEFAULT_GUIDE },
-  ...WORLD_GUIDES,
-];
+export const defaultGuides = (franceSteps?: GuideStep[] | null): CountryGuide[] =>
+  [{ id: 'guide-fr', country: 'FR', title: 'Arriver en France', published: true, steps: franceSteps ?? DEFAULT_GUIDE }, ...WORLD_GUIDES].map(withEnglish);
 
 /** Built-in guides (France, Spain, Canada, United States, United Kingdom, Italy). */
 export const isBuiltInGuide = (id: string) => defaultGuides().some((g) => g.id === id);

@@ -1,0 +1,92 @@
+import type { CountryGuide } from './guide';
+
+/**
+ * English versions of the built-in guides (read in every language but French, see `bi` in i18n).
+ * Applied to the built-in guides only: a guide saved by the admins keeps the English they wrote.
+ */
+const GUIDES: Record<string, { titleEn: string; introEn?: string }> = {
+  "guide-fr": { titleEn: "Arriving in France" },
+  "guide-es": { titleEn: "Studying in Spain", introEn: "The steps to settle in Spain: visa (outside the European Union), NIE, empadronamiento, health and daily life." },
+  "guide-ca": { titleEn: "Studying in Canada", introEn: "Study permit, CAQ for Quebec, arrival, Social Insurance Number and student life in Canada." },
+  "guide-us": { titleEn: "Studying in the United States", introEn: "Form I-20, F-1 visa, arriving on campus and the rules to follow while studying in the United States." },
+  "guide-gb": { titleEn: "Studying in the United Kingdom", introEn: "Student visa, CAS, health surcharge, registering with a doctor and student life in the United Kingdom." },
+  "guide-it": { titleEn: "Studying in Italy", introEn: "Universitaly pre-enrolment, visa (outside the European Union), codice fiscale, residence permit and health in Italy." },
+};
+
+const STEPS: Record<string, { titleEn: string; bodyEn: string; urlLabelEn?: string }> = {
+  "g-nationalite": { titleEn: "Check whether you need a visa", bodyEn: "French or European nationality: no visa or residence permit needed, go straight to housing and social security.\nOther nationalities: a long-stay « student » visa is required. Start as soon as you are admitted: it can take more than a month." },
+  "g-campus": { titleEn: "Campus France / Études en France", bodyEn: "In many countries, the application and the visa first go through Campus France’s « Études en France » procedure (online file, interview). Check on the website whether it applies to your country.", urlLabelEn: "Campus France" },
+  "g-visa": { titleEn: "Apply for the long-stay visa (VLS-TS)", bodyEn: "Create your application on France-Visas, then book an appointment at the visa centre to hand in your file and fingerprints.\nUsual documents: valid passport, admission letter, proof of funds (about €615 a month), proof of accommodation, ID photos.", urlLabelEn: "France-Visas" },
+  "g-docs": { titleEn: "Prepare your documents", bodyEn: "Bring the originals and copies: passport, birth certificate (translated if needed), diplomas and transcripts, baccalauréat certificate, ID photos. Keep a scanned copy on your phone too." },
+  "g-logement": { titleEn: "Find accommodation", bodyEn: "CROUS residences (student social file), private residences, flatshares. For the deposit, the Visale guarantee is free for students.\nAlso ask the alumni in your city on Repère: they know the good deals.", urlLabelEn: "Mes services étudiant (CROUS)" },
+  "g-cvec": { titleEn: "Pay the CVEC", bodyEn: "The student and campus life contribution (about €105) is compulsory before administrative enrolment in most institutions. Keep the certificate.", urlLabelEn: "CVEC" },
+  "g-validation": { titleEn: "Validate your visa (VLS-TS)", bodyEn: "Within 3 months of arriving, validate your visa online on the ANEF website and pay the fee (tax stamp). Without this validation, you are staying illegally once the 3 months are over.", urlLabelEn: "ANEF" },
+  "g-secu": { titleEn: "Register for social security", bodyEn: "Free registration: international students on the Assurance maladie’s dedicated website, French students on ameli.fr. You get a social security number, then the Carte Vitale (send the photo and ID requested).", urlLabelEn: "Assurance maladie — international students" },
+  "g-banque": { titleEn: "Open a bank account", bodyEn: "You need a French bank account (RIB) for rent, the CAF and a job. Bring your passport, proof of address and enrolment certificate. Online banks are often faster." },
+  "g-tel": { titleEn: "SIM card and French number", bodyEn: "A no-commitment plan is enough. A French number is needed for the bank, the CAF and paperwork." },
+  "g-assurance": { titleEn: "Home insurance", bodyEn: "Compulsory to rent: ask for the certificate to give to the landlord or the residence." },
+  "g-caf": { titleEn: "Apply for housing benefit (CAF)", bodyEn: "Students, including international students, may be entitled to the APL. Apply online as soon as you move in: the benefit is not backdated.", urlLabelEn: "CAF" },
+  "g-mutuelle": { titleEn: "Top-up insurance and GP", bodyEn: "Social security covers part of the costs; a top-up health insurance (mutuelle) covers the rest. Register a regular doctor (médecin traitant) to be better reimbursed." },
+  "g-transport": { titleEn: "Transport", bodyEn: "Cities offer discounted student passes (for example Imagine R in the Paris region)." },
+  "g-renouvellement": { titleEn: "Renew your residence permit", bodyEn: "Apply online on the ANEF at least 2 months before your visa or residence permit expires.", urlLabelEn: "ANEF" },
+  "g-job": { titleEn: "Student job", bodyEn: "With a student residence permit, you can work up to 964 hours a year. Look at the jobs offered by your institution and the CROUS." },
+  "g-impots": { titleEn: "File your tax return", bodyEn: "In spring, a tax return is often needed (even with no income) to keep your rights, especially with the CAF.", urlLabelEn: "impots.gouv.fr" },
+  "es-visa": { titleEn: "Student visa (outside the European Union)", bodyEn: "French or European nationality: no visa.\nOther nationalities: apply for a student visa (« visado de estudios ») at the Spanish consulate for your area as soon as you receive your admission letter. Usual documents: passport, admission, proof of funds, private health insurance with no excess, medical certificate and criminal record certificate (legalised or apostilled, with an official translation).", urlLabelEn: "Ministry of Foreign Affairs (consulates)" },
+  "es-docs": { titleEn: "Prepare your documents", bodyEn: "Passport, birth certificate, diplomas and transcripts, baccalauréat certificate. For some procedures, foreign documents must be apostilled and come with a sworn translation (« traducción jurada »). Keep a scanned copy of everything." },
+  "es-sante": { titleEn: "Health insurance", bodyEn: "European students: get the European Health Insurance Card (EHIC) before leaving.\nOther nationalities: private health insurance covering the whole stay is required for the visa." },
+  "es-logement": { titleEn: "Find accommodation", bodyEn: "University residences (« residencias » and « colegios mayores »), flatshares (« pisos compartidos »). Listings are on the main property websites. Ask the alumni living in Spain on Repère." },
+  "es-padron": { titleEn: "Register at the town hall (empadronamiento)", bodyEn: "Register on your town hall’s register with your rental contract and passport. The empadronamiento certificate is asked for in many other procedures." },
+  "es-nie": { titleEn: "NIE and residence card", bodyEn: "European students staying more than 3 months: apply for the EU citizen registration certificate (with your NIE) at the police or the foreigners’ office, by appointment.\nOther nationalities: apply for the residence card (TIE) within a month of arriving, by appointment (« cita previa »).", urlLabelEn: "Cita previa extranjería" },
+  "es-banque": { titleEn: "Bank account and SIM card", bodyEn: "A Spanish account makes rent and subscriptions easier; the NIE is often required. A prepaid SIM card is enough at first." },
+  "es-transport": { titleEn: "Transport", bodyEn: "Large cities and regions offer discounted youth passes (« abono joven »). Ask your city’s transport network." },
+  "es-travail": { titleEn: "Working while studying", bodyEn: "European students can work freely. With a student residence permit, part-time work compatible with your studies is allowed, within the limit set by law." },
+  "es-renouvellement": { titleEn: "Renew your residence permit", bodyEn: "Outside the European Union: apply to renew your student residence authorisation before it expires (usually in the 60 days before)." },
+  "ca-caq": { titleEn: "Quebec: the CAQ first", bodyEn: "To study in Quebec, first apply for the Quebec Acceptance Certificate (CAQ) from Quebec’s Ministry of Immigration, with your admission letter. You need it before the federal study permit.\nFrench students pay preferential tuition fees in Quebec: check with your university.", urlLabelEn: "Studying in Quebec" },
+  "ca-permis": { titleEn: "Apply for the study permit", bodyEn: "Apply online to Immigration Canada (IRCC): acceptance letter from a designated institution, attestation from the province or territory (or the CAQ for Quebec), proof of funds, passport, then biometrics. It can take a long time: start as soon as you are admitted.", urlLabelEn: "Study in Canada (IRCC)" },
+  "ca-sante": { titleEn: "Health insurance", bodyEn: "Coverage depends on the province: some include international students, others require the university’s insurance. In Quebec, French students can be covered by the RAMQ thanks to the France–Quebec agreement (form to get from the Assurance maladie before leaving)." },
+  "ca-logement": { titleEn: "Find accommodation", bodyEn: "University residences (book early), flatshares, apartments. Beware of listings that ask for payment before any visit. Alumni living in Canada can advise you (Repère)." },
+  "ca-arrivee": { titleEn: "At the port of entry", bodyEn: "At the airport, the border services officer gives you your study permit. Carry the letter of introduction, the admission letter, proof of funds (and the CAQ for Quebec). Check the details on the permit before leaving the counter." },
+  "ca-nas": { titleEn: "Social Insurance Number (SIN)", bodyEn: "Essential to work and get paid. Apply for free at Service Canada, online or in person, with your study permit.", urlLabelEn: "Service Canada — SIN" },
+  "ca-banque": { titleEn: "Bank account and phone", bodyEn: "The big banks offer accounts for international students, often opened on arrival with your passport and study permit. Get a local mobile plan." },
+  "ca-travail": { titleEn: "Working while studying", bodyEn: "The study permit generally allows you to work on campus, and off campus within a weekly limit of hours during terms (no limit during breaks). Check the conditions written on your permit." },
+  "ca-impots": { titleEn: "File your tax return", bodyEn: "Every spring, file your tax return (federal, and provincial in Quebec), even with little income: it gives access to some credits and refunds." },
+  "ca-renouvellement": { titleEn: "Extend your permit", bodyEn: "Apply to extend your study permit (and your CAQ in Quebec) before it expires if your studies continue." },
+  "us-i20": { titleEn: "Receive Form I-20", bodyEn: "After admission, the university sends you Form I-20 (once you have shown proof of funds). The whole procedure rests on it: check your name, dates and programme.", urlLabelEn: "Study in the States" },
+  "us-sevis": { titleEn: "Pay the SEVIS fee (I-901)", bodyEn: "Pay the SEVIS fee online with your I-20 number, before the visa interview. Keep the receipt.", urlLabelEn: "SEVIS I-901 fee" },
+  "us-visa": { titleEn: "F-1 student visa", bodyEn: "Fill in Form DS-160, pay the fee and book an interview at the US embassy or consulate. The ESTA does not allow you to study: the F-1 visa is compulsory.", urlLabelEn: "Student visas (Department of State)" },
+  "us-sante": { titleEn: "Health insurance", bodyEn: "Healthcare is very expensive: most universities require their own health insurance, or an equivalent one. Check what is required before leaving." },
+  "us-arrivee": { titleEn: "Entering the country and arriving on campus", bodyEn: "You can enter at the earliest 30 days before the programme start date on your I-20. Then report to the university’s international office (the « DSO ») to confirm your arrival in SEVIS." },
+  "us-banque": { titleEn: "Bank account and phone", bodyEn: "Open a local account (passport, I-20, address) and get a mobile plan. A Social Security Number (SSN) is only issued if you have authorised employment." },
+  "us-statut": { titleEn: "Keep your F-1 status", bodyEn: "Stay enrolled full time, tell the international office if your address or programme changes, and have your I-20 signed before every trip outside the United States." },
+  "us-travail": { titleEn: "Working while studying", bodyEn: "The F-1 visa allows on-campus work, part time during classes. Off-campus work goes through CPT or OPT, with the international office’s approval." },
+  "us-impots": { titleEn: "Annual tax form", bodyEn: "Every year, F-1 students must send Form 8843, even with no income, and a tax return if they worked. The international office often offers help.", urlLabelEn: "IRS" },
+  "gb-cas": { titleEn: "Receive your CAS", bodyEn: "Once you accept your offer (often through UCAS for a bachelor’s degree), the university issues a CAS (Confirmation of Acceptance for Studies), which you need for the visa application.", urlLabelEn: "UCAS" },
+  "gb-visa": { titleEn: "Apply for the Student visa", bodyEn: "Since Brexit, French and European students also need a Student visa (unless they have EU Settlement Scheme status). Apply online up to 6 months before your course starts: CAS, passport, proof of funds and, in some cases, of your English level. The visa is issued electronically (eVisa) in your UKVI account.", urlLabelEn: "GOV.UK — Student visa" },
+  "gb-ihs": { titleEn: "Health surcharge (IHS)", bodyEn: "When you apply for the visa, you pay the Immigration Health Surcharge, which gives access to the public health service (NHS) during your studies.", urlLabelEn: "GOV.UK — IHS" },
+  "gb-logement": { titleEn: "Find accommodation", bodyEn: "University residences (« halls ») are often guaranteed in first year if you apply before the deadline. After that: flatshares." },
+  "gb-gp": { titleEn: "Register with a doctor (GP)", bodyEn: "As soon as you arrive, register with a GP surgery near you: it is free and needed to access NHS care.", urlLabelEn: "NHS — register with a GP" },
+  "gb-banque": { titleEn: "Bank account and phone", bodyEn: "Open an account (enrolment letter from the university) and get a SIM card. Online banks are often faster." },
+  "gb-ni": { titleEn: "National Insurance number", bodyEn: "Needed if you work. You apply online.", urlLabelEn: "GOV.UK — National Insurance" },
+  "gb-council": { titleEn: "Council tax and transport", bodyEn: "Full-time students are exempt from council tax: ask the university for the certificate. Think of the 16-25 Railcard and student fares on local transport." },
+  "gb-travail": { titleEn: "Working while studying", bodyEn: "The Student visa generally allows a limited number of working hours per week during term (full time during holidays). The exact number is on your visa." },
+  "gb-graduate": { titleEn: "After graduating", bodyEn: "The Graduate visa lets you stay and work after your degree for a limited time. The rules change: check them on GOV.UK before your studies end.", urlLabelEn: "GOV.UK — Graduate visa" },
+  "it-universitaly": { titleEn: "Pre-enrol on Universitaly", bodyEn: "Students from outside the European Union pre-enrol on the Universitaly portal, which is also used for the visa application. Europeans enrol directly with the university.", urlLabelEn: "Universitaly" },
+  "it-visa": { titleEn: "Student visa (outside the European Union)", bodyEn: "French or European nationality: no visa.\nOther nationalities: student visa from the Italian consulate (admission, funds, accommodation, health insurance)." },
+  "it-diplome": { titleEn: "Get your diploma recognised", bodyEn: "Depending on the university, a « dichiarazione di valore » or a CIMEA statement of your baccalauréat may be required. Ask early: it can take a long time.", urlLabelEn: "CIMEA" },
+  "it-codice": { titleEn: "Codice fiscale", bodyEn: "The Italian tax code is asked for everywhere (housing, bank, phone, university). Get it at the consulate before leaving or at the Agenzia delle Entrate when you arrive.", urlLabelEn: "Agenzia delle Entrate" },
+  "it-permesso": { titleEn: "Residence permit (outside the European Union)", bodyEn: "Within 8 working days of arriving, apply for the student « permesso di soggiorno » with the kit available at post offices, then go to the Questura.\nEuropean students staying more than 3 months: register with the town’s registry office (anagrafe).", urlLabelEn: "Portale Immigrazione" },
+  "it-sante": { titleEn: "Health", bodyEn: "European students: the European Health Insurance Card (TEAM in Italy) covers care.\nOther nationalities: voluntary registration with the national health service (SSN) for a yearly fee, or private insurance." },
+  "it-banque": { titleEn: "Bank account and SIM card", bodyEn: "With your codice fiscale and an ID, open an account and get an Italian SIM card." },
+  "it-bourses": { titleEn: "Grants and discounts (DSU, ISEE)", bodyEn: "The regional right-to-study bodies (DSU) offer grants, housing and discounted meals. For income-based tuition fees, the university often asks for an ISEE (for foreigners: « ISEE parificato »)." },
+  "it-travail": { titleEn: "Working while studying", bodyEn: "European students can work freely. With a student residence permit, part-time work is allowed within a weekly limit of hours set by law." },
+  "it-renouvellement": { titleEn: "Renew your residence permit", bodyEn: "Outside the European Union: apply to renew it before it expires, showing that you passed exams according to your university’s rules." },
+};
+
+/** A built-in guide with its English version (what the admins already wrote is kept). */
+export function withEnglish(g: CountryGuide): CountryGuide {
+  return {
+    ...GUIDES[g.id],
+    ...g,
+    steps: g.steps.map((s) => ({ ...STEPS[s.id], ...s })),
+  };
+}
