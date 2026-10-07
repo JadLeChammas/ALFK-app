@@ -419,7 +419,7 @@ const zh: Dict = {
     emptyMine: '添加你的学业、经历、项目和语言：简历将对成员可见，并可下载为 PDF。',
     pdf: '下载 PDF',
     pdfPopup: '请允许弹出窗口以下载 PDF。',
-    openFile: '查看简历',
+    openFile: '查看简历', openTab: '在新标签页中打开',
     profile: '个人资料',
     headline: '标题',
     headlinePlaceholder: '例如：巴黎政治学院法学学生 · 热爱辩论',

@@ -424,7 +424,7 @@ const kw: Dict = {
     emptyMine: 'Zeed diraastik, khibratik, mashaaree3ik w lughaatik: il CV yibayyin 7ag il a3dha2 w tnazzla PDF.',
     pdf: 'Nazzil PDF',
     pdfPopup: 'Isma7 7ag il pop-ups 3ashan tnazzil il PDF.',
-    openFile: 'Shoof il CV',
+    openFile: 'Shoof il CV', openTab: 'Iftaha b tab jideed',
     profile: 'Profile',
     headline: 'Il 3inwaan',
     headlinePlaceholder: 'Mithil: tilmeeth 7qooq b Sciences Po · y7ibb il debates',

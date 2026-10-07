@@ -419,7 +419,7 @@ const ja: Dict = {
     emptyMine: '学歴・職歴・プロジェクト・語学を追加しましょう。履歴書はメンバーに公開され、PDF でダウンロードできます。',
     pdf: 'PDF をダウンロード',
     pdfPopup: 'PDF をダウンロードするにはポップアップを許可してください。',
-    openFile: '履歴書を見る',
+    openFile: '履歴書を見る', openTab: '新しいタブで開く',
     profile: 'プロフィール',
     headline: '見出し',
     headlinePlaceholder: '例：Sciences Po 法学部生・ディベート好き',

@@ -419,7 +419,7 @@ const eo: Dict = {
     emptyMine: 'Aldonu viajn studojn, sperton, projektojn kaj lingvojn: via vivresumo estos videbla por la membroj kaj elŝutebla kiel PDF.',
     pdf: 'Elŝuti kiel PDF',
     pdfPopup: 'Permesu ŝprucfenestrojn por elŝuti la PDF.',
-    openFile: 'Vidi la vivresumon',
+    openFile: 'Vidi la vivresumon', openTab: 'Malfermi en nova langeto',
     profile: 'Profilo',
     headline: 'Titolo',
     headlinePlaceholder: 'Ekz. jurstudanto ĉe Sciences Po · ŝatanto de debatoj',

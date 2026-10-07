@@ -420,7 +420,7 @@ const pirate: Dict = {
     emptyMine: 'Add yer schoolin\', voyages, ventures an\' tongues: yer log be seen by th\' crew an\' printable as a PDF.',
     pdf: 'Download as PDF',
     pdfPopup: 'Allow pop-ups to fetch th\' PDF, matey.',
-    openFile: 'See th\' log',
+    openFile: 'See th\' log', openTab: 'Open in a new spyglass',
     profile: 'Profile',
     headline: 'Headline',
     headlinePlaceholder: 'E.g. Law deckhand at Sciences Po · Lover o\' debates',

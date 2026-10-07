@@ -419,7 +419,7 @@ const it: Dict = {
     emptyMine: 'Aggiungi studi, esperienze, progetti e lingue: il tuo CV sarà visibile ai membri e scaricabile in PDF.',
     pdf: 'Scarica in PDF',
     pdfPopup: 'Consenti i pop-up per scaricare il PDF.',
-    openFile: 'Vedi il CV',
+    openFile: 'Vedi il CV', openTab: 'Apri in una nuova scheda',
     profile: 'Profilo',
     headline: 'Titolo',
     headlinePlaceholder: 'Es.: Studentessa di legge a Sciences Po · Appassionata di dibattiti',

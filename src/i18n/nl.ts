@@ -419,7 +419,7 @@ const nl: Dict = {
     emptyMine: 'Voeg je studie, ervaring, projecten en talen toe: je cv wordt zichtbaar voor de leden en is te downloaden als pdf.',
     pdf: 'Downloaden als pdf',
     pdfPopup: 'Sta pop-ups toe om de pdf te downloaden.',
-    openFile: 'cv bekijken',
+    openFile: 'cv bekijken', openTab: 'Openen in een nieuw tabblad',
     profile: 'Profiel',
     headline: 'Titel',
     headlinePlaceholder: 'Bijv. rechtenstudent aan Sciences Po · debatliefhebber',

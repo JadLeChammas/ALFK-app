@@ -424,7 +424,7 @@ const lb: Dict = {
     emptyMine: 'Zid dirastak, khebrtak, machari3ak w loughatak: el CV byban lal a3da2 w btnazzlo PDF.',
     pdf: 'Nazzel PDF',
     pdfPopup: 'Sma7 lal pop-ups ta tnazzel el PDF.',
-    openFile: 'Chouf el CV',
+    openFile: 'Chouf el CV', openTab: 'Fta7a b tab jdid',
     profile: 'Profile',
     headline: '3enwen',
     headlinePlaceholder: 'Metlan: talmiz 7o2ou2 b Sciences Po · bi7eb el débats',

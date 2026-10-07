@@ -419,7 +419,7 @@ const de: Dict = {
     emptyMine: 'Füge Studium, Erfahrungen, Projekte und Sprachen hinzu: Dein Lebenslauf ist für Mitglieder sichtbar und als PDF herunterladbar.',
     pdf: 'Als PDF herunterladen',
     pdfPopup: 'Erlaube Pop-ups, um das PDF herunterzuladen.',
-    openFile: 'Lebenslauf ansehen',
+    openFile: 'Lebenslauf ansehen', openTab: 'In neuem Tab öffnen',
     profile: 'Profil',
     headline: 'Titel',
     headlinePlaceholder: 'Z. B.: Jurastudentin an der Sciences Po · Debattierbegeistert',

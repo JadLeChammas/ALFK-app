@@ -420,7 +420,7 @@ const la: Dict = {
     emptyMine: 'Studia, experientiam, incepta et linguas adde: curriculum tuum sodalibus videbitur et ut PDF deponi poterit.',
     pdf: 'Ut PDF depone',
     pdfPopup: 'Fenestras emergentes permitte ut PDF deponas.',
-    openFile: 'Curriculum vide',
+    openFile: 'Curriculum vide', openTab: 'In nova tabula aperi',
     profile: 'Descriptio',
     headline: 'Titulus',
     headlinePlaceholder: 'E.g. studiosus iuris apud Sciences Po · disputationum amator',

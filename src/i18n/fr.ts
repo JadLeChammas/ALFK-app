@@ -417,7 +417,7 @@ const fr = {
     emptyMine: 'Ajoutez vos études, expériences, projets et langues : votre CV sera visible par les membres et téléchargeable en PDF.',
     pdf: 'Télécharger en PDF',
     pdfPopup: 'Autorisez les fenêtres pop-up pour télécharger le PDF.',
-    openFile: 'Voir le CV',
+    openFile: 'Voir le CV', openTab: 'Ouvrir dans un nouvel onglet',
     profile: 'Profil',
     headline: 'Titre',
     headlinePlaceholder: 'Ex. : Étudiante en droit à Sciences Po · Passionnée de débats',

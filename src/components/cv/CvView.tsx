@@ -1,4 +1,6 @@
 import { Feather } from '@expo/vector-icons';
+import { useLayout } from '@/theme/layout';
+import { CvPreview, CvViewer } from './PdfViewer';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Linking, Platform, View } from 'react-native';
@@ -238,6 +240,7 @@ export function useCvUpload() {
 /** The CV a member posted as a PDF, shown at the top of their page (with a preview on the web). */
 export function CvFileCard({ user }: { user: User }) {
   const { d, f, formatDate } = useI18n();
+  const { isMobile } = useLayout();
   const { colors } = useTheme();
   const { actions } = useStore();
   const me = useMe();
@@ -255,6 +258,13 @@ export function CvFileCard({ user }: { user: User }) {
     };
   }, [file, actions]);
   const link = url && url.path === file?.path ? url.url : null;
+  // Web: the PDF opens in a full-screen viewer (zoom, scroll); the app opens the system viewer.
+  const [viewing, setViewing] = useState(false);
+  const open = () => {
+    if (!link) return;
+    if (Platform.OS === 'web') setViewing(true);
+    else Linking.openURL(link);
+  };
 
   if (!file) return null;
   return (
@@ -267,17 +277,16 @@ export function CvFileCard({ user }: { user: User }) {
           <Txt variant="h3">{isMe ? d.cv.postedMine : f(d.cv.postedBy, { name: user.firstName })}</Txt>
           <Txt variant="small" color="textSubtle" numberOfLines={1}>{`${file.name} · ${f(d.cv.postedOn, { date: formatDate(file.uploadedAt) })}`}</Txt>
         </View>
-        <Row gap={8} wrap>
-          <Button label={d.cv.openFile} icon="eye" size="sm" disabled={!link} onPress={() => link && Linking.openURL(link)} />
+        {/* phones: the buttons take their own line and wrap, never running off the card */}
+        <Row gap={8} wrap style={isMobile ? { width: '100%' } : undefined}>
+          <Button label={d.cv.openFile} icon="eye" size="sm" disabled={!link} onPress={open} />
           {isMe && <Button label={upload.uploading ? d.cv.uploading : d.cv.replaceFile} icon="upload" size="sm" variant="secondary" disabled={upload.uploading} onPress={upload.attach} />}
           {isMe && <Button label={d.cv.removeFile} icon="x" size="sm" variant="ghost" onPress={upload.remove} />}
         </Row>
       </Row>
-      {Platform.OS === 'web' && link && (
-        <View style={{ height: 560, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceAlt }}>
-          <iframe title={file.name} src={link} style={{ width: '100%', height: '100%', border: 0 }} />
-        </View>
-      )}
+      {/* The first page, zoomed out and locked; a tap opens the full viewer. */}
+      {Platform.OS === 'web' && link && <CvPreview url={link} name={file.name} onOpen={open} />}
+      {Platform.OS === 'web' && link && <CvViewer url={link} name={file.name} visible={viewing} onClose={() => setViewing(false)} />}
     </Card>
   );
 }
