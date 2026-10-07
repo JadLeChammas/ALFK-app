@@ -13,7 +13,7 @@ import { Select } from '@/components/ui/Select';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
-import { isBuiltInGuide, useGuides, type CountryGuide } from '@/data/guide';
+import { useGuides, type CountryGuide } from '@/data/guide';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 
@@ -24,14 +24,13 @@ export default function AdminGuides() {
   const { actions } = useStore();
   const { confirm, toast } = useDialogs();
   const params = useLocalSearchParams<{ pays?: string; nouveau?: string }>();
-  const { guides, tombstones, custom } = useGuides();
+  const { guides } = useGuides();
   const titleOf = useGuideTitle();
   const [selected, setSelected] = useState<string | undefined>(params.pays?.toUpperCase());
   const [adding, setAdding] = useState(!!params.nouveau);
   const guide = guides.find((x) => x.country === selected) ?? guides[0];
 
-  // Deleted built-in guides stay saved as « hidden » so they do not come back.
-  const save = (next: CountryGuide[]) => actions.saveGuides([...next, ...tombstones]);
+  const save = (next: CountryGuide[]) => actions.saveGuides(next);
   const update = (id: string, patch: Partial<CountryGuide>) => save(guides.map((x) => (x.id === id ? { ...x, ...patch } : x)));
 
   return (
@@ -63,25 +62,13 @@ export default function AdminGuides() {
             onSee={() => router.push(`/guide?pays=${guide.country}` as never)}
             onDelete={async () => {
               if (await confirm({ title: g.deleteGuide, message: titleOf(guide), danger: true, confirmLabel: d.common.delete })) {
-                const rest = guides.filter((x) => x.id !== guide.id);
-                actions.saveGuides([...rest, ...tombstones, ...(isBuiltInGuide(guide.id) ? [{ ...guide, hidden: true, published: false, steps: [] }] : [])]);
+                save(guides.filter((x) => x.id !== guide.id));
                 setSelected(undefined);
               }
             }}
           />
           <GuideSteps steps={guide.steps} onChange={(steps) => update(guide.id, { steps })} />
         </>
-      )}
-
-      {custom && (
-        <Button
-          label={g.reset}
-          icon="rotate-ccw"
-          variant="ghost"
-          onPress={async () => {
-            if (await confirm({ title: g.reset, message: g.resetAllConfirm, danger: true, confirmLabel: g.reset })) actions.saveGuides(null);
-          }}
-        />
       )}
 
       {adding && (
