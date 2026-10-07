@@ -5,7 +5,7 @@ import { checkUnsubscribe, emailSettings, emailStatus, ROLE_NAMES, sendEvent, se
 
 /**
  * POST /api/email — emails through Brevo (see api/_email.ts).
- *   signup-notify   a brand-new account (no session needed): « inscription reçue » + alert to the admins
+ *   signup-notify   a brand-new account (no session needed): « inscription reçue » + alert to the Amicale's inbox
  *   unsubscribe     the link in the news emails
  *   marketing       a member turns the news on or off (their own account)
  *   approved        an admin approved an account: « compte validé »
@@ -21,6 +21,18 @@ const secret = process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_R
 const json = (status: number, body: unknown) => Response.json(body, { status });
 const COLUMNS = 'id, email, first_name, last_name, locale, role, approved, marketing_opt_in';
 const MAX_ATTACHMENTS = 10 * 1024 * 1024;
+/**
+ * Who is told about each new sign-up: the Amicale's inbox (Vercel env SIGNUP_ALERT_EMAIL can change it).
+ * The admins still see the requests in Admin → Approbations and in their notifications.
+ */
+const SIGNUP_ALERT: Recipient = {
+  id: 'amicale',
+  email: process.env.SIGNUP_ALERT_EMAIL || 'amicalelyceefrancaisdekoweit@gmail.com',
+  first_name: 'Bureau',
+  last_name: null,
+  locale: 'fr',
+  role: 'admin',
+};
 
 type Body = {
   action?: string;
@@ -120,9 +132,9 @@ async function signupNotify(admin: SupabaseClient, body: Body) {
     .single();
   const member = (updated ?? p) as Recipient;
   await sendEvent(admin, 'signupReceived', [member]);
-  const { data: admins } = await admin.from('profiles').select(COLUMNS).eq('role', 'admin').eq('approved', true);
   const name = [member.first_name, (member.last_name ?? '').toLocaleUpperCase('fr')].filter(Boolean).join(' ');
-  await sendEvent(admin, 'adminPending', (admins ?? []) as Recipient[], (locale) => ({ membre: name, role: ROLE_NAMES[locale][member.role ?? 'alumni'] ?? '' }));
+  // The « new account to review » alert goes to the Amicale's own inbox only, not to every admin.
+  await sendEvent(admin, 'adminPending', [SIGNUP_ALERT], (locale) => ({ membre: name, role: ROLE_NAMES[locale][member.role ?? 'alumni'] ?? '' }));
   return json(200, { ok: true });
 }
 
