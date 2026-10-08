@@ -16,7 +16,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { birthdayToday } from '@/lib/eggs';
-import { Balloons } from '@/components/EasterEggs';
+import { Balloons, LegendBadge } from '@/components/EasterEggs';
 import { nationalityName } from '@/data/nationalities';
 import { OtherSchoolsRows } from '@/components/OtherSchools';
 import { fieldLabel, userFields } from '@/data/fields';
@@ -66,6 +66,7 @@ export default function MemberProfile() {
                   <RoleBadge role={user.role} />
                   {user.role === 'eleve' && user.grade && <Badge label={d.grade[user.grade]} tone="info" icon="book-open" />}
                   {birthdayToday(user, me) && <Badge label={d.eggs.birthday} tone="warning" icon="gift" />}
+                  <LegendBadge user={user} />
                   {user.promo && <Txt color="textMuted">{f(d.common.promo, { year: user.promo })}</Txt>}
                   {user.fonction && <Txt color="textMuted">{user.fonction}</Txt>}
                 </Row>

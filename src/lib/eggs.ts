@@ -51,19 +51,28 @@ export const searchEgg = (q: string): EggEvent | undefined => SEARCH_WORDS[norm(
 
 /**
  * Legends: searching one of these full names (any case, accents or spacing) shows their special card —
- * the site's creator, the Amicale's legendary ambassador and its legendary pirate (a pirate hat on her photo). `kind` picks the texts (`eggs.legends`).
+ * the site's developers, the Amicale's legendary ambassador and its legendary pirate (a pirate hat on
+ * her photo) — and their badge shows on their profile. `kind` picks the texts (`eggs.legends`);
+ * `aliases`: other spellings of the name.
  */
-export const LEGENDS = [
+export const LEGENDS: readonly { name: string; kind: 'developer' | 'ambassador' | 'pirate'; emoji: string; aliases?: string[] }[] = [
   { name: 'Jad El Chammas', kind: 'developer', emoji: '🏆' },
+  { name: 'Anwar Al Bitar', kind: 'developer', emoji: '🏆', aliases: ['Anwar Bitar', 'Anwar Al-Bitar'] },
   { name: 'Adriano Sfeir', kind: 'ambassador', emoji: '🎖️' },
   { name: 'Tatiana El Hajj', kind: 'pirate', emoji: '🏴‍☠️' },
-] as const;
+];
 export type Legend = (typeof LEGENDS)[number];
 export const CREATOR = LEGENDS[0].name;
+/** Names compared without case, accents, spaces or hyphens. */
+const key = (s: string) => norm(s).replace(/[\s-]+/g, '');
+const isLegend = (l: Legend, s: string) => [l.name, ...(l.aliases ?? [])].some((n) => key(n) === key(s));
 /** The legend whose full name was typed, if any. */
 export function legendQuery(q: string): Legend | undefined {
-  const n = norm(q).replace(/\s+/g, ' ');
-  return LEGENDS.find((l) => norm(l.name) === n);
+  return q.trim() ? LEGENDS.find((l) => isLegend(l, q)) : undefined;
+}
+/** The legend this member is, if any (their badge on their profile). */
+export function legendOf(u: Pick<User, 'firstName' | 'lastName'>): Legend | undefined {
+  return legendQuery(`${u.firstName} ${u.lastName}`);
 }
 
 /** Birthday today, and allowed to be seen by this viewer. */

@@ -7,9 +7,10 @@ import Svg, { Ellipse, Path } from 'react-native-svg';
 
 import { useCreditsConfig, type CreditsConfig } from '@/data/credits';
 import { usePublicOverview } from '@/data/public';
-import { fullName, useApprovedMembers, useStore } from '@/data/store';
+import { useApprovedMembers, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
-import { eggs, takeCreditsPreview, type Legend } from '@/lib/eggs';
+import { eggs, legendOf, takeCreditsPreview, type Legend } from '@/lib/eggs';
+import type { User } from '@/data/types';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts } from '@/theme/tokens';
 import { Avatar, Badge, Tap } from './ui/primitives';
@@ -177,6 +178,15 @@ export function SparkleName({ name }: { name: string }) {
 // ——— Searching for the creator ———
 
 /** A legend's full name in a search box: their card (the legendary developer, the legendary ambassador). */
+/** A legend's badge, on their profile (own page and member page). */
+export function LegendBadge({ user }: { user: Pick<User, 'firstName' | 'lastName'> }) {
+  const { d } = useI18n();
+  const legend = legendOf(user);
+  if (!legend) return null;
+  const label = { developer: d.eggs.legendBadge, ambassador: d.eggs.ambassadorBadge, pirate: d.eggs.pirateBadge }[legend.kind];
+  return <Badge label={`${legend.emoji} ${label}`} tone="warning" />;
+}
+
 export function LegendCard({ legend, onOpen }: { legend: Legend; onOpen: (href: string) => void }) {
   const { d } = useI18n();
   const t = {
@@ -186,7 +196,7 @@ export function LegendCard({ legend, onOpen }: { legend: Legend; onOpen: (href: 
   }[legend.kind];
   const { colors } = useTheme();
   const members = useApprovedMembers();
-  const jad = useMemo(() => members.find((u) => fullName(u).toLowerCase() === legend.name.toLowerCase()), [members, legend.name]);
+  const jad = useMemo(() => members.find((u) => legendOf(u) === legend), [members, legend]);
   const shine = useSharedValue(0);
   useEffect(() => {
     shine.value = withRepeat(withTiming(1, { duration: 1600 }), -1, true);

@@ -18,7 +18,7 @@ import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 import { birthdayToday } from '@/lib/eggs';
-import { Balloons } from '@/components/EasterEggs';
+import { Balloons, LegendBadge } from '@/components/EasterEggs';
 import { nationalityName } from '@/data/nationalities';
 import { OtherSchoolsRows } from '@/components/OtherSchools';
 import { fieldLabel, userFields } from '@/data/fields';
@@ -70,6 +70,7 @@ export default function MyProfile() {
                   <RoleBadge role={me.role} />
                   {me.role === 'eleve' && me.grade && <Badge label={d.grade[me.grade]} tone="info" icon="book-open" />}
                   {birthdayToday(me, me) && <Badge label={d.eggs.birthday} tone="warning" icon="gift" />}
+                  <LegendBadge user={me} />
                   <Txt color="textMuted">{[d.roles[me.role], me.fonction, me.promo && f(d.common.promo, { year: me.promo })].filter(Boolean).join(' · ')}</Txt>
                 </Row>
               </View>
