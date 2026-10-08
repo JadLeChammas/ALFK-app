@@ -62,12 +62,13 @@ function fromDb(db: Db): PublicOverview {
     .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName.toLocaleUpperCase('fr')}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }));
   return {
     alumni: grads.length,
-    members: db.users.filter((u) => u.approved).length,
+    // Honorary members are not counted in the figures.
+    members: db.users.filter((u) => u.approved && u.role !== 'honneur').length,
     pupils: db.users.filter((u) => u.approved && u.role === 'eleve').length,
     countries: countries.length,
     promos: new Set(grads.map((u) => u.promo).filter(Boolean)).size,
     universities: schools.length,
-    nationalities: countNationalities(db.users.filter((u) => u.approved)).length,
+    nationalities: countNationalities(db.users.filter((u) => u.approved && u.role !== 'honneur')).length,
     destinations: countries.map(([code, n]) => ({ code, n })),
     schools: schools.map(([s]) => s).slice(0, 30),
     bureau,

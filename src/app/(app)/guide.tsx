@@ -104,7 +104,7 @@ function CountryPicker({ visible, onOpen, manage }: { visible: CountryGuide[]; o
   const me = useMe();
   const members = useApprovedMembers();
   const titleOf = useGuideTitle();
-  const alumniIn = (cc: string) => members.filter((u) => u.country === cc && u.role !== 'eleve').length;
+  const alumniIn = (cc: string) => members.filter((u) => u.country === cc && (u.role === 'alumni' || u.role === 'admin')).length;
   // Where alumni live but no guide exists yet: « coming soon ».
   const soon = [...new Set(members.map((u) => u.country).filter((c): c is string => !!c && c !== 'KW'))]
     .filter((cc) => !visible.some((g) => g.country === cc))

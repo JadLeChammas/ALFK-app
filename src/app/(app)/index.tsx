@@ -251,7 +251,8 @@ function RepereCard() {
 function LeadershipCard() {
   const { d, f } = useI18n();
   const { colors } = useTheme();
-  const members = useApprovedMembers();
+  // Honorary members are not counted in the figures.
+  const members = useApprovedMembers().filter((u) => u.role !== 'honneur');
   const countries = new Set(members.map((u) => u.country).filter(Boolean)).size;
   const alumni = members.filter((u) => u.role === 'alumni' || u.role === 'admin');
   return (

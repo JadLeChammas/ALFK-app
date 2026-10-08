@@ -58,7 +58,7 @@ function Credits() {
   const { d, f } = useI18n();
   const { height } = useWindowDimensions();
   const { bureau } = usePublicOverview();
-  const members = useApprovedMembers();
+  const members = useApprovedMembers().filter((u) => u.role !== 'honneur');
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<CreditsConfig | null>(null);
   const { config: saved } = useCreditsConfig(open);

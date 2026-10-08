@@ -22,11 +22,12 @@ export function CommunityStats() {
   const { d, f, country, formatNumber, lang } = useI18n();
   const { colors } = useTheme();
   const { isMobile } = useLayout();
-  const members = useApprovedMembers();
+  // Honorary members are not counted in the figures.
+  const members = useApprovedMembers().filter((u) => u.role !== 'honneur');
   const aliases = usePlaceAliases();
   const now = new Date();
 
-  const roleOrder: Role[] = ['alumni', 'honneur', 'admin', 'eleve']; // fixed order = fixed chart colors
+  const roleOrder: Role[] = ['alumni', 'admin', 'eleve']; // fixed order = fixed chart colors
   const byRole = roleOrder.map((r) => ({ label: d.roles[r], value: members.filter((u) => u.role === r).length }));
 
   const countryMap = new Map<string, number>();
