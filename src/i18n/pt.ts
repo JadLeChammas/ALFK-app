@@ -720,6 +720,7 @@ const pt: Dict = {
     done: 'Conta completa, bem-vindo!',
   },
   emails: {
+    oneMember: "Um membro", pickMember: "Escolher um membro", oneMemberHint: "Enviado só a este membro, mesmo que tenha recusado as novidades.", confirmOne: "Enviar este email a {name}?",
     nav: 'Emails',
     title: 'Emails',
     subtitle: 'Escreva aos membros e gerencie os emails automáticos (enviados com Brevo).',

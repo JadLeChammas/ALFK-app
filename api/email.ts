@@ -44,6 +44,8 @@ type Body = {
   u?: string;
   t?: string;
   audience?: string[];
+  /** An admin's email to one member (instead of `audience`). */
+  memberId?: string;
   subject?: string;
   body?: string;
   attachments?: { path: string; name: string }[];
@@ -159,7 +161,10 @@ async function sendUrgent(admin: SupabaseClient, me: Recipient, body: Body) {
   return json(200, { ok: true, sent });
 }
 
-/** An admin's email: to the chosen groups (members who accept the news; admins always), or a test. */
+/**
+ * An admin's email: to the chosen groups (members who accept the news; admins always), to one member
+ * (`memberId`: a personal email, sent even if they turned the news off), or a test.
+ */
 async function sendFromAdmin(admin: SupabaseClient, me: Recipient, body: Body) {
   const subject = (body.subject ?? '').trim();
   const text = (body.body ?? '').trim();
@@ -169,6 +174,10 @@ async function sendFromAdmin(admin: SupabaseClient, me: Recipient, body: Body) {
   let recipients: (Recipient & { approved?: boolean; marketing_opt_in?: boolean })[];
   if (body.test) {
     recipients = [me];
+  } else if (body.memberId) {
+    const { data } = await admin.from('profiles').select(COLUMNS).eq('approved', true).eq('id', body.memberId).maybeSingle();
+    if (!data) return json(400, { error: 'no_audience' });
+    recipients = [data as Recipient];
   } else {
     // Honorary members do not receive the admins' emails.
     const roles = (body.audience ?? []).filter((r) => ['alumni', 'eleve', 'admin'].includes(r));
@@ -194,7 +203,7 @@ async function sendFromAdmin(admin: SupabaseClient, me: Recipient, body: Body) {
     text: () => ({ subject, body: text }),
     signature,
     // News to members carry the unsubscribe link; admins and tests do not need it.
-    withUnsubscribe: (r) => !body.test && r.role !== 'admin',
+    withUnsubscribe: (r) => !body.test && !body.memberId && r.role !== 'admin',
     attachments,
   });
   if (!body.test) await admin.from('admin_logs').insert({ actor_id: me.id, action: 'send_email', target: subject.slice(0, 200), meta: { count: sent } });

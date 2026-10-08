@@ -720,6 +720,7 @@ const ja: Dict = {
     done: 'アカウント完成、ようこそ！',
   },
   emails: {
+    oneMember: "メンバー1人", pickMember: "メンバーを選ぶ", oneMemberHint: "ニュースを停止していても、このメンバーにのみ送信されます。", confirmOne: "{name} さんにこのメールを送信しますか？",
     nav: 'メール',
     title: 'メール',
     subtitle: 'メンバーへのメール作成と自動メールの管理（Brevo で送信）。',

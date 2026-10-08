@@ -721,6 +721,7 @@ const pirate: Dict = {
     done: 'Papers complete, welcome aboard!',
   },
   emails: {
+    oneMember: "One hand", pickMember: "Pick a crew member", oneMemberHint: "Sent to this hand only, even if they turned th' news off.", confirmOne: "Send this letter to {name}?",
     nav: 'Letters',
     title: 'Letters',
     subtitle: 'Write to th\' crew an\' manage th\' automatic letters (sent with Brevo).',

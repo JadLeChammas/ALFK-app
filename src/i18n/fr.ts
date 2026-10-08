@@ -718,6 +718,7 @@ const fr = {
     done: 'Compte complété, bienvenue !',
   },
   emails: {
+    oneMember: "Un membre", pickMember: "Choisir un membre", oneMemberHint: "Envoyé à ce membre seulement, même s'il a refusé les actualités.", confirmOne: "Envoyer cet email à {name} ?",
     nav: 'Emails',
     title: 'Emails',
     subtitle: 'Écrivez aux membres et gérez les emails automatiques (envoyés avec Brevo).',

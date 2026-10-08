@@ -704,6 +704,7 @@ const la: Dict = {
     done: 'Ratio completa, salve!',
   },
   emails: {
+    oneMember: "Unus socius", pickMember: "Socium elige", oneMemberHint: "Huic soli socio mittitur, etiam si nuntios recusavit.", confirmOne: "Hanc epistulam ad {name} mittere?",
     nav: 'Epistulae electronicae',
     title: 'Epistulae electronicae',
     subtitle: 'Sodalibus scribe et epistulas automaticas cura (per Brevo missas).',

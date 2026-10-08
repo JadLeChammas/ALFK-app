@@ -720,6 +720,7 @@ const zh: Dict = {
     done: '账户已完善，欢迎！',
   },
   emails: {
+    oneMember: "单个成员", pickMember: "选择成员", oneMemberHint: "仅发送给该成员，即使其已关闭新闻通知。", confirmOne: "将此邮件发送给 {name}？",
     nav: '邮件',
     title: '邮件',
     subtitle: '给会员写邮件并管理自动邮件（通过 Brevo 发送）。',

@@ -1141,7 +1141,7 @@ function useStoreValue() {
       return uploadMailAttachment(meId, doc);
     },
     /** An admin's email to groups of members (or a test to themself). Demo: nothing is sent. */
-    async sendEmail(input: { audience: Role[]; subject: string; body: string; attachments: { path: string; name: string }[]; test?: boolean }) {
+    async sendEmail(input: { audience: Role[]; memberId?: string; subject: string; body: string; attachments: { path: string; name: string }[]; test?: boolean }) {
       if (!supabase) return { ok: false, error: 'demo', sent: 0 };
       return callEmailApi<{ sent: number }>('send', input);
     },

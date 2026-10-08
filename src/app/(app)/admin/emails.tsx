@@ -6,9 +6,10 @@ import { AdminNav } from '@/components/AdminNav';
 import { useDialogs } from '@/components/ui/Dialogs';
 import { Badge, Button, Card, Chip, IconButton, Input, Row, Segmented } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
+import { Select } from '@/components/ui/Select';
 import { Txt } from '@/components/ui/Txt';
 import { DEFAULT_TEMPLATES, EMAIL_EVENTS, type EmailEvent, type EmailLocale, type EmailTemplates } from '@/data/emailTemplates';
-import { useStore } from '@/data/store';
+import { fullName, useStore } from '@/data/store';
 import type { Role } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { pickAttachment } from '@/lib/media';
@@ -61,7 +62,7 @@ function Notice({ icon, text, warn }: { icon: 'info' | 'alert-triangle'; text: s
   );
 }
 
-/** Writing an email to groups of members. */
+/** Writing an email to groups of members, or to one member. */
 function Compose() {
   const { d, f } = useI18n();
   const e = d.emails;
@@ -69,6 +70,18 @@ function Compose() {
   const { db, actions } = useStore();
   const { confirm, toast } = useDialogs();
   const [audience, setAudience] = useState<Role[]>(['alumni']);
+  // « Un membre »: one person, chosen in the list, instead of the groups.
+  const [single, setSingle] = useState(false);
+  const [memberId, setMemberId] = useState<string | undefined>(undefined);
+  const members = useMemo(
+    () =>
+      db.users
+        .filter((u) => u.approved)
+        .map((u) => ({ value: u.id, label: `${fullName(u)}${u.promo ? ` · ${u.promo}` : ''}`, name: fullName(u) }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    [db.users]
+  );
+  const member = members.find((m) => m.value === memberId);
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
   const [files, setFiles] = useState<{ path: string; name: string }[]>([]);
@@ -97,9 +110,10 @@ function Compose() {
   };
 
   const send = async (test: boolean) => {
-    if (!test && !(await confirm({ title: e.send, message: f(e.confirm, { n: count }), confirmLabel: e.send }))) return;
+    const message = single ? f(e.confirmOne, { name: member?.name ?? '' }) : f(e.confirm, { n: count });
+    if (!test && !(await confirm({ title: e.send, message, confirmLabel: e.send }))) return;
     setBusy(test ? 'test' : 'send');
-    const r = await actions.sendEmail({ audience, subject, body, attachments: files, test });
+    const r = await actions.sendEmail({ audience: single ? [] : audience, memberId: single ? memberId : undefined, subject, body, attachments: files, test });
     setBusy(null);
     if (!r.ok) return toast(r.error === 'demo' ? e.demo : `${d.auth.errors.unknown} (${r.error})`, 'danger');
     toast(test ? e.testSent : f(e.sent, { n: r.sent ?? 0 }), 'success');
@@ -116,9 +130,17 @@ function Compose() {
       <View style={{ gap: 8 }}>
         <Txt variant="smallStrong" color="textMuted">{e.to}</Txt>
         <Row gap={8} wrap>
-          {AUDIENCES.map((r) => <Chip key={r} label={d.roles[r]} active={audience.includes(r)} onPress={() => toggle(r)} />)}
+          {AUDIENCES.map((r) => <Chip key={r} label={d.roles[r]} active={!single && audience.includes(r)} onPress={() => { setSingle(false); toggle(r); }} />)}
+          <Chip label={e.oneMember} icon="user" active={single} onPress={() => setSingle(true)} />
         </Row>
-        <Txt variant="small" color="textSubtle">{f(e.recipients, { n: count })}</Txt>
+        {single ? (
+          <>
+            <Select value={memberId} onChange={setMemberId} options={members} placeholder={e.pickMember} searchable />
+            <Txt variant="small" color="textSubtle">{e.oneMemberHint}</Txt>
+          </>
+        ) : (
+          <Txt variant="small" color="textSubtle">{f(e.recipients, { n: count })}</Txt>
+        )}
       </View>
       <Input label={e.subject} value={subject} onChangeText={setSubject} />
       <Input label={e.message} value={body} onChangeText={setBody} multiline hint={e.messageHint} />
@@ -134,7 +156,7 @@ function Compose() {
       </View>
       <Row gap={10} wrap>
         <Button label={e.test} icon="eye" variant="secondary" onPress={() => send(true)} loading={busy === 'test'} disabled={!ready} />
-        <Button label={e.send} icon="send" onPress={() => send(false)} loading={busy === 'send'} disabled={!ready || !audience.length || count === 0} />
+        <Button label={e.send} icon="send" onPress={() => send(false)} loading={busy === 'send'} disabled={!ready || (single ? !member : !audience.length || count === 0)} />
       </Row>
     </Card>
   );

@@ -720,6 +720,7 @@ const en: Dict = {
     done: 'Account complete, welcome!',
   },
   emails: {
+    oneMember: "One member", pickMember: "Choose a member", oneMemberHint: "Sent to this member only, even if they turned the news off.", confirmOne: "Send this email to {name}?",
     nav: 'Emails',
     title: 'Emails',
     subtitle: 'Write to members and manage the automatic emails (sent with Brevo).',

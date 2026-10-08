@@ -703,6 +703,7 @@ const nl: Dict = {
     done: 'Account compleet, welkom!',
   },
   emails: {
+    oneMember: "Eén lid", pickMember: "Kies een lid", oneMemberHint: "Alleen naar dit lid gestuurd, ook als het geen nieuws wil ontvangen.", confirmOne: "Deze e-mail naar {name} sturen?",
     nav: 'E-mails',
     title: 'E-mails',
     subtitle: 'Schrijf de leden en beheer de automatische e-mails (verstuurd met Brevo).',

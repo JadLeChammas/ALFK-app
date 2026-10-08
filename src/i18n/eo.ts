@@ -703,6 +703,7 @@ const eo: Dict = {
     done: 'Konto kompleta, bonvenon!',
   },
   emails: {
+    oneMember: "Unu membro", pickMember: "Elektu membron", oneMemberHint: "Sendita nur al ĉi tiu membro, eĉ se ri malakceptis la novaĵojn.", confirmOne: "Sendi ĉi tiun retmesaĝon al {name}?",
     nav: 'Retmesaĝoj',
     title: 'Retmesaĝoj',
     subtitle: 'Skribu al la membroj kaj mastrumu la aŭtomatajn retmesaĝojn (senditajn per Brevo).',
