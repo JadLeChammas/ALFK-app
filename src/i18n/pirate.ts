@@ -192,7 +192,7 @@ const pirate: Dict = {
   },
   legal: {
     cgu: "Th' Ship's Articles", cguSoon: "Th' ship's articles be bein' inked an' will be nailed up here right soon.", updatedOn: "Last scrawled: {date}",
-    title: 'Articles o’ Agreement', sitemap: 'Map o’ the Ship', privacy: 'Code o’ Secrecy', privacyUpdated: 'Last amended: September 30, 2026', notFound: 'This page be lost at sea', notFoundSub: 'This page don’t exist or has sailed off.', notFoundJoke: 'Even the ship\'s camel be lost in the desert, arr… 🐪',
+    title: 'Articles o’ Agreement', sitemap: 'Map o’ the Ship', privacy: 'Code o’ Secrecy', privacyUpdated: 'Last amended: September 30, 2026', notFound: 'This page be lost at sea', notFoundSub: 'This page don’t exist or has sailed off.',
     goHome: 'Back to home port', contactTitle: 'Hail us', contactSub: 'A question? The Amicale crew will answer ye.',
     subject: 'Subject', message: 'Message', name: 'Name', sent: 'Message sent, thank ye kindly!', contactLead: 'Joinin’, shindigs, alliances or just a question: send word, an’ an officer o’ the crew will answer ye.', topic: 'Matter', topicMembership: 'Joinin’', topicEvents: 'Shindigs', topicPartnership: 'Alliance', topicOrientation: 'Headin’', topicOther: 'Other', replyTime: 'Answer within 48 bells', privateNote: 'Only the officers read yer message', otherWays: 'Other ways t’ hail us', wayBoardSub: 'The hands that sail the Amicale', wayJoinSub: 'Join the crew o’ old hands', wayAssociationSub: 'Our tale an’ our quest', sentTitle: 'Message sent', sentSub: 'Thankee! An officer will answer ye soon, by letter.', sendAnother: 'Send another message', messagePlaceholder: 'Tell us in a few words…', emailInvalid: 'That email be no good',
   },
@@ -937,9 +937,6 @@ const pirate: Dict = {
   fun: {
     minitelOn: 'Hailin\' 3615 ALFK… Ahoy, welcome to the Minitel!',
     minitelOff: 'Minitel cut loose.',
-    cinemaOn: 'Picture show time! 🍿',
-    cinemaOff: 'Lanterns back on.',
-    cinemaExit: 'THE END',
     flip: 'All hands upside down… like down under! 🙃',
   },
   legalAdmin: {

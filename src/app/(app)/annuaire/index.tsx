@@ -20,7 +20,7 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
-import { eggs, isSandWord, legendQuery, searchEgg } from '@/lib/eggs';
+import { eggs, legendQuery, searchEgg } from '@/lib/eggs';
 import { LegendCard } from '@/components/EasterEggs';
 
 const PREVIEW = 8;
@@ -114,7 +114,6 @@ export default function Directory() {
   };
 
   useEffect(() => {
-    if (isSandWord(q)) eggs.emit('sandstorm');
     const egg = searchEgg(q);
     if (egg) eggs.emit(egg);
   }, [q]);

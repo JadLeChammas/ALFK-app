@@ -189,7 +189,7 @@ const fr = {
   },
   legal: {
     cgu: "Conditions d'utilisation", cguSoon: "Les conditions générales d'utilisation sont en cours de rédaction et seront publiées ici très bientôt.", updatedOn: "Dernière mise à jour : {date}",
-    title: 'Mentions légales', sitemap: 'Plan du site', privacy: 'Politique de confidentialité', privacyUpdated: 'Dernière mise à jour : 30 septembre 2026', notFound: 'Page introuvable', notFoundSub: "Cette page n'existe pas ou a été déplacée.", notFoundJoke: 'Même le chameau s’est perdu dans le désert… 🐪',
+    title: 'Mentions légales', sitemap: 'Plan du site', privacy: 'Politique de confidentialité', privacyUpdated: 'Dernière mise à jour : 30 septembre 2026', notFound: 'Page introuvable', notFoundSub: "Cette page n'existe pas ou a été déplacée.",
     goHome: "Retour à l'accueil", contactTitle: 'Nous contacter', contactSub: "Une question ? L'équipe de l'Amicale vous répond.",
     subject: 'Objet', message: 'Message', name: 'Nom', sent: 'Message envoyé, merci !', contactLead: 'Adhésion, événements, partenariat ou simple question : écrivez-nous, un membre du bureau vous répond.', topic: 'Sujet', topicMembership: 'Adhésion', topicEvents: 'Événements', topicPartnership: 'Partenariat', topicOrientation: 'Orientation', topicOther: 'Autre', replyTime: 'Réponse sous 48 h', privateNote: 'Seul le bureau lit votre message', otherWays: 'Autres façons de nous joindre', wayBoardSub: 'Les membres qui font vivre l’Amicale', wayJoinSub: 'Rejoindre le réseau des anciens', wayAssociationSub: 'Notre histoire et nos missions', sentTitle: 'Message envoyé', sentSub: 'Merci ! Un membre du bureau vous répond très vite, par e-mail.', sendAnother: 'Envoyer un autre message', messagePlaceholder: 'Dites-nous en quelques mots…', emailInvalid: 'Adresse e-mail invalide',
   },
@@ -934,9 +934,6 @@ const fr = {
   fun: {
     minitelOn: 'Connexion au 3615 ALFK… Bienvenue sur le Minitel !',
     minitelOff: 'Déconnexion du Minitel.',
-    cinemaOn: 'Séance de cinéma ! 🍿',
-    cinemaOff: 'Lumières rallumées.',
-    cinemaExit: 'FIN',
     flip: 'Tout est à l’envers… comme en Australie ! 🙃',
   },
   legalAdmin: {

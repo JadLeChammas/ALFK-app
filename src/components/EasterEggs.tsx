@@ -16,12 +16,11 @@ import { Avatar, Badge, Tap } from './ui/primitives';
 import { Txt } from './ui/Txt';
 import { PirateHat } from '@/components/ui/Logo';
 
-/** Root layer: credits, sandstorm, baccalaureate banner. */
+/** Root layer: credits, baccalaureate banner. */
 export function EasterEggs() {
   return (
     <>
       <BacBanner />
-      <SandstormLayer />
       <Credits />
     </>
   );
@@ -50,50 +49,6 @@ function BacBanner() {
       </View>
     </View>
   );
-}
-
-// ——— Sandstorm ———
-
-const GRAINS = Array.from({ length: 70 }, (_, i) => ({ top: (i * 37) % 100, delay: (i * 53) % 900, size: 2 + (i % 4), speed: 700 + ((i * 97) % 900) }));
-
-/** « chameau », « 50°C », « shamal » in a search box: a few seconds of sandstorm. */
-export function SandstormLayer() {
-  const [on, setOn] = useState(0);
-  useEffect(() => eggs.on('sandstorm', () => setOn((n) => n + 1)), []);
-  useEffect(() => {
-    if (!on) return;
-    const id = setTimeout(() => setOn(0), 4200);
-    return () => clearTimeout(id);
-  }, [on]);
-  if (!on) return null;
-  return <Storm key={on} />;
-}
-
-function Storm() {
-  const { width } = useWindowDimensions();
-  const haze = useSharedValue(0);
-  useEffect(() => {
-    haze.value = withSequence(withTiming(0.55, { duration: 600 }), withDelay(2600, withTiming(0, { duration: 900 })));
-  }, [haze]);
-  const hazeStyle = useAnimatedStyle(() => ({ opacity: haze.value }));
-  return (
-    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1002, overflow: 'hidden' }}>
-      <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#C9A35B' }, hazeStyle]} />
-      {GRAINS.map((g, i) => (
-        <Grain key={i} {...g} width={width} />
-      ))}
-    </View>
-  );
-}
-
-function Grain({ top, delay, size, speed, width }: { top: number; delay: number; size: number; speed: number; width: number }) {
-  const x = useSharedValue(width + 20);
-  useEffect(() => {
-    x.value = withDelay(delay, withRepeat(withTiming(-40, { duration: speed, easing: Easing.linear }), 3, false));
-    return () => cancelAnimation(x);
-  }, [x, delay, speed]);
-  const style = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }, { translateY: Math.sin(x.value / 60) * 8 }] }));
-  return <Animated.View style={[{ position: 'absolute', left: 0, top: `${top}%`, width: size * 3, height: size, borderRadius: size, backgroundColor: '#8A6A2E', opacity: 0.8 }, style]} />;
 }
 
 // ——— End credits ———

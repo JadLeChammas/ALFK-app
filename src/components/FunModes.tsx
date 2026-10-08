@@ -1,26 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { useEffect } from 'react';
+import { Platform } from 'react-native';
 
 import { useDialogs } from '@/components/ui/Dialogs';
 import { useI18n } from '@/i18n';
 import { eggs } from '@/lib/eggs';
-import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
-import { Txt } from './ui/Txt';
 
 const web = Platform.OS === 'web' && typeof document !== 'undefined';
 
 /**
- * Three search-box surprises (the full list is in EASTER_EGGS.md):
+ * Two search-box surprises (the full list is in EASTER_EGGS.md):
  *   • « minitel » — the Minitel mode (green on black, ThemeProvider), announced by a modem's dial-up song;
- *   • « popcorn » — the cinema mode: black bars, sepia and film grain, until « Fin » or « popcorn » again;
  *   • « australie » — the whole site upside down for 10 seconds.
  */
 export function FunModes() {
   const { d } = useI18n();
   const { minitel, setMinitel } = useTheme();
   const { toast } = useDialogs();
-  const [cinema, setCinema] = useState(false);
 
   useEffect(
     () =>
@@ -31,17 +27,6 @@ export function FunModes() {
         if (on) playDialUp();
       }),
     [minitel, setMinitel, toast, d]
-  );
-
-  useEffect(
-    () =>
-      eggs.on('popcorn', () => {
-        setCinema((c) => {
-          toast(c ? d.fun.cinemaOff : d.fun.cinemaOn);
-          return !c;
-        });
-      }),
-    [toast, d]
   );
 
   useEffect(
@@ -60,64 +45,6 @@ export function FunModes() {
     [toast, d]
   );
 
-  // The cinema look: sepia on the whole page while it is on.
-  useEffect(() => {
-    if (!web || !cinema) return;
-    const root = document.documentElement;
-    root.style.filter = 'sepia(0.85) contrast(1.08) brightness(0.95)';
-    return () => {
-      root.style.filter = '';
-    };
-  }, [cinema]);
-
-  return cinema ? <Cinema onExit={() => setCinema(false)} /> : null;
-}
-
-/** Black bars top and bottom, flickering film grain and a « Fin » button. */
-function Cinema({ onExit }: { onExit: () => void }) {
-  const { d } = useI18n();
-  const { isMobile } = useLayout();
-  const bar = isMobile ? 46 : 72;
-  return (
-    <>
-      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: bar, backgroundColor: '#000', zIndex: 1000 }} />
-      <View pointerEvents="none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: bar, backgroundColor: '#000', zIndex: 1000 }} />
-      {web && (
-        <View
-          pointerEvents="none"
-          style={[
-            { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 999, opacity: 0.18 },
-            {
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-              animationName: 'lfk-grain',
-              animationDuration: '0.6s',
-              animationIterationCount: 'infinite',
-              animationTimingFunction: 'steps(4)',
-            } as object,
-          ]}
-        />
-      )}
-      {web && <GrainKeyframes />}
-      <Pressable
-        onPress={onExit}
-        accessibilityRole="button"
-        style={{ position: 'absolute', right: 16, bottom: (bar - 32) / 2, zIndex: 1001, paddingHorizontal: 14, paddingVertical: 6, borderRadius: 4, borderWidth: 1, borderColor: '#D9C9A3' }}>
-        <Txt style={{ color: '#F3E9D2', fontSize: 13, letterSpacing: 2 }}>{d.fun.cinemaExit}</Txt>
-      </Pressable>
-    </>
-  );
-}
-
-/** The grain's jitter, injected once. */
-function GrainKeyframes() {
-  useEffect(() => {
-    const id = 'lfk-grain-css';
-    if (document.getElementById(id)) return;
-    const style = document.createElement('style');
-    style.id = id;
-    style.textContent = '@keyframes lfk-grain { 0% { transform: translate(0,0) } 25% { transform: translate(-6px,4px) } 50% { transform: translate(5px,-5px) } 75% { transform: translate(-3px,-6px) } 100% { transform: translate(0,0) } }';
-    document.head.appendChild(style);
-  }, []);
   return null;
 }
 

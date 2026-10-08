@@ -191,7 +191,7 @@ const de: Dict = {
   },
   legal: {
     cgu: "Nutzungsbedingungen", cguSoon: "Die Nutzungsbedingungen werden gerade verfasst und hier in Kürze veröffentlicht.", updatedOn: "Zuletzt aktualisiert: {date}",
-    title: 'Impressum', sitemap: 'Sitemap', privacy: 'Datenschutzerklärung', privacyUpdated: 'Zuletzt aktualisiert: 30. September 2026', notFound: 'Seite nicht gefunden', notFoundSub: 'Diese Seite existiert nicht oder wurde verschoben.', notFoundJoke: 'Sogar das Kamel hat sich in der Wüste verirrt… 🐪',
+    title: 'Impressum', sitemap: 'Sitemap', privacy: 'Datenschutzerklärung', privacyUpdated: 'Zuletzt aktualisiert: 30. September 2026', notFound: 'Seite nicht gefunden', notFoundSub: 'Diese Seite existiert nicht oder wurde verschoben.',
     goHome: 'Zur Startseite', contactTitle: 'Kontakt', contactSub: 'Eine Frage? Das Team der Amicale antwortet Ihnen.',
     subject: 'Betreff', message: 'Nachricht', name: 'Name', sent: 'Nachricht gesendet, danke!', contactLead: 'Mitgliedschaft, Veranstaltungen, Partnerschaften oder einfach eine Frage: Schreiben Sie uns, ein Vorstandsmitglied antwortet Ihnen.', topic: 'Thema', topicMembership: 'Mitgliedschaft', topicEvents: 'Veranstaltungen', topicPartnership: 'Partnerschaft', topicOrientation: 'Orientierung', topicOther: 'Sonstiges', replyTime: 'Antwort innerhalb von 48 Std.', privateNote: 'Nur der Vorstand liest Ihre Nachricht', otherWays: 'Weitere Kontaktwege', wayBoardSub: 'Die Menschen hinter der Amicale', wayJoinSub: 'Dem Alumni-Netzwerk beitreten', wayAssociationSub: 'Unsere Geschichte und Aufgaben', sentTitle: 'Nachricht gesendet', sentSub: 'Danke! Ein Vorstandsmitglied antwortet Ihnen bald per E-Mail.', sendAnother: 'Weitere Nachricht senden', messagePlaceholder: 'Schreiben Sie uns in wenigen Worten…', emailInvalid: 'Ungültige E-Mail-Adresse',
   },
@@ -936,9 +936,6 @@ const de: Dict = {
   fun: {
     minitelOn: 'Verbinde mit 3615 ALFK… Willkommen beim Minitel!',
     minitelOff: 'Minitel getrennt.',
-    cinemaOn: 'Kinozeit! 🍿',
-    cinemaOff: 'Licht wieder an.',
-    cinemaExit: 'ENDE',
     flip: 'Alles steht kopf… wie in Australien! 🙃',
   },
   legalAdmin: {

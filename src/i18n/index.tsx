@@ -11,8 +11,6 @@ import es from './es';
 import fr, { type Dict } from './fr';
 import it from './it';
 import ja from './ja';
-import kwDict from './kw';
-import lbDict from './lb';
 import la from './la';
 import nl from './nl';
 import pirate from './pirate';
@@ -39,19 +37,15 @@ export const LANGUAGES = [
   // Latin (the Holy See's language: its flag) and Esperanto.
   { code: 'la', label: 'Latina', country: 'VA', locale: 'it-IT', ownDates: true },
   { code: 'eo', label: 'Esperanto', country: 'EO', locale: 'fr-FR', ownDates: true },
-  // Hidden: Lebanese in Arabizi, never listed in Settings: only ← → ← → ↑ ↓ ↑ ↓ L B (components/LebaneseMode.tsx).
-  { code: 'lb', label: 'Lebnene', country: 'LB', locale: 'fr-FR', ownDates: true, hidden: true },
-  // Hidden: Kuwaiti in Arabizi (→ ← → ← ↓ ↑ ↓ ↑ K W, components/HiddenLanguages.tsx).
-  { code: 'kw', label: 'Kuwaiti', country: 'KW', locale: 'en-GB', ownDates: true, hidden: true },
   // For fun: English as spoken aboard. `PIRATE` shows the Jolly Roger instead of a country flag.
   { code: 'pirate', label: 'Pirate', country: 'PIRATE', locale: 'en-GB' },
 ] as const;
 export type Lang = (typeof LANGUAGES)[number]['code'];
 
-const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, nl, ru, ar, ja, zh, la, eo, lb: lbDict, kw: kwDict, pirate };
+const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, nl, ru, ar, ja, zh, la, eo, pirate };
 
-/** The languages offered in Settings: never the hidden ones (only their secret code switches them). */
-export const visibleLanguages = () => LANGUAGES.filter((l) => !('hidden' in l));
+/** The languages offered in Settings. */
+export const visibleLanguages = () => LANGUAGES;
 export const isLang = (v: string | null): v is Lang => !!v && v in dicts;
 export const isRtl = (l: Lang) => l === 'ar';
 
@@ -73,7 +67,7 @@ type I18nValue = {
   country: (code?: string) => string;
   /**
    * Text the admins wrote in French with an optional English version (guides, « Le LFK », partners):
-   * French (and Lebanese, which mixes French in) reads the French; every other language reads the
+   * French reads the French; every other language reads the
    * English when it was written, otherwise the French.
    */
   bi: (fr?: string, en?: string) => string;
@@ -85,7 +79,7 @@ const I18nContext = createContext<I18nValue | null>(null);
 /** Sets the page language and reading direction (Arabic reads right to left). */
 function applyDocumentLanguage(lang: Lang) {
   if (Platform.OS === 'web' && typeof document !== 'undefined') {
-    document.documentElement.lang = lang === 'pirate' ? 'en' : lang === 'lb' ? 'apc' : lang === 'kw' ? 'afb' : lang;
+    document.documentElement.lang = lang === 'pirate' ? 'en' : lang;
     document.documentElement.dir = isRtl(lang) ? 'rtl' : 'ltr';
   } else if (I18nManager.isRTL !== isRtl(lang)) {
     // Native apps switch direction on the next launch.
@@ -177,7 +171,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       return formatDate(date, { year: date.getFullYear() !== now.getFullYear() });
     };
     const country = (code?: string) => countryLabel(code, lang);
-    const bi = (fr?: string, en?: string) => ((lang === 'fr' || lang === 'lb' ? fr?.trim() || en?.trim() : en?.trim() || fr?.trim()) ?? '');
+    const bi = (fr?: string, en?: string) => ((lang === 'fr' ? fr?.trim() || en?.trim() : en?.trim() || fr?.trim()) ?? '');
     return { lang, setLang, d, f, formatDate, formatTime, formatNumber, relative, country, bi, rtl: isRtl(lang) };
   }, [lang, setLang]);
 

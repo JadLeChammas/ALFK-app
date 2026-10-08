@@ -261,15 +261,15 @@ export function countryLabel(code: string | undefined, lang: string): string {
   const c = countryByCode(code);
   if (!c) return code ?? '';
   // Lebanese (Arabizi): the French names, as they are said in Lebanon.
-  if (lang === 'fr' || lang === 'lb') return c.fr;
+  if (lang === 'fr') return c.fr;
   // Kuwaiti (Arabizi): the English names, as they are said in Kuwait.
-  if (lang === 'en' || lang === 'pirate' || lang === 'kw') return c.en;
+  if (lang === 'en' || lang === 'pirate') return c.en;
   return NAMES[c.code]?.[lang as keyof (typeof NAMES)[string]] ?? intlName(c.code, lang) ?? c.en;
 }
 
 /** Every country, in alphabetical order for the reader's language (for lists and pickers). */
 export function sortedCountries(lang: string) {
-  const loc = lang === 'pirate' || lang === 'kw' ? 'en' : lang === 'lb' ? 'fr' : lang;
+  const loc = lang === 'pirate' ? 'en' : lang;
   return [...COUNTRIES].map((c) => ({ ...c, name: countryLabel(c.code, lang) })).sort((a, b) => a.name.localeCompare(b.name, loc));
 }
 

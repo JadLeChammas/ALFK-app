@@ -6,7 +6,7 @@ import type { User } from '@/data/types';
  * Easter eggs (the full list with how to find them is in EASTER_EGGS.md).
  * A tiny event bus lets a search box or the footer trigger an effect drawn at the root.
  */
-export type EggEvent = 'sandstorm' | 'credits' | 'future' | 'lebanon' | 'kuwait' | 'retro' | 'minitel' | 'popcorn' | 'australia';
+export type EggEvent = 'credits' | 'future' | 'retro' | 'minitel' | 'australia';
 
 const listeners = new Map<EggEvent, Set<() => void>>();
 /** Credits shown once instead of the saved ones (admin preview of unsaved changes). */
@@ -36,24 +36,14 @@ export const eggs = {
 
 const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
-/** « chameau », « 50°C » or « shamal » (the hot sand wind of Kuwait) → sandstorm. */
-export function isSandWord(q: string) {
-  const n = norm(q).replace(/\s+/g, '');
-  return n === 'chameau' || n === 'shamal' || n === '50°c' || n === '50c' || n === '50°';
-}
-
 /**
  * Words that switch a mode on (or off) when typed in a search box — on phones they replace the
- * keyboard codes. 2077 futuristic, 2003 retro, yalla Lebanese, chlonak Kuwaiti, minitel, popcorn
- * (cinema), australie (upside down for 10 s).
+ * keyboard codes. 2077 futuristic, 2003 retro, minitel, australie (upside down for 10 s).
  */
 const SEARCH_WORDS: Record<string, EggEvent> = {
   '2077': 'future',
   '2003': 'retro',
-  yalla: 'lebanon',
-  chlonak: 'kuwait',
   minitel: 'minitel',
-  popcorn: 'popcorn',
   australie: 'australia',
 };
 /** The mode a search box text switches, if it is one of the words above. */

@@ -12,8 +12,8 @@ import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
-import { eggs, isSandWord, legendQuery, searchEgg } from '@/lib/eggs';
-import { LegendCard, SandstormLayer } from '../EasterEggs';
+import { eggs, legendQuery, searchEgg } from '@/lib/eggs';
+import { LegendCard } from '../EasterEggs';
 import { Avatar, SearchBar, Tap, type IconName } from '../ui/primitives';
 import { Flag } from '../ui/Flag';
 import { Txt } from '../ui/Txt';
@@ -48,9 +48,8 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
     return { m, promos, countries, events, pubs };
   }, [q, members, db.events, db.publications, d, f, me]);
 
-  // Easter eggs: sandstorm words, and the creator's card.
+  // Easter eggs: mode words, and the legends' cards.
   useEffect(() => {
-    if (isSandWord(q)) eggs.emit('sandstorm');
     const egg = searchEgg(q);
     if (egg) eggs.emit(egg);
   }, [q]);
@@ -116,7 +115,6 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
             )}
           </ScrollView>
         </Pressable>
-        <SandstormLayer />
       </Pressable>
     </Modal>
   );

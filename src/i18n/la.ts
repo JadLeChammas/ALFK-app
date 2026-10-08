@@ -192,7 +192,7 @@ const la: Dict = {
   },
   legal: {
     cgu: "Condiciones usus", cguSoon: "Condiciones usus scribuntur et mox hic edentur.", updatedOn: "Novissime renovatum: {date}",
-    title: 'Notitia legalis', sitemap: 'Tabula situs', privacy: 'Ratio secreti', privacyUpdated: 'Ultima mutatio: XXX Septembris MMXXVI', notFound: 'Pagina non inventa', notFoundSub: 'Haec pagina non exstat aut alio translata est.', notFoundJoke: 'Etiam camelus in deserto erravit… 🐪',
+    title: 'Notitia legalis', sitemap: 'Tabula situs', privacy: 'Ratio secreti', privacyUpdated: 'Ultima mutatio: XXX Septembris MMXXVI', notFound: 'Pagina non inventa', notFoundSub: 'Haec pagina non exstat aut alio translata est.',
     goHome: 'Ad domum redi', contactTitle: 'Nobis scribe', contactSub: 'Quaestio? Turma Amicale tibi respondebit.',
     subject: 'Res', message: 'Nuntius', name: 'Nomen', sent: 'Nuntius missus, gratias!', contactLead: 'Sodalitas, eventus, societas aut simplex quaestio: nobis scribe et sodalis Collegii respondebit.', topic: 'Res', topicMembership: 'Sodalitas', topicEvents: 'Eventus', topicPartnership: 'Societas', topicOrientation: 'Consilium studiorum', topicOther: 'Aliud', replyTime: 'Responsum intra XLVIII horas', privateNote: 'Solum Collegium nuntium tuum legit', otherWays: 'Aliae viae ad nos', wayBoardSub: 'Ei qui Amicale regunt', wayJoinSub: 'Ad societatem alumnorum accede', wayAssociationSub: 'Historia et propositum nostrum', sentTitle: 'Nuntius missus', sentSub: 'Gratias! Sodalis Collegii mox tibi per epistulam respondebit.', sendAnother: 'Alium nuntium mitte', messagePlaceholder: 'Paucis verbis narra…', emailInvalid: 'Inscriptio electronica non valet',
   },
@@ -937,9 +937,6 @@ const la: Dict = {
   fun: {
     minitelOn: 'Conectio ad 3615 ALFK… Salve in Minitel!',
     minitelOff: 'Minitel disiunctum.',
-    cinemaOn: 'Tempus cinematographicum! 🍿',
-    cinemaOff: 'Lumina iterum accensa.',
-    cinemaExit: 'FINIS',
     flip: 'Omnia inversa sunt… ut in Australia! 🙃',
   },
   legalAdmin: {

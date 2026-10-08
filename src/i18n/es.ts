@@ -191,7 +191,7 @@ const es: Dict = {
   },
   legal: {
     cgu: "Condiciones de uso", cguSoon: "Las condiciones de uso se están redactando y se publicarán aquí muy pronto.", updatedOn: "Última actualización: {date}",
-    title: 'Aviso legal', sitemap: 'Mapa del sitio', privacy: 'Política de privacidad', privacyUpdated: 'Última actualización: 30 de septiembre de 2026', notFound: 'Página no encontrada', notFoundSub: 'Esta página no existe o se ha movido.', notFoundJoke: 'Hasta el camello se perdió en el desierto… 🐪',
+    title: 'Aviso legal', sitemap: 'Mapa del sitio', privacy: 'Política de privacidad', privacyUpdated: 'Última actualización: 30 de septiembre de 2026', notFound: 'Página no encontrada', notFoundSub: 'Esta página no existe o se ha movido.',
     goHome: 'Volver al inicio', contactTitle: 'Contáctanos', contactSub: '¿Una pregunta? El equipo de la Amicale te responde.',
     subject: 'Asunto', message: 'Mensaje', name: 'Nombre', sent: 'Mensaje enviado, ¡gracias!', contactLead: 'Afiliación, eventos, colaboraciones o una simple pregunta: escríbenos y un miembro de la junta te responderá.', topic: 'Asunto', topicMembership: 'Afiliación', topicEvents: 'Eventos', topicPartnership: 'Colaboración', topicOrientation: 'Orientación', topicOther: 'Otro', replyTime: 'Respuesta en 48 h', privateNote: 'Solo la junta lee tu mensaje', otherWays: 'Otras formas de contactarnos', wayBoardSub: 'Quienes dan vida a la Amicale', wayJoinSub: 'Unirse a la red de antiguos alumnos', wayAssociationSub: 'Nuestra historia y misión', sentTitle: 'Mensaje enviado', sentSub: '¡Gracias! Un miembro de la junta te responderá pronto por correo.', sendAnother: 'Enviar otro mensaje', messagePlaceholder: 'Cuéntanos en pocas palabras…', emailInvalid: 'Correo electrónico no válido',
   },
@@ -936,9 +936,6 @@ const es: Dict = {
   fun: {
     minitelOn: 'Conectando al 3615 ALFK… ¡Bienvenido al Minitel!',
     minitelOff: 'Minitel desconectado.',
-    cinemaOn: '¡Hora de cine! 🍿',
-    cinemaOff: 'Se encienden las luces.',
-    cinemaExit: 'FIN',
     flip: 'Todo está al revés… ¡como en Australia! 🙃',
   },
   legalAdmin: {

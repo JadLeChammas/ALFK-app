@@ -191,7 +191,7 @@ const eo: Dict = {
   },
   legal: {
     cgu: "Uzokondiĉoj", cguSoon: "La uzokondiĉoj estas verkataj kaj baldaŭ aperos ĉi tie.", updatedOn: "Laste ĝisdatigita: {date}",
-    title: 'Juraj informoj', sitemap: 'Retejmapo', privacy: 'Privateca politiko', privacyUpdated: 'Laste ĝisdatigita: 30 septembro 2026', notFound: 'Paĝo ne trovita', notFoundSub: 'Ĉi tiu paĝo ne ekzistas aŭ estis movita.', notFoundJoke: 'Eĉ la kamelo perdiĝis en la dezerto… 🐪',
+    title: 'Juraj informoj', sitemap: 'Retejmapo', privacy: 'Privateca politiko', privacyUpdated: 'Laste ĝisdatigita: 30 septembro 2026', notFound: 'Paĝo ne trovita', notFoundSub: 'Ĉi tiu paĝo ne ekzistas aŭ estis movita.',
     goHome: 'Reen al la hejmo', contactTitle: 'Kontaktu nin', contactSub: 'Ĉu demando? La teamo de la Amicale respondos al vi.',
     subject: 'Temo', message: 'Mesaĝo', name: 'Nomo', sent: 'Mesaĝo sendita, dankon!', contactLead: 'Membreco, eventoj, partnereco aŭ simpla demando: skribu al ni kaj estrarano respondos.', topic: 'Temo', topicMembership: 'Membreco', topicEvents: 'Eventoj', topicPartnership: 'Partnereco', topicOrientation: 'Studorientiĝo', topicOther: 'Alia', replyTime: 'Respondo ene de 48 h', privateNote: 'Nur la estraro legas vian mesaĝon', otherWays: 'Aliaj manieroj kontakti nin', wayBoardSub: 'La homoj, kiuj gvidas la Amicale', wayJoinSub: 'Aliĝu al la reto de eksaj lernantoj', wayAssociationSub: 'Nia historio kaj nia misio', sentTitle: 'Mesaĝo sendita', sentSub: 'Dankon! Estrarano baldaŭ respondos al vi retpoŝte.', sendAnother: 'Sendi alian mesaĝon', messagePlaceholder: 'Rakontu al ni per kelkaj vortoj…', emailInvalid: 'Nevalida retpoŝtadreso',
   },
@@ -936,9 +936,6 @@ const eo: Dict = {
   fun: {
     minitelOn: 'Konektiĝas al 3615 ALFK… Bonvenon ĉe la Minitel!',
     minitelOff: 'Minitel malkonektita.',
-    cinemaOn: 'Kinotempo! 🍿',
-    cinemaOff: 'La lumoj reŝaltiĝis.',
-    cinemaExit: 'FINO',
     flip: 'Ĉio estas renversita… kiel en Aŭstralio! 🙃',
   },
   legalAdmin: {
