@@ -10,13 +10,14 @@ Des surprises cachées dans le site. Chut, ne le dites pas à tout le monde 🤫
 | 4 | **Anniversaire** : des ballons s'envolent sur le profil et le nom scintille en doré ✨ dans l'annuaire | Automatique **le jour de votre anniversaire**. Visible par les autres seulement si vous avez choisi d'afficher votre anniversaire. |
 | 5 | **Jour du bac** : bannière « Bon courage aux Terminales ! » | Automatique le jour d'une date du calendrier dont le titre contient « **Bac** » (un admin ajoute par exemple « Bac : épreuve de philosophie » à la bonne date). |
 | 6 | **Développeurs légendaires** : une fiche spéciale avec un badge 🏆 | Rechercher le nom complet « **Jad El Chammas** » ou « **Anwar Al Bitar** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
+| 6 quater | **Fondateur légendaire** : une fiche spéciale avec une couronne 👑, « Fondateur et président de l'Amicale » | Rechercher le nom complet « **John El Hajj** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 6 bis | **Ambassadeur légendaire** : une fiche spéciale avec un badge 🎖️ | Rechercher le nom complet « **Adriano Sfeir** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 6 ter | **Pirate légendaire** : une fiche spéciale, avec un chapeau de pirate sur sa photo 🏴‍☠️ | Rechercher le nom complet « **Tatiana El Hajj** » dans la recherche (Ctrl K / la loupe) ou dans l'Annuaire. |
 | 7 | **Mode futuriste « ALFK 2077 »** : couleurs néon (cyan et violet), polices futuristes, grille lumineuse, ligne de balayage et badge « SYSTÈME 2077 » | Au clavier : **↓ ↓ ↑ ↑ → ← → ← Y Z**. Sur téléphone : taper « **2077** » dans la recherche ou l'Annuaire. Même code (ou bouton « Quitter 2077 ») pour revenir. |
 | 8 | **Mode Minitel (bac 1990)** 📟 : tout passe en vert phosphore sur fond noir, police pixelisée, photos teintées en vert, et le bruit d'un modem qui se connecte au « 3615 ALFK » | Taper « **minitel** » dans la recherche ou l'Annuaire. Le retaper pour revenir. |
 | 9 | **Le site à l'envers** 🙃 : tout le site se retourne pendant 10 secondes, « comme en Australie » | Taper « **australie** » dans la recherche ou l'Annuaire. |
 
-Les badges des légendes (🏆, 🎖️, 🏴‍☠️) sont aussi visibles sur leur profil : leur propre page et leur fiche membre.
+Les badges des légendes (👑, 🏆, 🎖️, 🏴‍☠️) sont aussi visibles sur leur profil : leur propre page et leur fiche membre.
 
 ## Pour les développeurs
 

@@ -52,17 +52,18 @@ export const searchEgg = (q: string): EggEvent | undefined => SEARCH_WORDS[norm(
 /**
  * Legends: searching one of these full names (any case, accents or spacing) shows their special card —
  * the site's developers, the Amicale's legendary ambassador and its legendary pirate (a pirate hat on
- * her photo) — and their badge shows on their profile. `kind` picks the texts (`eggs.legends`);
+ * her photo), the Amicale's founder and president — and their badge shows on their profile. `kind` picks the texts (`eggs.legends`);
  * `aliases`: other spellings of the name.
  */
-export const LEGENDS: readonly { name: string; kind: 'developer' | 'ambassador' | 'pirate'; emoji: string; aliases?: string[] }[] = [
+export const LEGENDS: readonly { name: string; kind: 'founder' | 'developer' | 'ambassador' | 'pirate'; emoji: string; aliases?: string[] }[] = [
+  { name: 'John El Hajj', kind: 'founder', emoji: '👑' },
   { name: 'Jad El Chammas', kind: 'developer', emoji: '🏆' },
   { name: 'Anwar Al Bitar', kind: 'developer', emoji: '🏆', aliases: ['Anwar Bitar', 'Anwar Al-Bitar'] },
   { name: 'Adriano Sfeir', kind: 'ambassador', emoji: '🎖️' },
   { name: 'Tatiana El Hajj', kind: 'pirate', emoji: '🏴‍☠️' },
 ];
 export type Legend = (typeof LEGENDS)[number];
-export const CREATOR = LEGENDS[0].name;
+export const CREATOR = 'Jad El Chammas';
 /** Names compared without case, accents, spaces or hyphens. */
 const key = (s: string) => norm(s).replace(/[\s-]+/g, '');
 const isLegend = (l: Legend, s: string) => [l.name, ...(l.aliases ?? [])].some((n) => key(n) === key(s));

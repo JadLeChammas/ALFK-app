@@ -183,13 +183,14 @@ export function LegendBadge({ user }: { user: Pick<User, 'firstName' | 'lastName
   const { d } = useI18n();
   const legend = legendOf(user);
   if (!legend) return null;
-  const label = { developer: d.eggs.legendBadge, ambassador: d.eggs.ambassadorBadge, pirate: d.eggs.pirateBadge }[legend.kind];
+  const label = { founder: d.eggs.founderBadge, developer: d.eggs.legendBadge, ambassador: d.eggs.ambassadorBadge, pirate: d.eggs.pirateBadge }[legend.kind];
   return <Badge label={`${legend.emoji} ${label}`} tone="warning" />;
 }
 
 export function LegendCard({ legend, onOpen }: { legend: Legend; onOpen: (href: string) => void }) {
   const { d } = useI18n();
   const t = {
+    founder: { title: d.eggs.founderTitle, text: d.eggs.founderText, badge: d.eggs.founderBadge },
     developer: { title: d.eggs.legendTitle, text: d.eggs.legendText, badge: d.eggs.legendBadge },
     ambassador: { title: d.eggs.ambassadorTitle, text: d.eggs.ambassadorText, badge: d.eggs.ambassadorBadge },
     pirate: { title: d.eggs.pirateTitle, text: d.eggs.pirateText, badge: d.eggs.pirateBadge },
