@@ -91,7 +91,7 @@ export default function Pending() {
             <Feather name="alert-triangle" size={16} color={colors.warning} />
             <Txt variant="smallStrong" style={{ flex: 1 }}>{d.proof.pendingHint}</Txt>
           </Row>
-          <ProofPicker value={doc} onChange={setDoc} />
+          <ProofPicker value={doc} onChange={setDoc} student={me?.role === 'eleve' ? { grade: me.grade, name: `${me.firstName} ${me.lastName}` } : undefined} />
           <Button label={d.proof.send} icon="send" full size="lg" onPress={send} disabled={!doc} loading={busy} />
         </View>
       )}

@@ -9,6 +9,7 @@ import { Txt } from '@/components/ui/Txt';
 import { countryByCode } from '@/data/countries';
 import { fullName, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
+import { schoolYear } from '@/lib/schoolYear';
 import { awaitsApproval } from '@/data/members';
 
 export default function Approvals() {
@@ -74,6 +75,9 @@ export default function Approvals() {
                     <Badge label={d.proof.none} tone="danger" icon="alert-triangle" />
                   )}
                 </Row>
+                {u.role === 'eleve' && (
+                  <Txt variant="small" color="textMuted">{f(d.proof.adminCheck, { year: schoolYear(), grade: u.grade ? d.grade[u.grade] : '?', name: fullName(u) })}</Txt>
+                )}
                 <View style={{ flex: 1 }} />
                 <Row gap={10}>
                   <Button

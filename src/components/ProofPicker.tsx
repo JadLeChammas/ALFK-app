@@ -4,19 +4,43 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { checkPicked, type PickedDoc } from '@/data/remote';
+import type { Grade } from '@/data/types';
 import { useI18n } from '@/i18n';
 import { isFileRejected, PROOF_TYPES } from '@/lib/fileSafety';
 import { pickProof } from '@/lib/media';
+import { schoolYear } from '@/lib/schoolYear';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Button, Row } from './ui/primitives';
 import { Txt } from './ui/Txt';
 
 /**
  * Proof of schooling at the LFK (report card, school certificate, attestation or a simple photo).
- * Required to sign up: an admin checks it before approving the account.
+ * Required to sign up: an admin checks it before approving the account. Pupils (`student`) need an
+ * official document of the current school year showing their class and their name.
  */
-export function ProofPicker({ value, onChange, error, required }: { value: PickedDoc | null; onChange: (doc: PickedDoc | null) => void; error?: boolean; required?: boolean }) {
-  const { d } = useI18n();
+export function ProofPicker({
+  value,
+  onChange,
+  error,
+  required,
+  student,
+}: {
+  value: PickedDoc | null;
+  onChange: (doc: PickedDoc | null) => void;
+  error?: boolean;
+  required?: boolean;
+  student?: { grade?: Grade | ''; name?: string };
+}) {
+  const { d, f } = useI18n();
+  const year = schoolYear();
+  const title = student ? f(d.proof.studentTitle, { year }) : d.proof.title;
+  const checks = student
+    ? [
+        f(d.proof.checkYear, { year }),
+        student.grade ? f(d.proof.checkGrade, { grade: d.grade[student.grade] }) : d.proof.checkGradeAny,
+        student.name?.trim() ? f(d.proof.checkName, { name: student.name.trim() }) : d.proof.checkNameAny,
+      ]
+    : [];
   const { colors } = useTheme();
   // A refused file: too large, not an image or a PDF, or contents that do not match its name.
   const [rejected, setRejected] = useState<'file_type' | 'file_too_large' | null>(null);
@@ -52,8 +76,14 @@ export function ProofPicker({ value, onChange, error, required }: { value: Picke
             <Feather name={value ? 'check' : 'file-plus'} size={20} color={value ? '#fff' : colors.primary} />
           </View>
           <View style={{ flex: 1, gap: 4 }}>
-            <Txt variant="bodyStrong">{required ? `${d.proof.title} *` : d.proof.title}</Txt>
-            <Txt variant="small" color="textMuted">{d.proof.sub}</Txt>
+            <Txt variant="bodyStrong">{required ? `${title} *` : title}</Txt>
+            <Txt variant="small" color="textMuted">{student ? d.proof.studentSub : d.proof.sub}</Txt>
+            {checks.map((c) => (
+              <Row key={c} gap={6} style={{ alignItems: 'flex-start' }}>
+                <Feather name="check-circle" size={13} color={colors.primary} style={{ marginTop: 3 }} />
+                <Txt variant="smallStrong" style={{ flex: 1 }}>{c}</Txt>
+              </Row>
+            ))}
           </View>
         </Row>
         {value && (

@@ -321,7 +321,7 @@ export default function SignUp() {
             />
           )}
           <Input label={`${d.profile.bio} (${d.common.optional})`} value={bio} onChangeText={setBio} multiline maxLength={600} />
-          <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} required />
+          <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} required student={form.role === 'eleve' ? { grade: form.grade, name: `${form.firstName} ${form.lastName}` } : undefined} />
           <Row gap={8} style={{ alignItems: 'flex-start' }}>
             <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />
             <Txt variant="small" color="textSubtle" style={{ flex: 1 }}>{d.proof.privacy}</Txt>

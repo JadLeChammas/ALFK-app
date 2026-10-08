@@ -196,6 +196,7 @@ const ar: Dict = {
     subject: 'الموضوع', message: 'الرسالة', name: 'الاسم', sent: 'تم إرسال الرسالة، شكرًا!', contactLead: 'العضوية أو الفعاليات أو الشراكات أو مجرد سؤال: راسلونا وسيرد عليكم أحد أعضاء المكتب.', topic: 'الموضوع', topicMembership: 'العضوية', topicEvents: 'الفعاليات', topicPartnership: 'شراكة', topicOrientation: 'التوجيه', topicOther: 'أخرى', replyTime: 'الرد خلال 48 ساعة', privateNote: 'لا يقرأ رسالتك إلا المكتب', otherWays: 'طرق أخرى للتواصل معنا', wayBoardSub: 'الأعضاء الذين يحيون الجمعية', wayJoinSub: 'انضم إلى شبكة الخريجين', wayAssociationSub: 'تاريخنا ومهامنا', sentTitle: 'تم إرسال الرسالة', sentSub: 'شكرًا! سيرد عليك أحد أعضاء المكتب قريبًا عبر البريد الإلكتروني.', sendAnother: 'إرسال رسالة أخرى', messagePlaceholder: 'أخبرنا ببضع كلمات…', emailInvalid: 'عنوان بريد إلكتروني غير صالح',
   },
   proof: {
+    studentTitle: "شهادة قيد {year}", studentSub: "إلزامي للتلاميذ: وثيقة رسمية من الثانوية (شهادة قيد أو كشف علامات) للسنة الحالية، يظهر فيها:", checkYear: "السنة الدراسية {year}", checkGrade: "الصف: {grade}", checkGradeAny: "صفك (Seconde أو Première أو Terminale)", checkName: "اسم التلميذ: {name}", checkNameAny: "اسمك الكامل", adminCheck: "للتحقق في الوثيقة: السنة {year} · {grade} · {name}",
     sending: 'جارٍ إرسال الإثبات…',
     title: 'إثبات الدراسة في الثانوية الفرنسية', sub: 'إلزامي: كشف درجات أو شهادة مدرسية أو إفادة أو مجرد صورة تثبت دراستك في الثانوية.', pick: 'اختر ملفًا',
     replace: 'تغيير الملف', formats: 'صورة أو PDF · بحد أقصى 10 ميغابايت', tooBig: 'الملف كبير جدًا: الحد الأقصى 10 ميغابايت.',
