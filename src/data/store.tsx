@@ -515,6 +515,15 @@ function useStoreValue() {
       await reload();
       return { ok: true };
     },
+    /**
+     * A member waiting for approval: the « inscription reçue » email and the alert to the Amicale's inbox,
+     * in case they did not leave right after the sign-up (connection lost, page closed…). The server
+     * sends them only once per account.
+     */
+    async ensureSignupNotified(u: User) {
+      if (!supabase || !u || u.approved || u.createdByAdmin) return;
+      await callEmailApi('signup-notify', { userId: u.id, email: u.email, locale: u.locale ?? 'fr', marketing: u.marketingOptIn ?? true }, false);
+    },
     async resendEmailCode(email: string): Promise<Result> {
       if (!supabase) return { ok: true };
       const { error: e } = await supabase.auth.resend({ type: 'signup', email: email.trim() });

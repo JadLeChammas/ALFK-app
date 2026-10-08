@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
 import { AuthFrame } from '@/components/AuthFrame';
@@ -19,6 +19,11 @@ export default function Pending() {
   const { colors } = useTheme();
   const { me, actions, sendingSignupFiles } = useStore();
   const { toast } = useDialogs();
+  // If the alert to the Amicale did not leave right after the sign-up, it leaves now (once per account).
+  useEffect(() => {
+    if (me && !sendingSignupFiles) void actions.ensureSignupNotified(me);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [me?.id, sendingSignupFiles]);
   const [doc, setDoc] = useState<PickedDoc | null>(null);
   const [busy, setBusy] = useState(false);
   const [cropping, setCropping] = useState<PickedImage | null>(null);
