@@ -169,7 +169,7 @@ export function createSeed(now = new Date()): Db {
   const jad = add({
     firstName: 'Jad', lastName: 'El Chammas', gender: 'M', role: 'admin', fonction: 'Président', promo: 2020, school: 'INSA Lyon',
     city: 'Paris', country: 'FR', phone: '+33 612345678', birthDate: '2002-03-12', avatar: portrait('M', 32),
-    email: DEMO_ACCOUNTS.admin, createdAt: ago(720), lastActiveAt: ago(0),
+    email: DEMO_ACCOUNTS.admin, createdAt: ago(720), lastActiveAt: ago(0), mhAccess: true,
     bio: "Ingénieur en informatique, j'anime la plateforme de l'Amicale.", nationalities: ['FR', 'LB'],
   });
   const sarah = add({ firstName: 'Sarah', lastName: 'Martin', gender: 'F', role: 'alumni', promo: 2020, school: 'Sciences Po', city: 'Paris', country: 'FR', birthDate: birthdayIn(2, 2002), avatar: portrait('F', 44), email: DEMO_ACCOUNTS.member, lastActiveAt: ago(0.1),
@@ -209,7 +209,7 @@ export function createSeed(now = new Date()): Db {
     city: 'Koweït City', country: 'KW', birthDate: '1968-02-11', avatar: portrait('M', 67), email: DEMO_ACCOUNTS.direction,
     bio: "Proviseur du Lycée Français du Koweït. Heureux de suivre le parcours de nos anciens élèves à travers le monde.",
   });
-  add({ firstName: 'Samira', lastName: 'Aoun', gender: 'F', role: 'honneur', fonction: 'Assistante de direction', school: 'Lycée Français du Koweït', city: 'Koweït City', country: 'KW', birthDate: '1976-08-03', avatar: portrait('F', 58) });
+  const samira = add({ firstName: 'Samira', lastName: 'Aoun', gender: 'F', role: 'honneur', fonction: 'Assistante de direction', school: 'Lycée Français du Koweït', city: 'Koweït City', country: 'KW', birthDate: '1976-08-03', avatar: portrait('F', 58) });
 
   // Generated alumni and students.
   for (let i = 0; i < 78; i++) {
@@ -337,6 +337,11 @@ export function createSeed(now = new Date()): Db {
     lines.forEach(([from, text, daysAgo], i) => messages.push({ id: `${id}m${i}`, conversationId: id, senderId: from, text, createdAt: ago(daysAgo) }));
     return id;
   };
+  // Two honorary members: their conversation goes to « Messages MH ».
+  convo(proviseur.id, samira.id, [
+    [samira.id, 'Monsieur le Proviseur, la réunion avec l’Amicale est confirmée pour jeudi.', 1.5],
+    [proviseur.id, 'Parfait, merci Samira. Je préparerai les chiffres du bac.', 1.4],
+  ]);
   convo(jad.id, sarah.id, [
     [sarah.id, 'Salut Jad ! Comment ça va ?', 0.08],
     [jad.id, 'Ça va bien et toi ? 😊', 0.07],
@@ -431,6 +436,9 @@ export function createSeed(now = new Date()): Db {
     institutions, keyDates, questions, answers, circleMessages: [
       { id: 'cm1', authorId: proviseur.id, text: 'Bienvenue dans le cercle des membres d’honneur ! Cet espace nous permet d’échanger entre nous et avec le bureau de l’Amicale.', createdAt: ago(6) },
       { id: 'cm2', authorId: jad.id, text: 'Merci Monsieur le Proviseur. N’hésitez pas à nous proposer des idées d’événements avec le lycée.', createdAt: ago(5.5) },
+    ],
+    circlePosts: [
+      { id: 'cpost1', authorId: proviseur.id, title: 'Forum des métiers : appel aux membres d’honneur', body: 'Le lycée organise son forum des métiers en mars. Nous cherchons des intervenants pour présenter leur parcours aux élèves de Première et de Terminale.\n\nFaites-moi signe si vous êtes disponibles.', createdAt: ago(3) },
     ],
     // Clubs: one running (Sarah manages it, Jad is a member, Léa asked to join), one waiting for the admins.
     clubs: [

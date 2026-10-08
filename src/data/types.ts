@@ -24,6 +24,8 @@ export type User = {
   password: string;
   /** Restricted by an admin: reads everything, writes nothing, nobody can message them (migration 040). */
   restricted?: boolean;
+  /** An admin with access to the honorary members' space (section « MH », migration 052). */
+  mhAccess?: boolean;
   gender: Gender;
   role: Role;
   approved: boolean;
@@ -224,6 +226,9 @@ export type Answer = { id: string; questionId: string; authorId?: string; text: 
 /** A message in the honorary members' group discussion. */
 export type CircleMessage = { id: string; authorId?: string; text: string; createdAt: string };
 
+/** A private publication of the honorary members' space (migration 052). */
+export type CirclePost = { id: string; authorId?: string; title: string; body: string; image?: string; createdAt: string };
+
 /**
  * An urgent message from the admins to one member (migration 039): shown in a pop-up, on every page,
  * until the member clicks « J'ai compris ». `reasons`: ready-made problems (see data/urgentReasons.ts),
@@ -264,6 +269,7 @@ export type Db = {
   questions: Question[];
   answers: Answer[];
   circleMessages: CircleMessage[];
+  circlePosts: CirclePost[];
   clubs: Club[];
   clubMembers: ClubMember[];
   clubPosts: ClubPost[];

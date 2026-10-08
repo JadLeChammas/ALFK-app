@@ -70,6 +70,7 @@ export default function EditProfile() {
   const [pwError, setPwError] = useState<string | null>(null);
 
   const [fieldError, setFieldError] = useState<'birth_date' | 'phone' | null>(null);
+  const [fonction, setFonction] = useState(me.fonction ?? '');
   const mandatory = requiresContact(me.role);
 
   const save = () => {
@@ -96,6 +97,7 @@ export default function EditProfile() {
       mentor: graduate ? mentor : undefined,
       situation: graduate ? situation : undefined,
       employer: working || honorary ? form.employer.trim() || undefined : undefined,
+      ...(honorary && fonction.trim() ? { fonction: fonction.trim() } : {}),
       jobTitle: working ? form.jobTitle.trim() || undefined : undefined,
       nationalities: nationalities.length ? nationalities : undefined,
       otherSchools: me.role !== 'eleve' && otherSchools.length ? otherSchools : undefined,
@@ -172,6 +174,8 @@ export default function EditProfile() {
               <Input label={d.auth.firstName} value={form.firstName} onChangeText={(v) => set('firstName')(properFirstName(v))} maxLength={80} containerStyle={{ flex: 1 }} />
               <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
             </FieldRow>
+            {/* Honorary members give neither a phone number nor a date of birth. */}
+            {!honorary && (
             <FieldRow>
               <PhoneField
                 label={d.profile.phone}
@@ -190,6 +194,8 @@ export default function EditProfile() {
                 error={fieldError === 'birth_date' ? d.auth.errors.birth_date : undefined}
               />
             </FieldRow>
+            )}
+            {honorary && <Input label={d.mh.fonction} icon="briefcase" value={fonction} onChangeText={setFonction} placeholder={d.mh.fonctionPlaceholder} maxLength={80} />}
             {graduate && (
               <View style={{ gap: 8 }}>
                 <Txt variant="smallStrong" color="textMuted">{d.situation.label}</Txt>

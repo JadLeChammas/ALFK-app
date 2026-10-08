@@ -14,7 +14,7 @@ import type {
   KeyDate,
   Question,
   Answer,
-  CircleMessage, UrgentMessage,
+  CircleMessage, CirclePost, UrgentMessage,
   Club,
   ClubMember,
   ClubPost,
@@ -32,7 +32,7 @@ const opt = <T,>(v: T | null | undefined) => (v === null || v === undefined ? un
 
 export const newId = () => Crypto.randomUUID();
 
-export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], clubs: [], clubMembers: [], clubPosts: [], settings: {} };
+export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], circlePosts: [], clubs: [], clubMembers: [], clubPosts: [], settings: {} };
 
 
 export const toUser = (r: Row): User => ({
@@ -59,6 +59,7 @@ export const toUser = (r: Row): User => ({
   needsCompletion: !!r.needs_completion,
   emailVerified: r.email_verified === undefined ? undefined : !!r.email_verified,
   restricted: !!r.restricted,
+  mhAccess: !!r.mh_access,
   marketingOptIn: !!r.marketing_opt_in,
   locale: r.locale === 'en' ? 'en' : 'fr',
   fieldOfStudy: opt(r.field_of_study),
@@ -136,6 +137,7 @@ export const toClub = (r: Row): Club => ({ id: r.id, name: r.name, description: 
 export const toClubMember = (r: Row): ClubMember => ({ clubId: r.club_id, userId: r.user_id, role: r.role, status: r.status, createdAt: r.created_at });
 export const toClubPost = (r: Row): ClubPost => ({ id: r.id, clubId: r.club_id, authorId: opt(r.author_id), kind: r.kind, text: r.text, createdAt: r.created_at });
 export const toCircleMessage = (r: Row): CircleMessage => ({ id: r.id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
+export const toCirclePost = (r: Row): CirclePost => ({ id: r.id, authorId: opt(r.author_id), title: r.title, body: r.body, image: opt(r.image), createdAt: r.created_at });
 export const toUrgentMessage = (r: Row): UrgentMessage => ({ id: r.id, userId: r.user_id, title: opt(r.title), body: opt(r.body), reasons: r.reasons ?? [], createdBy: opt(r.created_by), createdAt: r.created_at, acknowledgedAt: opt(r.acknowledged_at), resolvedAt: opt(r.resolved_at), photoBefore: opt(r.photo_before) });
 // photo_before (migration 043) only when there is one, so plain messages still save without it.
 export const urgentMessageRow = (m: UrgentMessage) => ({ id: m.id, user_id: m.userId, title: m.title ?? null, body: m.body ?? null, reasons: m.reasons, created_by: m.createdBy ?? null, created_at: m.createdAt, ...(m.photoBefore ? { photo_before: m.photoBefore } : {}) });
@@ -165,9 +167,9 @@ export async function loadProfiles(onlyId?: string): Promise<Row[]> {
     if (onlyId) q = q.eq('id', onlyId);
     return q;
   };
-  // email_verified (migration 034) and specialty (038): without them, the profiles still load.
-  const [first, priv] = await Promise.all([query(`${PROFILE_PUBLIC_COLUMNS}, email_verified, specialty`), sb.rpc('member_private_fields', onlyId ? { only_id: onlyId } : {})]);
-  const { data, error } = first.error && /email_verified|specialty/.test(first.error.message) ? await query(PROFILE_PUBLIC_COLUMNS) : first;
+  // email_verified (migration 034), specialty (038) and mh_access (052): without them, the profiles still load.
+  const [first, priv] = await Promise.all([query(`${PROFILE_PUBLIC_COLUMNS}, email_verified, specialty, mh_access`), sb.rpc('member_private_fields', onlyId ? { only_id: onlyId } : {})]);
+  const { data, error } = first.error && /email_verified|specialty|mh_access/.test(first.error.message) ? await query(PROFILE_PUBLIC_COLUMNS) : first;
   if (error) throw error;
   const extra = new Map(((priv.data ?? []) as Row[]).map((r) => [r.id, r]));
   return ((data ?? []) as Row[]).map((r) => ({ ...r, ...extra.get(r.id) }));
@@ -202,7 +204,7 @@ export async function loadDb(): Promise<Db> {
   };
   // Tables added by migration 003: an empty list until it has been run, instead of breaking the app.
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
-  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, clubs, clubMembers, clubPosts, urgent] = await Promise.all([
+  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, circlePosts, clubs, clubMembers, clubPosts, urgent] = await Promise.all([
     loadProfiles(),
     loadPromos(),
     all('events', 'date'),
@@ -220,6 +222,7 @@ export async function loadDb(): Promise<Db> {
     optional('question_authors'),
     optional('answers'),
     optional('circle_messages'),
+    optional('circle_posts'),
     optional('clubs'),
     optional('club_members'),
     optional('club_posts'),
@@ -243,6 +246,7 @@ export async function loadDb(): Promise<Db> {
     questions: questions.map((r: Row) => ({ ...toQuestion(r), authorId: askedBy.get(r.id) })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     answers: answers.map(toAnswer).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
     circleMessages: circle.map(toCircleMessage).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
+    circlePosts: circlePosts.map(toCirclePost).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     clubs: clubs.map(toClub).sort((a, b) => a.name.localeCompare(b.name)),
     clubMembers: clubMembers.map(toClubMember),
     clubPosts: clubPosts.map(toClubPost).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),

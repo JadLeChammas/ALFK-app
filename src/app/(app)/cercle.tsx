@@ -2,18 +2,18 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { RoleBadge, useStartConversation } from '@/components/cards';
 import { useDialogs } from '@/components/ui/Dialogs';
-import { Avatar, Button, Card, EmptyState, IconButton, Input, Row, SectionHeader, Tap } from '@/components/ui/primitives';
-import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
+import { Avatar, Button, Card, IconButton, Input, Row, SectionHeader, Tap } from '@/components/ui/primitives';
+import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { fullName, useApprovedMembers, useMe, useStore, useUserMap } from '@/data/store';
+import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /**
- * The honorary members' circle: who they are, and a group discussion only they and the admins see.
- * Guarded in (app)/_layout.tsx (honorary members and admins).
+ * The honorary members' circle: their group discussion (section « MH »). Read and written by the
+ * honorary members and the admins given « Accès à l'espace MH » — guarded in (app)/_layout.tsx and by
+ * the database (in_circle, migration 052). The members' list is /cercle-membres.
  */
 export default function Circle() {
   const { d, relative } = useI18n();
@@ -23,8 +23,6 @@ export default function Circle() {
   const { confirm } = useDialogs();
   const me = useMe();
   const users = useUserMap();
-  const start = useStartConversation();
-  const honorary = useApprovedMembers().filter((u) => u.role === 'honneur');
   const [text, setText] = useState('');
   const messages = db.circleMessages;
 
@@ -35,35 +33,11 @@ export default function Circle() {
 
   return (
     <Screen maxWidth={1000}>
-      <PageHeader title={c.title} subtitle={c.subtitle} />
-
-      <View style={{ gap: 14 }}>
-        <SectionHeader title={c.members} icon="award" count={String(honorary.length)} />
-        {honorary.length === 0 ? (
-          <Card>
-            <EmptyState icon="award" title={c.noMembers} />
-          </Card>
-        ) : (
-          <Grid min={240} gap={14}>
-            {honorary.map((u) => (
-              <Card key={u.id} onPress={() => router.push(`/membre/${u.id}`)} style={{ gap: 10, alignItems: 'center', height: '100%' }}>
-                <Avatar uri={u.avatar} name={fullName(u)} size={64} />
-                <View style={{ alignItems: 'center', gap: 2 }}>
-                  <Txt variant="h3" align="center">{fullName(u)}</Txt>
-                  {!!u.fonction && <Txt variant="small" color="textMuted" align="center">{u.fonction}</Txt>}
-                  {!!u.employer && <Txt variant="small" color="textSubtle" align="center">{u.employer}</Txt>}
-                </View>
-                <RoleBadge role={u.role} />
-                {u.id !== me.id && <Button label={c.write} icon="message-circle" size="sm" variant="secondary" onPress={() => start(u.id)} />}
-              </Card>
-            ))}
-          </Grid>
-        )}
-      </View>
+      <PageHeader title={c.title} subtitle={d.mh.circleSub} />
 
       <Card style={{ gap: 14 }}>
         <SectionHeader title={c.discussion} icon="message-square" />
-        <Txt variant="small" color="textSubtle">{c.discussionHint}</Txt>
+        <Txt variant="small" color="textSubtle">{d.mh.discussionHint}</Txt>
         {messages.length === 0 && <Txt color="textMuted">{c.empty}</Txt>}
         <View style={{ gap: 14 }}>
           {messages.map((m) => {

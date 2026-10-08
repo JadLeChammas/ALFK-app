@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 import { isRemote, supabase } from '@/lib/supabase';
 import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL, properFirstName } from './members';
-import { can, canMessage, isRestricted, SELF_SIGNUP_ROLES } from './permissions';
+import { can, canMessage, isMhPair, isRestricted, SELF_SIGNUP_ROLES } from './permissions';
 import { parseAliases } from './places';
 import { sortPartners } from './partners';
 import { needsValidation } from './urgentReasons';
@@ -47,6 +47,7 @@ import type {
   Db,
   Club,
   ClubMember,
+  CirclePost,
   ClubPost,
   UrgentMessage,
   Gender,
@@ -88,7 +89,7 @@ export const isUnavailable = (e: unknown): e is UnavailableError => e instanceof
 /** What the app shows when a write is refused: to a restricted member, or towards one. */
 export type Notice = { kind: 'unavailable' | 'recipient'; at: number };
 
-const STORAGE_KEY = 'lfk.demo.db.v13';
+const STORAGE_KEY = 'lfk.demo.db.v14';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -148,7 +149,7 @@ export type SignUpInput = {
   locale?: 'fr' | 'en';
 };
 
-export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools' | 'fields' | 'schoolCountry' | 'needsCompletion'>>;
+export type ProfilePatch = Partial<Pick<User, 'firstName' | 'lastName' | 'phone' | 'birthDate' | 'school' | 'promo' | 'city' | 'country' | 'avatar' | 'bio' | 'fieldOfStudy' | 'mentor' | 'situation' | 'employer' | 'jobTitle' | 'cv' | 'nationalities' | 'otherSchools' | 'fields' | 'schoolCountry' | 'needsCompletion' | 'fonction'>>;
 
 const demoId = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 const makeId = (p: string) => (isRemote ? newId() : demoId(p));
@@ -936,6 +937,24 @@ function useStoreValue() {
       commit((d) => ({ ...d, circleMessages: d.circleMessages.filter((x) => x.id !== id) }));
       if (supabase) send(supabase.from('circle_messages').delete().eq('id', id));
     },
+    /** The honorary members' space: a private publication (only the circle reads it, migration 052). */
+    postCirclePost(input: { title: string; body: string; image?: string }): Result {
+      const title = input.title.trim();
+      const body = input.body.trim();
+      if (!meId || !title || !body) return { ok: false, error: 'unknown' };
+      if (readOnly) {
+        deny();
+        return { ok: false, error: 'unavailable' };
+      }
+      const p: CirclePost = { id: makeId('cp'), authorId: meId, title, body, image: input.image || undefined, createdAt: nowIso() };
+      commit((d) => ({ ...d, circlePosts: [p, ...d.circlePosts] }));
+      if (supabase) send(supabase.from('circle_posts').insert({ id: p.id, author_id: meId, title, body, image: p.image ?? null }));
+      return { ok: true };
+    },
+    deleteCirclePost(id: string) {
+      commit((d) => ({ ...d, circlePosts: d.circlePosts.filter((x) => x.id !== id) }));
+      if (supabase) send(supabase.from('circle_posts').delete().eq('id', id));
+    },
 
     // ——— Anonymous questions ———
     /** Students: ask a question. It stays hidden until an admin publishes it; the name is never shown. */
@@ -1244,6 +1263,14 @@ function useStoreValue() {
      * restricted member reads everything but cannot message, post, upload or edit their profile, and
      * nobody can message them. Admins cannot be restricted.
      */
+    /** Admins: gives an admin access to the honorary members' space (section « MH »), or takes it back. */
+    setMhAccess(id: string, mhAccess: boolean): Result {
+      const u = dbRef.current?.users.find((x) => x.id === id);
+      if (!u || u.role !== 'admin' || me?.role !== 'admin') return { ok: false, error: 'unknown' };
+      commit((d) => ({ ...d, users: d.users.map((x) => (x.id === id ? { ...x, mhAccess } : x)) }));
+      if (supabase) send(supabase.from('profiles').update({ mh_access: mhAccess }).eq('id', id));
+      return { ok: true };
+    },
     setRestricted(id: string, restricted: boolean): Result {
       const u = dbRef.current?.users.find((x) => x.id === id);
       if (!u || u.role === 'admin' || me?.role !== 'admin') return { ok: false, error: 'unknown' };
@@ -1519,12 +1546,21 @@ export function usePublished() {
   return useMemo(() => db.publications.filter((p) => p.status === 'published').sort((a, b) => (a.date < b.date ? 1 : -1)), [db.publications]);
 }
 
-export function useInbox() {
+/**
+ * The member's conversations. `scope`: « mh » = « Messages MH » (two honorary members), « main » =
+ * every other conversation (« Messages »).
+ */
+export function useInbox(scope: 'main' | 'mh' = 'main') {
   const { db, me } = useStore();
   return useMemo(() => {
     if (!me) return { threads: [], unread: 0 };
+    const roles = new Map(db.users.map((u) => [u.id, u.role]));
     const threads = db.conversations
       .filter((c) => c.members.includes(me.id))
+      .filter((c) => {
+        const other = c.members.find((m) => m !== me.id);
+        return isMhPair(me, { role: roles.get(other ?? '') ?? 'alumni' }) === (scope === 'mh');
+      })
       .map((c) => {
         const msgs = db.messages.filter((m) => m.conversationId === c.id);
         const last = msgs.at(-1);
@@ -1536,7 +1572,7 @@ export function useInbox() {
       .filter((t) => t.last)
       .sort((a, b) => (b.last!.createdAt > a.last!.createdAt ? 1 : -1));
     return { threads, unread: threads.reduce((a, t) => a + t.unread, 0) };
-  }, [db.conversations, db.messages, me]);
+  }, [db.conversations, db.messages, db.users, me, scope]);
 }
 
 /** Members whose birthday falls within the next `days` days, soonest first. */

@@ -946,6 +946,9 @@ const ja: Dict = {
   legalAdmin: {
     nav: "法的文書", title: "法的文書", subtitle: "利用規約、プライバシーポリシー、法的表示：作成・プレビュー・公開。", cardSub: "{total}件中{n}件公開 · 「公開」を押すまでサイトは変わりません", open: "編集", live: "公開中", liveSince: "公開中 · {date}", notLive: "未公開 · サイトは現在の文章を表示", hintLive: "この文章は公開中です。再公開するまで変更は下書きのままです。", hintDraft: "まだ何も公開されていません：「公開」を押すまでサイトは現在のページのままです。", empty: "プレビューする内容がありません。", placeholder: "## 1. Title\n\nA paragraph…\n\n- A list item", format: "Format: « ## Title », « ### Sub-title », « - » for lists, **bold**, « | a | b | » for tables, an empty line between paragraphs.", preview: "プレビュー", edit: "編集", publish: "公開", publishConfirm: "この文章を「{name}」としてサイトに公開しますか？誰でも読めるようになります。", published: "サイトに公開しました", withdraw: "取り下げ", withdrawConfirm: "「{name}」をサイトから取り下げますか？ページは元の文章に戻ります。", withdrawn: "取り下げました：サイトは元の文章を表示します", discard: "変更を破棄", seePage: "ページを見る",
   },
+  mh: {
+    discussionHint: "名誉会員とそのスペースの管理者だけが見られます。", section: "名誉会員", circleSub: "名誉会員のサロン。", publications: "非公開の投稿", publicationsSub: "名誉会員のスペースでのみ表示されます。", messages: "名誉会員メッセージ", members: "メンバー", membersSub: "Amicale の名誉会員と、その所在地。", newPost: "新しい投稿", postTitle: "タイトル", postBody: "本文", publish: "投稿する", published: "名誉会員と共有しました", empty: "まだ投稿はありません。", access: "名誉会員スペースへのアクセス", accessOn: "アクセスを付与しました", accessOff: "アクセスを取り消しました", createHint: "名誉会員：姓名、メールアドレス、パスワードだけで作成できます。初回ログイン時に写真、役職、国、都市を入力します。", setupTitle: "Amicale へようこそ", setupSub: "名誉会員のプロフィールを完成させてください：写真、役職、お住まいの場所。", photo: "プロフィール写真", addPhoto: "写真を追加", changePhoto: "写真を変更", fonction: "役職", fonctionPlaceholder: "例：校長、大使…", missing: "未入力：", setupSave: "保存して続ける",
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

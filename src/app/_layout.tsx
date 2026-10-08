@@ -15,6 +15,7 @@ import { FunModes } from '@/components/FunModes';
 import { RetroLayer } from '@/components/RetroLayer';
 import { UrgentMessages } from '@/components/UrgentMessages';
 import { DialogProvider, useDialogs } from '@/components/ui/Dialogs';
+import { honourProfileMissing } from '@/data/members';
 import { StoreProvider, useStore } from '@/data/store';
 import { I18nProvider, useI18n } from '@/i18n';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
@@ -75,6 +76,8 @@ function RootNavigator() {
   const approved = signedIn && me.approved;
   // A former Terminale student made alumni by an admin fills in the account first (completer.tsx).
   const completing = approved && !!me.needsCompletion;
+  // An honorary member signing in for the first time adds their photo, title, country and city (profil-honneur.tsx).
+  const honourSetup = approved && !completing && honourProfileMissing(me);
 
   const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
   const navTheme = { ...base, colors: { ...base.colors, background: colors.bg, card: colors.surface, text: colors.text, border: colors.border, primary: colors.primary } };
@@ -95,7 +98,10 @@ function RootNavigator() {
         <Stack.Protected guard={completing}>
           <Stack.Screen name="completer" />
         </Stack.Protected>
-        <Stack.Protected guard={approved && !completing}>
+        <Stack.Protected guard={honourSetup}>
+          <Stack.Screen name="profil-honneur" />
+        </Stack.Protected>
+        <Stack.Protected guard={approved && !completing && !honourSetup}>
           <Stack.Screen name="(app)" />
         </Stack.Protected>
         {/* Public pages, open with or without an account. */}

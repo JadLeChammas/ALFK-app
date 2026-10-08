@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { can, canSeeClubs, inCircle } from '@/data/permissions';
+import { can, canSeeClubs, hasMhInbox, inCircle } from '@/data/permissions';
 import { fullName, useInbox, useMe, useStore, useUnreadNotifications } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -36,6 +36,7 @@ function isActive(pathname: string, item: NavItem) {
 function useNav() {
   const { d } = useI18n();
   const { unread } = useInbox();
+  const { unread: mhUnread } = useInbox('mh');
   const { db } = useStore();
   const me = useMe();
   const toReview = me.role === 'admin' ? db.publications.filter((p) => p.status === 'pending').length : 0;
@@ -52,13 +53,20 @@ function useNav() {
   const events: NavItem[] = can(me, 'viewEvents') ? [{ href: '/evenements', icon: 'star', label: d.nav.events }] : [];
   const publications: NavItem = { href: '/publications', icon: 'book-open', label: d.nav.publications, short: d.nav.publicationsShort, badge: toReview };
   const messages: NavItem = { href: '/messages', icon: 'message-circle', label: d.nav.messages, badge: unread };
-  // Honorary members' circle: in « Communauté » for honorary members, under « Administration » for admins.
-  const circle: NavItem[] = inCircle(me) ? [{ href: '/cercle', icon: 'award', label: d.circle.nav }] : [];
+  // Section « MH »: the honorary members, and the admins given « Accès à l'espace MH » (Admin → Membres).
+  // « Messages MH » (their conversations with each other) is the honorary members' own.
+  const mh: NavItem[] = inCircle(me)
+    ? [
+        { href: '/cercle', icon: 'award', label: d.circle.nav },
+        { href: '/cercle-publications', icon: 'file-text', label: d.mh.publications },
+        ...(hasMhInbox(me) ? [{ href: '/messages-mh', icon: 'message-square' as const, label: d.mh.messages, badge: mhUnread }] : []),
+        { href: '/cercle-membres', icon: 'users', label: d.mh.members },
+      ]
+    : [];
   const community: NavItem[] = [
     { href: '/whatsapp', icon: 'message-square', label: d.nav.whatsapp },
     // Clubs: alumni and admins (data/permissions.ts).
     ...(canSeeClubs(me) ? [{ href: '/clubs', icon: 'grid' as const, label: d.clubs.nav }] : []),
-    ...(me.role === 'admin' ? [] : circle),
     { href: INSTAGRAM_URL, icon: 'instagram', label: 'Instagram', external: 'instagram' },
   ];
   // The Amicale's own pages (also public), opened inside the member space.
@@ -72,11 +80,11 @@ function useNav() {
     main: [home, directory, repere, orientation, guide, questions, calendar, ...events, publications, messages],
     community,
     amicale,
-    adminCircle: me.role === 'admin' ? circle : [],
+    mh,
     bar: [home, directory, repere, publications, messages],
     // The phone's « Plus » sheet: everything else in the sidebar, in the same sections.
     moreMain: [...events, orientation, guide, questions, calendar],
-    more: [...events, orientation, guide, questions, calendar, ...community, ...amicale, ...(me.role === 'admin' ? circle : [])],
+    more: [...events, orientation, guide, questions, calendar, ...community, ...amicale, ...mh],
   };
 }
 
@@ -112,7 +120,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const immersive = isMobile && /^\/messages\/[^/]+$/.test(pathname);
+  const immersive = isMobile && /^\/messages(-mh)?\/[^/]+$/.test(pathname);
 
   return (
     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: colors.bg }}>
@@ -140,7 +148,7 @@ function Sidebar({ compact }: { compact: boolean }) {
   const me = useMe();
   const { db } = useStore();
   const pathname = usePathname();
-  const { main, community, amicale, adminCircle } = useNav();
+  const { main, community, amicale, mh } = useNav();
   const notif = useUnreadNotifications();
   const pending = db.users.filter(awaitsApproval).length;
   // Laptop-height windows: slightly tighter rows so the whole menu fits without scrolling;
@@ -212,13 +220,19 @@ function Sidebar({ compact }: { compact: boolean }) {
         ))}
       </View>
 
+      {mh.length > 0 && (
+        <View style={{ marginTop: dense ? 6 : 12, gap: 2 }}>
+          {section(d.mh.section)}
+          {mh.map((item) => (
+            <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
+          ))}
+        </View>
+      )}
+
       {me.role === 'admin' && (
         <View style={{ marginTop: dense ? 6 : 12, gap: 2 }}>
           {section(d.nav.admin)}
           <SideLink item={{ href: '/admin', icon: 'shield', label: d.nav.dashboard, badge: pending }} active={isActive(pathname, { href: '/admin', icon: 'shield', label: '' })} compact={compact} dense={dense} />
-          {adminCircle.map((item) => (
-            <SideLink key={item.href} item={item} active={isActive(pathname, item)} compact={compact} dense={dense} />
-          ))}
         </View>
       )}
       {me.role !== 'admin' && can(me, 'viewStats') && (
@@ -345,7 +359,7 @@ function BottomNav() {
   const { d } = useI18n();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const { bar, moreMain, community, amicale, adminCircle } = useNav();
+  const { bar, moreMain, community, amicale, mh } = useNav();
   const me = useMe();
   const { db } = useStore();
   const { height } = useWindowDimensions();
@@ -357,15 +371,16 @@ function BottomNav() {
   const sections: { title?: string; items: NavItem[]; wide?: boolean }[] = [
     { items: moreMain },
     { title: d.nav.community, items: [...community, ...amicale] },
+    ...(mh.length ? [{ title: d.mh.section, items: mh }] : []),
     ...(me.role === 'admin'
-      ? [{ title: d.nav.admin, items: [{ href: '/admin', icon: 'shield' as const, label: d.nav.dashboard, badge: pending }, ...adminCircle] }]
+      ? [{ title: d.nav.admin, items: [{ href: '/admin', icon: 'shield' as const, label: d.nav.dashboard, badge: pending }] }]
       : can(me, 'viewStats')
         ? [{ title: d.nav.leadership, items: [{ href: '/statistiques', icon: 'bar-chart-2' as const, label: d.nav.stats }] }]
         : []),
     { items: [{ href: '/parametres', icon: 'settings', label: d.nav.settings }], wide: true },
   ];
   const more = sections.flatMap((s) => s.items);
-  const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href), badge: pending || undefined };
+  const moreItem: NavItem = { href: '#more', icon: 'grid', label: d.nav.more, match: more.map((m) => m.href), badge: pending + mh.reduce((n, i) => n + (i.badge ?? 0), 0) || undefined };
   const tab = (item: NavItem, active: boolean, onPress: () => void) => (
     <Tap key={item.href} onPress={onPress} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }} accessibilityLabel={item.label}>
       <View style={{ width: 44, height: 28, borderRadius: radius.input, alignItems: 'center', justifyContent: 'center', backgroundColor: active ? brand.red : 'transparent' }}>

@@ -43,8 +43,18 @@ export const canMessage = (a: Pick<User, 'role'> | null | undefined, b: Pick<Use
 /** Roles a visitor can pick when signing up; honorary members' accounts are created by an admin. */
 export const SELF_SIGNUP_ROLES: Role[] = ['alumni', 'eleve'];
 
-/** The honorary members' circle (their page and group discussion): honorary members and admins. */
 /** Clubs (page « Clubs »): alumni and admins for now — students and honorary members later, if wanted. */
 export const canSeeClubs = (user: Pick<User, 'role' | 'approved'> | null | undefined) => !!user && user.approved && (user.role === 'alumni' || user.role === 'admin');
 
-export const inCircle = (user: Pick<User, 'role'> | null | undefined) => !!user && (user.role === 'honneur' || user.role === 'admin');
+/**
+ * The honorary members' space (section « MH »: Cercle d'honneur, private publications, members): the
+ * honorary members, and the admins given « Accès à l'espace MH » (Admin → Membres; migration 052).
+ */
+export const inCircle = (user: (Pick<User, 'role'> & { mhAccess?: boolean }) | null | undefined) =>
+  !!user && (user.role === 'honneur' || (user.role === 'admin' && !!user.mhAccess));
+
+/** « Messages MH »: the honorary members' own inbox, for their conversations with each other. */
+export const hasMhInbox = (user: Pick<User, 'role'> | null | undefined) => user?.role === 'honneur';
+
+/** A conversation between two honorary members goes to « Messages MH », every other one to « Messages ». */
+export const isMhPair = (a: Pick<User, 'role'> | null | undefined, b: Pick<User, 'role'> | null | undefined) => a?.role === 'honneur' && b?.role === 'honneur';

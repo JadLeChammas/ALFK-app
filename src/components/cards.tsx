@@ -5,7 +5,7 @@ import { View } from 'react-native';
 
 import { countryByCode, countryName } from '@/data/countries';
 import { occupation } from '@/data/members';
-import { canMessage } from '@/data/permissions';
+import { canMessage, isMhPair } from '@/data/permissions';
 import { fullName, useStore } from '@/data/store';
 import type { EventCategory, LfkEvent, Publication, PublicationCategory, Role, User } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -31,10 +31,11 @@ export function roleLine(u: User, d: ReturnType<typeof useI18n>['d'], f: ReturnT
 }
 
 export function useStartConversation() {
-  const { actions } = useStore();
+  const { actions, db, me } = useStore();
   return (userId: string) => {
     const id = actions.conversationWith(userId);
-    if (id) router.push(`/messages/${id}`);
+    // Two honorary members talk in « Messages MH »; every other conversation is in « Messages ».
+    if (id) router.push(isMhPair(me, db.users.find((u) => u.id === userId)) ? `/messages-mh/${id}` : `/messages/${id}`);
   };
 }
 

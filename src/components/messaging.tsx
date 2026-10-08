@@ -17,35 +17,41 @@ import { Txt } from './ui/Txt';
 
 const isOnline = (iso: string) => Date.now() - new Date(iso).getTime() < 15 * 60_000;
 
-/** Two-pane messaging on desktop/tablet, single pane on mobile. */
-export function MessagesLayout({ conversationId }: { conversationId?: string }) {
+/**
+ * Two-pane messaging on desktop/tablet, single pane on mobile. `scope` « mh »: the honorary members'
+ * own inbox (« Messages MH », /messages-mh) with their conversations with each other.
+ */
+export function MessagesLayout({ conversationId, scope = 'main' }: { conversationId?: string; scope?: 'main' | 'mh' }) {
   const { colors } = useTheme();
   const { isMobile } = useLayout();
   const { d } = useI18n();
   const gutter = useGutter();
 
   if (isMobile) {
-    return <View style={{ flex: 1, backgroundColor: colors.bg }}>{conversationId ? <Thread id={conversationId} /> : <ConversationList />}</View>;
+    return <View style={{ flex: 1, backgroundColor: colors.bg }}>{conversationId ? <Thread id={conversationId} scope={scope} /> : <ConversationList scope={scope} />}</View>;
   }
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg, padding: gutter, paddingBottom: 24 }}>
       <View style={{ flex: 1, maxWidth: 1240, width: '100%', alignSelf: 'center', flexDirection: 'row', borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, overflow: 'hidden' }}>
         <View style={{ width: 340, borderRightWidth: 1, borderRightColor: colors.border }}>
-          <ConversationList activeId={conversationId} />
+          <ConversationList activeId={conversationId} scope={scope} />
         </View>
-        <View style={{ flex: 1 }}>{conversationId ? <Thread id={conversationId} /> : <EmptyState icon="message-circle" title={d.messages.pick} subtitle={d.messages.emptySub} />}</View>
+        <View style={{ flex: 1 }}>{conversationId ? <Thread id={conversationId} scope={scope} /> : <EmptyState icon="message-circle" title={d.messages.pick} subtitle={d.messages.emptySub} />}</View>
       </View>
     </View>
   );
 }
 
-function ConversationList({ activeId }: { activeId?: string }) {
+function ConversationList({ activeId, scope }: { activeId?: string; scope: 'main' | 'mh' }) {
   const { colors } = useTheme();
   const { d, relative } = useI18n();
   const { isMobile } = useLayout();
   const users = useUserMap();
   const me = useMe();
-  const { threads } = useInbox();
+  const { threads } = useInbox(scope);
+  const base = scope === 'mh' ? '/messages-mh' : '/messages';
+  // A new conversation: from the directory, or for « Messages MH » from the honorary members' list.
+  const startFrom = scope === 'mh' ? '/cercle-membres' : '/annuaire';
   const [q, setQ] = useState('');
   const list = threads.filter((t) => !q || norm(fullName(users.get(t.otherId))).includes(norm(q)));
 
@@ -53,13 +59,13 @@ function ConversationList({ activeId }: { activeId?: string }) {
     <View style={{ flex: 1 }}>
       <View style={{ padding: isMobile ? 16 : 20, gap: 14 }}>
         <Row style={{ justifyContent: 'space-between' }}>
-          <Txt variant={isMobile ? 'h1' : 'h2'}>{d.messages.title}</Txt>
-          <IconButton icon="edit" onPress={() => router.push('/annuaire')} label={d.messages.newConversation} size={38} />
+          <Txt variant={isMobile ? 'h1' : 'h2'}>{scope === 'mh' ? d.mh.messages : d.messages.title}</Txt>
+          <IconButton icon="edit" onPress={() => router.push(startFrom as never)} label={d.messages.newConversation} size={38} />
         </Row>
         <SearchBar value={q} onChangeText={setQ} placeholder={d.messages.searchPlaceholder} style={{ backgroundColor: colors.surfaceAlt }} />
       </View>
       <ScrollView contentContainerStyle={{ paddingHorizontal: isMobile ? 8 : 10, paddingBottom: 24 }}>
-        {list.length === 0 && <EmptyState icon="message-circle" title={d.messages.empty} subtitle={d.messages.emptySub} action={<Button label={d.nav.directory} icon="users" variant="secondary" onPress={() => router.push('/annuaire')} />} />}
+        {list.length === 0 && <EmptyState icon="message-circle" title={d.messages.empty} subtitle={d.messages.emptySub} action={<Button label={scope === 'mh' ? d.mh.members : d.nav.directory} icon="users" variant="secondary" onPress={() => router.push(startFrom as never)} />} />}
         {list.map((t) => {
           const other = users.get(t.otherId);
           const active = t.conversation.id === activeId;
@@ -67,7 +73,7 @@ function ConversationList({ activeId }: { activeId?: string }) {
           return (
             <Tap
               key={t.conversation.id}
-              onPress={() => router.replace(`/messages/${t.conversation.id}`)}
+              onPress={() => router.replace(`${base}/${t.conversation.id}` as never)}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12, borderRadius: 16, backgroundColor: active ? colors.primarySoft : 'transparent' }}
               hoverStyle={!active && { backgroundColor: colors.surfaceAlt }}>
               <Avatar uri={other?.avatar} name={fullName(other)} size={46} online={other && isOnline(other.lastActiveAt)} />
@@ -92,7 +98,7 @@ function ConversationList({ activeId }: { activeId?: string }) {
   );
 }
 
-function Thread({ id }: { id: string }) {
+function Thread({ id, scope }: { id: string; scope: 'main' | 'mh' }) {
   const { colors } = useTheme();
   const { d, f, relative, formatTime, formatDate } = useI18n();
   const { isMobile } = useLayout();
@@ -143,7 +149,7 @@ function Thread({ id }: { id: string }) {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingVertical: 12, paddingTop: isMobile ? insets.top + 10 : 12, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.surface }}>
-        {isMobile && <IconButton icon="arrow-left" variant="ghost" onPress={() => router.dismissTo('/messages')} label={d.nav.back} />}
+        {isMobile && <IconButton icon="arrow-left" variant="ghost" onPress={() => router.dismissTo(scope === 'mh' ? '/messages-mh' : '/messages')} label={d.nav.back} />}
         <Tap onPress={() => router.push(`/membre/${otherId}`)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
           {moderation ? (
             <Row gap={0}>

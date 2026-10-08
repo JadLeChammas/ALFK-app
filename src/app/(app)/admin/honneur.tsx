@@ -4,10 +4,11 @@ import { View } from 'react-native';
 
 import { AdminNav } from '@/components/AdminNav';
 import { useDialogs } from '@/components/ui/Dialogs';
-import { Avatar, Button, Card, EmptyState, FieldRow, Input, ListRow, Segmented, SectionHeader } from '@/components/ui/primitives';
+import { Avatar, Button, Card, EmptyState, FieldRow, Input, ListRow, SectionHeader } from '@/components/ui/primitives';
 import { Columns, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
-import { fullName, useStore, type AuthError, properFirstName } from '@/data/store';
+import { inCircle } from '@/data/permissions';
+import { fullName, useMe, useStore, type AuthError, properFirstName } from '@/data/store';
 import type { Gender } from '@/data/types';
 import { useI18n } from '@/i18n';
 
@@ -21,7 +22,10 @@ export default function HonoraryAccounts() {
   const h = d.honoraryAdmin;
   const { db, actions } = useStore();
   const { toast } = useDialogs();
-  const blank = { firstName: '', lastName: '', email: '', password: '', fonction: '', gender: 'N' as Gender };
+  const me = useMe();
+  // Only a name, an e-mail and a password: the member adds their photo, title, country and city at
+  // their first sign-in (app/profil-honneur.tsx).
+  const blank = { firstName: '', lastName: '', email: '', password: '' };
   const [form, setForm] = useState(blank);
   const [error, setError] = useState<AuthError | null>(null);
   const [detail, setDetail] = useState<string | null>(null);
@@ -39,9 +43,9 @@ export default function HonoraryAccounts() {
       lastName: form.lastName.trim(),
       email: form.email.trim(),
       password: form.password,
-      gender: form.gender,
+      gender: 'N' as Gender,
       role: 'honneur',
-      fonction: form.fonction.trim() || undefined,
+      country: '',
     });
     setBusy(false);
     if (!r.ok) {
@@ -54,7 +58,7 @@ export default function HonoraryAccounts() {
 
   return (
     <Screen>
-      <PageHeader title={h.title} subtitle={h.subtitle} right={<Button label={h.openCircle} icon="award" variant="secondary" onPress={() => router.push('/cercle')} />} />
+      <PageHeader title={h.title} subtitle={h.subtitle} right={inCircle(me) ? <Button label={h.openCircle} icon="award" variant="secondary" onPress={() => router.push('/cercle')} /> : undefined} />
       <AdminNav />
       <Columns
         main={
@@ -69,11 +73,7 @@ export default function HonoraryAccounts() {
             </FieldRow>
             <Input label={d.auth.email} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" />
             <Input label={d.admin.initialPassword} icon="lock" value={form.password} onChangeText={set('password')} hint={d.auth.passwordHint} autoCapitalize="none" />
-            <Input label={h.fonctionOptional} icon="briefcase" value={form.fonction} onChangeText={set('fonction')} />
-            <View style={{ gap: 8 }}>
-              <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
-              <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }, { value: 'N', label: d.gender.N }]} />
-            </View>
+            <Txt variant="small" color="textSubtle">{d.mh.createHint}</Txt>
             {error && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}{error === 'unknown' && detail ? ` (${detail})` : ''}</Txt>}
             <Button label={h.create} icon="user-plus" full size="lg" onPress={submit} loading={busy} disabled={!form.firstName.trim() || !form.lastName.trim() || !form.email.trim() || !form.password} />
           </Card>

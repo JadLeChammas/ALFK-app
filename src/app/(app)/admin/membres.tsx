@@ -223,6 +223,21 @@ export default function ManageMembers() {
                     }
                   />
                 )}
+                {db.users.find((u) => u.id === editing.id)?.role === 'admin' && (
+                  <Button
+                    label={db.users.find((u) => u.id === editing.id)?.mhAccess ? `${d.mh.access} ✓` : d.mh.access}
+                    icon="award"
+                    variant={db.users.find((u) => u.id === editing.id)?.mhAccess ? 'primary' : 'secondary'}
+                    full
+                    onPress={() =>
+                      fromCard(async (u) => {
+                        const on = !db.users.find((x) => x.id === u.id)?.mhAccess;
+                        const r = actions.setMhAccess(u.id, on);
+                        if (r.ok) toast(on ? d.mh.accessOn : d.mh.accessOff, 'success');
+                      })
+                    }
+                  />
+                )}
                 {editing.id !== me.id && (
                   <Button
                     label={d.admin.setPassword}
@@ -278,6 +293,9 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
     setError(null);
   };
   const [busy, setBusy] = useState(false);
+  // An honorary member's account: only a name, an e-mail and a password; they add their photo, title,
+  // country and city on their first sign-in (app/profil-honneur.tsx). No phone, no date of birth.
+  const honorary = form.role === 'honneur';
   const submit = async () => {
     const promo = parseInt(form.promo, 10);
     const mandatory = requiresContact(form.role);
@@ -289,8 +307,9 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
     setBusy(true);
     const r = await actions.createUser({
       ...rest,
-      promo: Number.isFinite(promo) ? promo : undefined,
-      fonction: form.role === 'honneur' && form.fonction.trim() ? form.fonction.trim() : undefined,
+      ...(honorary ? { country: '', gender: 'N' as Gender } : {}),
+      promo: !honorary && Number.isFinite(promo) ? promo : undefined,
+      fonction: undefined,
       birthDate,
       phone: hasPhone ? formatPhone(dial, phoneNumber) : undefined,
       bureauCode: form.role === 'admin' && bureauCode.trim() ? bureauCode.trim() : undefined,
@@ -323,16 +342,22 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
             </FieldRow>
             <Input label={d.auth.email} icon="mail" value={form.email} onChangeText={set('email')} autoCapitalize="none" keyboardType="email-address" />
             <Input label={d.admin.initialPassword} icon="lock" value={form.password} onChangeText={set('password')} hint={d.auth.passwordHint} />
-            <PhoneField label={d.profile.phone} dial={form.dial} number={form.phoneNumber} onDial={set('dial')} onNumber={set('phoneNumber')} required={requiresContact(form.role)} error={error === 'phone' ? d.auth.errors.phone : undefined} />
-            <FieldRow>
-              <DateField label={d.profile.birthDate} value={form.birth} onChange={set('birth')} required={requiresContact(form.role)} error={error === 'birth_date' ? d.auth.errors.birth_date : undefined} />
-              <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
-            </FieldRow>
-            <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
-            <View style={{ gap: 8 }}>
-              <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
-              <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }, { value: 'N', label: d.gender.N }]} />
-            </View>
+            {honorary ? (
+              <Txt variant="small" color="textSubtle">{d.mh.createHint}</Txt>
+            ) : (
+              <>
+                <PhoneField label={d.profile.phone} dial={form.dial} number={form.phoneNumber} onDial={set('dial')} onNumber={set('phoneNumber')} required={requiresContact(form.role)} error={error === 'phone' ? d.auth.errors.phone : undefined} />
+                <FieldRow>
+                  <DateField label={d.profile.birthDate} value={form.birth} onChange={set('birth')} required={requiresContact(form.role)} error={error === 'birth_date' ? d.auth.errors.birth_date : undefined} />
+                  <Input label={d.profile.promoLabel} icon="award" value={form.promo} onChangeText={set('promo')} keyboardType="number-pad" maxLength={4} containerStyle={{ flex: 1 }} />
+                </FieldRow>
+                <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
+                <View style={{ gap: 8 }}>
+                  <Txt variant="smallStrong" color="textMuted">{d.auth.gender}</Txt>
+                  <Segmented value={form.gender} onChange={(g) => setForm((x) => ({ ...x, gender: g }))} options={[{ value: 'F', label: d.gender.F }, { value: 'M', label: d.gender.M }, { value: 'N', label: d.gender.N }]} />
+                </View>
+              </>
+            )}
             <View style={{ gap: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.admin.role}</Txt>
               <Row gap={8} wrap>
@@ -345,7 +370,6 @@ function CreateUserModal({ visible, onClose }: { visible: boolean; onClose: () =
                 <Segmented value={form.grade} onChange={(g) => setForm((x) => ({ ...x, grade: g }))} options={GRADES.map((g) => ({ value: g, label: d.grade[g] }))} />
               </View>
             )}
-            {form.role === 'honneur' && <Input label={d.admin.fonctionField} icon="briefcase" value={form.fonction} onChangeText={set('fonction')} />}
             {form.role === 'admin' && <Input label={d.admin.bureauCodeField} icon="shield" value={form.bureauCode} onChangeText={(v) => set('bureauCode')(v.replace(/\D/g, '').slice(0, 4))} keyboardType="number-pad" maxLength={4} />}
             {error && error !== 'phone' && error !== 'birth_date' && <Txt variant="smallStrong" color="danger">{d.auth.errors[error]}{error === 'unknown' && detail ? ` (${detail})` : ''}</Txt>}
             <Button label={d.common.create} icon="user-plus" full size="lg" onPress={submit} loading={busy} disabled={!form.firstName || !form.lastName || !form.email || !form.password} />

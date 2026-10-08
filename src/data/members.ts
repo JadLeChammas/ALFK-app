@@ -33,6 +33,13 @@ export const isValidBureauCode = (code: string) => /^\d{4}$/.test(code);
 export const requiresContact = (role: Role) => role !== 'honneur';
 
 /**
+ * An honorary member's account is created by an admin with only a name, an e-mail and a password; on
+ * their first sign-in they add their photo, their title, their country and city (app/profil-honneur.tsx).
+ */
+export const honourProfileMissing = (u: Pick<User, 'role' | 'avatar' | 'fonction' | 'country' | 'city'>) =>
+  u.role === 'honneur' && (!u.avatar || !u.fonction?.trim() || !u.country || !u.city?.trim());
+
+/**
  * Applies the role rules to a profile: students study at the LFK, only admins keep a Bureau code,
  * alumni/admins without a number get the next one.
  */

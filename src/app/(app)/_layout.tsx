@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 
 import { AppShell } from '@/components/shell/AppShell';
-import { can, canSeeClubs, inCircle } from '@/data/permissions';
+import { can, canSeeClubs, hasMhInbox, inCircle } from '@/data/permissions';
 import { useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -34,8 +34,15 @@ export default function MemberLayout() {
           <Stack.Screen name="clubs/index" />
           <Stack.Screen name="clubs/[id]" />
         </Stack.Protected>
+        {/* Section « MH »: honorary members and the admins given access (Admin → Membres). */}
         <Stack.Protected guard={inCircle(me)}>
           <Stack.Screen name="cercle" />
+          <Stack.Screen name="cercle-publications" />
+          <Stack.Screen name="cercle-membres" />
+        </Stack.Protected>
+        <Stack.Protected guard={hasMhInbox(me)}>
+          <Stack.Screen name="messages-mh/index" />
+          <Stack.Screen name="messages-mh/[id]" />
         </Stack.Protected>
         <Stack.Protected guard={can(me, 'viewStats')}>
           <Stack.Screen name="statistiques" />
