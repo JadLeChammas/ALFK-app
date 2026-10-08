@@ -221,22 +221,22 @@ export const CONTINENTS: ContinentKey[] = ['europe', 'asia', 'north_america', 'a
 export const countryByCode = (code?: string) => COUNTRIES.find((c) => c.code === code);
 
 /** Country names in the other app languages (French and English live on COUNTRIES). */
-const NAMES: Record<string, Record<'de' | 'es' | 'it' | 'pt' | 'ar' | 'ja' | 'zh', string>> = {
-  FR: { de: 'Frankreich', es: 'Francia', it: 'Francia', pt: 'França', ar: 'فرنسا', ja: 'フランス', zh: '法国' },
-  GB: { de: 'Vereinigtes Königreich', es: 'Reino Unido', it: 'Regno Unito', pt: 'Reino Unido', ar: 'المملكة المتحدة', ja: 'イギリス', zh: '英国' },
-  BE: { de: 'Belgien', es: 'Bélgica', it: 'Belgio', pt: 'Bélgica', ar: 'بلجيكا', ja: 'ベルギー', zh: '比利时' },
-  CH: { de: 'Schweiz', es: 'Suiza', it: 'Svizzera', pt: 'Suíça', ar: 'سويسرا', ja: 'スイス', zh: '瑞士' },
-  ES: { de: 'Spanien', es: 'España', it: 'Spagna', pt: 'Espanha', ar: 'إسبانيا', ja: 'スペイン', zh: '西班牙' },
-  KW: { de: 'Kuwait', es: 'Kuwait', it: 'Kuwait', pt: 'Kuwait', ar: 'الكويت', ja: 'クウェート', zh: '科威特' },
-  LB: { de: 'Libanon', es: 'Líbano', it: 'Libano', pt: 'Líbano', ar: 'لبنان', ja: 'レバノン', zh: '黎巴嫩' },
-  AE: { de: 'Vereinigte Arabische Emirate', es: 'Emiratos Árabes Unidos', it: 'Emirati Arabi Uniti', pt: 'Emirados Árabes Unidos', ar: 'الإمارات العربية المتحدة', ja: 'アラブ首長国連邦', zh: '阿联酋' },
-  JP: { de: 'Japan', es: 'Japón', it: 'Giappone', pt: 'Japão', ar: 'اليابان', ja: '日本', zh: '日本' },
-  CA: { de: 'Kanada', es: 'Canadá', it: 'Canada', pt: 'Canadá', ar: 'كندا', ja: 'カナダ', zh: '加拿大' },
-  US: { de: 'Vereinigte Staaten', es: 'Estados Unidos', it: 'Stati Uniti', pt: 'Estados Unidos', ar: 'الولايات المتحدة', ja: 'アメリカ合衆国', zh: '美国' },
-  BR: { de: 'Brasilien', es: 'Brasil', it: 'Brasile', pt: 'Brasil', ar: 'البرازيل', ja: 'ブラジル', zh: '巴西' },
-  EG: { de: 'Ägypten', es: 'Egipto', it: 'Egitto', pt: 'Egito', ar: 'مصر', ja: 'エジプト', zh: '埃及' },
-  MA: { de: 'Marokko', es: 'Marruecos', it: 'Marocco', pt: 'Marrocos', ar: 'المغرب', ja: 'モロッコ', zh: '摩洛哥' },
-  AU: { de: 'Australien', es: 'Australia', it: 'Australia', pt: 'Austrália', ar: 'أستراليا', ja: 'オーストラリア', zh: '澳大利亚' },
+const NAMES: Record<string, Record<'de' | 'es' | 'it' | 'pt' | 'ar' | 'ja', string>> = {
+  FR: { de: 'Frankreich', es: 'Francia', it: 'Francia', pt: 'França', ar: 'فرنسا', ja: 'フランス' },
+  GB: { de: 'Vereinigtes Königreich', es: 'Reino Unido', it: 'Regno Unito', pt: 'Reino Unido', ar: 'المملكة المتحدة', ja: 'イギリス' },
+  BE: { de: 'Belgien', es: 'Bélgica', it: 'Belgio', pt: 'Bélgica', ar: 'بلجيكا', ja: 'ベルギー' },
+  CH: { de: 'Schweiz', es: 'Suiza', it: 'Svizzera', pt: 'Suíça', ar: 'سويسرا', ja: 'スイス' },
+  ES: { de: 'Spanien', es: 'España', it: 'Spagna', pt: 'Espanha', ar: 'إسبانيا', ja: 'スペイン' },
+  KW: { de: 'Kuwait', es: 'Kuwait', it: 'Kuwait', pt: 'Kuwait', ar: 'الكويت', ja: 'クウェート' },
+  LB: { de: 'Libanon', es: 'Líbano', it: 'Libano', pt: 'Líbano', ar: 'لبنان', ja: 'レバノン' },
+  AE: { de: 'Vereinigte Arabische Emirate', es: 'Emiratos Árabes Unidos', it: 'Emirati Arabi Uniti', pt: 'Emirados Árabes Unidos', ar: 'الإمارات العربية المتحدة', ja: 'アラブ首長国連邦' },
+  JP: { de: 'Japan', es: 'Japón', it: 'Giappone', pt: 'Japão', ar: 'اليابان', ja: '日本' },
+  CA: { de: 'Kanada', es: 'Canadá', it: 'Canada', pt: 'Canadá', ar: 'كندا', ja: 'カナダ' },
+  US: { de: 'Vereinigte Staaten', es: 'Estados Unidos', it: 'Stati Uniti', pt: 'Estados Unidos', ar: 'الولايات المتحدة', ja: 'アメリカ合衆国' },
+  BR: { de: 'Brasilien', es: 'Brasil', it: 'Brasile', pt: 'Brasil', ar: 'البرازيل', ja: 'ブラジル' },
+  EG: { de: 'Ägypten', es: 'Egipto', it: 'Egitto', pt: 'Egito', ar: 'مصر', ja: 'エジプト' },
+  MA: { de: 'Marokko', es: 'Marruecos', it: 'Marocco', pt: 'Marrocos', ar: 'المغرب', ja: 'モロッコ' },
+  AU: { de: 'Australien', es: 'Australia', it: 'Australia', pt: 'Austrália', ar: 'أستراليا', ja: 'オーストラリア' },
 };
 
 const intlNames = new Map<string, Intl.DisplayNames | null>();
@@ -260,9 +260,7 @@ function intlName(code: string, lang: string) {
 export function countryLabel(code: string | undefined, lang: string): string {
   const c = countryByCode(code);
   if (!c) return code ?? '';
-  // Lebanese (Arabizi): the French names, as they are said in Lebanon.
   if (lang === 'fr') return c.fr;
-  // Kuwaiti (Arabizi): the English names, as they are said in Kuwait.
   if (lang === 'en' || lang === 'pirate') return c.en;
   return NAMES[c.code]?.[lang as keyof (typeof NAMES)[string]] ?? intlName(c.code, lang) ?? c.en;
 }

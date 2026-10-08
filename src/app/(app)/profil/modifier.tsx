@@ -29,7 +29,7 @@ import { OtherSchoolsEditor } from '@/components/OtherSchools';
 import { isFileRejected } from '@/lib/fileSafety';
 
 export default function EditProfile() {
-  const { d, lang } = useI18n();
+  const { d, lang, country } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
   const { toast } = useDialogs();
@@ -230,7 +230,11 @@ export default function EditProfile() {
                 <CityPicker label={d.auth.city} value={form.city} onChange={set('city')} country={form.country} />
               </View>
               <View style={{ flex: 1 }}>
-                <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
+                {me.role === 'eleve' ? (
+                  <Input label={d.auth.country} icon="lock" value={country('KW')} editable={false} hint={d.auth.schoolAuto} />
+                ) : (
+                  <Select label={d.auth.country} value={form.country} onChange={set('country')} searchable options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))} />
+                )}
               </View>
             </FieldRow>
             {me.role !== 'eleve' && !honorary && <OtherSchoolsEditor value={otherSchools} onChange={setOtherSchools} country={form.country} />}

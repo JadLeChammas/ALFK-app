@@ -18,16 +18,6 @@ export function Flag({ code, size = 16 }: { code: string; size?: number }) {
       </View>
     );
   }
-  if (code === 'EO') {
-    // The Esperanto flag: green, with a green star on a white square.
-    return (
-      <View style={{ width: w, height: size, borderRadius: 3, overflow: 'hidden', backgroundColor: '#009900', flexDirection: 'row' }}>
-        <View style={{ width: size / 2, height: size / 2, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: '#009900', fontSize: Math.round(size * 0.42), lineHeight: Math.round(size / 2) }}>★</Text>
-        </View>
-      </View>
-    );
-  }
   return (
     <View style={{ width: w, height: size, borderRadius: 3, overflow: 'hidden', backgroundColor: colors.surfaceAlt, borderWidth: 0.5, borderColor: colors.border }}>
       <Image source={{ uri: `https://flagcdn.com/w80/${code.toLowerCase()}.png` }} style={{ width: '100%', height: '100%' }} contentFit="cover" />

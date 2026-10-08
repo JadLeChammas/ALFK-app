@@ -6,7 +6,6 @@ import { countryLabel } from '@/data/countries';
 import ar from './ar';
 import de from './de';
 import en from './en';
-import eo from './eo';
 import es from './es';
 import fr, { type Dict } from './fr';
 import it from './it';
@@ -16,10 +15,9 @@ import nl from './nl';
 import pirate from './pirate';
 import pt from './pt';
 import ru from './ru';
-import zh from './zh';
 
 /**
- * `country` = the flag shown in Settings (`EO`: the Esperanto flag). `locale` = used for dates and numbers.
+ * `country` = the flag shown in Settings. `locale` = used for dates and numbers.
  * `ownDates`: browsers have no month or day names for it — the dictionary's are used instead.
  */
 export const LANGUAGES = [
@@ -33,16 +31,14 @@ export const LANGUAGES = [
   { code: 'ru', label: 'Русский', country: 'RU', locale: 'ru-RU' },
   { code: 'ar', label: 'العربية', country: 'SA', locale: 'ar-u-nu-latn' },
   { code: 'ja', label: '日本語', country: 'JP', locale: 'ja-JP' },
-  { code: 'zh', label: '中文', country: 'CN', locale: 'zh-CN' },
-  // Latin (the Holy See's language: its flag) and Esperanto.
+  // Latin (the Holy See's language: its flag).
   { code: 'la', label: 'Latina', country: 'VA', locale: 'it-IT', ownDates: true },
-  { code: 'eo', label: 'Esperanto', country: 'EO', locale: 'fr-FR', ownDates: true },
   // For fun: English as spoken aboard. `PIRATE` shows the Jolly Roger instead of a country flag.
   { code: 'pirate', label: 'Pirate', country: 'PIRATE', locale: 'en-GB' },
 ] as const;
 export type Lang = (typeof LANGUAGES)[number]['code'];
 
-const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, nl, ru, ar, ja, zh, la, eo, pirate };
+const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, nl, ru, ar, ja, la, pirate };
 
 /** The languages offered in Settings. */
 export const visibleLanguages = () => LANGUAGES;

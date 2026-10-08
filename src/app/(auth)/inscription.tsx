@@ -30,7 +30,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { AvatarCropper } from '@/components/AvatarCropper';
 
 export default function SignUp() {
-  const { d, lang } = useI18n();
+  const { d, lang, country } = useI18n();
   const { colors } = useTheme();
   const { actions } = useStore();
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -105,6 +105,7 @@ export default function SignUp() {
       jobTitle: working ? jobTitle.trim() || undefined : undefined,
       promo: Number.isFinite(promo) ? promo : undefined,
       school: form.role === 'eleve' ? LFK_SCHOOL : form.school || undefined,
+      country: form.role === 'eleve' ? 'KW' : form.country,
       grade: form.role === 'eleve' && grade ? grade : undefined,
       city: form.city || undefined,
       birthDate: parseFrDate(birth) ?? undefined,
@@ -194,7 +195,7 @@ export default function SignUp() {
             <Txt variant="smallStrong" color="textMuted">{req(d.auth.status)}</Txt>
             <Row gap={8} wrap>
               {SELF_SIGNUP_ROLES.map((r) => (
-                <Chip key={r} label={d.roles[r]} active={form.role === r} onPress={() => setForm((f) => ({ ...f, role: r }))} />
+                <Chip key={r} label={d.roles[r]} active={form.role === r} onPress={() => setForm((f) => ({ ...f, role: r, ...(r === 'eleve' && f.country !== 'KW' ? { country: 'KW', city: '' } : {}) }))} />
               ))}
             </Row>
           </View>
@@ -225,13 +226,18 @@ export default function SignUp() {
               <Txt variant="small" color="textSubtle">{d.situation.whereHint}</Txt>
             </View>
           )}
-          <Select
-            label={req(d.auth.country)}
-            value={form.country}
-            onChange={(c) => setForm((f) => ({ ...f, country: c }))}
-            searchable
-            options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))}
-          />
+          {form.role === 'eleve' ? (
+            // Pupils are at the LFK, so they live in Kuwait: set for them.
+            <Input label={d.auth.country} icon="lock" value={country('KW')} editable={false} hint={d.auth.schoolAuto} />
+          ) : (
+            <Select
+              label={req(d.auth.country)}
+              value={form.country}
+              onChange={(c) => setForm((f) => ({ ...f, country: c }))}
+              searchable
+              options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))}
+            />
+          )}
           <CityPicker label={req(d.auth.city)} value={form.city} onChange={set('city')} country={form.country} />
           {form.role === 'eleve' ? (
             // Students are at the LFK: the school is set for them and cannot be changed.
