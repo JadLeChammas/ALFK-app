@@ -19,6 +19,12 @@ import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
 
+/** « Bonsoir » from 6 pm to 5 am, by the reader's own clock (the time where they are). */
+const eveningNow = () => {
+  const h = new Date().getHours();
+  return h >= 18 || h < 5;
+};
+
 export default function Home() {
   const { colors } = useTheme();
   const { d, f, formatDate } = useI18n();
@@ -57,7 +63,7 @@ export default function Home() {
       {/* Hero — Interactive Globe card: greeting, network figures, alumni globe */}
       <GlobeCard
         compact
-        title={f(d.home.hello, { name: me.firstName })}
+        title={f(eveningNow() ? d.home.helloEvening : d.home.hello, { name: me.firstName })}
         lead={`${formatDate(new Date(), { weekday: true })} · ${me.fonction ?? d.roles[me.role]}`}
         markers={markers}
         stats={<StatsRow light dense />}>

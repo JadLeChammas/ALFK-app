@@ -70,7 +70,7 @@ const la: Dict = {
     photo: 'Imago paginae', addPhoto: 'Imaginem adde', photoRequired: 'Imaginem adde ut rationem crees.', missingPhotoTitle: 'Imaginem tuam adde', missingPhotoSub: 'Imago tua non advenit (conexio interrupta): adde eam ut communitas te agnoscat.', noPhoto: 'Sine imagine', retryUpload: 'Iterum mitte', requiredLegend: '* Necessaria',
   },
   home: {
-    hello: 'Salve, {name}', heroTitle: 'Una communitas,\nmilia historiarum.',
+    hello: 'Salve, {name}', helloEvening: "Bonum vesperum, {name}", heroTitle: 'Una communitas,\nmilia historiarum.',
     heroSub: 'Condiscipulos tuos inveni, eventus disce et cum communitate LFK coniunctus mane.',
     quickActions: 'Actiones celeres', seeEvents: 'Eventus vide', myPromo: 'Mea classis', nextEvent: 'Eventus proximus',
     news: 'Nuntii', birthdays: 'Dies natales proximi', seeEvent: 'Eventum vide', seeAllNews: 'Omnes nuntii',

@@ -70,7 +70,7 @@ const pirate: Dict = {
     photo: 'Yer portrait', addPhoto: 'Add a portrait', photoRequired: 'Add a portrait to sign aboard.', retryUpload: 'Send it again', missingPhotoTitle: 'Show yer face, sailor', missingPhotoSub: 'Yer picture got lost at sea (bad connection): add it so the crew knows ye.', noPhoto: 'No picture', requiredLegend: '* Ye must fill these, sailor',
   },
   home: {
-    hello: 'Ahoy {name}', heroTitle: 'One crew,\na thousand tall tales.',
+    hello: 'Ahoy {name}', helloEvening: "Evenin', {name}", heroTitle: 'One crew,\na thousand tall tales.',
     heroSub: 'Find yer shipmates, discover shore leaves an’ stay tied to the LFK fleet.',
     quickActions: 'Quick orders', seeEvents: 'See shore leaves', myPromo: 'Me LFK crew', nextEvent: 'Next shore leave',
     news: 'News from the crow’s nest', birthdays: 'Birthdays on the horizon', seeEvent: 'See the shore leave', seeAllNews: 'All the news',

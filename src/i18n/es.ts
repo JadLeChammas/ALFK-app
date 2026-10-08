@@ -69,7 +69,7 @@ const es: Dict = {
     photo: 'Foto de perfil', addPhoto: 'Añadir una foto', photoRequired: 'Añada una foto de perfil para crear su cuenta.', retryUpload: 'Reintentar el envío', missingPhotoTitle: 'Añade tu foto de perfil', missingPhotoSub: 'Tu foto no llegó (conexión interrumpida): añádela para que la comunidad te reconozca.', noPhoto: 'Sin foto', requiredLegend: '* Campos obligatorios',
   },
   home: {
-    hello: 'Hola, {name}', heroTitle: 'Una sola comunidad,\nmiles de historias.',
+    hello: 'Hola, {name}', helloEvening: "Buenas noches, {name}", heroTitle: 'Una sola comunidad,\nmiles de historias.',
     heroSub: 'Reencuentra a tus compañeros, descubre los eventos y mantente conectado con la comunidad del LFK.',
     quickActions: 'Accesos rápidos', seeEvents: 'Ver los eventos', myPromo: 'Mi Promoción LFK', nextEvent: 'Próximo evento',
     news: 'Noticias', birthdays: 'Próximos cumpleaños', seeEvent: 'Ver el evento', seeAllNews: 'Todas las noticias',

@@ -69,7 +69,7 @@ const ar: Dict = {
     photo: 'صورة الملف الشخصي', addPhoto: 'إضافة صورة', photoRequired: 'أضف صورة شخصية لإنشاء حسابك.', retryUpload: 'إعادة الإرسال', missingPhotoTitle: 'أضف صورتك الشخصية', missingPhotoSub: 'لم تصل صورتك (انقطع الاتصال): أضفها ليتعرف عليك أعضاء المجتمع.', noPhoto: 'بدون صورة', requiredLegend: '* حقول إلزامية',
   },
   home: {
-    hello: 'مرحبًا {name}', heroTitle: 'مجتمع واحد،\nوآلاف القصص.',
+    hello: 'مرحبًا {name}', helloEvening: "مساء الخير {name}", heroTitle: 'مجتمع واحد،\nوآلاف القصص.',
     heroSub: 'التقِ بزملائك، واكتشف الفعاليات، وابقَ على تواصل مع مجتمع الثانوية الفرنسية.',
     quickActions: 'إجراءات سريعة', seeEvents: 'عرض الفعاليات', myPromo: 'دفعتي في LFK', nextEvent: 'الفعالية القادمة',
     news: 'الأخبار', birthdays: 'أعياد الميلاد القادمة', seeEvent: 'عرض الفعالية', seeAllNews: 'كل الأخبار',

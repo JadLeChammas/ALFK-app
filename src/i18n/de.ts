@@ -69,7 +69,7 @@ const de: Dict = {
     photo: 'Profilfoto', addPhoto: 'Foto hinzufügen', photoRequired: 'Fügen Sie ein Profilfoto hinzu, um Ihr Konto zu erstellen.', retryUpload: 'Erneut senden', missingPhotoTitle: 'Profilfoto hinzufügen', missingPhotoSub: 'Ihr Foto ist nicht angekommen (Verbindung unterbrochen): Fügen Sie es hinzu, damit die Community Sie erkennt.', noPhoto: 'Kein Foto', requiredLegend: '* Pflichtfelder',
   },
   home: {
-    hello: 'Hallo {name}', heroTitle: 'Eine Gemeinschaft,\ntausende Geschichten.',
+    hello: 'Hallo {name}', helloEvening: "Guten Abend {name}", heroTitle: 'Eine Gemeinschaft,\ntausende Geschichten.',
     heroSub: 'Finden Sie Ihre Mitschüler wieder, entdecken Sie Veranstaltungen und bleiben Sie mit der LFK-Gemeinschaft verbunden.',
     quickActions: 'Schnellzugriff', seeEvents: 'Veranstaltungen ansehen', myPromo: 'Mein LFK-Jahrgang', nextEvent: 'Nächste Veranstaltung',
     news: 'Neuigkeiten', birthdays: 'Kommende Geburtstage', seeEvent: 'Veranstaltung ansehen', seeAllNews: 'Alle Neuigkeiten',

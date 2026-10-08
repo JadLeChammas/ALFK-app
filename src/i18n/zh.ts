@@ -69,7 +69,7 @@ const zh: Dict = {
     photo: '头像', addPhoto: '添加照片', photoRequired: '请添加头像以创建账户。', retryUpload: '重新发送', missingPhotoTitle: '添加头像照片', missingPhotoSub: '您的照片未上传成功（连接中断）：请重新添加，方便大家认出您。', noPhoto: '无照片', requiredLegend: '* 为必填项',
   },
   home: {
-    hello: '你好，{name}', heroTitle: '一个社区，\n千万个故事。',
+    hello: '你好，{name}', helloEvening: "晚上好，{name}", heroTitle: '一个社区，\n千万个故事。',
     heroSub: '找回同学，发现活动，与 LFK 社区保持联系。',
     quickActions: '快捷操作', seeEvents: '查看活动', myPromo: '我的 LFK 年级', nextEvent: '下一场活动',
     news: '资讯', birthdays: '即将到来的生日', seeEvent: '查看活动', seeAllNews: '全部资讯',

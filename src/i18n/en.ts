@@ -69,7 +69,7 @@ const en: Dict = {
     photo: 'Profile photo', addPhoto: 'Add a photo', photoRequired: 'Add a profile photo to create your account.', retryUpload: 'Try sending again', missingPhotoTitle: 'Add your profile photo', missingPhotoSub: 'Your photo didn’t arrive (connection lost): add it so the community can recognise you.', noPhoto: 'No photo', requiredLegend: '* Required fields',
   },
   home: {
-    hello: 'Hello {name}', heroTitle: 'One community,\nthousands of stories.',
+    hello: 'Hello {name}', helloEvening: "Good evening {name}", heroTitle: 'One community,\nthousands of stories.',
     heroSub: 'Find your classmates, discover events and stay connected to the LFK community.',
     quickActions: 'Quick actions', seeEvents: 'See events', myPromo: 'My LFK Class', nextEvent: 'Next event',
     news: 'News', birthdays: 'Upcoming birthdays', seeEvent: 'View event', seeAllNews: 'All news',

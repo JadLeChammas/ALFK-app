@@ -67,7 +67,7 @@ const fr = {
     photo: 'Photo de profil', addPhoto: 'Ajouter une photo', photoRequired: 'Ajoutez une photo de profil pour créer votre compte.', retryUpload: 'Réessayer l’envoi', missingPhotoTitle: 'Ajoutez votre photo de profil', missingPhotoSub: 'Votre photo n’a pas été reçue (connexion interrompue) : ajoutez-la pour que la communauté vous reconnaisse.', noPhoto: 'Pas de photo', requiredLegend: '* Champs obligatoires',
   },
   home: {
-    hello: 'Bonjour {name}', heroTitle: "Une seule communauté,\ndes milliers d'histoires.",
+    hello: 'Bonjour {name}', helloEvening: "Bonsoir {name}", heroTitle: "Une seule communauté,\ndes milliers d'histoires.",
     heroSub: 'Retrouvez vos camarades, découvrez les événements et restez connecté à la communauté du LFK.',
     quickActions: 'Actions rapides', seeEvents: 'Voir les événements', myPromo: 'Ma Promo LFK', nextEvent: 'Prochain événement',
     news: 'Actualités', birthdays: 'Anniversaires à venir', seeEvent: "Voir l'événement", seeAllNews: 'Toutes les actualités',

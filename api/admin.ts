@@ -133,14 +133,21 @@ export async function POST(request: Request) {
   if (callerError || !caller.user) return json(401, { error: 'unauthorized' });
   const callerId = caller.user.id;
 
-  /** Removes a member's proof of schooling (private "proofs" bucket, one folder per member). */
-  const removeProofs = async (userId: string) => {
-    const { data } = await admin.storage.from('proofs').list(userId);
-    if (data?.length) await admin.storage.from('proofs').remove(data.map((f) => `${userId}/${f.name}`));
+  /**
+   * Before an account is deleted: its private files (proof of schooling, CVs) and its profile photos.
+   * The rest of its « media » folder stays: an admin's folder also holds the partners' logos, the
+   * leaders' photos and publication covers, which the site keeps showing.
+   */
+  const removeFiles = async (userId: string) => {
+    for (const [bucket, dir] of [['proofs', userId], ['cvs', userId], ['media', `${userId}/avatars`]] as const) {
+      const { data } = await admin.storage.from(bucket).list(dir, { limit: 1000 });
+      const files = (data ?? []).filter((f) => f.id); // folders have no id
+      if (files.length) await admin.storage.from(bucket).remove(files.map((f) => `${dir}/${f.name}`));
+    }
   };
 
   if (body.action === 'delete-self') {
-    await removeProofs(callerId);
+    await removeFiles(callerId);
     const { error } = await admin.auth.admin.deleteUser(callerId);
     return error ? json(500, { error: error.message }) : json(200, { ok: true });
   }
@@ -218,7 +225,7 @@ export async function POST(request: Request) {
     case 'delete-user': {
       if (!body.userId) return json(400, { error: 'missing' });
       if (body.userId === callerId) return json(400, { error: 'use_delete_self' });
-      await removeProofs(body.userId);
+      await removeFiles(body.userId);
       const { error } = await admin.auth.admin.deleteUser(body.userId);
       if (error) return json(500, { error: error.message });
       await log(body.logAction === 'refuse' ? 'refuse' : 'delete_user', body.name ?? body.userId);

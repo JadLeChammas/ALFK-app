@@ -180,7 +180,8 @@ export default function Repere() {
       </Card>
 
       {isDesktop ? (
-        <View style={{ flexDirection: 'row', gap: 20, alignItems: 'flex-start' }}>
+        // On a narrow screen the universities drop below the two lists instead of being squeezed.
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 20, alignItems: 'flex-start' }}>
           <Card style={{ width: 260 }}>
             <SectionHeader title={d.repere.continent} icon="globe" />
             {continentList}
@@ -189,7 +190,7 @@ export default function Repere() {
             <SectionHeader title={d.repere.country} icon="flag" count={f(d.repere.countriesCount, { n: countries.length })} />
             {countryList}
           </Card>
-          <Card style={{ flex: 1 }}>
+          <Card style={{ flex: 1, minWidth: 340 }}>
             <SectionHeader title={ac ? f(mode === 'work' ? d.situation.companiesIn : d.repere.universitiesIn, { country: countryOf(ac.code) }) : mode === 'work' ? d.situation.companies : d.repere.universities} icon={mode === 'work' ? 'briefcase' : 'book'} count={f(mode === 'work' ? d.situation.companiesCount : d.repere.universitiesCount, { n: universities.length })} />
             {universityList}
           </Card>
@@ -286,8 +287,8 @@ function PickRow({ label, count, active, onPress, leading, disabled }: { label: 
       style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, height: 44, borderRadius: 12, backgroundColor: active ? colors.secondarySoft : 'transparent', opacity: disabled ? 0.4 : 1, borderLeftWidth: 3, borderLeftColor: active ? colors.primary : 'transparent' }}
       hoverStyle={!active && { backgroundColor: colors.surfaceAlt }}>
       {leading}
-      <Txt variant="bodyStrong" numberOfLines={1} style={{ flex: 1, fontSize: 14, color: active ? colors.navy : colors.text }}>{label}</Txt>
-      <Txt variant="smallStrong" style={{ color: active ? colors.navy : colors.textSubtle }}>{count}</Txt>
+      <Txt variant="bodyStrong" numberOfLines={1} style={{ flex: 1, fontSize: 14, color: colors.text }}>{label}</Txt>
+      <Txt variant="smallStrong" style={{ color: active ? colors.text : colors.textSubtle }}>{count}</Txt>
       {active && <Feather name="chevron-right" size={15} color={colors.primary} />}
     </Tap>
   );

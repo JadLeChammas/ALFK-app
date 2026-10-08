@@ -74,7 +74,7 @@ const kw: Dict = {
     photo: 'Sooratik', addPhoto: 'Zeed soora', photoRequired: 'Zeed soora maalik 3ashan tsawwi account.', missingPhotoTitle: 'Zeed soora maalik', missingPhotoSub: 'Sooratik ma wuslat (il internet ingita3): zeedha 3ashan il jama3a ti3arfik.', noPhoto: 'Ma fee soora', retryUpload: 'Jarrib mara thanya', requiredLegend: '* Khaanaat laazma',
   },
   home: {
-    hello: 'Chlonak {name}', heroTitle: 'Jam3a wa7da,\nalf 9i9a.',
+    hello: 'Chlonak {name}', helloEvening: "Masa el 5air {name}", heroTitle: 'Jam3a wa7da,\nalf 9i9a.',
     heroSub: 'Ilga rab3ik bil 9aff, shoof il events w khallik ma3a jam3at il LFK.',
     quickActions: 'Ashya2 sarree3a', seeEvents: 'Shoof il events', myPromo: 'Il promo maali', nextEvent: 'Il event il jaay',
     news: 'Akhbaar', birthdays: 'Ayyaam meelaad garreeba', seeEvent: 'Shoof il event', seeAllNews: 'Kil il akhbaar',

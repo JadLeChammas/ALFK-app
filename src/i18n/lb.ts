@@ -74,7 +74,7 @@ const lb: Dict = {
     photo: 'Sourtak', addPhoto: 'Zid soura', photoRequired: 'Zid soura la 7alak ta ta3mol compte.', missingPhotoTitle: 'Zid soura la 7alak', missingPhotoSub: 'Sourtak ma wislit (el internet n2ata3): zida ta ya3rfak el jame3a.', noPhoto: 'Ma fi soura', retryUpload: 'Jarreb marra tenye', requiredLegend: '* Chaghlet darouriye',
   },
   home: {
-    hello: 'Kifak {name}', heroTitle: 'Jame3a we7de,\nalf 7ikeye.',
+    hello: 'Kifak {name}', helloEvening: "Masa el kheir {name}", heroTitle: 'Jame3a we7de,\nalf 7ikeye.',
     heroSub: 'Le2e rfa2ak bel saff, chouf el events w khallik 3a tawassol ma3 jame3et el LFK.',
     quickActions: 'Chaghlet sri3a', seeEvents: 'Chouf el events', myPromo: 'El promo taba3e', nextEvent: 'El event el jey',
     news: 'Akhbar', birthdays: '3ayed mileds 2arib', seeEvent: 'Chouf el event', seeAllNews: 'Kel el akhbar',

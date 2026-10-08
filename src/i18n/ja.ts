@@ -69,7 +69,7 @@ const ja: Dict = {
     photo: 'プロフィール写真', addPhoto: '写真を追加', photoRequired: 'アカウント作成にはプロフィール写真が必要です。', retryUpload: 'もう一度送信', missingPhotoTitle: 'プロフィール写真を追加', missingPhotoSub: '写真が届きませんでした（接続が切れました）。コミュニティがあなたを見つけられるよう追加してください。', noPhoto: '写真なし', requiredLegend: '* は必須項目です',
   },
   home: {
-    hello: 'こんにちは、{name}さん', heroTitle: 'ひとつのコミュニティ、\n無数のストーリー。',
+    hello: 'こんにちは、{name}さん', helloEvening: "こんばんは、{name}さん", heroTitle: 'ひとつのコミュニティ、\n無数のストーリー。',
     heroSub: '同級生と再会し、イベントを見つけ、LFKのコミュニティとつながり続けましょう。',
     quickActions: 'クイックアクション', seeEvents: 'イベントを見る', myPromo: '私のLFK学年', nextEvent: '次のイベント',
     news: 'ニュース', birthdays: '近日の誕生日', seeEvent: 'イベントを見る', seeAllNews: 'すべてのニュース',

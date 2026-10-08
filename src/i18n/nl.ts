@@ -69,7 +69,7 @@ const nl: Dict = {
     photo: 'Profielfoto', addPhoto: 'Foto toevoegen', photoRequired: 'Voeg een profielfoto toe om je account aan te maken.', missingPhotoTitle: 'Voeg je profielfoto toe', missingPhotoSub: 'Je foto is niet aangekomen (verbinding verbroken): voeg hem toe zodat de community je herkent.', noPhoto: 'Geen foto', retryUpload: 'Opnieuw verzenden', requiredLegend: '* Verplichte velden',
   },
   home: {
-    hello: 'Hallo {name}', heroTitle: 'Eén gemeenschap,\nduizenden verhalen.',
+    hello: 'Hallo {name}', helloEvening: "Goedenavond {name}", heroTitle: 'Eén gemeenschap,\nduizenden verhalen.',
     heroSub: 'Vind je klasgenoten terug, ontdek de evenementen en blijf verbonden met de LFK-gemeenschap.',
     quickActions: 'Snelle acties', seeEvents: 'Evenementen bekijken', myPromo: 'Mijn jaargang', nextEvent: 'Volgend evenement',
     news: 'Nieuws', birthdays: 'Komende verjaardagen', seeEvent: 'Evenement bekijken', seeAllNews: 'Al het nieuws',

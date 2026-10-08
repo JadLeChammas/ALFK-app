@@ -28,6 +28,11 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
   const { isMobile } = useLayout();
   const insets = useSafeAreaInsets();
   const [q, setQ] = useState('');
+  // Closed however it was (Close, tap outside, Escape, a result): it opens empty next time.
+  const close = () => {
+    setQ('');
+    onClose();
+  };
 
   const results = useMemo(() => {
     const n = norm(q.trim());
@@ -52,22 +57,21 @@ export function GlobalSearch({ visible, onClose }: { visible: boolean; onClose: 
   const legend = legendQuery(q);
 
   const go = (href: string) => {
-    onClose();
-    setQ('');
+    close();
     router.push(href as never);
   };
 
   const count = results ? results.m.length + results.promos.length + results.countries.length + results.events.length + results.pubs.length : 0;
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable onPress={onClose} style={{ flex: 1, backgroundColor: colors.overlay, alignItems: 'center', paddingTop: isMobile ? insets.top + 8 : 90, paddingHorizontal: isMobile ? 8 : 16 }}>
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={close}>
+      <Pressable onPress={close} style={{ flex: 1, backgroundColor: colors.overlay, alignItems: 'center', paddingTop: isMobile ? insets.top + 8 : 90, paddingHorizontal: isMobile ? 8 : 16 }}>
         <Pressable
           onPress={() => {}}
           style={{ width: '100%', maxWidth: 640, maxHeight: isMobile ? '92%' : '75%', backgroundColor: colors.surface, borderRadius: radius.hero, borderWidth: 1, borderColor: colors.border, overflow: 'hidden' }}>
           <View style={{ padding: 14, borderBottomWidth: 1, borderBottomColor: colors.border, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <SearchBar value={q} onChangeText={setQ} placeholder={d.search.placeholder} autoFocus style={{ flex: 1, backgroundColor: colors.surfaceAlt }} />
-            <Tap onPress={onClose} style={{ paddingHorizontal: 8 }}>
+            <Tap onPress={close} style={{ paddingHorizontal: 8 }}>
               <Txt variant="smallStrong" color="textMuted">{d.common.close}</Txt>
             </Tap>
           </View>

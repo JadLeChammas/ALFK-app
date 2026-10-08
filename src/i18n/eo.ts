@@ -69,7 +69,7 @@ const eo: Dict = {
     photo: 'Profilfoto', addPhoto: 'Aldoni foton', photoRequired: 'Aldonu profilfoton por krei vian konton.', missingPhotoTitle: 'Aldonu vian profilfoton', missingPhotoSub: 'Via foto ne alvenis (konekto interrompita): aldonu ĝin por ke la komunumo rekonu vin.', noPhoto: 'Sen foto', retryUpload: 'Resendi', requiredLegend: '* Devigaj kampoj',
   },
   home: {
-    hello: 'Saluton, {name}', heroTitle: 'Unu komunumo,\nmiloj da rakontoj.',
+    hello: 'Saluton, {name}', helloEvening: "Bonan vesperon, {name}", heroTitle: 'Unu komunumo,\nmiloj da rakontoj.',
     heroSub: 'Retrovu viajn samklasanojn, malkovru la eventojn kaj restu ligita al la komunumo de LFK.',
     quickActions: 'Rapidaj agoj', seeEvents: 'Vidi la eventojn', myPromo: 'Mia promocio', nextEvent: 'Venonta evento',
     news: 'Novaĵoj', birthdays: 'Venontaj naskiĝtagoj', seeEvent: 'Vidi la eventon', seeAllNews: 'Ĉiuj novaĵoj',
