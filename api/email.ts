@@ -133,10 +133,13 @@ async function signupNotify(admin: SupabaseClient, body: Body) {
     .select(COLUMNS)
     .single();
   const member = (updated ?? p) as Recipient;
-  await sendEvent(admin, 'signupReceived', [member]);
+  // Each email on its own: one refused by Brevo does not stop the other. Failures go to the Vercel logs.
+  await sendEvent(admin, 'signupReceived', [member]).catch((e) => console.error('signupReceived failed', id, e));
   const name = [member.first_name, (member.last_name ?? '').toLocaleUpperCase('fr')].filter(Boolean).join(' ');
   // The « new account to review » alert goes to the Amicale's own inbox only, not to every admin.
-  await sendEvent(admin, 'adminPending', [SIGNUP_ALERT], (locale) => ({ membre: name, role: ROLE_NAMES[locale][member.role ?? 'alumni'] ?? '' }));
+  await sendEvent(admin, 'adminPending', [SIGNUP_ALERT], (locale) => ({ membre: name, role: ROLE_NAMES[locale][member.role ?? 'alumni'] ?? '' })).catch((e) =>
+    console.error('adminPending alert failed', SIGNUP_ALERT.email, e)
+  );
   return json(200, { ok: true });
 }
 
