@@ -949,6 +949,9 @@ const ja: Dict = {
   mh: {
     discussionHint: "名誉会員とそのスペースの管理者だけが見られます。", section: "名誉会員", circleSub: "名誉会員のサロン。", publications: "非公開の投稿", publicationsSub: "名誉会員のスペースでのみ表示されます。", messages: "名誉会員メッセージ", members: "メンバー", membersSub: "Amicale の名誉会員と、その所在地。", newPost: "新しい投稿", postTitle: "タイトル", postBody: "本文", publish: "投稿する", published: "名誉会員と共有しました", empty: "まだ投稿はありません。", access: "名誉会員スペースへのアクセス", accessOn: "アクセスを付与しました", accessOff: "アクセスを取り消しました", createHint: "名誉会員：姓名、メールアドレス、パスワードだけで作成できます。初回ログイン時に写真、役職、国、都市を入力します。", setupTitle: "Amicale へようこそ", setupSub: "名誉会員のプロフィールを完成させてください：写真、役職、お住まいの場所。", photo: "プロフィール写真", addPhoto: "写真を追加", changePhoto: "写真を変更", fonction: "役職", fonctionPlaceholder: "例：校長、大使…", missing: "未入力：", setupSave: "保存して続ける",
   },
+  parental: {
+    title: "保護者の同意書", sub: "15歳未満の方は、保護者（または法定代理人）が署名した同意書を添付してください。同意書がないとアカウントは承認されません。", required: "署名済みの保護者の同意書を追加してください。", received: "保護者の同意書を受け取りました", none: "保護者の同意書がありません", view: "保護者の同意書を見る", send: "同意書を送信", sent: "保護者の同意書を送信しました", pendingHint: "15歳未満の方：保護者が署名した同意書を受け取り次第、アカウントを承認します。", under15: "15歳未満",
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

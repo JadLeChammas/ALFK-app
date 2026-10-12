@@ -33,6 +33,18 @@ export const isValidBureauCode = (code: string) => /^\d{4}$/.test(code);
 export const requiresContact = (role: Role) => role !== 'honneur';
 
 /**
+ * Under 15 (French law: a minor consents alone to the use of their data from 15): the sign-up asks
+ * for an authorization signed by a parent, and the account is only approved with it (migration 053).
+ */
+export function isUnder15(birthDate?: string | null, today = new Date()) {
+  if (!birthDate) return false;
+  const [y, m, d] = birthDate.split('-').map(Number);
+  if (!y || !m || !d) return false;
+  const age = today.getFullYear() - y - (today.getMonth() + 1 < m || (today.getMonth() + 1 === m && today.getDate() < d) ? 1 : 0);
+  return age < 15;
+}
+
+/**
  * An honorary member's account is created by an admin with only a name, an e-mail and a password; on
  * their first sign-in they add their photo, their title, their country and city (app/profil-honneur.tsx).
  */

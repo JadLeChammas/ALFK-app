@@ -950,6 +950,9 @@ const pirate: Dict = {
   mh: {
     discussionHint: "Only seen by th' honoured hands an' th' officers o' their quarters.", section: "Honoured hands", circleSub: "Th' honoured hands' quarters.", publications: "Private scrolls", publicationsSub: "Only seen in th' honoured hands' quarters.", messages: "Honoured hands’ letters", members: "Crew", membersSub: "Th' Amicale's honoured hands, an' where they be.", newPost: "New scroll", postTitle: "Title", postBody: "Text", publish: "Nail it up", published: "Scroll shared with th' honoured hands", empty: "No scrolls yet.", access: "Key to th' honoured quarters", accessOn: "Key handed over", accessOff: "Key taken back", createHint: "Honoured hand: name, e-mail an' password be enough. First time aboard, they add their picture, rank, country an' port.", setupTitle: "Welcome aboard", setupSub: "Finish yer honoured hand's papers: yer picture, yer rank an' yer home port.", photo: "Picture", addPhoto: "Add a picture", changePhoto: "Change picture", fonction: "Yer rank", fonctionPlaceholder: "E.g. Captain, Ambassador…", missing: "Still to fill:", setupSave: "Save an’ sail on",
   },
+  parental: {
+    title: "Parents' permission", sub: "Ye be under 15: attach a permission signed by one o' yer parents (or guardian). Without it, yer papers can't be approved.", required: "Add th' signed parents' permission.", received: "Parents' permission received", none: "Parents' permission missin'", view: "See th' parents' permission", send: "Send th' permission", sent: "Parents' permission sent", pendingHint: "Ye be under 15: yer papers be approved as soon as we get th' permission signed by one o' yer parents.", under15: "Under 15",
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

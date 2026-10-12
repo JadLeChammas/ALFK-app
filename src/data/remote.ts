@@ -54,6 +54,7 @@ export const toUser = (r: Row): User => ({
   alumniNumber: opt(r.alumni_number),
   bureauCode: opt(r.bureau_code),
   proof: r.proof_path ? { path: r.proof_path, name: r.proof_name ?? '', mimeType: opt(r.proof_mime), uploadedAt: r.proof_uploaded_at ?? r.created_at } : undefined,
+  parental: r.parental_path ? { path: r.parental_path, name: r.parental_name ?? '', mimeType: opt(r.parental_mime), uploadedAt: r.parental_uploaded_at ?? r.created_at } : undefined,
   createdByAdmin: !!r.created_by_admin,
   grade: r.grade === '2nde' || r.grade === '1ere' || r.grade === 'Tle' ? r.grade : undefined,
   needsCompletion: !!r.needs_completion,
@@ -347,7 +348,7 @@ export class PhotoUploadError extends Error {
   }
 }
 
-export async function uploadSignupFiles(userId: string, email: string, proof: PickedDoc | null, photo?: PickedImage | null) {
+export async function uploadSignupFiles(userId: string, email: string, proof: PickedDoc | null, photo?: PickedImage | null, parental?: PickedDoc | null) {
   const sb = supabase!;
   // Signed in (a pending member adding a missing file): the server also accepts the session, so the
   // files can be sent at any time, not only in the minutes after signing up.
@@ -360,7 +361,7 @@ export async function uploadSignupFiles(userId: string, email: string, proof: Pi
         headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
         body: JSON.stringify({ userId, email, ...payload }),
       });
-      const json = (await res.json().catch(() => ({}))) as { error?: string; proof?: { path: string; token: string }; photo?: { path: string; token: string } };
+      const json = (await res.json().catch(() => ({}))) as { error?: string; proof?: { path: string; token: string }; photo?: { path: string; token: string }; parental?: { path: string; token: string } };
       if (!res.ok) throw new Error(json.error ?? `http_${res.status}`);
       return json;
     });
@@ -369,7 +370,9 @@ export async function uploadSignupFiles(userId: string, email: string, proof: Pi
   const proofType = proof && proofBody ? await checkUpload(proofBody, proof.name, proof.mimeType, PROOF_TYPES) : null;
   const photoBody = photo ? (photo.base64 ? base64ToBytes(photo.base64) : await (await fetch(photo.uri)).blob()) : null;
   const photoType = photo && photoBody ? await checkUpload(photoBody, photo.uri, photo.mimeType, IMAGE_TYPES) : null;
-  const links = await post({ action: 'signup-upload', proofExt: proofType ? extensionFor(proofType) : undefined, photoExt: photoType ? extensionFor(photoType) : undefined });
+  const parentalBody = parental ? (parental.file ?? (parental.base64 ? base64ToBytes(parental.base64) : await (await fetch(parental.uri)).arrayBuffer())) : null;
+  const parentalType = parental && parentalBody ? await checkUpload(parentalBody, parental.name, parental.mimeType, PROOF_TYPES) : null;
+  const links = await post({ action: 'signup-upload', proofExt: proofType ? extensionFor(proofType) : undefined, photoExt: photoType ? extensionFor(photoType) : undefined, parentalExt: parentalType ? extensionFor(parentalType) : undefined });
   const done: Record<string, unknown> = {};
   // A file the storage already has (an earlier try that went through) counts as sent.
   const send = (bucket: string, link: { path: string; token: string }, body: Blob | ArrayBuffer | Uint8Array, contentType: string) =>
@@ -394,7 +397,16 @@ export async function uploadSignupFiles(userId: string, email: string, proof: Pi
       photoFailed = true;
     }
   }
-  if (done.proof || done.photo) await post({ action: 'signup-finish', ...done });
+  // Under 15: the parental authorization (a lost one is asked for again on the pending screen).
+  if (parental && parentalBody && parentalType && links.parental) {
+    try {
+      await send('proofs', links.parental, parentalBody, parentalType);
+      done.parental = { path: links.parental.path, name: parental.name, mime: parentalType };
+    } catch {
+      // the pending screen asks for it again
+    }
+  }
+  if (done.proof || done.photo || done.parental) await post({ action: 'signup-finish', ...done });
   if (photoFailed) throw new PhotoUploadError();
   // Photo in place, only the proof missing: the pending screen asks for it again.
   if (proof && !done.proof) throw new Error('proof_only');

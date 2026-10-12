@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { Platform } from 'react-native';
 
 import { isRemote, supabase } from '@/lib/supabase';
-import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isValidBureauCode, LFK_SCHOOL, properFirstName } from './members';
+import { applyRoleRules, contactError, FIRST_ALUMNI_NUMBER, isUnder15, isValidBureauCode, LFK_SCHOOL, properFirstName } from './members';
 import { can, canMessage, isMhPair, isRestricted, SELF_SIGNUP_ROLES } from './permissions';
 import { parseAliases } from './places';
 import { sortPartners } from './partners';
@@ -176,7 +176,7 @@ function useStoreValue() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
   /** A sign-up whose photo could not be sent yet (same account, files sent again by retrySignupFiles). */
-  const pendingSignup = useRef<{ userId: string; input: SignUpInput; hasSession: boolean } | null>(null);
+  const pendingSignup = useRef<{ userId: string; input: SignUpInput; hasSession: boolean; parental?: PickedDoc | null } | null>(null);
   // The sign-up proof and photo are still being sent: the pending screen says so instead of « not received ».
   const [sendingSignupFiles, setSendingSignupFiles] = useState(false);
   const dbRef = useRef<Db | null>(null);
@@ -392,7 +392,7 @@ function useStoreValue() {
       saveSession({ userId: u.id });
       return { ok: true };
     },
-    async signUp(input: SignUpInput, proof: PickedDoc | null, photo?: PickedImage | null): Promise<Result> {
+    async signUp(input: SignUpInput, proof: PickedDoc | null, photo?: PickedImage | null, parental?: PickedDoc | null): Promise<Result> {
       if (input.password.length < 8) return { ok: false, error: 'weak_password' };
       if (!proof) return { ok: false, error: 'proof' };
       // No account without a profile photo.
@@ -438,13 +438,13 @@ function useStoreValue() {
         if (data.user?.identities?.length) {
           setSendingSignupFiles(true);
           try {
-            await uploadSignupFiles(data.user.id, input.email, proof, photo);
+            await uploadSignupFiles(data.user.id, input.email, proof, photo, parental);
           } catch (err) {
             // The photo is mandatory: if it did not arrive (bad connection, even after the retries), the
             // sign-up stops here and the form offers to send it again (retrySignupFiles) — never an
             // account without a photo. A lost proof only is asked for again on the pending screen.
             if (!(err instanceof Error) || err.message !== 'proof_only') {
-              pendingSignup.current = { userId: data.user.id, input, hasSession: !!data.session };
+              pendingSignup.current = { userId: data.user.id, input, hasSession: !!data.session, parental };
               setSendingSignupFiles(false);
               return { ok: false, error: 'photo_upload' };
             }
@@ -463,6 +463,7 @@ function useStoreValue() {
         ...input,
         bureauCode: undefined,
         proof: proof ? { path: proof.uri, name: proof.name, mimeType: proof.mimeType ?? undefined, uploadedAt: nowIso() } : undefined,
+        parental: parental ? { path: parental.uri, name: parental.name, mimeType: parental.mimeType ?? undefined, uploadedAt: nowIso() } : undefined,
         avatar: photo?.uri,
         email: input.email.trim(),
         id: demoId('u'),
@@ -495,7 +496,7 @@ function useStoreValue() {
       if (!p || !supabase) return { ok: false, error: 'unknown' };
       setSendingSignupFiles(true);
       try {
-        await uploadSignupFiles(p.userId, p.input.email, proof, photo);
+        await uploadSignupFiles(p.userId, p.input.email, proof, photo, p.parental);
       } catch {
         setSendingSignupFiles(false);
         return { ok: false, error: 'photo_upload' };
@@ -1043,6 +1044,30 @@ function useStoreValue() {
       commit((d) => ({ ...d, users: d.users.map((u) => (u.id === meId ? { ...u, proof } : u)) }));
       return { ok: true };
     },
+    /** Under 15, waiting for approval: sends the authorization signed by a parent. */
+    async submitParental(doc: PickedDoc): Promise<Result> {
+      if (!meId) return { ok: false, error: 'unknown' };
+      let path = doc.uri;
+      if (supabase) {
+        try {
+          const up = await uploadProof(meId, doc);
+          path = up.path;
+          const { error: e } = await supabase.from('profiles').update({ parental_path: up.path, parental_name: doc.name.slice(0, 200), parental_mime: up.type, parental_uploaded_at: nowIso() }).eq('id', meId);
+          if (e) throw e;
+        } catch {
+          return { ok: false, error: 'unknown' };
+        }
+      }
+      const parental = { path, name: doc.name, mimeType: doc.mimeType ?? undefined, uploadedAt: nowIso() };
+      commit((d) => ({ ...d, users: d.users.map((u) => (u.id === meId ? { ...u, parental } : u)) }));
+      return { ok: true };
+    },
+    /** Admins: a link to open a member's parental authorization (temporary signed link with Supabase). */
+    async openParental(userId: string): Promise<string | null> {
+      const u = dbRef.current?.users.find((x) => x.id === userId);
+      if (!u?.parental) return null;
+      return supabase ? proofUrl(u.parental.path) : u.parental.path;
+    },
     /** Admins: a link to open a member's proof (temporary signed link with Supabase). */
     async openProof(userId: string): Promise<string | null> {
       const u = dbRef.current?.users.find((x) => x.id === userId);
@@ -1055,6 +1080,8 @@ function useStoreValue() {
       if (!target) return { ok: false, error: 'unknown' };
       // Honorary members have no proof of schooling.
       if (!target.proof && !target.createdByAdmin) return { ok: false, error: 'proof' };
+      // Under 15: only with the parental authorization.
+      if (isUnder15(target.birthDate) && !target.parental && !target.createdByAdmin) return { ok: false, error: 'proof' };
       actions.approveUserNow(id);
       return { ok: true };
     },

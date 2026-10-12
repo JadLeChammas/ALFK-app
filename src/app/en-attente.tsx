@@ -10,6 +10,7 @@ import { Avatar, Badge, Button, Row } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
 import type { PickedDoc, PickedImage } from '@/data/remote';
 import { pickImages } from '@/lib/media';
+import { isUnder15 } from '@/data/members';
 import { useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -40,6 +41,17 @@ export default function Pending() {
     toast(r.ok ? d.crop.saved : d.auth.errors.unknown, r.ok ? 'success' : 'danger');
   };
   const hasProof = !!me?.proof || !!me?.createdByAdmin;
+  const [parentalDoc, setParentalDoc] = useState<PickedDoc | null>(null);
+  const [parentalBusy, setParentalBusy] = useState(false);
+  const sendParental = async () => {
+    if (!parentalDoc) return;
+    setParentalBusy(true);
+    const r = await actions.submitParental(parentalDoc);
+    setParentalBusy(false);
+    if (!r.ok) return toast(d.auth.errors.unknown, 'danger');
+    setParentalDoc(null);
+    toast(d.parental.sent);
+  };
   const send = async () => {
     if (!doc) return;
     setBusy(true);
@@ -94,6 +106,25 @@ export default function Pending() {
           <ProofPicker value={doc} onChange={setDoc} student={me?.role === 'eleve' ? { grade: me.grade, name: `${me.firstName} ${me.lastName}` } : undefined} />
           <Button label={d.proof.send} icon="send" full size="lg" onPress={send} disabled={!doc} loading={busy} />
         </View>
+      )}
+      {/* Under 15: the account is approved only with an authorization signed by a parent. */}
+      {!!me && isUnder15(me.birthDate) && !me.createdByAdmin && (
+        me.parental ? (
+          <Row gap={10} style={{ padding: 14, borderRadius: 16, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}>
+            <Feather name="file-text" size={18} color={colors.primary} />
+            <Txt variant="smallStrong" style={{ flex: 1 }} numberOfLines={1}>{me.parental.name}</Txt>
+            <Badge label={d.parental.received} tone="success" />
+          </Row>
+        ) : (
+          <View style={{ gap: 12 }}>
+            <Row gap={8} style={{ padding: 12, borderRadius: 12, backgroundColor: colors.warningSoft }}>
+              <Feather name="alert-triangle" size={16} color={colors.warning} />
+              <Txt variant="smallStrong" style={{ flex: 1 }}>{d.parental.pendingHint}</Txt>
+            </Row>
+            <ProofPicker parental value={parentalDoc} onChange={setParentalDoc} />
+            <Button label={d.parental.send} icon="send" full size="lg" onPress={sendParental} disabled={!parentalDoc} loading={parentalBusy} />
+          </View>
+        )
       )}
       {/* The photo chosen at sign-up never arrived (bad connection): ask for it again. */}
       {!!me && !me.avatar && !sendingSignupFiles && (

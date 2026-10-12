@@ -24,17 +24,20 @@ export function ProofPicker({
   error,
   required,
   student,
+  parental,
 }: {
   value: PickedDoc | null;
   onChange: (doc: PickedDoc | null) => void;
   error?: boolean;
   required?: boolean;
   student?: { grade?: Grade | ''; name?: string };
+  /** The parental authorization of a member under 15 (same picker, its own texts). */
+  parental?: boolean;
 }) {
   const { d, f } = useI18n();
   const year = schoolYear();
-  const title = student ? f(d.proof.studentTitle, { year }) : d.proof.title;
-  const checks = student
+  const title = parental ? d.parental.title : student ? f(d.proof.studentTitle, { year }) : d.proof.title;
+  const checks = student && !parental
     ? [
         f(d.proof.checkYear, { year }),
         student.grade ? f(d.proof.checkGrade, { grade: d.grade[student.grade] }) : d.proof.checkGradeAny,
@@ -77,7 +80,7 @@ export function ProofPicker({
           </View>
           <View style={{ flex: 1, gap: 4 }}>
             <Txt variant="bodyStrong">{required ? `${title} *` : title}</Txt>
-            <Txt variant="small" color="textMuted">{student ? d.proof.studentSub : d.proof.sub}</Txt>
+            <Txt variant="small" color="textMuted">{parental ? d.parental.sub : student ? d.proof.studentSub : d.proof.sub}</Txt>
             {checks.map((c) => (
               <Row key={c} gap={6} style={{ alignItems: 'flex-start' }}>
                 <Feather name="check-circle" size={13} color={colors.primary} style={{ marginTop: 3 }} />
@@ -101,7 +104,7 @@ export function ProofPicker({
         <Txt variant="small" color="textSubtle">{d.proof.formats}</Txt>
       </View>
       {rejected && <Txt variant="smallStrong" color="danger">{rejected === 'file_too_large' ? d.proof.tooBig : d.auth.errors.file_type}</Txt>}
-      {error && !rejected && <Txt variant="smallStrong" color="danger">{d.auth.errors.proof}</Txt>}
+      {error && !rejected && <Txt variant="smallStrong" color="danger">{parental ? d.parental.required : d.auth.errors.proof}</Txt>}
     </View>
   );
 }

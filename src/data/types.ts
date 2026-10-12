@@ -45,6 +45,8 @@ export type User = {
   bureauCode?: string;
   /** Proof of schooling sent at sign-up (private: only admins can open it). Required before approval. */
   proof?: { path: string; name: string; mimeType?: string; uploadedAt: string };
+  /** Under 15 at sign-up: the authorization signed by a parent (private, admins only; migration 053). */
+  parental?: { path: string; name: string; mimeType?: string; uploadedAt: string };
   /** Students: their class (moved up each year by an admin, see promoteStudents). */
   grade?: Grade;
   /** A former Terminale student just made alumni: fills in their account before using the site. */

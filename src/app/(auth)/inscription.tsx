@@ -18,7 +18,7 @@ import { Select } from '@/components/ui/Select';
 import { Flag } from '@/components/ui/Flag';
 import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
-import { formatPhone, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
+import { formatPhone, isUnder15, isValidPhoneNumber, LFK_SCHOOL, parseFrDate } from '@/data/members';
 import { SELF_SIGNUP_ROLES } from '@/data/permissions';
 import { checkPicked, type PickedDoc, type PickedImage } from '@/data/remote';
 import { IMAGE_TYPES, isFileRejected } from '@/lib/fileSafety';
@@ -37,6 +37,9 @@ export default function SignUp() {
   /** Step 1 (name, e-mail, new password) is a real form on the web, for password managers. */
   const identityForm = useRef<CredentialFormHandle>(null);
   const [proof, setProof] = useState<PickedDoc | null>(null);
+  // Under 15: an authorization signed by a parent is asked for too.
+  const [parental, setParental] = useState<PickedDoc | null>(null);
+  const [parentalMissing, setParentalMissing] = useState(false);
   // Same questions as the profile: nationalities, photo, a few words, and (alumni) answering students.
   const [nationalities, setNationalities] = useState<string[]>([]);
   const [fields, setFields] = useState<string[]>([]);
@@ -78,7 +81,9 @@ export default function SignUp() {
     // The profile photo and the proof of schooling are mandatory: no account without them.
     setPhotoMissing(!photo);
     if (!proof) setError('proof');
-    if (!photo || !proof) return;
+    const needsParental = isUnder15(parseFrDate(form.birth));
+    setParentalMissing(needsParental && !parental);
+    if (!photo || !proof || (needsParental && !parental)) return;
     // The account was created but its photo could not be sent: send the files again (same account).
     if (error === 'photo_upload') {
       setBusy(true);
@@ -116,7 +121,7 @@ export default function SignUp() {
       otherSchools: alumni && otherSchools.length ? otherSchools : undefined,
       marketing: !noNews,
       locale: lang === 'fr' ? 'fr' : 'en',
-    }, proof, photo);
+    }, proof, photo, isUnder15(parseFrDate(form.birth)) ? parental : null);
     setBusy(false);
     // The account exists: the browser may offer to save the e-mail and password (Chrome, Edge…).
     if (r.ok) void offerToSavePassword(form.email.trim(), form.password, `${form.firstName} ${form.lastName}`.trim());
@@ -328,6 +333,7 @@ export default function SignUp() {
           )}
           <Input label={`${d.profile.bio} (${d.common.optional})`} value={bio} onChangeText={setBio} multiline maxLength={600} />
           <ProofPicker value={proof} onChange={(p) => { setProof(p); setError(null); }} error={error === 'proof'} required student={form.role === 'eleve' ? { grade: form.grade, name: `${form.firstName} ${form.lastName}` } : undefined} />
+          {isUnder15(parseFrDate(form.birth)) && <ProofPicker parental value={parental} onChange={(p) => { setParental(p); setParentalMissing(false); }} error={parentalMissing} required />}
           <Row gap={8} style={{ alignItems: 'flex-start' }}>
             <Feather name="lock" size={13} color={colors.textSubtle} style={{ marginTop: 2 }} />
             <Txt variant="small" color="textSubtle" style={{ flex: 1 }}>{d.proof.privacy}</Txt>

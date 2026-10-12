@@ -40,9 +40,12 @@ type Body = {
   /** signup-upload: which files are coming (their extensions). */
   proofExt?: string;
   photoExt?: string;
+  /** Under 15: the parental authorization (migration 053). */
+  parentalExt?: string;
   /** signup-finish: what was uploaded. */
   proof?: { path: string; name?: string; mime?: string };
   photo?: { path: string };
+  parental?: { path: string; name?: string; mime?: string };
 };
 
 // Only these extensions get an upload link (the buckets also refuse any other file type).
@@ -83,14 +86,16 @@ export async function POST(request: Request) {
     const bearer = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
     const self = !!u && !!bearer && (await admin.auth.getUser(bearer)).data.user?.id === u.id;
     if (!u || !(self || (fresh && sameEmail))) return json(403, { error: 'forbidden' });
-    const { data: p } = await admin.from('profiles').select('approved, proof_path, avatar').eq('id', userId).single();
+    // `*`: parental_path (migration 053) is read when the column exists, without breaking sign-ups before.
+    const { data: p } = await admin.from('profiles').select('*').eq('id', userId).single();
     if (!p || p.approved) return json(403, { error: 'forbidden' });
 
     if (body.action === 'signup-upload') {
       const out: Record<string, { path: string; token: string }> = {};
       const proofExt = ext(body.proofExt, PROOF_EXTS);
       const photoExt = ext(body.photoExt, PHOTO_EXTS);
-      if ((body.proofExt && !proofExt) || (body.photoExt && !photoExt)) return json(400, { error: 'file_type' });
+      const parentalExt = ext(body.parentalExt, PROOF_EXTS);
+      if ((body.proofExt && !proofExt) || (body.photoExt && !photoExt) || (body.parentalExt && !parentalExt)) return json(400, { error: 'file_type' });
       if (proofExt && !p.proof_path) {
         const { data, error } = await admin.storage.from('proofs').createSignedUploadUrl(`${userId}/${randomId()}.${proofExt}`);
         if (error || !data) return json(500, { error: error?.message ?? 'failed' });
@@ -100,6 +105,11 @@ export async function POST(request: Request) {
         const { data, error } = await admin.storage.from('media').createSignedUploadUrl(`${userId}/avatars/${randomId()}.${photoExt}`);
         if (error || !data) return json(500, { error: error?.message ?? 'failed' });
         out.photo = { path: data.path, token: data.token };
+      }
+      if (parentalExt && !p.parental_path) {
+        const { data, error } = await admin.storage.from('proofs').createSignedUploadUrl(`${userId}/parental/${randomId()}.${parentalExt}`);
+        if (error || !data) return json(500, { error: error?.message ?? 'failed' });
+        out.parental = { path: data.path, token: data.token };
       }
       return json(200, { ok: true, ...out });
     }
@@ -115,6 +125,10 @@ export async function POST(request: Request) {
     if (body.proof?.path && !p.proof_path && body.proof.path.startsWith(`${userId}/`) && (await exists('proofs', body.proof.path))) {
       const mime = PROOF_MIMES.includes(body.proof.mime ?? '') ? body.proof.mime! : null;
       Object.assign(row, { proof_path: body.proof.path, proof_name: (body.proof.name ?? 'justificatif').slice(0, 200), proof_mime: mime, proof_uploaded_at: new Date().toISOString() });
+    }
+    if (body.parental?.path && 'parental_path' in p && !p.parental_path && body.parental.path.startsWith(`${userId}/parental/`) && (await exists('proofs', body.parental.path))) {
+      const mime = PROOF_MIMES.includes(body.parental.mime ?? '') ? body.parental.mime! : null;
+      Object.assign(row, { parental_path: body.parental.path, parental_name: (body.parental.name ?? 'autorisation').slice(0, 200), parental_mime: mime, parental_uploaded_at: new Date().toISOString() });
     }
     if (body.photo?.path && !p.avatar && body.photo.path.startsWith(`${userId}/avatars/`) && (await exists('media', body.photo.path))) {
       row.avatar = admin.storage.from('media').getPublicUrl(body.photo.path).data.publicUrl;
@@ -139,7 +153,7 @@ export async function POST(request: Request) {
    * leaders' photos and publication covers, which the site keeps showing.
    */
   const removeFiles = async (userId: string) => {
-    for (const [bucket, dir] of [['proofs', userId], ['cvs', userId], ['media', `${userId}/avatars`]] as const) {
+    for (const [bucket, dir] of [['proofs', userId], ['proofs', `${userId}/parental`], ['cvs', userId], ['media', `${userId}/avatars`]] as const) {
       const { data } = await admin.storage.from(bucket).list(dir, { limit: 1000 });
       const files = (data ?? []).filter((f) => f.id); // folders have no id
       if (files.length) await admin.storage.from(bucket).remove(files.map((f) => `${dir}/${f.name}`));

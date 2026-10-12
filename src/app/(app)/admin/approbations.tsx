@@ -10,7 +10,7 @@ import { countryByCode } from '@/data/countries';
 import { fullName, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { schoolYear } from '@/lib/schoolYear';
-import { awaitsApproval } from '@/data/members';
+import { awaitsApproval, isUnder15 } from '@/data/members';
 
 export default function Approvals() {
   const { d, f, relative, country } = useI18n();
@@ -75,6 +75,27 @@ export default function Approvals() {
                     <Badge label={d.proof.none} tone="danger" icon="alert-triangle" />
                   )}
                 </Row>
+                {isUnder15(u.birthDate) && !u.createdByAdmin && (
+                  <Row gap={8} wrap>
+                    <Badge label={d.parental.under15} tone="warning" icon="alert-triangle" />
+                    {u.parental ? (
+                      <Button
+                        label={d.parental.view}
+                        icon="external-link"
+                        size="sm"
+                        variant="secondary"
+                        onPress={async () => {
+                          const url = await actions.openParental(u.id);
+                          if (!url) return toast(d.auth.errors.unknown, 'danger');
+                          if (Platform.OS === 'web') window.open(url, '_blank', 'noopener');
+                          else Linking.openURL(url);
+                        }}
+                      />
+                    ) : (
+                      <Badge label={d.parental.none} tone="danger" icon="file-minus" />
+                    )}
+                  </Row>
+                )}
                 {u.role === 'eleve' && (
                   <Txt variant="small" color="textMuted">{f(d.proof.adminCheck, { year: schoolYear(), grade: u.grade ? d.grade[u.grade] : '?', name: fullName(u) })}</Txt>
                 )}
@@ -84,7 +105,7 @@ export default function Approvals() {
                     label={d.admin.approve}
                     icon="check"
                     style={{ flex: 1 }}
-                    disabled={!u.proof && !u.createdByAdmin}
+                    disabled={(!u.proof || (isUnder15(u.birthDate) && !u.parental)) && !u.createdByAdmin}
                     onPress={() => {
                       const r = actions.approveUser(u.id);
                       toast(r.ok ? `${fullName(u)} ✓` : d.admin.proofRequired, r.ok ? 'success' : 'danger');
