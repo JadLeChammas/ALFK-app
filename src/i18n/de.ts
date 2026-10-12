@@ -952,6 +952,9 @@ const de: Dict = {
   parental: {
     title: "Einverständniserklärung der Eltern", sub: "Du bist unter 15: Füge eine von einem Elternteil (oder gesetzlichen Vertreter) unterschriebene Erklärung bei. Ohne sie kann dein Konto nicht freigeschaltet werden.", required: "Füge die unterschriebene Einverständniserklärung bei.", received: "Einverständniserklärung erhalten", none: "Einverständniserklärung fehlt", view: "Einverständniserklärung ansehen", send: "Erklärung senden", sent: "Einverständniserklärung gesendet", pendingHint: "Du bist unter 15: Dein Konto wird freigeschaltet, sobald wir die von einem Elternteil unterschriebene Erklärung erhalten haben.", under15: "Unter 15",
   },
+  stages: {
+    nav: "Praktikum / Duales Studium", title: "Praktikum / Duales Studium", subtitle: "Bieten Sie ein Praktikum oder eine duale Stelle an oder sagen Sie, was Sie suchen: Mitglieder antworten per Nachricht.", post: "Anzeige aufgeben", all: "Alle", offers: "Angebote", requests: "Gesuche", anyContract: "Praktikum und dual", stage: "Praktikum", alternance: "Dual", empty: "Noch keine Anzeigen.", offerBadge: "Bietet", requestBadge: "Sucht", duration: "Dauer", start: "Beginn", contact: "Kontaktieren", remove: "Anzeige entfernen", posted: "Anzeige veröffentlicht", iOffer: "Ich biete", iLook: "Ich suche", adTitle: "Titel der Anzeige", titleOfferPlaceholder: "z. B. Praktikum im Digitalmarketing", titleRequestPlaceholder: "z. B. Suche ein Praktikum im Finanzbereich", field: "Bereich", company: "Unternehmen", durationPlaceholder: "z. B. 6 Monate", startPlaceholder: "z. B. Januar 2027", description: "Beschreibung", publish: "Veröffentlichen",
+  },
   uni: {
     pick: 'Aus der Liste wählen', searchPlaceholder: 'Name oder Kürzel eingeben (z. B. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Anderswo — {country}', none: 'Keine Einrichtung gefunden', notListed: 'Meine Hochschule ist nicht in der Liste',

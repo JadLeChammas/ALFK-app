@@ -22,6 +22,7 @@ import {
   loadProfiles,
   toMessage,
   toCircleMessage,
+  internshipRow,
   toUrgentMessage,
   urgentMessageRow,
   toClubPost,
@@ -49,6 +50,7 @@ import type {
   ClubMember,
   CirclePost,
   ClubPost,
+  Internship,
   UrgentMessage,
   Gender,
   Grade,
@@ -89,7 +91,7 @@ export const isUnavailable = (e: unknown): e is UnavailableError => e instanceof
 /** What the app shows when a write is refused: to a restricted member, or towards one. */
 export type Notice = { kind: 'unavailable' | 'recipient'; at: number };
 
-const STORAGE_KEY = 'lfk.demo.db.v14';
+const STORAGE_KEY = 'lfk.demo.db.v15';
 const SESSION_KEY = 'lfk.demo.session.v1';
 
 export type AuthError =
@@ -937,6 +939,36 @@ function useStoreValue() {
     deleteCircleMessage(id: string) {
       commit((d) => ({ ...d, circleMessages: d.circleMessages.filter((x) => x.id !== id) }));
       if (supabase) send(supabase.from('circle_messages').delete().eq('id', id));
+    },
+    /** « Stage / Alternance »: posts an ad at once (no review for now). */
+    postInternship(input: Omit<Internship, 'id' | 'authorId' | 'createdAt'>): Result {
+      if (!meId || !input.title.trim() || !input.description.trim()) return { ok: false, error: 'unknown' };
+      if (readOnly) {
+        deny();
+        return { ok: false, error: 'unavailable' };
+      }
+      const clean = (v?: string) => v?.trim() || undefined;
+      const ad: Internship = {
+        ...input,
+        id: makeId('in'),
+        authorId: meId,
+        title: input.title.trim(),
+        description: input.description.trim(),
+        field: clean(input.field),
+        company: clean(input.company),
+        city: clean(input.city),
+        duration: clean(input.duration),
+        startDate: clean(input.startDate),
+        createdAt: nowIso(),
+      };
+      commit((d) => ({ ...d, internships: [ad, ...d.internships] }));
+      if (supabase) send(supabase.from('internships').insert(internshipRow(ad)));
+      return { ok: true };
+    },
+    /** Its author, or an admin, takes an ad down. */
+    deleteInternship(id: string) {
+      commit((d) => ({ ...d, internships: d.internships.filter((x) => x.id !== id) }));
+      if (supabase) send(supabase.from('internships').delete().eq('id', id));
     },
     /** The honorary members' space: a private publication (only the circle reads it, migration 052). */
     postCirclePost(input: { title: string; body: string; image?: string }): Result {

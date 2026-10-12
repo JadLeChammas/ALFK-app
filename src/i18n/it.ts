@@ -952,6 +952,9 @@ const it: Dict = {
   parental: {
     title: "Autorizzazione dei genitori", sub: "Hai meno di 15 anni: allega un’autorizzazione firmata da uno dei tuoi genitori (o dal tuo tutore). Senza di essa il tuo account non potrà essere convalidato.", required: "Aggiungi l’autorizzazione firmata dei genitori.", received: "Autorizzazione dei genitori ricevuta", none: "Autorizzazione dei genitori mancante", view: "Vedi l’autorizzazione dei genitori", send: "Invia l’autorizzazione", sent: "Autorizzazione inviata", pendingHint: "Hai meno di 15 anni: il tuo account sarà convalidato appena riceveremo l’autorizzazione firmata da uno dei tuoi genitori.", under15: "Meno di 15 anni",
   },
+  stages: {
+    nav: "Stage / Alternanza", title: "Stage / Alternanza", subtitle: "Proponi uno stage o un’alternanza, o di’ cosa cerchi: i membri ti rispondono per messaggio.", post: "Pubblica un annuncio", all: "Tutti", offers: "Offerte", requests: "Ricerche", anyContract: "Stage e alternanza", stage: "Stage", alternance: "Alternanza", empty: "Ancora nessun annuncio.", offerBadge: "Offre", requestBadge: "Cerca", duration: "Durata", start: "Inizio", contact: "Contatta", remove: "Ritira l’annuncio", posted: "Annuncio pubblicato", iOffer: "Propongo", iLook: "Cerco", adTitle: "Titolo dell’annuncio", titleOfferPlaceholder: "Es. Stage in marketing digitale", titleRequestPlaceholder: "Es. Cerco uno stage in finanza", field: "Settore", company: "Azienda", durationPlaceholder: "Es. 6 mesi", startPlaceholder: "Es. gennaio 2027", description: "Descrizione", publish: "Pubblica",
+  },
   uni: {
     pick: 'Scegli dall’elenco', searchPlaceholder: 'Scrivi il nome o la sigla (es. I, ISEP, Sorbonne)…', inCity: 'A {city}',
     elsewhere: 'Altrove — {country}', none: 'Nessun istituto trovato', notListed: 'Il mio istituto non è nell’elenco',

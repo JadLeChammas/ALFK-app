@@ -952,6 +952,9 @@ const nl: Dict = {
   parental: {
     title: "Ouderlijke toestemming", sub: "Je bent jonger dan 15: voeg een toestemming toe die door een van je ouders (of je wettelijke vertegenwoordiger) is ondertekend. Zonder die kan je account niet worden goedgekeurd.", required: "Voeg de ondertekende ouderlijke toestemming toe.", received: "Ouderlijke toestemming ontvangen", none: "Ouderlijke toestemming ontbreekt", view: "Ouderlijke toestemming bekijken", send: "Toestemming versturen", sent: "Ouderlijke toestemming verstuurd", pendingHint: "Je bent jonger dan 15: je account wordt goedgekeurd zodra we de door een ouder ondertekende toestemming hebben ontvangen.", under15: "Jonger dan 15",
   },
+  stages: {
+    nav: "Stage / Duaal", title: "Stage / Duaal leren", subtitle: "Bied een stage of een duale plek aan, of zeg wat je zoekt: leden antwoorden via een bericht.", post: "Advertentie plaatsen", all: "Alle", offers: "Aanbod", requests: "Gezocht", anyContract: "Stage en duaal", stage: "Stage", alternance: "Duaal", empty: "Nog geen advertenties.", offerBadge: "Biedt aan", requestBadge: "Zoekt", duration: "Duur", start: "Start", contact: "Contact opnemen", remove: "Advertentie verwijderen", posted: "Advertentie geplaatst", iOffer: "Ik bied aan", iLook: "Ik zoek", adTitle: "Titel van de advertentie", titleOfferPlaceholder: "Bijv. stage digitale marketing", titleRequestPlaceholder: "Bijv. ik zoek een stage in financiën", field: "Vakgebied", company: "Bedrijf", durationPlaceholder: "Bijv. 6 maanden", startPlaceholder: "Bijv. januari 2027", description: "Beschrijving", publish: "Plaatsen",
+  },
   uni: {
     pick: 'Kies uit de lijst', searchPlaceholder: 'Typ de naam of de afkorting (bijv. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Elders — {country}', none: 'Geen instelling gevonden', notListed: 'Mijn school staat niet in de lijst',

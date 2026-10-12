@@ -953,6 +953,9 @@ const la: Dict = {
   parental: {
     title: "Permissio parentum", sub: "Minor quindecim annis es: adiunge permissionem ab uno ex parentibus (vel tutore) subscriptam. Sine ea ratio tua probari non potest.", required: "Adde permissionem parentum subscriptam.", received: "Permissio parentum accepta", none: "Permissio parentum deest", view: "Permissionem parentum videre", send: "Permissionem mittere", sent: "Permissio parentum missa", pendingHint: "Minor quindecim annis es: ratio tua probabitur ubi permissionem ab uno ex parentibus subscriptam acceperimus.", under15: "Minor XV annis",
   },
+  stages: {
+    nav: "Tirocinium", title: "Tirocinium et studium alternum", subtitle: "Tirocinium offer aut quid quaeras dic: socii nuntio respondent.", post: "Nuntium edere", all: "Omnia", offers: "Oblata", requests: "Quaesita", anyContract: "Tirocinium et alternum", stage: "Tirocinium", alternance: "Alternum", empty: "Nondum nuntia.", offerBadge: "Offert", requestBadge: "Quaerit", duration: "Spatium", start: "Initium", contact: "Scribere", remove: "Nuntium removere", posted: "Nuntium editum", iOffer: "Offero", iLook: "Quaero", adTitle: "Titulus nuntii", titleOfferPlaceholder: "Ex. Tirocinium in mercatura digitali", titleRequestPlaceholder: "Ex. Tirocinium in re pecuniaria quaero", field: "Campus", company: "Societas", durationPlaceholder: "Ex. sex menses", startPlaceholder: "Ex. Ianuario MMXXVII", description: "Descriptio", publish: "Edere",
+  },
   uni: {
     pick: 'Ex indice elige', searchPlaceholder: 'Nomen aut compendium scribe (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Alibi — {country}', none: 'Nullum institutum inventum', notListed: 'Schola mea in indice non est',

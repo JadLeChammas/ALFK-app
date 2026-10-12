@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 
 import { AppShell } from '@/components/shell/AppShell';
-import { can, canSeeClubs, hasMhInbox, inCircle } from '@/data/permissions';
+import { can, canSeeClubs, canSeeInternships, hasMhInbox, inCircle } from '@/data/permissions';
 import { useMe, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -29,6 +29,10 @@ export default function MemberLayout() {
         <Stack.Protected guard={can(me, 'viewEvents')}>
           <Stack.Screen name="evenements/index" />
           <Stack.Screen name="evenements/[id]" />
+        </Stack.Protected>
+        {/* « Stage / Alternance »: not for students. */}
+        <Stack.Protected guard={canSeeInternships(me)}>
+          <Stack.Screen name="stages" />
         </Stack.Protected>
         <Stack.Protected guard={canSeeClubs(me)}>
           <Stack.Screen name="clubs/index" />

@@ -952,6 +952,9 @@ const ja: Dict = {
   parental: {
     title: "保護者の同意書", sub: "15歳未満の方は、保護者（または法定代理人）が署名した同意書を添付してください。同意書がないとアカウントは承認されません。", required: "署名済みの保護者の同意書を追加してください。", received: "保護者の同意書を受け取りました", none: "保護者の同意書がありません", view: "保護者の同意書を見る", send: "同意書を送信", sent: "保護者の同意書を送信しました", pendingHint: "15歳未満の方：保護者が署名した同意書を受け取り次第、アカウントを承認します。", under15: "15歳未満",
   },
+  stages: {
+    nav: "インターン", title: "インターン・ワークスタディ", subtitle: "インターンやワークスタディを提供、または探しているものを伝えましょう。メンバーがメッセージで返信します。", post: "募集を投稿", all: "すべて", offers: "募集", requests: "希望", anyContract: "インターン・ワークスタディ", stage: "インターン", alternance: "ワークスタディ", empty: "まだ投稿はありません。", offerBadge: "募集", requestBadge: "希望", duration: "期間", start: "開始", contact: "連絡する", remove: "投稿を取り下げる", posted: "投稿しました", iOffer: "募集する", iLook: "探している", adTitle: "タイトル", titleOfferPlaceholder: "例：デジタルマーケティングのインターン", titleRequestPlaceholder: "例：金融のインターンを探しています", field: "分野", company: "会社", durationPlaceholder: "例：6か月", startPlaceholder: "例：2027年1月", description: "説明", publish: "投稿する",
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

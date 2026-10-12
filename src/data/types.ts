@@ -228,6 +228,23 @@ export type Answer = { id: string; questionId: string; authorId?: string; text: 
 /** A message in the honorary members' group discussion. */
 export type CircleMessage = { id: string; authorId?: string; text: string; createdAt: string };
 
+/** An internship or work-study ad (page « Stage / Alternance », migration 054): someone offers one, or looks for one. */
+export type Internship = {
+  id: string;
+  authorId?: string;
+  kind: 'offer' | 'request';
+  contract: 'stage' | 'alternance';
+  title: string;
+  field?: string;
+  company?: string;
+  city?: string;
+  country?: string;
+  duration?: string;
+  startDate?: string;
+  description: string;
+  createdAt: string;
+};
+
 /** A private publication of the honorary members' space (migration 052). */
 export type CirclePost = { id: string; authorId?: string; title: string; body: string; image?: string; createdAt: string };
 
@@ -272,6 +289,7 @@ export type Db = {
   answers: Answer[];
   circleMessages: CircleMessage[];
   circlePosts: CirclePost[];
+  internships: Internship[];
   clubs: Club[];
   clubMembers: ClubMember[];
   clubPosts: ClubPost[];

@@ -952,6 +952,9 @@ const en: Dict = {
   parental: {
     title: "Parental authorization", sub: "You are under 15: attach an authorization signed by one of your parents (or legal guardian). Without it, your account cannot be approved.", required: "Add the signed parental authorization.", received: "Parental authorization received", none: "Parental authorization missing", view: "View the parental authorization", send: "Send the authorization", sent: "Parental authorization sent", pendingHint: "You are under 15: your account will be approved as soon as we receive the authorization signed by one of your parents.", under15: "Under 15",
   },
+  stages: {
+    nav: "Internships", title: "Internships & work-study", subtitle: "Offer an internship or a work-study contract, or say what you are looking for: members answer by message.", post: "Post an ad", all: "All", offers: "Offers", requests: "Looking for", anyContract: "Internship & work-study", stage: "Internship", alternance: "Work-study", empty: "No ads yet.", offerBadge: "Offers", requestBadge: "Looking for", duration: "Length", start: "Start", contact: "Contact", remove: "Remove the ad", posted: "Ad posted", iOffer: "I offer", iLook: "I am looking", adTitle: "Ad title", titleOfferPlaceholder: "E.g. Digital marketing internship", titleRequestPlaceholder: "E.g. Looking for a finance internship", field: "Field", company: "Company", durationPlaceholder: "E.g. 6 months", startPlaceholder: "E.g. January 2027", description: "Description", publish: "Post",
+  },
   uni: {
     pick: 'Pick from the list', searchPlaceholder: 'Type the name or acronym (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Elsewhere — {country}', none: 'No establishment found', notListed: 'My school isn’t in the list',

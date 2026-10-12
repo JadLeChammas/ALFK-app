@@ -953,6 +953,9 @@ const pirate: Dict = {
   parental: {
     title: "Parents' permission", sub: "Ye be under 15: attach a permission signed by one o' yer parents (or guardian). Without it, yer papers can't be approved.", required: "Add th' signed parents' permission.", received: "Parents' permission received", none: "Parents' permission missin'", view: "See th' parents' permission", send: "Send th' permission", sent: "Parents' permission sent", pendingHint: "Ye be under 15: yer papers be approved as soon as we get th' permission signed by one o' yer parents.", under15: "Under 15",
   },
+  stages: {
+    nav: "Apprentice berths", title: "Apprentice berths", subtitle: "Offer a berth for an apprentice, or say what ye seek: th' crew answers by letter.", post: "Post a notice", all: "All", offers: "Offers", requests: "Seekin’", anyContract: "Any berth", stage: "Internship", alternance: "Work-study", empty: "No notices yet.", offerBadge: "Offers", requestBadge: "Seeks", duration: "Length", start: "Start", contact: "Send word", remove: "Tear down th’ notice", posted: "Notice posted", iOffer: "I offer", iLook: "I seek", adTitle: "Notice title", titleOfferPlaceholder: "E.g. Marketing internship", titleRequestPlaceholder: "E.g. Seekin’ a finance internship", field: "Field", company: "Ship (company)", durationPlaceholder: "E.g. 6 months", startPlaceholder: "E.g. January 2027", description: "Description", publish: "Post",
+  },
   uni: {
     pick: 'Pick from the chart', searchPlaceholder: 'Type the name or letters (e.g. I, ISEP, Sorbonne)…', inCity: 'In {city}',
     elsewhere: 'Other ports — {country}', none: 'No school on the horizon', notListed: 'Me school ain’t on the chart',

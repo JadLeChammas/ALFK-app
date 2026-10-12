@@ -174,8 +174,7 @@ export default function EditProfile() {
               <Input label={d.auth.firstName} value={form.firstName} onChangeText={(v) => set('firstName')(properFirstName(v))} maxLength={80} containerStyle={{ flex: 1 }} />
               <Input label={d.auth.lastName} value={form.lastName} onChangeText={(v) => set('lastName')(v.toLocaleUpperCase('fr'))} maxLength={80} autoCapitalize="characters" containerStyle={{ flex: 1 }} />
             </FieldRow>
-            {/* Honorary members give neither a phone number nor a date of birth. */}
-            {!honorary && (
+            {/* Honorary members: an optional phone number, no date of birth. */}
             <FieldRow>
               <PhoneField
                 label={d.profile.phone}
@@ -186,6 +185,7 @@ export default function EditProfile() {
                 required={mandatory}
                 error={fieldError === 'phone' ? d.auth.errors.phone : undefined}
               />
+              {!honorary && (
               <DateField
                 label={d.profile.birthDate}
                 value={form.birth}
@@ -193,8 +193,8 @@ export default function EditProfile() {
                 required={mandatory}
                 error={fieldError === 'birth_date' ? d.auth.errors.birth_date : undefined}
               />
+              )}
             </FieldRow>
-            )}
             {honorary && <Input label={d.mh.fonction} icon="briefcase" value={fonction} onChangeText={setFonction} placeholder={d.mh.fonctionPlaceholder} maxLength={80} />}
             {graduate && (
               <View style={{ gap: 8 }}>

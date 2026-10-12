@@ -952,6 +952,9 @@ const ar: Dict = {
   parental: {
     title: "موافقة الوالدين", sub: "عمرك أقل من 15 سنة: أرفق موافقة موقّعة من أحد والديك (أو وليّك القانوني). من دونها لا يمكن اعتماد حسابك.", required: "أضف موافقة الوالدين الموقّعة.", received: "تم استلام موافقة الوالدين", none: "موافقة الوالدين مفقودة", view: "عرض موافقة الوالدين", send: "إرسال الموافقة", sent: "تم إرسال موافقة الوالدين", pendingHint: "عمرك أقل من 15 سنة: سيُعتمد حسابك فور استلامنا الموافقة الموقّعة من أحد والديك.", under15: "أقل من 15 سنة",
   },
+  stages: {
+    nav: "تدريب / تناوب", title: "تدريب / دراسة بالتناوب", subtitle: "اعرض تدريبًا أو فرصة دراسة بالتناوب، أو قل ما تبحث عنه: يرد عليك الأعضاء برسالة.", post: "نشر إعلان", all: "الكل", offers: "عروض", requests: "طلبات", anyContract: "تدريب وتناوب", stage: "تدريب", alternance: "تناوب", empty: "لا توجد إعلانات بعد.", offerBadge: "يعرض", requestBadge: "يبحث", duration: "المدة", start: "البداية", contact: "تواصل", remove: "سحب الإعلان", posted: "تم نشر الإعلان", iOffer: "أعرض", iLook: "أبحث", adTitle: "عنوان الإعلان", titleOfferPlaceholder: "مثال: تدريب في التسويق الرقمي", titleRequestPlaceholder: "مثال: أبحث عن تدريب في المالية", field: "المجال", company: "الشركة", durationPlaceholder: "مثال: 6 أشهر", startPlaceholder: "مثال: يناير 2027", description: "الوصف", publish: "نشر",
+  },
   uni: {
     pick: 'اختر من القائمة', searchPlaceholder: 'اكتب الاسم أو الاختصار (مثل I أو ISEP أو Sorbonne)…', inCity: 'في {city}',
     elsewhere: 'في مكان آخر — {country}', none: 'لم يتم العثور على أي مؤسسة', notListed: 'مؤسستي غير موجودة في القائمة',

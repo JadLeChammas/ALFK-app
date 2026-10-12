@@ -952,6 +952,9 @@ const pt: Dict = {
   parental: {
     title: "Autorização parental", sub: "Tens menos de 15 anos: anexa uma autorização assinada por um dos teus pais (ou representante legal). Sem ela, a tua conta não poderá ser validada.", required: "Adiciona a autorização parental assinada.", received: "Autorização parental recebida", none: "Falta a autorização parental", view: "Ver a autorização parental", send: "Enviar a autorização", sent: "Autorização parental enviada", pendingHint: "Tens menos de 15 anos: a tua conta será validada assim que recebermos a autorização assinada por um dos teus pais.", under15: "Menos de 15 anos",
   },
+  stages: {
+    nav: "Estágio / Alternância", title: "Estágio / Alternância", subtitle: "Proponha um estágio ou uma alternância, ou diga o que procura: os membros respondem por mensagem.", post: "Publicar um anúncio", all: "Todos", offers: "Ofertas", requests: "Procuras", anyContract: "Estágio e alternância", stage: "Estágio", alternance: "Alternância", empty: "Ainda sem anúncios.", offerBadge: "Oferece", requestBadge: "Procura", duration: "Duração", start: "Início", contact: "Contactar", remove: "Retirar o anúncio", posted: "Anúncio publicado", iOffer: "Proponho", iLook: "Procuro", adTitle: "Título do anúncio", titleOfferPlaceholder: "Ex. Estágio em marketing digital", titleRequestPlaceholder: "Ex. Procuro um estágio em finanças", field: "Área", company: "Empresa", durationPlaceholder: "Ex. 6 meses", startPlaceholder: "Ex. janeiro de 2027", description: "Descrição", publish: "Publicar",
+  },
   uni: {
     pick: 'Escolher na lista', searchPlaceholder: 'Escreva o nome ou a sigla (ex. I, ISEP, Sorbonne)…', inCity: 'Em {city}',
     elsewhere: 'Noutro lugar — {country}', none: 'Nenhuma instituição encontrada', notListed: 'A minha instituição não está na lista',

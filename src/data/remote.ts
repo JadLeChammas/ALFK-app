@@ -14,7 +14,7 @@ import type {
   KeyDate,
   Question,
   Answer,
-  CircleMessage, CirclePost, UrgentMessage,
+  CircleMessage, CirclePost, Internship, UrgentMessage,
   Club,
   ClubMember,
   ClubPost,
@@ -32,7 +32,7 @@ const opt = <T,>(v: T | null | undefined) => (v === null || v === undefined ? un
 
 export const newId = () => Crypto.randomUUID();
 
-export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], circlePosts: [], clubs: [], clubMembers: [], clubPosts: [], settings: {} };
+export const EMPTY_DB: Db = { users: [], promos: [], events: [], photos: [], publications: [], conversations: [], messages: [], contacts: [], logs: [], notifications: [], institutions: [], keyDates: [], questions: [], answers: [], circleMessages: [], circlePosts: [], internships: [], clubs: [], clubMembers: [], clubPosts: [], settings: {} };
 
 
 export const toUser = (r: Row): User => ({
@@ -138,6 +138,14 @@ export const toClub = (r: Row): Club => ({ id: r.id, name: r.name, description: 
 export const toClubMember = (r: Row): ClubMember => ({ clubId: r.club_id, userId: r.user_id, role: r.role, status: r.status, createdAt: r.created_at });
 export const toClubPost = (r: Row): ClubPost => ({ id: r.id, clubId: r.club_id, authorId: opt(r.author_id), kind: r.kind, text: r.text, createdAt: r.created_at });
 export const toCircleMessage = (r: Row): CircleMessage => ({ id: r.id, authorId: opt(r.author_id), text: r.text, createdAt: r.created_at });
+export const toInternship = (r: Row): Internship => ({
+  id: r.id, authorId: opt(r.author_id), kind: r.kind, contract: r.contract, title: r.title, field: opt(r.field), company: opt(r.company),
+  city: opt(r.city), country: opt(r.country), duration: opt(r.duration), startDate: opt(r.start_date), description: r.description, createdAt: r.created_at,
+});
+export const internshipRow = (i: Internship) => ({
+  id: i.id, author_id: i.authorId ?? null, kind: i.kind, contract: i.contract, title: i.title, field: i.field ?? null, company: i.company ?? null,
+  city: i.city ?? null, country: i.country ?? null, duration: i.duration ?? null, start_date: i.startDate ?? null, description: i.description,
+});
 export const toCirclePost = (r: Row): CirclePost => ({ id: r.id, authorId: opt(r.author_id), title: r.title, body: r.body, image: opt(r.image), createdAt: r.created_at });
 export const toUrgentMessage = (r: Row): UrgentMessage => ({ id: r.id, userId: r.user_id, title: opt(r.title), body: opt(r.body), reasons: r.reasons ?? [], createdBy: opt(r.created_by), createdAt: r.created_at, acknowledgedAt: opt(r.acknowledged_at), resolvedAt: opt(r.resolved_at), photoBefore: opt(r.photo_before) });
 // photo_before (migration 043) only when there is one, so plain messages still save without it.
@@ -205,7 +213,7 @@ export async function loadDb(): Promise<Db> {
   };
   // Tables added by migration 003: an empty list until it has been run, instead of breaking the app.
   const optional = (table: string) => all(table).catch(() => [] as Row[]);
-  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, circlePosts, clubs, clubMembers, clubPosts, urgent] = await Promise.all([
+  const [users, promos, events, photos, publications, conversations, messages, contacts, logs, notifications, institutions, keyDates, settings, questions, questionAuthors, answers, circle, circlePosts, internships, clubs, clubMembers, clubPosts, urgent] = await Promise.all([
     loadProfiles(),
     loadPromos(),
     all('events', 'date'),
@@ -224,6 +232,7 @@ export async function loadDb(): Promise<Db> {
     optional('answers'),
     optional('circle_messages'),
     optional('circle_posts'),
+    optional('internships'),
     optional('clubs'),
     optional('club_members'),
     optional('club_posts'),
@@ -247,6 +256,7 @@ export async function loadDb(): Promise<Db> {
     questions: questions.map((r: Row) => ({ ...toQuestion(r), authorId: askedBy.get(r.id) })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     answers: answers.map(toAnswer).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
     circleMessages: circle.map(toCircleMessage).sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1)),
+    internships: internships.map(toInternship).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     circlePosts: circlePosts.map(toCirclePost).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     clubs: clubs.map(toClub).sort((a, b) => a.name.localeCompare(b.name)),
     clubMembers: clubMembers.map(toClubMember),

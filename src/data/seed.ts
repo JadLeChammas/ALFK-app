@@ -437,6 +437,10 @@ export function createSeed(now = new Date()): Db {
       { id: 'cm1', authorId: proviseur.id, text: 'Bienvenue dans le cercle des membres d’honneur ! Cet espace nous permet d’échanger entre nous et avec le bureau de l’Amicale.', createdAt: ago(6) },
       { id: 'cm2', authorId: jad.id, text: 'Merci Monsieur le Proviseur. N’hésitez pas à nous proposer des idées d’événements avec le lycée.', createdAt: ago(5.5) },
     ],
+    internships: [
+      { id: 'in1', authorId: sarah.id, kind: 'offer', contract: 'stage', title: 'Stage en communication politique', field: 'Sciences politiques', company: 'Agence Horizon', city: 'Paris', country: 'FR', duration: '6 mois', startDate: 'Janvier 2027', description: 'Notre agence cherche un ou une stagiaire pour accompagner les campagnes de nos clients : veille, rédaction, réseaux sociaux. Profil Sciences Po ou école de communication.', createdAt: ago(2) },
+      { id: 'in2', authorId: thomas.id, kind: 'request', contract: 'alternance', title: 'Je cherche une alternance en génie logiciel', field: 'Informatique', city: 'Montréal', country: 'CA', duration: '2 ans', startDate: 'Septembre 2027', description: 'Étudiant en informatique, je cherche une alternance en développement web ou mobile, à Montréal ou en télétravail.', createdAt: ago(5) },
+    ],
     circlePosts: [
       { id: 'cpost1', authorId: proviseur.id, title: 'Forum des métiers : appel aux membres d’honneur', body: 'Le lycée organise son forum des métiers en mars. Nous cherchons des intervenants pour présenter leur parcours aux élèves de Première et de Terminale.\n\nFaites-moi signe si vous êtes disponibles.', createdAt: ago(3) },
     ],

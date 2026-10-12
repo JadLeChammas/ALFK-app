@@ -952,6 +952,9 @@ const es: Dict = {
   parental: {
     title: "Autorización parental", sub: "Tienes menos de 15 años: adjunta una autorización firmada por uno de tus padres (o tu representante legal). Sin ella, tu cuenta no podrá validarse.", required: "Añade la autorización parental firmada.", received: "Autorización parental recibida", none: "Falta la autorización parental", view: "Ver la autorización parental", send: "Enviar la autorización", sent: "Autorización parental enviada", pendingHint: "Tienes menos de 15 años: tu cuenta se validará en cuanto recibamos la autorización firmada por uno de tus padres.", under15: "Menor de 15 años",
   },
+  stages: {
+    nav: "Prácticas / Alternancia", title: "Prácticas / Alternancia", subtitle: "Ofrece unas prácticas o una alternancia, o di lo que buscas: los miembros te responden por mensaje.", post: "Publicar un anuncio", all: "Todos", offers: "Ofertas", requests: "Búsquedas", anyContract: "Prácticas y alternancia", stage: "Prácticas", alternance: "Alternancia", empty: "Aún no hay anuncios.", offerBadge: "Ofrece", requestBadge: "Busca", duration: "Duración", start: "Inicio", contact: "Contactar", remove: "Retirar el anuncio", posted: "Anuncio publicado", iOffer: "Ofrezco", iLook: "Busco", adTitle: "Título del anuncio", titleOfferPlaceholder: "Ej. Prácticas en marketing digital", titleRequestPlaceholder: "Ej. Busco prácticas en finanzas", field: "Ámbito", company: "Empresa", durationPlaceholder: "Ej. 6 meses", startPlaceholder: "Ej. enero de 2027", description: "Descripción", publish: "Publicar",
+  },
   uni: {
     pick: 'Elegir en la lista', searchPlaceholder: 'Escriba el nombre o la sigla (p. ej. I, ISEP, Sorbonne)…', inCity: 'En {city}',
     elsewhere: 'En otro lugar — {country}', none: 'Ningún centro encontrado', notListed: 'Mi centro no está en la lista',

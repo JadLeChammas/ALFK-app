@@ -43,6 +43,9 @@ export const canMessage = (a: Pick<User, 'role'> | null | undefined, b: Pick<Use
 /** Roles a visitor can pick when signing up; honorary members' accounts are created by an admin. */
 export const SELF_SIGNUP_ROLES: Role[] = ['alumni', 'eleve'];
 
+/** « Stage / Alternance »: alumni, honorary members and admins read and post the ads; students do not see the page. */
+export const canSeeInternships = (user: Pick<User, 'role' | 'approved'> | null | undefined) => !!user && user.approved && user.role !== 'eleve';
+
 /** Clubs (page « Clubs »): alumni and admins for now — students and honorary members later, if wanted. */
 export const canSeeClubs = (user: Pick<User, 'role' | 'approved'> | null | undefined) => !!user && user.approved && (user.role === 'alumni' || user.role === 'admin');
 

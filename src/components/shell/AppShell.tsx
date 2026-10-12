@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { can, canSeeClubs, hasMhInbox, inCircle } from '@/data/permissions';
+import { can, canSeeClubs, canSeeInternships, hasMhInbox, inCircle } from '@/data/permissions';
 import { fullName, useInbox, useMe, useStore, useUnreadNotifications } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -46,6 +46,8 @@ function useNav() {
   const directory: NavItem = { href: '/annuaire', icon: 'users', label: d.nav.directory, match: ['/membre'] };
   const repere: NavItem = { href: '/repere', icon: 'globe', label: d.nav.repere };
   const orientation: NavItem = { href: '/orientation', icon: 'compass', label: d.nav.orientation };
+  // « Stage / Alternance », beside Orientation (not for students).
+  const internships: NavItem[] = canSeeInternships(me) ? [{ href: '/stages', icon: 'briefcase', label: d.stages.nav }] : [];
   const calendar: NavItem = { href: '/calendrier', icon: 'calendar', label: d.nav.calendar };
   const questionsToReview = me.role === 'admin' ? db.questions.filter((q) => q.status === 'pending').length : 0;
   const guide: NavItem = { href: '/guide', icon: 'map', label: d.nav.guide };
@@ -77,14 +79,14 @@ function useNav() {
     { href: '/partenaires', icon: 'award', label: d.nav.honorary },
   ];
   return {
-    main: [home, directory, repere, orientation, guide, questions, calendar, ...events, publications, messages],
+    main: [home, directory, repere, orientation, ...internships, guide, questions, calendar, ...events, publications, messages],
     community,
     amicale,
     mh,
     bar: [home, directory, repere, publications, messages],
     // The phone's « Plus » sheet: everything else in the sidebar, in the same sections.
-    moreMain: [...events, orientation, guide, questions, calendar],
-    more: [...events, orientation, guide, questions, calendar, ...community, ...amicale, ...mh],
+    moreMain: [...events, orientation, ...internships, guide, questions, calendar],
+    more: [...events, orientation, ...internships, guide, questions, calendar, ...community, ...amicale, ...mh],
   };
 }
 

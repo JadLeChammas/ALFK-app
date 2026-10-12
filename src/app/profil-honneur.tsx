@@ -5,11 +5,13 @@ import { AuthFrame } from '@/components/AuthFrame';
 import { AvatarCropper } from '@/components/AvatarCropper';
 import { CityPicker } from '@/components/CityPicker';
 import { useDialogs } from '@/components/ui/Dialogs';
+import { PhoneField } from '@/components/ui/fields';
 import { Flag } from '@/components/ui/Flag';
 import { Avatar, Button, Input, Row } from '@/components/ui/primitives';
 import { Select } from '@/components/ui/Select';
 import { Txt } from '@/components/ui/Txt';
 import { sortedCountries } from '@/data/countries';
+import { formatPhone, isValidPhoneNumber, parsePhone } from '@/data/members';
 import type { PickedImage } from '@/data/remote';
 import { fullName, useStore } from '@/data/store';
 import { useI18n } from '@/i18n';
@@ -28,6 +30,10 @@ export default function HonourProfile() {
   const [fonction, setFonction] = useState(me?.fonction ?? '');
   const [country, setCountry] = useState(me?.country || 'KW');
   const [city, setCity] = useState(me?.city ?? '');
+  // Optional phone number, with the country code.
+  const [dial, setDial] = useState(parsePhone(me?.phone).dial || '+965');
+  const [phoneNumber, setPhoneNumber] = useState(parsePhone(me?.phone).number);
+  const [phoneError, setPhoneError] = useState(false);
   const [cropping, setCropping] = useState<PickedImage | null>(null);
   const [photoBusy, setPhotoBusy] = useState(false);
   const [missing, setMissing] = useState<string[]>([]);
@@ -47,8 +53,10 @@ export default function HonourProfile() {
   const save = () => {
     const lacking = [!me?.avatar && m.photo, !fonction.trim() && m.fonction, !country && d.auth.country, !city.trim() && d.auth.city].filter((x): x is string => !!x);
     setMissing(lacking);
-    if (lacking.length) return;
-    const r = actions.updateProfile({ fonction: fonction.trim(), country, city: city.trim() });
+    const hasPhone = phoneNumber.trim() !== '';
+    setPhoneError(hasPhone && !isValidPhoneNumber(phoneNumber));
+    if (lacking.length || (hasPhone && !isValidPhoneNumber(phoneNumber))) return;
+    const r = actions.updateProfile({ fonction: fonction.trim(), country, city: city.trim(), ...(hasPhone ? { phone: formatPhone(dial, phoneNumber) } : {}) });
     if (!r.ok && r.error !== 'unavailable') toast(d.auth.errors[r.error], 'danger');
   };
 
@@ -75,6 +83,7 @@ export default function HonourProfile() {
           options={sortedCountries(lang).map((c) => ({ value: c.code, label: c.name, leading: <Flag code={c.code} /> }))}
         />
         <CityPicker label={`${d.auth.city} *`} value={city} onChange={setCity} country={country} />
+        <PhoneField label={`${d.profile.phone} (${d.common.optional})`} dial={dial} number={phoneNumber} onDial={setDial} onNumber={(v) => { setPhoneNumber(v); setPhoneError(false); }} error={phoneError ? d.auth.errors.phone : undefined} />
         {missing.length > 0 && <Txt variant="smallStrong" color="danger">{`${m.missing} ${missing.join(', ')}`}</Txt>}
         <Button label={m.setupSave} icon="check" full size="lg" onPress={save} disabled={photoBusy} />
       </View>
