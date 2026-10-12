@@ -6,6 +6,7 @@ import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Button, Card, IconButton, Input, Row, SectionHeader, Tap } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -16,6 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
  * the database (in_circle, migration 052). The members' list is /cercle-membres.
  */
 export default function Circle() {
+  const censor = useCensor();
   const { d, relative } = useI18n();
   const c = d.circle;
   const { colors } = useTheme();
@@ -54,7 +56,7 @@ export default function Circle() {
                     {u?.fonction && <Txt variant="small" color="textSubtle">{u.fonction}</Txt>}
                     <Txt variant="small" color="textSubtle">{relative(m.createdAt)}</Txt>
                   </Row>
-                  <Txt>{m.text}</Txt>
+                  <Txt>{censor(m.text)}</Txt>
                 </View>
                 {(mine || me.role === 'admin') && (
                   <IconButton

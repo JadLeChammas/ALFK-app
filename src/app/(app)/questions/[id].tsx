@@ -7,6 +7,7 @@ import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, Card, EmptyState, IconButton, Input, Row, Tap } from '@/components/ui/primitives';
 import { BackLink, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { occupation } from '@/data/members';
 import { canAnswer } from '@/data/permissions';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
@@ -15,6 +16,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 /** One anonymous question and the alumni's (signed) answers. */
 export default function QuestionPage() {
+  const censor = useCensor();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { d, f, relative } = useI18n();
   const { colors } = useTheme();
@@ -55,7 +57,7 @@ export default function QuestionPage() {
           </View>
           <View style={{ flex: 1, gap: 4 }}>
             <Txt variant="smallStrong" color="textMuted">{`${d.questions.anonymous} · ${relative(q.publishedAt ?? q.createdAt)}`}</Txt>
-            <Txt variant="h3">{q.text}</Txt>
+            <Txt variant="h3">{censor(q.text)}</Txt>
           </View>
         </Row>
         {author && (
@@ -108,7 +110,7 @@ export default function QuestionPage() {
                 />
               )}
             </Row>
-            <Txt>{a.text}</Txt>
+            <Txt>{censor(a.text)}</Txt>
           </Card>
         );
       })}

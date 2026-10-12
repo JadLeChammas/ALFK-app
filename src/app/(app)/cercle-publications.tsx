@@ -8,6 +8,7 @@ import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Button, Card, EmptyState, IconButton, Input, Row, SectionHeader, Tap } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { radius } from '@/theme/tokens';
@@ -18,6 +19,7 @@ import { useTheme } from '@/theme/ThemeProvider';
  * given « Accès à l'espace MH » (guarded in (app)/_layout.tsx; table circle_posts, migration 052).
  */
 export default function CirclePublications() {
+  const censor = useCensor();
   const { d, relative } = useI18n();
   const m = d.mh;
   const { colors } = useTheme();
@@ -88,9 +90,9 @@ export default function CirclePublications() {
                     />
                   )}
                 </Row>
-                <Txt variant="h3">{p.title}</Txt>
+                <Txt variant="h3">{censor(p.title)}</Txt>
                 {!!p.image && <Image source={{ uri: p.image }} style={{ width: '100%', height: 220, borderRadius: radius.card, backgroundColor: colors.surfaceAlt }} contentFit="cover" />}
-                <Txt color="textMuted">{p.body}</Txt>
+                <Txt color="textMuted">{censor(p.body)}</Txt>
               </Card>
             );
           })}

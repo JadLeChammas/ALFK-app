@@ -27,6 +27,7 @@ export function AdminNav() {
     { href: '/admin/membres', label: d.nav.members, icon: 'users' },
     { href: '/admin/honneur', label: d.honoraryAdmin.nav, icon: 'award' },
     { href: '/admin/contenus', label: d.nav.content, icon: 'layers', count: reports || undefined },
+    { href: '/admin/mots-interdits', label: d.banned.nav, icon: 'slash' },
     { href: '/admin/contact', label: d.nav.contact, icon: 'inbox', count: unread || undefined },
     { href: '/admin/urgent', label: d.urgent.nav, icon: 'alert-triangle' },
     { href: '/admin/emails', label: d.emails.nav, icon: 'mail' },

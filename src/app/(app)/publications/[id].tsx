@@ -9,6 +9,7 @@ import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, EmptyState, Row } from '@/components/ui/primitives';
 import { BackLink, Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -16,6 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { radius } from '@/theme/tokens';
 
 export default function Article() {
+  const censor = useCensor();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { d, f, formatDate } = useI18n();
   const { isMobile } = useLayout();
@@ -51,8 +53,8 @@ export default function Article() {
           {pub.status !== 'published' && <Badge label={pub.status === 'pending' ? d.pubReview.pending : d.pubReview.rejected} tone={pub.status === 'pending' ? 'warning' : 'danger'} />}
           <Txt variant="small" color="textSubtle">{formatDate(pub.date, { weekday: true })}</Txt>
         </Row>
-        <Txt variant={isMobile ? 'h1' : 'display'} style={!isMobile && { fontSize: 40, lineHeight: 48 }}>{pub.title}</Txt>
-        <Txt style={{ fontSize: 18, lineHeight: 28 }} color="textMuted">{pub.excerpt}</Txt>
+        <Txt variant={isMobile ? 'h1' : 'display'} style={!isMobile && { fontSize: 40, lineHeight: 48 }}>{censor(pub.title)}</Txt>
+        <Txt style={{ fontSize: 18, lineHeight: 28 }} color="textMuted">{censor(pub.excerpt)}</Txt>
         {author && (
           <Row gap={10}>
             <Avatar uri={author.avatar} name={fullName(author)} size={36} />
@@ -75,7 +77,7 @@ export default function Article() {
         />
       </View>
       <View style={{ gap: 18 }}>
-        {pub.body.split('\n\n').map((para, i) => (
+        {censor(pub.body).split('\n\n').map((para, i) => (
           <Txt key={i} style={{ fontSize: 17, lineHeight: 29 }}>{para}</Txt>
         ))}
       </View>

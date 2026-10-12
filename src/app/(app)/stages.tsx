@@ -9,6 +9,7 @@ import { Avatar, Badge, Button, Card, Chip, EmptyState, FieldRow, IconButton, In
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Select } from '@/components/ui/Select';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { sortedCountries } from '@/data/countries';
 import { canMessage } from '@/data/permissions';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
@@ -75,6 +76,7 @@ export default function Internships() {
 }
 
 function AdCard({ ad, when, place }: { ad: Internship; when: string; place: string }) {
+  const censor = useCensor();
   const { d } = useI18n();
   const s = d.stages;
   const { actions } = useStore();
@@ -90,16 +92,16 @@ function AdCard({ ad, when, place }: { ad: Internship; when: string; place: stri
       <Row gap={8} wrap>
         <Badge label={ad.kind === 'offer' ? s.offerBadge : s.requestBadge} tone={ad.kind === 'offer' ? 'success' : 'info'} icon={ad.kind === 'offer' ? 'briefcase' : 'search'} />
         <Badge label={ad.contract === 'stage' ? s.stage : s.alternance} tone="neutral" />
-        {!!ad.field && <Badge label={ad.field} tone="secondary" />}
+        {!!ad.field && <Badge label={censor(ad.field)} tone="secondary" />}
       </Row>
-      <Txt variant="h3">{ad.title}</Txt>
+      <Txt variant="h3">{censor(ad.title)}</Txt>
       <View style={{ gap: 4 }}>
-        {!!ad.company && <MetaLine icon="home" text={ad.company} />}
+        {!!ad.company && <MetaLine icon="home" text={censor(ad.company)} />}
         {!!place && <MetaLine icon="map-pin" text={place} />}
         {!!ad.duration && <MetaLine icon="clock" text={`${s.duration} : ${ad.duration}`} />}
         {!!ad.startDate && <MetaLine icon="calendar" text={`${s.start} : ${ad.startDate}`} />}
       </View>
-      <Txt color="textMuted">{ad.description}</Txt>
+      <Txt color="textMuted">{censor(ad.description)}</Txt>
       <Row gap={10} wrap style={{ borderTopWidth: 1, borderTopColor: 'rgba(127,127,127,0.18)', paddingTop: 10 }}>
         <Tap onPress={() => author && router.push(`/membre/${author.id}`)} disabled={!author} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 }}>
           <Avatar uri={author?.avatar} name={author ? fullName(author) : '?'} size={32} />

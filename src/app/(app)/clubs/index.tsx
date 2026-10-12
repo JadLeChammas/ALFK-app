@@ -7,6 +7,7 @@ import { ClubForm } from '@/components/ClubForm';
 import { Badge, Button, Card, EmptyState, Row, SectionHeader } from '@/components/ui/primitives';
 import { Grid, PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import type { Club } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -17,6 +18,7 @@ import { useTheme } from '@/theme/ThemeProvider';
  * Alumni and admins only — guarded in (app)/_layout.tsx (canSeeClubs).
  */
 export default function Clubs() {
+  const censor = useCensor();
   const { d, f } = useI18n();
   const c = d.clubs;
   const { db, actions } = useStore();
@@ -40,8 +42,8 @@ export default function Clubs() {
           <Grid min={300} gap={16}>
             {toReview.map((x) => (
               <Card key={x.id} style={{ gap: 10 }}>
-                <Txt variant="h3">{x.name}</Txt>
-                {!!x.description && <Txt variant="small" color="textMuted" numberOfLines={4}>{x.description}</Txt>}
+                <Txt variant="h3">{censor(x.name)}</Txt>
+                {!!x.description && <Txt variant="small" color="textMuted" numberOfLines={4}>{censor(x.description)}</Txt>}
                 <Txt variant="small" color="textSubtle">{f(c.proposedBy, { name: fullName(users.get(x.createdBy ?? '')) || '—' })}</Txt>
                 <Row gap={8} wrap>
                   <Button label={c.approve} icon="check" size="sm" onPress={() => actions.reviewClub(x.id, 'approved')} />
@@ -59,7 +61,7 @@ export default function Clubs() {
           <Grid min={280} gap={16}>
             {mine.map((x) => (
               <Card key={x.id} style={{ gap: 8 }}>
-                <Txt variant="h3">{x.name}</Txt>
+                <Txt variant="h3">{censor(x.name)}</Txt>
                 <Badge label={x.status === 'pending' ? c.pending : c.rejected} tone={x.status === 'pending' ? 'warning' : 'danger'} />
               </Card>
             ))}
@@ -88,6 +90,7 @@ export default function Clubs() {
 }
 
 function ClubCard({ club, members, status, manager }: { club: Club; members: number; status?: 'pending' | 'active'; manager: boolean }) {
+  const censor = useCensor();
   const { d, f } = useI18n();
   const c = d.clubs;
   const { colors } = useTheme();
@@ -97,8 +100,8 @@ function ClubCard({ club, members, status, manager }: { club: Club; members: num
         {!!club.cover && <Image source={{ uri: club.cover }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} />}
       </View>
       <View style={{ padding: 16, gap: 8 }}>
-        <Txt variant="h3" numberOfLines={1}>{club.name}</Txt>
-        {!!club.description && <Txt variant="small" color="textMuted" numberOfLines={2}>{club.description}</Txt>}
+        <Txt variant="h3" numberOfLines={1}>{censor(club.name)}</Txt>
+        {!!club.description && <Txt variant="small" color="textMuted" numberOfLines={2}>{censor(club.description)}</Txt>}
         <Row gap={8} wrap>
           <Txt variant="small" color="textSubtle">{f(c.memberCount, { n: members })}</Txt>
           {manager ? <Badge label={c.manager} tone="secondary" /> : status === 'active' ? <Badge label={c.member} tone="success" /> : status === 'pending' ? <Badge label={c.requested} tone="warning" /> : null}

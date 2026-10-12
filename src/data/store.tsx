@@ -1247,6 +1247,11 @@ function useStoreValue() {
       commit((d) => ({ ...d, settings: { ...d.settings, schoolLeaders: value } }));
       if (supabase) send(supabase.from('app_settings').upsert({ key: 'schoolLeaders', value: value ?? null }));
     },
+    /** Admins: the words added to / taken off the banned words list (lib/censor.ts), JSON. */
+    setBannedWords(value: string) {
+      commit((d) => ({ ...d, settings: { ...d.settings, bannedWords: value } }));
+      if (supabase) send(supabase.from('app_settings').upsert({ key: 'bannedWords', value }));
+    },
     /** Admins: the published legal texts (data/legal.ts), JSON. */
     setLegalTexts(value: string) {
       commit((d) => ({ ...d, settings: { ...d.settings, legalTexts: value } }));

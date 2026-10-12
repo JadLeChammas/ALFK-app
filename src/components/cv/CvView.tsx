@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Linking, Platform, View } from 'react-native';
 
+import { useCensor } from '@/data/censor';
 import { countryName } from '@/data/countries';
 import { fullName, isUnavailable, useMe, useStore } from '@/data/store';
 import type { Cv, CvEntry, User } from '@/data/types';
@@ -179,6 +180,7 @@ function Tags({ items }: { items: string[] }) {
 }
 
 function Timeline({ title, icon, entries }: { title: string; icon: React.ComponentProps<typeof Feather>['name']; entries: CvEntry[] }) {
+  const censor = useCensor();
   const { d, lang } = useI18n();
   const { colors } = useTheme();
   const locale = LANGUAGES.find((l) => l.code === lang)?.locale ?? 'fr-FR';
@@ -192,10 +194,10 @@ function Timeline({ title, icon, entries }: { title: string; icon: React.Compone
             {i < entries.length - 1 && <View style={{ flex: 1, width: 2, backgroundColor: colors.border, marginTop: 4 }} />}
           </View>
           <View style={{ flex: 1, gap: 2, paddingBottom: i < entries.length - 1 ? 12 : 0 }}>
-            <Txt variant="bodyStrong">{e.title}</Txt>
+            <Txt variant="bodyStrong">{censor(e.title)}</Txt>
             {(e.org || e.place) && <Txt variant="small" color="secondary">{[e.org, e.place].filter(Boolean).join(' · ')}</Txt>}
             {(e.start || e.end) && <Txt variant="small" color="textSubtle">{period(e, locale, d.cv.present)}</Txt>}
-            {!!e.description && <Txt variant="small" color="textMuted" style={{ marginTop: 4 }}>{e.description}</Txt>}
+            {!!e.description && <Txt variant="small" color="textMuted" style={{ marginTop: 4 }}>{censor(e.description)}</Txt>}
             {!!e.url && (
               <Txt variant="small" color="primary" onPress={() => openExternal(e.url!)} numberOfLines={1}>{e.url}</Txt>
             )}

@@ -8,6 +8,7 @@ import { useDialogs } from '@/components/ui/Dialogs';
 import { Avatar, Badge, Button, Card, EmptyState, IconButton, Input, Row, Segmented, Tap } from '@/components/ui/primitives';
 import { BackLink, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import type { ClubPost } from '@/data/types';
 import { useI18n } from '@/i18n';
@@ -23,6 +24,7 @@ type Tab = 'announcements' | 'discussion' | 'members';
  * co-managers. Admins can do everything managers can.
  */
 export default function ClubPage() {
+  const censor = useCensor();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { d, f } = useI18n();
   const c = d.clubs;
@@ -63,10 +65,10 @@ export default function ClubPage() {
         </View>
         <View style={{ padding: 20, gap: 12 }}>
           <Row gap={10} wrap>
-            <Txt variant="h1">{club.name}</Txt>
+            <Txt variant="h1">{censor(club.name)}</Txt>
             {club.status !== 'approved' && <Badge label={club.status === 'pending' ? c.pending : c.rejected} tone={club.status === 'pending' ? 'warning' : 'danger'} />}
           </Row>
-          {!!club.description && <Txt color="textMuted" style={{ lineHeight: 24 }}>{club.description}</Txt>}
+          {!!club.description && <Txt color="textMuted" style={{ lineHeight: 24 }}>{censor(club.description)}</Txt>}
           <Txt variant="small" color="textSubtle">{f(c.memberCount, { n: active.length })}</Txt>
           <Row gap={10} wrap>
             {club.status === 'approved' && !mine && <Button label={c.join} icon="user-plus" onPress={() => { if (actions.requestToJoinClub(club.id) !== false) toast(c.requestSent, 'success'); }} />}
@@ -169,6 +171,7 @@ export default function ClubPage() {
 
 /** Announcements (managers write) or the group discussion (members write); newest at the bottom. */
 function Posts({ posts, canWrite, kind, clubId }: { posts: ClubPost[]; canWrite: boolean; kind: ClubPost['kind']; clubId: string }) {
+  const censor = useCensor();
   const { d, relative } = useI18n();
   const c = d.clubs;
   const { colors } = useTheme();
@@ -196,7 +199,7 @@ function Posts({ posts, canWrite, kind, clubId }: { posts: ClubPost[]; canWrite:
                 <Txt variant="smallStrong">{u ? fullName(u) : c.formerMember}</Txt>
                 <Txt variant="small" color="textSubtle">{relative(p.createdAt)}</Txt>
               </Row>
-              <Txt>{p.text}</Txt>
+              <Txt>{censor(p.text)}</Txt>
             </View>
             {mineOrAdmin && (
               <IconButton icon="trash-2" size={30} label={d.common.delete} onPress={async () => (await confirm({ title: d.common.delete, message: p.text, danger: true, confirmLabel: d.common.delete })) && actions.deleteClubPost(p.id)} />

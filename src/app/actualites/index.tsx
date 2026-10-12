@@ -6,6 +6,7 @@ import { Seo } from '@/components/Seo';
 import { Reveal, Section, SerifHeading, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Tap } from '@/components/ui/primitives';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { usePublicPublications, type PublicPublication } from '@/data/publicPublications';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -45,6 +46,7 @@ export default function PublicNews() {
 }
 
 function NewsCard({ pub }: { pub: PublicPublication }) {
+  const censor = useCensor();
   const { d, formatDate } = useI18n();
   const t = useTone();
   return (
@@ -54,8 +56,8 @@ function NewsCard({ pub }: { pub: PublicPublication }) {
         <Txt style={{ fontFamily: fonts.semibold, fontSize: 12, letterSpacing: 1.2, textTransform: 'uppercase', color: t.accent }}>
           {`${d.publications.categories[pub.category]} · ${formatDate(pub.date)}`}
         </Txt>
-        <Txt style={{ fontFamily: fonts.serif, fontSize: 26, lineHeight: 30, color: t.cardFg }}>{pub.title}</Txt>
-        {!!pub.excerpt && <Txt numberOfLines={3} style={{ color: t.cardMuted }}>{pub.excerpt}</Txt>}
+        <Txt style={{ fontFamily: fonts.serif, fontSize: 26, lineHeight: 30, color: t.cardFg }}>{censor(pub.title)}</Txt>
+        {!!pub.excerpt && <Txt numberOfLines={3} style={{ color: t.cardMuted }}>{censor(pub.excerpt)}</Txt>}
       </View>
     </Tap>
   );

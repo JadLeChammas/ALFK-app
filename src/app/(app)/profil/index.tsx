@@ -9,6 +9,7 @@ import { Avatar, Badge, Button, Card, IconTile, ListRow, Row, type IconName } fr
 import { Columns, Screen } from '@/components/ui/Screen';
 import { CvFileCard, CvView } from '@/components/cv/CvView';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { countryByCode, countryName } from '@/data/countries';
 import { isoToFrDate } from '@/data/members';
 import { can } from '@/data/permissions';
@@ -24,6 +25,7 @@ import { OtherSchoolsRows } from '@/components/OtherSchools';
 import { fieldLabel, userFields } from '@/data/fields';
 
 export default function MyProfile() {
+  const censor = useCensor();
   const { d, f, lang } = useI18n();
   const { colors } = useTheme();
   const { isMobile, isDesktop } = useLayout();
@@ -80,7 +82,7 @@ export default function MyProfile() {
               <Button label={d.nav.settings} icon="settings" variant="secondary" onPress={() => router.push('/parametres')} />
             </Row>
           </View>
-          {me.bio && <Txt color="textMuted" style={{ maxWidth: 640 }}>{me.bio}</Txt>}
+          {me.bio && <Txt color="textMuted" style={{ maxWidth: 640 }}>{censor(me.bio)}</Txt>}
         </View>
       </Card>
 

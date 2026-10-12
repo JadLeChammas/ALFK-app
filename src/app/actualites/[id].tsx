@@ -8,6 +8,7 @@ import { Section, SiteFrame, useTone } from '@/components/site/SiteFrame';
 import { Avatar } from '@/components/ui/primitives';
 import { BackLink } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { usePublicPublications } from '@/data/publicPublications';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
@@ -49,12 +50,13 @@ function Article({ pub, ratio, setRatio, isMobile, by, date, category }: {
   date: string;
   category: string;
 }) {
+  const censor = useCensor();
   const t = useTone();
   return (
     <>
       <Txt style={{ fontFamily: fonts.semibold, fontSize: 12, letterSpacing: 1.2, textTransform: 'uppercase', color: t.accent }}>{`${category} · ${date}`}</Txt>
-      <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 38 : 54, lineHeight: isMobile ? 42 : 58, color: t.fg }}>{pub.title}</Txt>
-      {!!pub.excerpt && <Txt style={{ fontSize: 19, lineHeight: 28, color: t.muted }}>{pub.excerpt}</Txt>}
+      <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 38 : 54, lineHeight: isMobile ? 42 : 58, color: t.fg }}>{censor(pub.title)}</Txt>
+      {!!pub.excerpt && <Txt style={{ fontSize: 19, lineHeight: 28, color: t.muted }}>{censor(pub.excerpt)}</Txt>}
       {!!by && (
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <Avatar uri={pub.authorAvatar} name={pub.authorName ?? ''} size={42} />
@@ -76,7 +78,7 @@ function Article({ pub, ratio, setRatio, isMobile, by, date, category }: {
         </View>
       )}
       <View style={{ gap: 18 }}>
-        {pub.body.split('\n\n').map((para, i) => (
+        {censor(pub.body).split('\n\n').map((para, i) => (
           <Txt key={i} style={{ fontSize: 17, lineHeight: 29, color: t.fg }}>{para}</Txt>
         ))}
       </View>

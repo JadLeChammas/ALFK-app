@@ -955,6 +955,9 @@ const ja: Dict = {
   stages: {
     nav: "インターン", title: "インターン・ワークスタディ", subtitle: "インターンやワークスタディを提供、または探しているものを伝えましょう。メンバーがメッセージで返信します。", post: "募集を投稿", all: "すべて", offers: "募集", requests: "希望", anyContract: "インターン・ワークスタディ", stage: "インターン", alternance: "ワークスタディ", empty: "まだ投稿はありません。", offerBadge: "募集", requestBadge: "希望", duration: "期間", start: "開始", contact: "連絡する", remove: "投稿を取り下げる", posted: "投稿しました", iOffer: "募集する", iLook: "探している", adTitle: "タイトル", titleOfferPlaceholder: "例：デジタルマーケティングのインターン", titleRequestPlaceholder: "例：金融のインターンを探しています", field: "分野", company: "会社", durationPlaceholder: "例：6か月", startPlaceholder: "例：2027年1月", description: "説明", publish: "投稿する",
   },
+  banned: {
+    nav: "Banned words", title: "Banned words", subtitle: "These words are masked « ***** » wherever members write publicly (publications, bios, honorary circle, ads, questions, clubs, events). Private messages are not filtered.", test: "Test a text", testPlaceholder: "Write a sentence to see what would be masked…", result: "What members will see:", count: "{n} banned words in all", yours: "Your words", addPlaceholder: "E.g. a word in Arabizi, slang…", add: "Add", addHint: "Case and accents do not matter. A word is only masked as a whole word. Masking applies to older texts too.", yoursEmpty: "No words added yet.", addedToast: "« {word} » added", builtIn: "Built-in list", builtInHint: "A public list in 10 languages (LDNOOBW (CC BY 4.0)). Tap a word to remove it if it is too strict.", search: "Search a word…", more: "and {n} more: search to find a word", removed: "Removed words", removedHint: "Built-in words you removed. Tap one to put it back.", removedEmpty: "No words removed.",
+  },
   uni: {
     pick: 'リストから選ぶ', searchPlaceholder: '名前または略称を入力（例：I、ISEP、Sorbonne）…', inCity: '{city}',
     elsewhere: 'その他 — {country}', none: '該当する学校がありません', notListed: 'リストに学校がありません',

@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { View } from 'react-native';
 
+import { useCensor } from '@/data/censor';
 import { countryByCode, countryName } from '@/data/countries';
 import { occupation } from '@/data/members';
 import { canMessage, isMhPair } from '@/data/permissions';
@@ -92,6 +93,7 @@ export function DateBadge({ iso, size = 'md' }: { iso: string; size?: 'sm' | 'md
 }
 
 export function EventCard({ event, layout = 'vertical' }: { event: LfkEvent; layout?: 'vertical' | 'horizontal' }) {
+  const censor = useCensor();
   const { d, f, formatDate, formatTime } = useI18n();
   const { colors } = useTheme();
   const { db } = useStore();
@@ -108,7 +110,7 @@ export function EventCard({ event, layout = 'vertical' }: { event: LfkEvent; lay
         </View>
         <View style={{ flex: 1, gap: 6 }}>
           <Badge label={d.events.categories[event.category]} tone={CATEGORY_TONE[event.category]} />
-          <Txt variant="h3" numberOfLines={1}>{event.title}</Txt>
+          <Txt variant="h3" numberOfLines={1}>{censor(event.title)}</Txt>
           <MetaLine icon="map-pin" text={event.location} />
           <MetaLine icon="clock" text={`${formatDate(event.date, { year: false })} · ${formatTime(event.date)}`} />
         </View>
@@ -128,10 +130,10 @@ export function EventCard({ event, layout = 'vertical' }: { event: LfkEvent; lay
         </View>
       </View>
       <View style={{ padding: 18, gap: 8, flex: 1 }}>
-        <Txt variant="h3" numberOfLines={1}>{event.title}</Txt>
+        <Txt variant="h3" numberOfLines={1}>{censor(event.title)}</Txt>
         <MetaLine icon="map-pin" text={event.location} />
         <MetaLine icon="clock" text={formatDate(event.date, { weekday: true, time: true })} />
-        <Txt variant="small" color="textMuted" numberOfLines={2}>{event.description}</Txt>
+        <Txt variant="small" color="textMuted" numberOfLines={2}>{censor(event.description)}</Txt>
         <View style={{ flex: 1 }} />
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 }}>
           {photos > 0 ? <MetaLine icon="image" text={f(d.events.photos, { n: photos })} color="textSubtle" /> : <View />}
@@ -143,6 +145,7 @@ export function EventCard({ event, layout = 'vertical' }: { event: LfkEvent; lay
 }
 
 export function PublicationCard({ pub, featured }: { pub: Publication; featured?: boolean }) {
+  const censor = useCensor();
   const { d, formatDate } = useI18n();
   const open = () => router.push(`/publications/${pub.id}`);
   return (
@@ -157,8 +160,8 @@ export function PublicationCard({ pub, featured }: { pub: Publication; featured?
           {pub.visibility === 'public' && <Badge label={d.publications.publicBadge} icon="globe" tone="info" />}
           <Txt variant="small" color="textSubtle">{formatDate(pub.date)}</Txt>
         </View>
-        <Txt variant={featured ? 'h2' : 'h3'} numberOfLines={2}>{pub.title}</Txt>
-        <Txt variant="small" color="textMuted" numberOfLines={featured ? 3 : 2}>{pub.excerpt}</Txt>
+        <Txt variant={featured ? 'h2' : 'h3'} numberOfLines={2}>{censor(pub.title)}</Txt>
+        <Txt variant="small" color="textMuted" numberOfLines={featured ? 3 : 2}>{censor(pub.excerpt)}</Txt>
       </View>
     </Card>
   );

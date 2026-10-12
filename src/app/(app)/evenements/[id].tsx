@@ -11,6 +11,7 @@ import { Lightbox } from '@/components/ui/Lightbox';
 import { Badge, Button, Card, EmptyState, ListRow, Row, SectionHeader, Tap } from '@/components/ui/primitives';
 import { BackLink, Columns, Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { fullName, useMe, useStore, useUserMap } from '@/data/store';
 import { useI18n } from '@/i18n';
 import { addToCalendar, pickImages } from '@/lib/media';
@@ -19,6 +20,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fonts, radius } from '@/theme/tokens';
 
 export default function EventPage() {
+  const censor = useCensor();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { d, f, formatDate, formatTime } = useI18n();
   const { colors } = useTheme();
@@ -82,7 +84,7 @@ export default function EventPage() {
         </View>
         <View style={{ flex: 1, justifyContent: 'flex-end', padding: isMobile ? 20 : 36, gap: 10 }}>
           <Badge label={d.events.categories[event.category]} tone={CATEGORY_TONE[event.category]} />
-          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: isMobile ? 36 : 56, lineHeight: isMobile ? 40 : 60, letterSpacing: -0.5 }}>{event.title}</Txt>
+          <Txt style={{ color: '#fff', fontFamily: fonts.serif, fontSize: isMobile ? 36 : 56, lineHeight: isMobile ? 40 : 60, letterSpacing: -0.5 }}>{censor(event.title)}</Txt>
           <Row gap={18} wrap>
             <Row gap={6}>
               <Feather name="clock" size={15} color="rgba(255,255,255,0.85)" />
@@ -100,7 +102,7 @@ export default function EventPage() {
         main={
           <>
             <Card>
-              <Txt style={{ fontSize: 16, lineHeight: 26 }} color="textMuted">{event.description}</Txt>
+              <Txt style={{ fontSize: 16, lineHeight: 26 }} color="textMuted">{censor(event.description)}</Txt>
               <Row gap={10} wrap style={{ marginTop: 20 }}>
                 <Button label={d.events.addToCalendar} icon="calendar" variant="secondary" onPress={() => addToCalendar(event)} />
               </Row>

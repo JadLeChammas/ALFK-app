@@ -9,6 +9,7 @@ import { Avatar, Badge, Button, Card, EmptyState, IconTile, ListRow, Row } from 
 import { BackLink, Columns, Screen } from '@/components/ui/Screen';
 import { CvFileCard, CvView } from '@/components/cv/CvView';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { countryByCode, countryName } from '@/data/countries';
 import { canMessage } from '@/data/permissions';
 import { fullName, useMe, useStore } from '@/data/store';
@@ -22,6 +23,7 @@ import { OtherSchoolsRows } from '@/components/OtherSchools';
 import { fieldLabel, userFields } from '@/data/fields';
 
 export default function MemberProfile() {
+  const censor = useCensor();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { d, f, lang, formatDate } = useI18n();
   const { colors } = useTheme();
@@ -136,7 +138,7 @@ export default function MemberProfile() {
             {user.bio && (
               <Card>
                 <Txt variant="h3" style={{ marginBottom: 8 }}>{d.member.about}</Txt>
-                <Txt color="textMuted">{user.bio}</Txt>
+                <Txt color="textMuted">{censor(user.bio)}</Txt>
               </Card>
             )}
             <Card>

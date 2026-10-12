@@ -9,6 +9,7 @@ import { useDialogs } from '@/components/ui/Dialogs';
 import { Badge, Button, Card, Chip, EmptyState, Input, Row, Tap } from '@/components/ui/primitives';
 import { PageHeader, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { canAsk } from '@/data/permissions';
 import { useMe, useStore } from '@/data/store';
 import type { Question, QuestionTopic } from '@/data/types';
@@ -75,6 +76,7 @@ export default function Questions() {
 }
 
 function QuestionRow({ q, answers }: { q: Question; answers: number }) {
+  const censor = useCensor();
   const { d, f, relative } = useI18n();
   const { colors } = useTheme();
   return (
@@ -88,7 +90,7 @@ function QuestionRow({ q, answers }: { q: Question; answers: number }) {
         {q.status === 'rejected' && <Badge label={d.questions.rejected} tone="danger" icon="x" />}
         <Txt variant="small" color="textSubtle">{relative(q.publishedAt ?? q.createdAt)}</Txt>
       </Row>
-      <Txt variant="bodyStrong" numberOfLines={3}>{q.text}</Txt>
+      <Txt variant="bodyStrong" numberOfLines={3}>{censor(q.text)}</Txt>
       <Row gap={6}>
         <Feather name="message-circle" size={14} color={answers ? colors.primary : colors.textSubtle} />
         <Txt variant="small" style={{ color: answers ? colors.primary : colors.textSubtle }}>

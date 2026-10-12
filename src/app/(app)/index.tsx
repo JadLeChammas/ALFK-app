@@ -10,6 +10,7 @@ import { GlobeCard, StatsRow, useDestinationMarkers } from '@/components/site/bl
 import { Avatar, Badge, Button, Card, CountBadge, MetaLine, Row, SectionHeader, Tap, type IconName } from '@/components/ui/primitives';
 import { Grid, Screen } from '@/components/ui/Screen';
 import { Txt } from '@/components/ui/Txt';
+import { useCensor } from '@/data/censor';
 import { COUNTRIES } from '@/data/countries';
 import { awaitsApproval, contactError } from '@/data/members';
 import { can } from '@/data/permissions';
@@ -26,6 +27,7 @@ const eveningNow = () => {
 };
 
 export default function Home() {
+  const censor = useCensor();
   const { colors } = useTheme();
   const { d, f, formatDate } = useI18n();
   const me = useMe();
@@ -151,7 +153,7 @@ export default function Home() {
               <Tap key={p.id} onPress={() => router.push(`/publications/${p.id}`)} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
                 <Image source={{ uri: p.cover }} style={{ width: 56, height: 56, borderRadius: 12 }} contentFit="cover" />
                 <View style={{ flex: 1, gap: 2 }}>
-                  <Txt variant="smallStrong" numberOfLines={2}>{p.title}</Txt>
+                  <Txt variant="smallStrong" numberOfLines={2}>{censor(p.title)}</Txt>
                   <Txt variant="small" color="textSubtle">{formatDate(p.date)}</Txt>
                 </View>
               </Tap>
