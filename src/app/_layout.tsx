@@ -1,8 +1,9 @@
 import { InstrumentSerif_400Regular, InstrumentSerif_400Regular_Italic } from '@expo-google-fonts/instrument-serif';
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { ComicNeue_400Regular, ComicNeue_700Bold } from '@expo-google-fonts/comic-neue';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold, useFonts } from '@expo-google-fonts/inter';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, useFonts } from '@expo-google-fonts/inter';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider, router, Stack } from 'expo-router';
+import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -46,10 +47,31 @@ export default function RootLayout() {
   );
 }
 
+/**
+ * The fonts every page uses, loaded before the first paint. `display: swap` (« Ensure text remains
+ * visible during webfont load »): nothing is shown before they are loaded anyway, so nothing changes
+ * on screen. Inter 800 is never used; Comic Neue (retro easter egg) loads only when retro mode is on.
+ */
+const font = (uri: number) => ({ uri, display: Font.FontDisplay.SWAP });
+const FONTS = {
+  Inter_400Regular: font(Inter_400Regular),
+  Inter_500Medium: font(Inter_500Medium),
+  Inter_600SemiBold: font(Inter_600SemiBold),
+  Inter_700Bold: font(Inter_700Bold),
+  InstrumentSerif_400Regular: font(InstrumentSerif_400Regular),
+  InstrumentSerif_400Regular_Italic: font(InstrumentSerif_400Regular_Italic),
+  BebasNeue_400Regular: font(BebasNeue_400Regular),
+};
+const RETRO_FONTS = { ComicNeue_400Regular: font(ComicNeue_400Regular), ComicNeue_700Bold: font(ComicNeue_700Bold) };
+
 function RootNavigator() {
-  const { scheme, colors } = useTheme();
+  const { scheme, colors, retro } = useTheme();
   const { ready, session, me } = useStore();
-  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold, InstrumentSerif_400Regular, InstrumentSerif_400Regular_Italic, BebasNeue_400Regular, ComicNeue_400Regular, ComicNeue_700Bold });
+  const [fontsLoaded] = useFonts(FONTS);
+  // Retro mode's font: downloaded only when the mode is on (its CSS falls back on Comic Sans meanwhile).
+  useEffect(() => {
+    if (retro) Font.loadAsync(RETRO_FONTS).catch(() => {});
+  }, [retro]);
   const loaded = ready && fontsLoaded;
 
   useEffect(() => {
