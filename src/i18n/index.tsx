@@ -3,18 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { I18nManager, Platform } from 'react-native';
 
 import { countryLabel } from '@/data/countries';
-import ar from './ar';
-import de from './de';
-import en from './en';
-import es from './es';
 import fr, { type Dict } from './fr';
-import it from './it';
-import ja from './ja';
-import la from './la';
-import nl from './nl';
-import pirate from './pirate';
-import pt from './pt';
-import ru from './ru';
 
 /**
  * `country` = the flag shown in Settings. `locale` = used for dates and numbers.
@@ -38,11 +27,36 @@ export const LANGUAGES = [
 ] as const;
 export type Lang = (typeof LANGUAGES)[number]['code'];
 
-const dicts: Record<Lang, Dict> = { fr, en, de, es, it, pt, nl, ru, ar, ja, la, pirate };
+/**
+ * French is in the main bundle; every other language is a separate file, downloaded only when it is
+ * chosen (about 1 MB of text the public pages no longer load for nothing).
+ */
+const dicts: Partial<Record<Lang, Dict>> = { fr };
+const loaders: Record<Exclude<Lang, 'fr'>, () => Promise<{ default: Dict }>> = {
+  en: () => import('./en'),
+  de: () => import('./de'),
+  es: () => import('./es'),
+  it: () => import('./it'),
+  pt: () => import('./pt'),
+  nl: () => import('./nl'),
+  ru: () => import('./ru'),
+  ar: () => import('./ar'),
+  ja: () => import('./ja'),
+  la: () => import('./la'),
+  pirate: () => import('./pirate'),
+};
+/** The dictionary of `lang`, downloaded once. */
+async function loadDict(lang: Lang): Promise<Dict> {
+  const have = dicts[lang];
+  if (have) return have;
+  const d = (await loaders[lang as Exclude<Lang, 'fr'>]()).default;
+  dicts[lang] = d;
+  return d;
+}
 
 /** The languages offered in Settings. */
 export const visibleLanguages = () => LANGUAGES;
-export const isLang = (v: string | null): v is Lang => !!v && v in dicts;
+export const isLang = (v: string | null): v is Lang => !!v && LANGUAGES.some((l) => l.code === v);
 export const isRtl = (l: Lang) => l === 'ar';
 
 const STORAGE_KEY = 'lfk.lang';
@@ -88,24 +102,33 @@ const capitalize = (s: string) => (s ? s.charAt(0).toLocaleUpperCase() + s.slice
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>('fr');
+  // The saved language and its dictionary are ready: nothing is shown before, so a visitor who chose
+  // another language never sees the French text first.
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
-      .then((v) => {
-        if (isLang(v)) setLangState(v);
+      .then(async (v) => {
+        if (isLang(v) && v !== 'fr') {
+          await loadDict(v);
+          setLangState(v);
+        }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setReady(true));
   }, []);
 
   useEffect(() => applyDocumentLanguage(lang), [lang]);
 
   const setLang = useCallback((l: Lang) => {
-    setLangState(l);
     AsyncStorage.setItem(STORAGE_KEY, l).catch(() => {});
+    loadDict(l)
+      .then(() => setLangState(l))
+      .catch(() => {});
   }, []);
 
   const value = useMemo<I18nValue>(() => {
-    const d = dicts[lang];
+    const d = dicts[lang] ?? fr;
     const entry = LANGUAGES.find((l) => l.code === lang)!;
     const locale = entry.locale;
     const ownDates = 'ownDates' in entry && entry.ownDates;
@@ -171,7 +194,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return { lang, setLang, d, f, formatDate, formatTime, formatNumber, relative, country, bi, rtl: isRtl(lang) };
   }, [lang, setLang]);
 
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+  return <I18nContext.Provider value={value}>{ready ? children : null}</I18nContext.Provider>;
 }
 
 export function useI18n() {
