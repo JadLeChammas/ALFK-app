@@ -109,6 +109,7 @@
   {
     "path": "/connexion",
     "file": "connexion.html",
+    "noindex": true,
     "title": "Se connecter · Amicale LFK (ALFK)",
     "description": "Connexion à l’espace membres de l’Amicale LFK, le réseau des anciens élèves du Lycée Français du Koweït.",
     "h1": "Espace membres de l’Amicale LFK",

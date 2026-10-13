@@ -21,7 +21,10 @@ export function Seo({ title, description }: { title?: string; description?: stri
   const path = pathname === '/bienvenue' ? '/' : pathname;
   // In French (the default, and what search engines see) the public pages use the same title and
   // description as their pre-rendered HTML (src/data/seo-pages.json, scripts/seo-pages.mjs).
-  const page = lang === 'fr' ? (seoPages as { path: string; title?: string; description?: string }[]).find((p) => p.path === path && p.title) : undefined;
+  const pages = seoPages as { path: string; title?: string; description?: string; noindex?: boolean }[];
+  const page = lang === 'fr' ? pages.find((p) => p.path === path && p.title) : undefined;
+  // Pages search engines should not list (the sign-in page).
+  const noindex = pages.some((p) => p.path === path && p.noindex);
   const fullTitle = page?.title ?? (title ? `${title} · ${BRAND}` : DEFAULT_TITLE);
   const text = (page?.description || description || DEFAULT_DESCRIPTION).replace(/\s+/g, ' ').trim();
   const desc = text.length > 160 ? `${text.slice(0, 157).replace(/\s+\S*$/, '')}…` : text;
@@ -30,6 +33,7 @@ export function Seo({ title, description }: { title?: string; description?: stri
       <title>{fullTitle}</title>
       <meta name="description" content={desc} />
       <link rel="canonical" href={`${SITE}${path}`} />
+      {noindex && <meta name="robots" content="noindex, follow" />}
     </Head>
   );
 }
