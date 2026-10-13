@@ -23,7 +23,7 @@ export function ImageReveal({ source, style, cover = brand.navy, delay = 0 }: { 
   return (
     <View ref={ref} onLayout={(e) => setW(e.nativeEvent.layout.width)} style={[{ overflow: 'hidden' }, style]}>
       <Animated.View style={[{ width: '100%', height: '100%' }, zoom]}>
-        <Image source={typeof source === 'string' ? { uri: source } : source} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={250} />
+        <Image source={typeof source === 'string' ? { uri: source } : source} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={250} accessibilityLabel="" />
       </Animated.View>
       {!reduced && <Animated.View pointerEvents="none" style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: cover }, panel]} />}
     </View>

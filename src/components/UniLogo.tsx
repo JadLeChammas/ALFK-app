@@ -15,7 +15,7 @@ export function UniLogo({ name, size = 34, fallback = null }: { name?: string; s
   const inner = Math.round(size * 0.76);
   return (
     <View style={{ width: size, height: size, borderRadius: Math.round(size * 0.26), backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-      <Image source={{ uri: url }} style={{ width: inner, height: inner }} contentFit="contain" transition={200} onError={() => setFailed(url)} accessibilityIgnoresInvertColors />
+      <Image source={{ uri: url }} style={{ width: inner, height: inner }} contentFit="contain" transition={200} onError={() => setFailed(url)} accessibilityIgnoresInvertColors accessibilityLabel="" />
     </View>
   );
 }

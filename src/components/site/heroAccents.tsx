@@ -159,7 +159,7 @@ export function FacesCard({ people, caption }: { people: { name: string; avatar?
         {shown.map((p, i) => (
           <View key={p.name} style={{ width: 48, height: 48, borderRadius: 24, marginLeft: i ? -14 : 0, borderWidth: 3, borderColor: '#fff', backgroundColor: brand.sky, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
             {p.avatar ? (
-              <Image source={{ uri: p.avatar }} style={{ width: '100%', height: '100%' }} contentFit="cover" />
+              <Image source={{ uri: p.avatar }} style={{ width: '100%', height: '100%' }} contentFit="cover" accessibilityLabel="" />
             ) : (
               <Txt style={{ fontFamily: fonts.semibold, fontSize: 15, color: brand.navy }}>{p.name.split(/\s+/).map((w) => w[0]).slice(0, 2).join('')}</Txt>
             )}

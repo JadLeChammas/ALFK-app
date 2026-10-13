@@ -94,7 +94,7 @@ export function InstagramLink({ variant = 'inline', color = '#FFFFFF', muted = '
     );
   }
   return (
-    <Tap {...instagramLinkProps()} role="link" accessibilityLabel={`Instagram ${INSTAGRAM_HANDLE}`} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 6 }} hoverStyle={{ opacity: 0.75 }}>
+    <Tap {...instagramLinkProps()} role="link" accessibilityLabel={`${d.site.footer.followUs} ${INSTAGRAM_HANDLE}`} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 6 }} hoverStyle={{ opacity: 0.75 }}>
       <InstagramGlyph size={17} color={color} />
       <Txt style={{ fontFamily: fonts.medium, fontSize: 14, color: muted }}>
         {d.site.footer.followUs} <Txt style={{ fontFamily: fonts.semibold, fontSize: 14, color }}>{INSTAGRAM_HANDLE}</Txt>

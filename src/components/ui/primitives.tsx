@@ -328,7 +328,7 @@ export function Avatar({ uri, name, size = 44, ring, online }: { uri?: string; n
           borderColor: colors.surface,
         }}>
         {uri ? (
-          <Image source={{ uri }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} />
+          <Image source={{ uri }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} accessibilityLabel={name} />
         ) : (
           <Txt style={{ color: colors.secondaryStrong, fontFamily: fonts.bold, fontSize: size * 0.36 }}>{initials}</Txt>
         )}

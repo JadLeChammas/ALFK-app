@@ -26,6 +26,7 @@ export function FramedPhoto({ uri, size, frame }: { uri: string; size: number; f
         style={framed ? { position: 'absolute', width: w, height: h, left: size / 2 + frame!.x * size - w / 2, top: size / 2 + frame!.y * size - h / 2 } : { width: size, height: size }}
         contentFit={framed ? 'fill' : 'cover'}
         transition={150}
+        accessibilityLabel=""
       />
     </View>
   );

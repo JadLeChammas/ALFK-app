@@ -20,7 +20,7 @@ export function Flag({ code, size = 16 }: { code: string; size?: number }) {
   }
   return (
     <View style={{ width: w, height: size, borderRadius: 3, overflow: 'hidden', backgroundColor: colors.surfaceAlt, borderWidth: 0.5, borderColor: colors.border }}>
-      <Image source={{ uri: `https://flagcdn.com/w80/${code.toLowerCase()}.png` }} style={{ width: '100%', height: '100%' }} contentFit="cover" />
+      <Image source={{ uri: `https://flagcdn.com/w80/${code.toLowerCase()}.png` }} style={{ width: '100%', height: '100%' }} contentFit="cover" accessibilityLabel="" />
     </View>
   );
 }

@@ -153,7 +153,7 @@ function ImageHeroInner({ tagline, title, description, image, primary, secondary
       <View style={{ zIndex: 2 }}>
       <View style={{ width: '100%', aspectRatio: isMobile ? 1.5 : 9 / 3.6, overflow: 'hidden' }}>
         <SettleZoom>
-          <Image source={src(image)} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={300} />
+          <Image source={src(image)} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={300} accessibilityLabel="" />
         </SettleZoom>
         {/* keeps the transparent header legible over the photo */}
         <LinearGradient colors={['rgba(14, 42, 71,0.7)', 'rgba(14, 42, 71,0)']} locations={[0, 0.45]} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
@@ -318,7 +318,7 @@ export function TeamShowcase({ members }: { members: TeamMember[] }) {
                 <Pressable key={m.id} {...hoverProps(m.id)} onPress={() => (m.onPress ? m.onPress() : setActive(on ? null : m.id))} style={{ width: sizes[ci].w, height: sizes[ci].h, borderRadius: radius.card, overflow: 'hidden', opacity: dim ? 0.6 : 1, backgroundColor: t.rule, alignItems: 'center', justifyContent: 'center' }}>
                   {/* No photo yet: the person's initials rather than an empty tile. */}
                   {!m.image && <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 30 : 44, color: t.muted }}>{initials(m.name)}</Txt>}
-                  {m.image && <Image source={{ uri: m.image }} style={[{ width: '100%', height: '100%' }, webFilter(on ? 'grayscale(0) brightness(1)' : 'grayscale(1) brightness(0.77)')]} contentFit="cover" />}
+                  {m.image && <Image source={{ uri: m.image }} style={[{ width: '100%', height: '100%' }, webFilter(on ? 'grayscale(0) brightness(1)' : 'grayscale(1) brightness(0.77)')]} contentFit="cover"  accessibilityLabel="" />}
                 </Pressable>
               );
             })}
@@ -398,7 +398,7 @@ export function EditorialTestimonial({ quotes }: { quotes: Quote[] }) {
                   ]}>
                   <View style={{ flex: 1, borderRadius: 999, padding: 3, backgroundColor: '#fff' }}>
                     <View style={{ flex: 1, borderRadius: 999, overflow: 'hidden', backgroundColor: t.rule }}>
-                      {q.image && <Image source={{ uri: q.image }} style={{ width: '100%', height: '100%' }} contentFit="cover" contentPosition="top" />}
+                      {q.image && <Image source={{ uri: q.image }} style={{ width: '100%', height: '100%' }} contentFit="cover" contentPosition="top" accessibilityLabel="" />}
                     </View>
                   </View>
                 </View>
@@ -419,7 +419,7 @@ export function EditorialTestimonial({ quotes }: { quotes: Quote[] }) {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 24 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             {quotes.map((_, n) => (
-              <Tap key={n} onPress={() => go(n)} style={{ paddingVertical: 16 }} accessibilityLabel={pad(n + 1)}>
+              <Tap key={n} onPress={() => go(n)} style={{ paddingVertical: 16 }} accessibilityRole="button" accessibilityLabel={`${pad(n + 1)} / ${pad(quotes.length)}`}>
                 <View style={{ height: 2, width: n === i ? 48 : 24, backgroundColor: t.rule, overflow: 'hidden' }}>
                   {n === i && <Animated.View style={[{ position: 'absolute', left: 0, top: 0, bottom: 0, backgroundColor: t.fg }, reduced || paused ? { width: 48 } : fill]} />}
                 </View>
