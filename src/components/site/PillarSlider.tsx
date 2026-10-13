@@ -186,9 +186,9 @@ export function PillarSlider({ slides }: { slides: PillarSlide[] }) {
           </Container>
         </Animated.View>
 
-        <Container style={{ flexDirection: 'row', gap: isMobile ? 10 : 24, paddingBottom: isMobile ? 22 : 34 }}>
+        <Container style={{ flexDirection: 'row', gap: isMobile ? 10 : 24, paddingBottom: isMobile ? 22 : 34 }} role="tablist">
           {slides.map((x, n) => (
-            <Pressable key={x.key} onPress={() => go(n)} role="tab" aria-selected={n === i} aria-label={x.label} style={{ flex: 1, gap: 10, paddingTop: 8 }}>
+            <Pressable key={x.key} onPress={() => go(n)} role="tab" aria-selected={n === i} aria-label={`${pad(n + 1)} ${x.label}`} style={{ flex: 1, gap: 10, paddingTop: 8 }}>
               <View style={{ height: 2, backgroundColor: `${s.fg}33`, overflow: 'hidden' }}>
                 {n < i && <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: s.fg }} />}
                 {n === i && <Animated.View style={[{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: s.fg, transformOrigin: 'left' }, WILL_MOVE, fill]} />}
@@ -235,7 +235,7 @@ function FloatingPhotos({ slides, active, bob, desktop }: { slides: PillarSlide[
   const spot = (k: 0 | 1, style: object) => (
     <Animated.View style={[style, WILL_MOVE, k ? b : a]}>
       {slides.map((x, n) => (
-        <Photo key={x.key} source={x.images[k]} active={n === active} delay={k ? 140 : 0} />
+        <Photo key={x.key} source={x.images[k]} active={n === active} delay={k ? 140 : 0} first={n === 0} />
       ))}
     </Animated.View>
   );
@@ -256,7 +256,8 @@ function FloatingPhotos({ slides, active, bob, desktop }: { slides: PillarSlide[
   );
 }
 
-function Photo({ source, active, delay }: { source: PillarSlide['images'][number]; active: boolean; delay: number }) {
+/** `first`: the first slide's photo, the page's largest image — loaded at once and first (LCP). */
+function Photo({ source, active, delay, first }: { source: PillarSlide['images'][number]; active: boolean; delay: number; first?: boolean }) {
   const shown = useSharedValue(0);
   useEffect(() => {
     shown.value = active ? withDelay(120 + delay, withTiming(1, POP)) : withTiming(0, { duration: 220 });
@@ -264,7 +265,7 @@ function Photo({ source, active, delay }: { source: PillarSlide['images'][number
   const pop = useAnimatedStyle(() => ({ opacity: shown.value, transform: [{ scale: 0.7 + 0.3 * shown.value }] }));
   return (
     <Animated.View style={[FRAME, pop]}>
-      <Image source={typeof source === 'string' ? { uri: source } : source} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={0} />
+      <Image source={typeof source === 'string' ? { uri: source } : source} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={0} accessibilityLabel="" {...(first ? { priority: 'high' as const, loading: 'eager' as const } : {})} />
     </Animated.View>
   );
 }

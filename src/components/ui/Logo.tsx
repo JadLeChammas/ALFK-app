@@ -11,10 +11,10 @@ import { Txt } from './Txt';
  * Light surfaces use the original colours; on navy/dark surfaces (`onDark`) the emblem sits on a
  * white seal and the lettering turns white, so the navy tower and letters never disappear.
  */
-const emblem = require('@/assets/images/logo-emblem.png');
-const badge = require('@/assets/images/logo-emblem-badge.png');
-const lockup = require('@/assets/images/logo-lockup.png');
-const lockupLight = require('@/assets/images/logo-lockup-light.png');
+const emblem = require('@/assets/images/logo-emblem.webp');
+const badge = require('@/assets/images/logo-emblem-badge.webp');
+const lockup = require('@/assets/images/logo-lockup.webp');
+const lockupLight = require('@/assets/images/logo-lockup-light.webp');
 const LOCKUP_RATIO = 630 / 240;
 const LOCKUP_LIGHT_RATIO = 625 / 240;
 

@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { Txt } from '@/components/ui/Txt';
 import { brand, fonts } from '@/theme/tokens';
 
-const EMBLEM = require('@/assets/images/logo-emblem.png');
+const EMBLEM = require('@/assets/images/logo-emblem.webp');
 const GOLD = '#C9A13B';
 
 /**

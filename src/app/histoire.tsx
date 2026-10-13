@@ -23,7 +23,7 @@ import { brand, fonts, radius } from '@/theme/tokens';
 /** The LFK campus from above. */
 const CAMPUS_AERIAL = require('@/assets/images/lfk-campus-aerial.png');
 /** The school's front, and pupils forming the logo in the playground (beside the story). */
-const CAMPUS = require('@/assets/images/lfk-campus.png');
+const CAMPUS = require('@/assets/images/lfk-campus.webp');
 const STUDENTS_LOGO = require('@/assets/images/lfk-students-logo.png');
 
 export default function LfkStoryPage() {

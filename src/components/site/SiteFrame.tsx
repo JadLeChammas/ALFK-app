@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { Link, router, usePathname } from 'expo-router';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { Platform, Pressable, useWindowDimensions, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, Pressable, useWindowDimensions, View, type StyleProp, type ViewStyle, type ViewProps } from 'react-native';
 import Animated, { Easing, FadeIn, interpolateColor, useAnimatedScrollHandler, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withTiming, type SharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -147,9 +147,9 @@ function PageWipe() {
 }
 
 /** Centered container of the public site (max-w-6xl, px-6). */
-export function Container({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
+export function Container({ children, style, role }: { children: ReactNode; style?: StyleProp<ViewStyle>; role?: ViewProps['role'] }) {
   const gutter = useGutter();
-  return <View style={[{ width: '100%', maxWidth: SITE_MAX + gutter * 2, alignSelf: 'center', paddingHorizontal: gutter }, style]}>{children}</View>;
+  return <View role={role} style={[{ width: '100%', maxWidth: SITE_MAX + gutter * 2, alignSelf: 'center', paddingHorizontal: gutter }, style]}>{children}</View>;
 }
 
 /** A full-bleed band of the site (py-20 sm:py-28 in the source blocks) in one brand tone. */

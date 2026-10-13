@@ -23,7 +23,7 @@ import { enterDemo } from '@/lib/supabase';
 import { useLayout } from '@/theme/layout';
 import { brand, fonts, radius } from '@/theme/tokens';
 
-const campus = require('@/assets/images/lfk-campus.png');
+const campus = require('@/assets/images/lfk-campus.webp');
 const kuwaitFlag = require('@/assets/images/lfk-kuwait-flag.png');
 
 /**
@@ -136,7 +136,7 @@ function Partners() {
         return (
           <Tap key={p.id} onPress={() => router.push('/partenaires')} accessibilityLabel={p.name} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, height: 64 }} hoverStyle={{ opacity: 0.8 }}>
             <View style={{ width: 44, height: 44, borderRadius: radius.input, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-              {logo ? <Image source={logo} style={{ width: 34, height: 34 }} contentFit="contain" /> : <Feather name="home" size={20} color={brand.navy} />}
+              {logo ? <Image source={logo} style={{ width: 34, height: 34 }} contentFit="contain" accessibilityLabel="" /> : <Feather name="home" size={20} color={brand.navy} />}
             </View>
             <Txt numberOfLines={1} style={{ fontFamily: fonts.serif, fontSize: 26, color: t.fg }}>{p.name}</Txt>
           </Tap>
