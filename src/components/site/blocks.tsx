@@ -451,10 +451,10 @@ export function StatsRow({ light, items, dense }: { light?: boolean; items?: { v
   const { isMobile } = useLayout();
   const c = useCommunity();
   const fg = light ? '#fff' : t.fg;
-  // The total of members first, « dont X anciens élèves et Y élèves » under it (once migration 044
+  // The total of members first, « dont X anciens élèves, Y élèves et Z membres d'honneur » under it (once migration 044
   // gives the total; before it, the alumni alone as before).
   const list: { v: number; l: string; sub?: string }[] = items ?? [
-    c.members ? { v: c.members, l: d.site.home.statMembers, sub: f(d.site.home.statSplit, { a: c.alumni, p: c.pupils }) } : { v: c.alumni, l: d.site.home.statAlumni },
+    c.members ? { v: c.members, l: d.site.home.statMembers, sub: c.honorary ? f(d.site.home.statSplitHonor, { a: c.alumni, p: c.pupils, h: c.honorary }) : f(d.site.home.statSplit, { a: c.alumni, p: c.pupils }) } : { v: c.alumni, l: d.site.home.statAlumni },
     { v: c.countries, l: d.site.home.statCountries },
     { v: c.promos, l: d.site.home.statPromos },
     { v: c.universities, l: d.site.home.statUniversities },

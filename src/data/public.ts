@@ -17,9 +17,10 @@ import { studyEntries } from './members';
 export type PublicPerson = { name: string; role: 'admin' | 'honneur'; fonction?: string; avatar?: string };
 export type PublicOverview = {
   alumni: number;
-  /** All approved accounts, and the lycée's pupils among them (migration 044; missing before it). */
+  /** All approved accounts (honorary members included, migration 057), the lycée's pupils and the honorary members among them (missing before 044 / 057). */
   members?: number;
   pupils?: number;
+  honorary?: number;
   countries: number;
   promos: number;
   universities: number;
@@ -62,13 +63,13 @@ function fromDb(db: Db): PublicOverview {
     .map((u): PublicPerson => ({ name: `${u.firstName} ${u.lastName.toLocaleUpperCase('fr')}`, role: u.role as 'admin' | 'honneur', fonction: u.fonction, avatar: u.avatar }));
   return {
     alumni: grads.length,
-    // Honorary members are not counted in the figures.
-    members: db.users.filter((u) => u.approved && u.role !== 'honneur').length,
+    members: db.users.filter((u) => u.approved).length,
     pupils: db.users.filter((u) => u.approved && u.role === 'eleve').length,
+    honorary: db.users.filter((u) => u.approved && u.role === 'honneur').length,
     countries: countries.length,
     promos: new Set(grads.map((u) => u.promo).filter(Boolean)).size,
     universities: schools.length,
-    nationalities: countNationalities(db.users.filter((u) => u.approved && u.role !== 'honneur')).length,
+    nationalities: countNationalities(db.users.filter((u) => u.approved)).length,
     destinations: countries.map(([code, n]) => ({ code, n })),
     schools: schools.map(([s]) => s).slice(0, 30),
     bureau,

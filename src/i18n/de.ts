@@ -315,7 +315,7 @@ const de: Dict = {
       cta1: 'Der Amicale beitreten', cta2: 'Konto erstellen', cta3: 'Studium vorbereiten',
       cta4: 'Die Amicale entdecken', studyAt: 'Unsere Ehemaligen studieren heute an', networkTitle: 'Von Kuwait',
       networkItalic: 'in die ganze Welt.', networkSub: 'Jeder Bogen beginnt am Lycée und führt dorthin, wo unsere Ehemaligen heute studieren.', statAlumni: 'Ehemalige',
-      statCountries: 'Gastländer', statPromos: 'Promos LFK', statUniversities: 'Universitäten', statNationalities: 'Nationalitäten', statMembers: 'Mitglieder', statSplit: 'davon {a} Ehemalige und {p} Schüler',
+      statCountries: 'Gastländer', statPromos: 'Promos LFK', statUniversities: 'Universitäten', statNationalities: 'Nationalitäten', statMembers: 'Mitglieder', statSplit: 'davon {a} Ehemalige und {p} Schüler', statSplitHonor: 'davon {a} Ehemalige, {p} Schüler und {h} Ehrenmitglieder',
       topDestinations: 'Wichtigste Ziele', quoteTitle: 'Ein Wort des Präsidenten', quote: 'Es gibt Orte, die man verlässt, ohne sie je wirklich hinter sich zu lassen.',
       stepsTitle: 'Der Amicale beitreten', stepsItalic: 'in drei Schritten.', step: 'Schritt',
       step1Title: 'Konto erstellen', step1Sub: 'Ihre Angaben und ein Schulnachweis des LFK: Zeugnis, Bescheinigung, Bestätigung oder einfaches Foto.', step2Title: 'Prüfung durch den Vorstand',

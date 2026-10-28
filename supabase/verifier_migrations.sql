@@ -1,4 +1,4 @@
--- Vérifie que les migrations 002 à 054 sont appliquées : une ligne par migration, « ok » = true.
+-- Vérifie que les migrations 002 à 057 sont appliquées : une ligne par migration, « ok » = true.
 -- Ne modifie rien (lecture seule). À coller dans le SQL Editor de Supabase.
 -- (La 001 n'existe pas : la base de départ est supabase/schema.sql.)
 
@@ -58,9 +58,12 @@ with
     (48, '048 textes anglais',                  exists (select 1 from public.app_settings where key = 'guides' and value like '%titleEn%' and value like '%guide-it%') and exists (select 1 from public.app_settings where key = 'lfkStory' and value like '%introEn%')),
     (49, '049 stockage',                        exists (select 1 from storage.buckets where id = 'media' and file_size_limit = 10485760) and exists (select 1 from pols where t = 'objects' and name = 'media delete own or admin')),
     (50, '050 guide France : étape CAF',        exists (select 1 from public.app_settings where key = 'guides' and value like '%APL ou ALS%')),
-    (51, '051 chiffres sans les MH',            exists (select 1 from fns where name = 'public_overview' and def like '%<> ''honneur''%')),
+    (51, '051 chiffres sans les MH',            exists (select 1 from fns where name = 'public_overview' and (def like '%<> ''honneur''%' or def like '%''honorary''%'))),
     (52, '052 espace des membres d''honneur',   exists (select 1 from cols where c = 'profiles.mh_access') and to_regclass('public.circle_posts') is not null and exists (select 1 from fns where name = 'in_circle' and def like '%mh_access%')),
     (53, '053 autorisation parentale',          exists (select 1 from cols where c = 'profiles.parental_path') and exists (select 1 from fns where name = 'member_private_fields' and def like '%parental_path%')),
-    (54, '054 stage / alternance',              to_regclass('public.internships') is not null and exists (select 1 from fns where name = 'can_see_internships'))
+    (54, '054 stage / alternance',              to_regclass('public.internships') is not null and exists (select 1 from fns where name = 'can_see_internships')),
+    (55, '055 mots interdits',                  exists (select 1 from pols where t = 'app_settings' and def like '%bannedWords%')),
+    (56, '056 guides Europe, Liban, Égypte',    exists (select 1 from public.app_settings where key = 'guides' and value like '%guide-de%' and value like '%guide-nl%')),
+    (57, '057 chiffres avec les MH',            exists (select 1 from fns where name = 'public_overview' and def like '%''honorary''%'))
   )
 select num, migration, ok from checks order by ok, num;
