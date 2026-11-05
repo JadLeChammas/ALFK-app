@@ -7,10 +7,10 @@ import { useTone } from '@/components/site/SiteFrame';
 import { Txt } from '@/components/ui/Txt';
 import { partnerLogo } from '@/data/partners';
 import type { Institution } from '@/data/types';
-import { openExternal } from '@/lib/links';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
+import { hasPartnerLink, openPartner } from '@/lib/partnerLinks';
 
 /**
  * The partners' logos scattered around a title — the public Partners page and the members' one.
@@ -80,7 +80,7 @@ export function LogoCloud({ partners, children }: { partners: Institution[]; chi
         );
         return (
           <Reveal key={x.id} index={i} style={{ position: 'absolute', ...pos, transform: [{ rotate: `${slot.tilt}deg` }] } as object}>
-            {x.website ? <Pressable onPress={() => openExternal(x.website!)} accessibilityRole="link" accessibilityLabel={x.name}>{mark}</Pressable> : mark}
+            {hasPartnerLink(x) ? <Pressable onPress={() => openPartner(x)} accessibilityRole="link" accessibilityLabel={x.name}>{mark}</Pressable> : mark}
           </Reveal>
         );
       })}

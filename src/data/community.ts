@@ -19,6 +19,7 @@ export function useCommunity() {
       alumni: o.alumni,
       members: o.members,
       pupils: o.pupils ?? 0,
+      honorary: o.honorary ?? 0,
       countries: o.countries,
       promos: o.promos,
       universities: o.universities,

@@ -17,7 +17,7 @@ import { Txt } from '@/components/ui/Txt';
 import { fullName, useApprovedMembers, useMe, useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
 import { LEADER_KINDS, useSchoolLeaders } from '@/data/schoolLeaders';
-import { partnerLogo, sortPartners } from '@/data/partners';
+import { isHiDev, partnerLogo, sortPartners } from '@/data/partners';
 import type { PickedImage } from '@/data/remote';
 import { AvatarCropper } from '@/components/AvatarCropper';
 import { useI18n } from '@/i18n';
@@ -25,7 +25,7 @@ import { isFileRejected } from '@/lib/fileSafety';
 import { pickImages } from '@/lib/media';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand } from '@/theme/tokens';
-import { openExternal } from '@/lib/links';
+import { hasPartnerLink, openPartner } from '@/lib/partnerLinks';
 
 /** Logos shipped with the app; any other value is an image URL. */
 
@@ -159,7 +159,9 @@ function InstitutionCard({ inst, onDelete, onEdit, onUp, onDown, onToggleHidden 
         </Row>
       )}
       <Txt color="textMuted" style={{ flex: 1 }}>{bi(inst.description, inst.descriptionEn)}</Txt>
-      {inst.website && <Button label={d.honorary.website} icon="external-link" size="sm" variant="secondary" style={{ alignSelf: 'flex-start' }} onPress={() => openExternal(inst.website!)} />}
+      {hasPartnerLink(inst) && (
+        <Button label={isHiDev(inst) ? bi('Découvrir Hi Dev Mobile', 'Discover Hi Dev Mobile') : d.honorary.website} icon={isHiDev(inst) ? 'arrow-right' : 'external-link'} size="sm" variant="secondary" style={{ alignSelf: 'flex-start' }} onPress={() => openPartner(inst)} />
+      )}
     </Card>
   );
 }

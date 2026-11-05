@@ -64,7 +64,11 @@ function render(page) {
     `<meta name="twitter:title" content="${title}" />`,
     `<meta name="twitter:description" content="${desc}" />`,
   ].join('\n    ');
-  html = html.replace('</head>', `    ${head}\n  </head>`);
+  // the page's own structured data (schema.org), e.g. a partner and its products
+  const ld = src.jsonld ? `
+    <script type="application/ld+json">${JSON.stringify(src.jsonld).replace(/</g, '\\u003c')}</script>` : '';
+  html = html.replace('</head>', `    ${head}${ld}
+  </head>`);
   // the page's text and links, replaced by the app when it starts
   const links = NAV.filter(([href]) => href !== (page.canonical ?? page.path))
     .map(([href, label]) => `<a href="${href}">${esc(label)}</a>`)
@@ -73,6 +77,8 @@ function render(page) {
     `<div id="root"><main class="seo-static"><header><a href="/">Amicale LFK — ALFK Alumni</a></header>` +
     `<h1>${esc(src.h1)}</h1>` +
     src.body.map((p) => `<p>${esc(p)}</p>`).join('') +
+    // outside links (e.g. a partner's products): real, followed links with descriptive text
+    (src.links?.length ? `<ul>${src.links.map(([href, label]) => `<li><a href="${esc(href)}" rel="noopener">${esc(label)}</a></li>`).join('')}</ul>` : '') +
     `<nav aria-label="Pages">${links}</nav></main></div>` +
     // outside #root: stays until the app has drawn its first screen, then fades out (app/_layout.tsx)
     `<div id="boot-splash" aria-hidden="true"><img src="/apple-touch-icon.png" alt="" width="72" height="72" /></div>`;
@@ -96,7 +102,7 @@ for (const page of PAGES) {
 
 // sitemap from the same list (canonical pages only)
 const today = new Date().toISOString().slice(0, 10);
-const prio = { '/': '1.0', '/association': '0.9', '/adherer': '0.9', '/histoire': '0.8', '/bureau': '0.7', '/partenaires': '0.7', '/actualites': '0.8', '/contact': '0.6', '/inscription': '0.6' };
+const prio = { '/hi-dev-mobile': '0.6', '/': '1.0', '/association': '0.9', '/adherer': '0.9', '/histoire': '0.8', '/bureau': '0.7', '/partenaires': '0.7', '/actualites': '0.8', '/contact': '0.6', '/inscription': '0.6' };
 const urls = PAGES.filter((p) => !p.canonical)
   .map((p) => `  <url><loc>${SITE}${p.path}</loc><lastmod>${today}</lastmod><priority>${prio[p.path] ?? '0.3'}</priority></url>`)
   .join('\n');

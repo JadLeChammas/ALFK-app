@@ -147,5 +147,120 @@
     "description": "Toutes les pages du site de l’Amicale des anciens élèves du Lycée Français du Koweït.",
     "h1": "Plan du site",
     "body": []
+  },
+  {
+    "path": "/hi-dev-mobile",
+    "file": "hi-dev-mobile.html",
+    "title": "Hi Dev Mobile — développement d’applications mobiles, de sites web et d’IA · Partenaire de l’Amicale LFK",
+    "description": "Hi Dev Mobile, partenaire technique de l’Amicale LFK : intelligence artificielle pour les entreprises, applications mobiles, sites web, logiciels et matériel sur mesure. Créateur de LaBreak, ResOlio et InstantWebsite.com.",
+    "h1": "Hi Dev Mobile — applications, sites web et IA",
+    "body": [
+      "Hi Dev Mobile met l’intelligence artificielle au service des entreprises et conçoit des applications mobiles, des sites web, des logiciels et du matériel sur mesure. C’est le studio qui a créé et fait vivre la plateforme de l’Amicale LFK (alfk.org).",
+      "LaBreak : trouver où déjeuner en 30 secondes — bistros, comptoirs et traiteurs du quartier filtrés par envie, budget, distance et carte ticket-resto, avec une recherche IA.",
+      "ResOlio : le système de réservation pour restaurants, cafés, bars et pubs, avec Olio, l’hôte IA. Gratuit pour commencer, sans commission.",
+      "InstantWebsite.com : décrivez votre activité et obtenez un vrai site web en quelques minutes, modifiable en discutant et publié sur votre propre nom de domaine."
+    ],
+    "links": [
+      [
+        "https://www.hidevmobile.com",
+        "Hi Dev Mobile — développement d’applications, de sites web et d’IA"
+      ],
+      [
+        "https://labreak.app",
+        "Trouver un restaurant pour le déjeuner avec LaBreak"
+      ],
+      [
+        "https://resolio.app",
+        "Logiciel de réservation pour restaurants sans commission (ResOlio)"
+      ],
+      [
+        "https://instantwebsite.com",
+        "Créer le site web de son entreprise en quelques minutes (InstantWebsite.com)"
+      ]
+    ],
+    "jsonld": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.hidevmobile.com/#org",
+          "name": "Hi Dev Mobile",
+          "alternateName": "Hi Dev",
+          "url": "https://www.hidevmobile.com",
+          "description": "Studio de développement : intelligence artificielle pour les entreprises, applications mobiles, sites web, logiciels et matériel sur mesure.",
+          "knowsAbout": [
+            "Intelligence artificielle",
+            "Développement d’applications mobiles",
+            "Création de sites web",
+            "Logiciel sur mesure",
+            "Matériel sur mesure"
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "url": "https://www.alfk.org/hi-dev-mobile",
+          "name": "Hi Dev Mobile — développement d’applications mobiles, de sites web et d’IA · Partenaire de l’Amicale LFK",
+          "about": {
+            "@id": "https://www.hidevmobile.com/#org"
+          },
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Amicale LFK",
+            "url": "https://www.alfk.org/"
+          }
+        },
+        {
+          "@type": "ItemList",
+          "name": "Produits de Hi Dev Mobile",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "SoftwareApplication",
+                "name": "LaBreak",
+                "url": "https://labreak.app",
+                "applicationCategory": "LifestyleApplication",
+                "operatingSystem": "Web, iOS, Android",
+                "description": "Trouver un restaurant pour le déjeuner : bistros, comptoirs et traiteurs filtrés par carte ticket-resto, avec recherche IA.",
+                "creator": {
+                  "@id": "https://www.hidevmobile.com/#org"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "SoftwareApplication",
+                "name": "ResOlio",
+                "url": "https://resolio.app",
+                "applicationCategory": "BusinessApplication",
+                "operatingSystem": "Web",
+                "description": "Système de réservation pour restaurants sans commission, avec Olio, l’hôte IA.",
+                "creator": {
+                  "@id": "https://www.hidevmobile.com/#org"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "SoftwareApplication",
+                "name": "InstantWebsite.com",
+                "url": "https://instantwebsite.com",
+                "applicationCategory": "BusinessApplication",
+                "operatingSystem": "Web",
+                "description": "Créer le site web de son entreprise en quelques minutes, modifiable en discutant.",
+                "creator": {
+                  "@id": "https://www.hidevmobile.com/#org"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

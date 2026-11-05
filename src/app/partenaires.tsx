@@ -16,12 +16,12 @@ import { usePublicOverview } from '@/data/public';
 import { LEADER_KINDS, useSchoolLeaders } from '@/data/schoolLeaders';
 import { useStore } from '@/data/store';
 import type { Institution } from '@/data/types';
-import { partnerLogo } from '@/data/partners';
+import { isHiDev, partnerLogo } from '@/data/partners';
 import { useI18n } from '@/i18n';
 import { useLayout } from '@/theme/layout';
 import { useTheme } from '@/theme/ThemeProvider';
 import { brand, fonts, radius } from '@/theme/tokens';
-import { openExternal } from '@/lib/links';
+import { hasPartnerLink, openPartner } from '@/lib/partnerLinks';
 
 /**
  * Partners. Approved members get it inside their space (admins manage the list there);
@@ -126,7 +126,7 @@ function PartnerList({ partners, empty }: { partners: Institution[]; empty: stri
               <View style={{ flex: 1, gap: 8 }}>
                 <Txt style={{ fontFamily: fonts.serif, fontSize: isMobile ? 30 : 40, lineHeight: isMobile ? 34 : 44, color: t.fg }}>{x.name}</Txt>
                 <Txt style={{ fontFamily: fonts.regular, fontSize: 15, lineHeight: 24, color: t.muted, maxWidth: 560 }}>{bi(x.description, x.descriptionEn)}</Txt>
-                {x.website && <LinkCta label={d.honorary.website} onPress={() => openExternal(x.website!)} />}
+                {hasPartnerLink(x) && <LinkCta label={isHiDev(x) ? bi('Découvrir Hi Dev Mobile', 'Discover Hi Dev Mobile') : d.honorary.website} onPress={() => openPartner(x)} />}
               </View>
             </View>
           </Reveal>

@@ -20,6 +20,7 @@ export default function Sitemap() {
         ['users', d.site.nav.bureau, '/bureau'],
         ['book-open', d.site.news.title, '/actualites'],
         ['briefcase', d.site.nav.partners, '/partenaires'],
+        ['code', 'Hi Dev Mobile', '/hi-dev-mobile'],
         ['user-plus', d.site.nav.join, '/adherer'],
       ],
     },

@@ -20,6 +20,8 @@ export function sortPartners<T extends Institution>(list: T[]): T[] {
 
 /** The Lycée Français du Koweït's own logo (partners, the « Le LFK » page). */
 export const LFK_LOGO = LOGOS.lfk;
+/** Hi Dev Mobile's logo (its partner page). */
+export const HIDEV_LOGO = LOGOS.hidev;
 
 /** A bundled logo (`lfk`, `hidev`), an image URL, or nothing. */
 export function partnerLogo(i: PartnerLike) {
